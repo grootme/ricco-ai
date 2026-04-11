@@ -1,0 +1,74 @@
+# Flowise AI - RICCO Ecosystem Integration
+# Visual low-code LLM flow builder
+
+version: '3.8'
+
+services:
+  flowise:
+    image: flowiseai/flowise:latest
+    container_name: ricco-flowise
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - FLOWISE_USERNAME=admin
+      - FLOWISE_PASSWORD=${FLOWISE_PASSWORD:-ricco2026}
+      - SECRETKEY_PATH=/root/.flowise
+      - LOG_PATH=/root/.flowise/logs
+      - DATABASE_PATH=/root/.flowise
+      - APIKEY_PATH=/root/.flowise
+      # OpenRouter for multi-LLM support
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      # Qdrant Vector DB
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_API_KEY=${QDRANT_API_KEY:-}
+      # NebulaGraph connection
+      - NEBULA_HOST=nebula-graph
+      - NEBULA_PORT=9669
+      - NEBULA_USER=root
+      - NEBULA_PASSWORD=${NEBULA_PASSWORD:-nebula}
+      - NEBULA_SPACE=ricco_ecosystem
+      # Redis for caching
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - flowise_data:/root/.flowise
+      - ./flows:/root/.flowise/flows
+    networks:
+      - ricco-network
+    depends_on:
+      - qdrant
+      - redis
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: ricco-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - ricco-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: ricco-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ricco-network
+
+volumes:
+  flowise_data:
+  qdrant_data:
+  redis_data:
+
+networks:
+  ricco-network:
+    external: true
+    name: ricco-network
