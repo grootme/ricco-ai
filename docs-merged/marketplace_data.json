@@ -1,0 +1,1582 @@
+[
+  {
+    "title": "ERPNext",
+"description": "World's best free and open source ERP",
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext"
+  },
+  {
+    "title": "Twilio",
+"description": "Twilio Integration for ERPNext",
+    "url": "https://cloud.frappe.io/marketplace/apps/twilio_integration"
+  },
+  {
+    "title": "Wiki",
+"description": "Open source knowledge management software",
+    "url": "https://cloud.frappe.io/marketplace/apps/wiki"
+  },
+  {
+    "title": "PDF on Submit",
+"description": "Automatically create a PDF on document submission",
+    "url": "https://cloud.frappe.io/marketplace/apps/pdf_on_submit"
+  },
+  {
+    "title": "Telegram",
+"description": "Telegram Integration for ERPNext",
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_telegram_integration"
+  },
+  {
+    "title": "ERPNext Shipping",
+"description": "Shipping integration for ERPNext",
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_shipping"
+  },
+  {
+    "title": "Ecommerce Integrations",
+"description": "E-commerce marketplace integrations for ERPNext",
+    "url": "https://cloud.frappe.io/marketplace/apps/ecommerce_integrations"
+  },
+  {
+    "title": "Tanzania Customizations",
+"description": "Country Specific Functionality for Tanzania required for apps developed by Aakvatech",
+    "url": "https://cloud.frappe.io/marketplace/apps/csf_tz"
+  },
+  {
+    "title": "Swiss Accounting Integration",
+"description": "Swiss Accounting Integration for ERPNext is for companies in Switzerland",
+    "url": "https://cloud.frappe.io/marketplace/apps/swiss_accounting_integration"
+  },
+  {
+    "title": "Property Management Solution",
+"description": "Includes: Lease, Daily Checklist, Key Set, Meter, Outsourced Attendance. Requires ERPNext.",
+    "url": "https://cloud.frappe.io/marketplace/apps/propms"
+  },
+  {
+    "title": "IT Management",
+"description": "With IT Management for ERPNext you can manage your companies or your clients it landscape",
+    "url": "https://cloud.frappe.io/marketplace/apps/it_management"
+  },
+  {
+    "title": "Special Item Accountancy Code",
+"description": "This application allow to define Accountancy code on Item according an attribute define on Thirdparty",
+    "url": "https://cloud.frappe.io/marketplace/apps/special_item_accountancy_code"
+  },
+  {
+    "title": "Swiss Factur X E Invoicing",
+"description": "Swiss ERPNext App for E-Invoice Hybrid PDF based on Factur-X and ZugFerd (EN 16931 Standards). The PDF is fully compatible with ZugFerd and contains factur-x.xml according to the invoice.",
+    "url": "https://cloud.frappe.io/marketplace/apps/swiss_factur_x_e_invoicing"
+  },
+  {
+    "title": "Learning",
+"description": "Easy to use, open source learning management system",
+    "url": "https://cloud.frappe.io/marketplace/apps/lms"
+  },
+  {
+    "title": "Grynn Swiss QR Bill",
+"description": "A Swiss QR Bill Generator app for ERPNext. This APP makes it easy to generate QR Invoices, without sending data to 3rd parties. Bugs / Features contact us at sales@grynn.ch.",
+    "url": "https://cloud.frappe.io/marketplace/apps/grynnswissqrbill"
+  },
+  {
+    "title": "Frappe Paystack",
+"description": "Paystack payment gateway integration for ERPNext and Frappe",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_paystack"
+  },
+  {
+    "title": "WooCommerce Connector",
+"description": "Allows the synchronisation of items, stock, customers, addresses, sales orders, sales invoices and payment entries to a WooCommerce instance.",
+    "url": "https://cloud.frappe.io/marketplace/apps/woocommerceconnector"
+  },
+  {
+    "title": "Marley Healthcare",
+"description": "One stop solution for all your Healthcare Information System(HIS) & Electronics Medical Records(EMR) needs.",
+    "url": "https://cloud.frappe.io/marketplace/apps/marley_health"
+  },
+  {
+    "title": "PAV",
+"description": "PAV stands for Partner Added Value, this app has been created for Yemen localization customization.",
+    "url": "https://cloud.frappe.io/marketplace/apps/pav"
+  },
+  {
+    "title": "Project Payroll",
+"description": "For NPOs or companies that need to pay employee salary based on projects.",
+    "url": "https://cloud.frappe.io/marketplace/apps/project_payroll"
+  },
+  {
+    "title": "Frappe tinyMCE",
+"description": "Replace frappe's default text editor with tinyMCE",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_tinymce"
+  },
+  {
+    "title": "GSTR 2B Reconciler",
+"description": "Reconciliation tool for GSTR 2B and Purchase Register (PR) that includes Purchase Invoices, Credit and Debit Notes",
+    "url": "https://cloud.frappe.io/marketplace/apps/reconciler"
+  },
+  {
+    "title": "Contract Payment",
+"description": "Link between contract with sales invoice and purchase invoice and make dues",
+    "url": "https://cloud.frappe.io/marketplace/apps/contract_payment"
+  },
+  {
+    "title": "Email Delivery Service",
+"description": "A plug and play email delivery service for Frappe Cloud.",
+    "url": "https://cloud.frappe.io/marketplace/apps/email_delivery_service"
+  },
+  {
+    "title": "Incident Management",
+"description": "The alert automated, real time incident marking system. This app is for marking & updating various incidents / accidents happens in any location.",
+    "url": "https://cloud.frappe.io/marketplace/apps/incident_management"
+  },
+  {
+    "title": "DATEV Integration",
+"description": "Integration with DATEV Unternehmen Online for ERPNext.",
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_datev"
+  },
+  {
+    "title": "Frappe Non Profit",
+"description": "A Non profit app built on top of Frappe Framework & ERPNext",
+    "url": "https://cloud.frappe.io/marketplace/apps/non_profit"
+  },
+  {
+    "title": "Stone Warehouse",
+"description": "This is a custom app to manage batch wise balance, especially setup for a ceramic tiles vendor.",
+    "url": "https://cloud.frappe.io/marketplace/apps/stonewarehouse"
+  },
+  {
+    "title": "Staffing",
+"description": "Manpower Supply services for ERPNext, this app has been created for Saudi Arabia localization customization",
+    "url": "https://cloud.frappe.io/marketplace/apps/staffing"
+  },
+  {
+    "title": "ERPNext Germany",
+"description": "ERPNext extension for companies in Germany.",
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_germany"
+  },
+  {
+    "title": "Navari CSF Ke",
+"description": "EXPNext Country Specific Functionality for Kenya",
+    "url": "https://cloud.frappe.io/marketplace/apps/csf_ke"
+  },
+  {
+    "title": "FCM Notification",
+"description": "Send Firebase Cloud Messaging Notifications from your Frappe Site",
+    "url": "https://cloud.frappe.io/marketplace/apps/fcm_notification"
+  },
+  {
+    "title": "WhatsApp Integration",
+"description": "WhatsApp Cloud API integration for Frappe / ERPNext sites.",
+    "url": "https://cloud.frappe.io/marketplace/apps/whatsapp_integration"
+  },
+  {
+    "title": "Frappe System Monitor",
+"description": "View your CPU, RAM, Disk Usage and more.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_system_monitor"
+  },
+  {
+    "title": "Persona",
+"description": "Lets System Managers impersonate any user",
+    "url": "https://cloud.frappe.io/marketplace/apps/persona"
+  },
+  {
+    "title": "PibiCut",
+"description": "Shorten links and generate QR code in a click",
+    "url": "https://cloud.frappe.io/marketplace/apps/pibicut"
+  },
+  {
+    "title": "Calendar Planner for Job Card",
+"description": "Add a calendar view Job Card Planning where you can drag and drop Job card to update a Planned start date",
+    "url": "https://cloud.frappe.io/marketplace/apps/jobcard_planning"
+  },
+  {
+    "title": "HR Addon",
+"description": "Addon for Erpnext attendance and employee checkins",
+    "url": "https://cloud.frappe.io/marketplace/apps/hr_addon"
+  },
+  {
+    "title": "Green Checklist",
+"description": "This app is used for maintaining the records/status of daily activities to be carried out.",
+    "url": "https://cloud.frappe.io/marketplace/apps/green_checklist"
+  },
+  {
+    "title": "Sales-Purchase",
+"description": "Purchase Order created from Sales Order with custom and default supplier.",
+    "url": "https://cloud.frappe.io/marketplace/apps/scs_sales_purchase"
+  },
+  {
+    "title": "Freight Management",
+"description": "Freight management app allows you to manage freight operations like FCL and LCL shipments with FTL and LTL etc.",
+    "url": "https://cloud.frappe.io/marketplace/apps/freight_management"
+  },
+  {
+    "title": "Indiamart ERPNext Integration",
+"description": "Automatically pull purchase inquires from indiamart and create leads in ERPNext",
+    "url": "https://cloud.frappe.io/marketplace/apps/indiamart_erpnext_integration"
+  },
+  {
+    "title": "WATI Integration",
+"description": "WATI integration for ERPNext / Frappe",
+    "url": "https://cloud.frappe.io/marketplace/apps/wati_integration"
+  },
+  {
+    "title": "Site Management",
+"description": "The app is designed to facilitate the needs of an organisation like managing and maintaining records of the Assets, issues or complaints and on-site visitors.",
+    "url": "https://cloud.frappe.io/marketplace/apps/kf_city_2"
+  },
+  {
+    "title": "Fiscal Year Based Date Fields",
+"description": "ERPNext plugin that makes date related fields respect the start and end dates of default fiscal year.",
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_fiscal_year_based_date_related_fields"
+  },
+  {
+    "title": "HR & Payroll",
+"description": "Open source, modern, and user-friendly HR and payroll software for all organizations",
+    "url": "https://cloud.frappe.io/marketplace/apps/hrms"
+  },
+  {
+    "title": "Helpdesk Management",
+"description": "Capture the TAT and calculate the time required to resolve the tickets, attachments and more with proper email notifications.",
+    "url": "https://cloud.frappe.io/marketplace/apps/kf_shell"
+  },
+  {
+    "title": "Law Management",
+"description": "Manage lawyers, clients, matters(cases), trials and its invoicing",
+    "url": "https://cloud.frappe.io/marketplace/apps/law_management"
+  },
+  {
+    "title": "POS Restaurant",
+"description": "POS Restaurant",
+    "url": "https://cloud.frappe.io/marketplace/apps/restaurant_management"
+  },
+  {
+    "title": "Gym Management",
+"description": "Gym Management allows managing equipment, register member, measurement History, membership, trainer, trainer attendance, workout/diet plan, assign workout/diet schedule, gym meeting/events, and appointments. Gym Management also manages reports, dashboards, and workspace."
+    "url": "https://cloud.frappe.io/marketplace/apps/gym_management"
+  },
+  {
+    "title": "Payments",
+"description": "Razorpay, Stripe, Braintree, PayPal and Paytm integration for Frappe applications.",
+    "url": "https://cloud.frappe.io/marketplace/apps/payments"
+  },
+  {
+    "title": "Exotel Integration",
+"description": "Please add a short description about your app here..."
+    "url": "https://cloud.frappe.io/marketplace/apps/exotel_integration"
+  },
+  {
+    "title": "Insights",
+"description": "Open source business intelligence tool"
+    "url": "https://cloud.frappe.io/marketplace/apps/insights"
+  },
+  {
+    "title": "Frappe Better Attach Control",
+"description": "A small plugin for Frappe that adds customization to the attach control. It supports RTL layout and dark mode out of the box."
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_better_attach_control"
+  },
+  {
+    "title": "Better Select Control",
+    "description": "A small plugin for Frappe that adds the support of options group to the select control.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_better_select_control"
+  },
+  {
+    "title": "India Compliance",
+"description": "Simple, yet powerful compliance solutions for Indian businesses"
+    "url": "https://cloud.frappe.io/marketplace/apps/india_compliance"
+  },
+  {
+    "title": "List Unassign From",
+"description": "A Frappe plugin that adds the support of unassign from users for single and multiple list selection."
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_list_unassign_from"
+  },
+  {
+    "title": "Education",
+"description": "Open source ERP for academic institutes"
+    "url": "https://cloud.frappe.io/marketplace/apps/education"
+  },
+  {
+    "title": "Check Run",
+"description": "Check Run is an application that extends ERPNext to allow users to aggregate payments to Employees and Suppliers, bulk-generate PDF checks, and generate ACH files for electronic payments with their bank"
+    "url": "https://cloud.frappe.io/marketplace/apps/check_run"
+  },
+  {
+    "title": "Helpdesk",
+"description": "Well designed, open source ticketing system"
+    "url": "https://cloud.frappe.io/marketplace/apps/helpdesk"
+  },
+  {
+    "title": "Visa Management",
+"description": "This module is developed for visa application manage the record of applicants with various stages approved,used,return,Expire etc."
+    "url": "https://cloud.frappe.io/marketplace/apps/visa_management"
+  },
+  {
+    "title": "Red Background",
+"description": "Adds a light red background to distinguish test systems from production."
+    "url": "https://cloud.frappe.io/marketplace/apps/red_background"
+  },
+  {
+    "title": "Active Users",
+"description": "A small plugin for Frappe that displays a list of current active users."
+    "url": "https://cloud.frappe.io/marketplace/apps/active_users"
+  },
+  {
+    "title": "Go1 CMS",
+"description": "Its a Advanced Content Management System built on top of Frappe."
+    "url": "https://cloud.frappe.io/marketplace/apps/go1_cms"
+  },
+  {
+    "title": "E Invoice Egypt",
+"description": "Frappe App offer a fast and reliable integration with the Egyptian tax authority (E-Invoice)"
+    "url": "https://cloud.frappe.io/marketplace/apps/e_invoice"
+  },
+  {
+    "title": "Pakistan Workspace",
+"description": "ERPNext Regional App for Pakistan with NIC, NTN, and STRN numbers, and reports for FBR tax compliance."
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_pk"
+  },
+  {
+    "title": "Easy Ecom Integration",
+"description": "Enables syncing information between ERPNext and EasyEcom.io"
+    "url": "https://cloud.frappe.io/marketplace/apps/easy_ecom_integration"
+  },
+  {
+    "title": "Gym Pro",
+"description": "Manage a gym, gym members and gym membership plans, create a workout plans, diet plans and much more."
+    "url": "https://cloud.frappe.io/marketplace/apps/gympro"
+  },
+  {
+    "title": "Property Management",
+"description": "Property Management System will help to manage your real estate portfolio with Property Items, Property, Maintenance, Insurance, Utilities, and Rent management with reminders. It manages Customers, Tenants, Landlords, and Tenancy details. Property Management also manages reports and workspace."
+    "url": "https://cloud.frappe.io/marketplace/apps/property_management"
+  },
+  {
+    "title": "Servisa",
+"description": "The Visa Management Agents will handles immigration/coaching applications."
+    "url": "https://cloud.frappe.io/marketplace/apps/servisa"
+  },
+  {
+    "title": "Medium Integration App",
+"description": "This will enable you to publish blogs to Medium right from your Frappe sites."
+    "url": "https://cloud.frappe.io/marketplace/apps/medium_app"
+  },
+  {
+    "title": "Gameplan",
+"description": "Delightful work communication tool for remote teams"
+    "url": "https://cloud.frappe.io/marketplace/apps/gameplan"
+  },
+  {
+    "title": "Frappe WhatsApp",
+"description": "Send WhatsApp Messages from your Frappe app. Without any 3rd party integration."
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_whatsapp"
+  },
+  {
+    "title": "Due Diligence",
+"description": "Get a Due Diligence of your Quote from the customer with secure unique link. Secure link will be open on the ERPNext website."
+    "url": "https://cloud.frappe.io/marketplace/apps/due_diligence"
+  },
+  {
+    "title": "Business Theme",
+"description": "Business Theme for ERPNext / Frappe"
+    "url": "https://cloud.frappe.io/marketplace/apps/business_theme_v14"
+  },
+  {
+    "title": "Car Reservation",
+"description": "This application helps to manage the car trip information for required time duration, Car working conditions are updated, Car owner manage the vehicle services record, Total kilometers of the trip are recorded in the car history."
+    "url": "https://cloud.frappe.io/marketplace/apps/car_reservation"
+  },
+  {
+    "title": "Frappe Disable Signup",
+"description": "Disable signup for specific domains"
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_disable_signup"
+  },
+  {
+    "title": "Better List View",
+"description": "Frappe list view plugin that allows more customisations."
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_better_list_view"
+  },
+  {
+    "title": "Digital Signature",
+"description": "App to generate PDF with Digital Signatures attached."
+    "url": "https://cloud.frappe.io/marketplace/apps/dsc"
+  },
+  {
+    "title": "Better Numerical Controls",
+"description": "A small plugin for Frappe that adds the support of customizations to the numerical controls."
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_better_numerical_controls"
+  },
+  {
+    "title": "ERPNext Quota",
+"description": "App to manage Frappe Document Count and Space limitations"
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_quota"
+  },
+  {
+    "title": "Car Repair Management",
+"description": "This app is developed to handle business/industries of Car Repairs using ERPNext Version 14."
+    "url": "https://cloud.frappe.io/marketplace/apps/car_repair_management"
+  },
+  {
+    "title": "NextArrear",
+"description": "NextArrear is a comprehensive app designed for ERPNext/Frappe that automates the calculation of salary arrears."
+    "url": "https://cloud.frappe.io/marketplace/apps/nextarrear"
+  },
+  {
+    "title": "Tripetto Survey Integration",
+"description": "A custom app integrated with Tripetto to create and manage surveys directly from ERPNext."
+    "url": "https://cloud.frappe.io/marketplace/apps/tripetto_survey"
+  },
+  {
+    "title": "Employee Self Service Mobile App",
+"description": "Nesscale ESS is a mobile-first Frappe application that extends the power of ERPNext to mobile devices."
+    "url": "https://cloud.frappe.io/marketplace/apps/employee_self_service"
+  },
+  {
+    "title": "Optical ERP",
+"description": "Optical ERP Solution can be used to record data of all patients who are visiting the clinic for any type of service. Services could be of any type like Appointment, Treatment, Eye Test, Quotation,Billing, and much more."
+    "url": "https://cloud.frappe.io/marketplace/apps/optical_erp"
+  },
+  {
+    "title": "Genie",
+"description": "Your guide to unlocking full potential of ERPNext. Raise support tickets right from within your site with screen and voice recording and more!"
+    "url": "https://cloud.frappe.io/marketplace/apps/genie"
+  },
+  {
+    "title": "Tours And Travels",
+"description": "The Tours And Travels module allows for managing Tour Package and Registration Management, Contract Management, and Travels Services. Also will manage a Hotel Management System, Restaurant Management System, and Transportation Management System. Tours And Travels module-wise manage reports and workspace."
+    "url": "https://cloud.frappe.io/marketplace/apps/tours_and_travels"
+  },
+  {
+    "title": "Whatsapp App",
+"description": "Stay connected with your customers in real-time with WhatsApp Integration for ERPNext."
+    "url": "https://cloud.frappe.io/marketplace/apps/whatsapp_app"
+  },
+  {
+    "title": "Insurance Management",
+"description": "Life insurance is a contract between an insurance policy holder and an insurer or assurer, where the insurer promises to pay a designated beneficiary a sum of money upon the death of an insured person. Depending on the contract, other events such as terminal illness or critical illness can also trigger payment."
+    "url": "https://cloud.frappe.io/marketplace/apps/insurance_management"
+  },
+  {
+    "title": "B2B Marketing",
+"description": "B2B Marketing is a comprehensive ERPNext app designed to enhance your B2B marketing efforts through Account-Based Marketing campaigns."
+    "url": "https://cloud.frappe.io/marketplace/apps/b2b_marketing"
+  },
+  {
+    "title": "Dairy Management",
+"description": "Manage all dairy operations in ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/dairy"
+  },
+  {
+    "title": "Signage Display",
+"description": "Create and customize digital signage display boards with minimal set-up."
+    "url": "https://cloud.frappe.io/marketplace/apps/signage_display"
+  },
+  {
+    "title": "ERPNext United Kingdom",
+"description": "ERPNext UK regional features including HMRC integration"
+    "url": "https://cloud.frappe.io/marketplace/apps/uk"
+  },
+  {
+    "title": "Courier Management",
+"description": "Courier management module, allows you to manage the handling and delivery of packages and shipments from your location or transit hub to the end customers."
+    "url": "https://cloud.frappe.io/marketplace/apps/courier_management"
+  },
+  {
+    "title": "Follow Up",
+"description": "It enables timely, condition-based follow-ups for any document or doctype, ensuring you never miss important tasks or deadlines."
+    "url": "https://cloud.frappe.io/marketplace/apps/follow_up"
+  },
+  {
+    "title": "Payroll LavaDo",
+"description": "This is an opensource extension developed by LavaLoon using Frappe framework, integrated with ERPNext, to handle payroll penalties and creating timeseets based on the standard attendance."
+    "url": "https://cloud.frappe.io/marketplace/apps/payroll_lavado"
+  },
+  {
+    "title": "DFP S3 External Storage",
+"description": "Simplest cloud S3 compatible file management for Frappe / ERPNext."
+    "url": "https://cloud.frappe.io/marketplace/apps/dfp_external_storage"
+  },
+  {
+    "title": "Meeting Management",
+"description": "The Meeting Notes feature in this app allows users to track meeting discussions, action items, and expenses in a uniform and organized manner. This information can be easily accessed from the scheduled meeting and is saved in the history of the Lead, Opportunity, or Customer document. A video is available to help understand the process of creating a meeting note."
+    "url": "https://cloud.frappe.io/marketplace/apps/meeting_management"
+  },
+  {
+    "title": "Holidays",
+"description": "A simple add-on for ERPNext to make it easier to create country specific holiday lists."
+    "url": "https://cloud.frappe.io/marketplace/apps/holidays"
+  },
+  {
+    "title": "Veterinary Management",
+"description": "Veterinary practice management app is helps to deal with the day-to-day operations of a veterinary practice."
+    "url": "https://cloud.frappe.io/marketplace/apps/veterinary_management"
+  },
+  {
+    "title": "trello",
+"description": "Trello is the visual tool that empowers your team to manage any type of project, workflow, or task tracking right through ERPNext."
+    "url": "https://cloud.frappe.io/marketplace/apps/trello"
+  },
+  {
+    "title": "Project Management System (PMS)",
+"description": "The Project Management System manages the employee check-in and check-out entry. It manages the project-wise task-wise hours-wise entry in the timesheet. It also manages the employee in-out attendance with timesheet calculation."
+    "url": "https://cloud.frappe.io/marketplace/apps/pms_solufy"
+  },
+  {
+    "title": "ERPNext Arabic Layout",
+"description": "Add a beauty Arabic font to the GUI"
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_arabic_layout"
+  },
+  {
+    "title": "Stock Reconcialiation Per Item Group",
+"description": "Add button to Stock Reconciliation to add product by Item Group"
+    "url": "https://cloud.frappe.io/marketplace/apps/stock_reconcialiation_per_item_group"
+  },
+  {
+    "title": "Dairy Management System",
+"description": "The Milk Management System is a simple Dairy Software to maintain milk record by account member."
+    "url": "https://cloud.frappe.io/marketplace/apps/dms"
+  },
+  {
+    "title": "Easy Letterhead",
+"description": "A non-technical way to create standard letterheads for ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_easy_letterhead"
+  },
+  {
+    "title": "Tariff",
+"description": "The Tarrif app is extension module of freight management with purchase workflow. We can manage tariff duties and additional charges"
+    "url": "https://cloud.frappe.io/marketplace/apps/tariff_workflow"
+  },
+  {
+    "title": "Forward Contract",
+"description": "Forward contracting is a financial tool used to hedge foreign exchange risk by locking in a fixed exchange rate for a future transaction. It involves an agreement between two parties to buy or sell an asset at a predetermined price and date. Forward contracts are commonly used by importers and exporters to manage their exposure to currency fluctuations."
+    "url": "https://cloud.frappe.io/marketplace/apps/forward_contract"
+  },
+  {
+    "title": "IPCONNEX Stripe Payment",
+"description": "A module created by ipconnex to make stripe payments easier for clients using the frappe erp"
+    "url": "https://cloud.frappe.io/marketplace/apps/ipconnex_stripe_payment"
+  },
+  {
+    "title": "Sipgate Integration",
+"description": "Sync contacts from Frappe/ERPNext to Sipgate."
+    "url": "https://cloud.frappe.io/marketplace/apps/sipgate"
+  },
+  {
+    "title": "Frappe Changemakers",
+"description": "FOSS Beneficiary Management System with tracking of services like Food Distribution, Shelter, Education and more"
+    "url": "https://cloud.frappe.io/marketplace/apps/changemakers"
+  },
+  {
+    "title": "Advance Authorisation Licence",
+"description": "This app in ERPNext helps manage Advance Authorisation Licences, which exempt import duties on raw materials for manufacturing export products. The app ensures that licenses are not overutilized for imports and exports, preventing penalties and loss of duty drawback benefits. The user can create and utilize licenses, and the system calculates remaining quantities and amounts for each declared item."
+    "url": "https://cloud.frappe.io/marketplace/apps/advance_authorisation_licence"
+  },
+  {
+    "title": "QR/Barcode Check-In-Out",
+"description": "QR/Barcode manages the check-in and check-out entry. QR/Barcode actual use for gym trainers and members, Hotel/Restaurant members, office members, and employees. For more security propose, we can also provide the Two Factor Code with a check-in-check-out entry."
+    "url": "https://cloud.frappe.io/marketplace/apps/qr_barcode_check_inout"
+  },
+  {
+    "title": "ONDC Seller App",
+"description": "ONDC Seller Integration for ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/ondc_seller_app"
+  },
+  {
+    "title": "ChatNext",
+"description": "Introducing Chatnext, the AI-powered assistant for Frappe and ERPNext users. Enhance your user experience and streamline workflows with instant query resolution, in-depth knowledge of various modules, contextual assistance, and proactive solutions. Chatnext seamlessly integrates with your existing setup and continuously improves its knowledge base. Future features include workflow automation, advanced analytics, voice command support, and third-party integrations. Transform your ERPNext experience with Chatnext today!"
+    "url": "https://cloud.frappe.io/marketplace/apps/nextai"
+  },
+  {
+    "title": "EMD Management",
+"description": "The process of giving an Earnest Money Deposit (EMD) involves filling out a form with relevant information. Once submitted, the system generates an EMD Journal Entry, tracks expenses, and creates a receivable from the customer."
+    "url": "https://cloud.frappe.io/marketplace/apps/emd_management"
+  },
+  {
+    "title": "Print Designer",
+"description": "Design print formats using a drag and drop user interface"
+    "url": "https://cloud.frappe.io/marketplace/apps/print_designer"
+  },
+  {
+    "title": "Official EasyEcom Integration",
+"description": "Official app for integration of EasyEcom with ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_easyecom"
+  },
+  {
+    "title": "Rodtep Claim Management",
+"description": "The app is specifically designed to help users manage their RODTEP and Duty Drawback claims for exports. It allows users to create accounts, enter Exim details, submit invoices, and manage their claims through adding or removing entries and entering relevant account information. Additionally, the app provides features to view reports and account balances."
+    "url": "https://cloud.frappe.io/marketplace/apps/rodtep_claim_management"
+  },
+  {
+    "title": "Recapp",
+"description": "Keep track of daily tasks and revisit them when needed in future."
+    "url": "https://cloud.frappe.io/marketplace/apps/recapp"
+  },
+  {
+    "title": "Fd Management",
+"description": "This Fixed Deposit Management App simplifies the management of fixed deposits by providing a platform to add, update, and renew fixed deposits with ease. This app provides an efficient and streamlined approach to manage fixed deposits."
+    "url": "https://cloud.frappe.io/marketplace/apps/fd_management"
+  },
+  {
+    "title": "Sheets",
+"description": "Effortless synchronization between Google Sheets & ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/sheets"
+  },
+  {
+    "title": "Toolbox",
+"description": "ToolBox keeps your ERPNext & Frappe sites healthy with it's automated Site Maintenance tools"
+    "url": "https://cloud.frappe.io/marketplace/apps/toolbox"
+  },
+  {
+    "title": "Group Financial Report",
+"description": "This app includes two powerful reports to serve Group General Ledger and Group Trial Balance. The Group General Ledger report provides a comprehensive overview of the General Ledger across all companies in a single consolidated view. Similarly, the Group Trial Balance report offers a consolidated view of the Trial Balance for all companies. These reports empower businesses to efficiently manage their financial data across multiple entities, providing a streamlined and holistic approach to financial management."
+    "url": "https://cloud.frappe.io/marketplace/apps/tesla"
+  },
+  {
+    "title": "Four Whats Net",
+"description": "This app is integrating Saudi Arabia's leading Whatspp messaging provider 4whats.net with ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/four_whats_net"
+  },
+  {
+    "title": "E Invoice Mexico",
+"description": "The Mexico E Invoicing (FacturAPI Integration) app provide a compliant invoicing solution for businesses in Mexico."
+    "url": "https://cloud.frappe.io/marketplace/apps/mexico_einvoice"
+  },
+  {
+    "title": "Face App",
+"description": "The Face Recognition App for Employee Attendance with Location is a comprehensive application designed to simplify and enhance the attendance tracking process in organizations"
+    "url": "https://cloud.frappe.io/marketplace/apps/face_app"
+  },
+  {
+    "title": "Library Management",
+"description": "Welcome to library management in ERPNext! This manual is designed to provide comprehensive guidance on effectively utilizing ERPNext to streamline library operations and enhance patron services. By following the instructions and best practices outlined in this manual, library staff can optimize their workflow and leverage the power of ERPNext for efficient library management."
+    "url": "https://cloud.frappe.io/marketplace/apps/lib_mgmt"
+  },
+  {
+    "title": "Photos",
+"description": "Facial Recognition & Clustering for your Photos"
+    "url": "https://cloud.frappe.io/marketplace/apps/photos"
+  },
+  {
+    "title": "Desk Navbar Extended",
+"description": "Tweaks in Desk's Navbar to boost your Productivity"
+    "url": "https://cloud.frappe.io/marketplace/apps/desk_navbar_extended"
+  },
+  {
+    "title": "Raven",
+"description": "Enterprise-first messaging platform that integrates with ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/raven"
+  },
+  {
+    "title": "Stripe2 Payment Integration",
+"description": "Stripe payment integration"
+    "url": "https://cloud.frappe.io/marketplace/apps/stripe2"
+  },
+  {
+    "title": "InstaGPT",
+"description": "Your one-stop solution that allows users to interact with ChatGPT anywhere inside Frappe Framework"
+    "url": "https://cloud.frappe.io/marketplace/apps/instagpt"
+  },
+  {
+    "title": "Indiamart Integration",
+"description": "The Frappe IndiaMart Integration App facilitates the seamless integration between IndiaMart and ERPNext. This integration allows for the automatic retrieval of data from IndiaMart, which is then used to create leads in ERPNext. Users have the flexibility to set up a recurring cron job to pull data from IndiaMart at regular intervals, or manually pull data from the IndiaMart portal through the 'Indiamart Setting' Page. To enable this integration, users need to obtain a key from the IndiaMart portal, set it up in the app's settings, and enable the IndiaMart module."
+    "url": "https://cloud.frappe.io/marketplace/apps/indiamart_integration"
+  },
+  {
+    "title": "Balance Sheet Reconciliation",
+"description": "This module add reconciliation option for any balance sheet accounts."
+    "url": "https://cloud.frappe.io/marketplace/apps/bs_reconcile"
+  },
+  {
+    "title": "HR Forms",
+"description": "Empower HR departments to efficiently create, customize, submit, and generate print-ready HR forms, simplifying administrative tasks and enhancing productivity in managing HR processes."
+    "url": "https://cloud.frappe.io/marketplace/apps/hr_forms"
+  },
+  {
+    "title": "Resend Integration",
+"description": "Send Emails via Resend"
+    "url": "https://cloud.frappe.io/marketplace/apps/resend_integration"
+  },
+  {
+    "title": "Batch Payments",
+"description": "Pay batches of Supplier Invoices and generate BAI2 and ABA files and remittance advice emails."
+    "url": "https://cloud.frappe.io/marketplace/apps/batch_payments"
+  },
+  {
+    "title": "Whatsapp Plus",
+"description": "WhatsApp integration for frappe using meta API's"
+    "url": "https://cloud.frappe.io/marketplace/apps/whatsapp_plus"
+  },
+  {
+    "title": "Treasury Entry",
+"description": "A comprehensive solution for managing treasury transactions, it enables you to record and track various financial activities related to treasury operations, this feature consists of two components: Treasury Entry, Treasury List."
+    "url": "https://cloud.frappe.io/marketplace/apps/safe_entry"
+  },
+  {
+    "title": "Zymmr",
+"description": "Zymmr is a project management platform for Agile as well and non-agile teams."
+    "url": "https://cloud.frappe.io/marketplace/apps/everest"
+  },
+  {
+    "title": "Lending",
+"description": "Open source loan management system"
+    "url": "https://cloud.frappe.io/marketplace/apps/lending"
+  },
+  {
+    "title": "Dealership Management",
+"description": "A dealership management system (DMS) is a business management software provider for dealerships to help them manage their day-to-day business activities."
+    "url": "https://cloud.frappe.io/marketplace/apps/dealership_management"
+  },
+  {
+    "title": "Alerts",
+"description": "A small frappe module that displays custom alerts to specific recipients after login."
+    "url": "https://cloud.frappe.io/marketplace/apps/alerts"
+  },
+  {
+    "title": "Timesheet Overtime",
+"description": "Timesheet overtime calculation"
+    "url": "https://cloud.frappe.io/marketplace/apps/overtime"
+  },
+  {
+    "title": "Appointment Booking Management",
+"description": "In the Appointment Booking System, you can easily handle applications for various purposes based on different places and spaces. For instance, if you have multiple branches for your gym, you can organize the areas or rooms according to each branch's location. This way, you can create a tailored solution for different needs, all with their own unique themes."
+    "url": "https://cloud.frappe.io/marketplace/apps/booking_mgmt"
+  },
+  {
+    "title": "Nb Desk",
+"description": "NB Desk is the feature build to extend current feature in Frappe HelpDesk with Slack Integration. This app will enable users to create ticket directly from their Slack Channel. And also get messages in individual thread for each ticket with 2 way communication"
+    "url": "https://cloud.frappe.io/marketplace/apps/nb_desk"
+  },
+  {
+    "title": "ERPNext France",
+"description": "App to hold regional code and localization for France, built on top of ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_france"
+  },
+  {
+    "title": "Ultramsg Whatsapp Integration",
+"description": "UltraMessenger WhatsApp Integration is a powerful application designed to enhance your notification capabilities by enabling you to send WhatsApp alerts for various critical events in your system. This integration provides a range of features, including the ability to send WhatsApp notifications for events like order overdue reminders and payment notifications. You can customize these notifications with dynamic data placeholders, and the application also allows for automation of notifications based on event triggers and conditions."
+    "url": "https://cloud.frappe.io/marketplace/apps/ultramsg_whatsapp_integration"
+  },
+  {
+    "title": "Parlo",
+"description": "Parlo is your dedicated solution for mastering part load management with precision and ease. If you deal with transportation that involves part loads, Parlo is the app you've been waiting for."
+    "url": "https://cloud.frappe.io/marketplace/apps/parlo"
+  },
+  {
+    "title": "GETPOS",
+"description": "GETPOS is a comprehensive cloud-based Point of Sale (POS) app developed by NestorBird. It’s designed to support multi-store retail, restaurant, and supermarket businesses. Manage real-time transactions, inventory, and operations across multiple locations effortlessly. With features like dynamic taxation, currency management, and customer tracking, GETPOS enhances efficiency and increases profitability."
+    "url": "https://cloud.frappe.io/marketplace/apps/nbpos"
+  },
+  {
+    "title": "SmartConnect Mobile App",
+"description": "SmartConnect: Interactive Mobile App"
+    "url": "https://cloud.frappe.io/marketplace/apps/mtpl_api"
+  },
+  {
+    "title": "Banking",
+"description": "Sync payments from your bank to your ERPNext instance and reconcile them with your vouchers."
+    "url": "https://cloud.frappe.io/marketplace/apps/banking"
+  },
+  {
+    "title": "Digital Sewa",
+"description": "Ticketing Solution in Frappe and ERPNext along with Voice Service. Digital Sewa is extension for any Frappe, ERPNext or Custom App doctype, where DS Ticket can be configured to log call records handled by agent for inbound or outbound calls. This app has integration with 2 Cloud Voice service providers, Servertel and Knowlarity enabling voice call service with Frappe"
+    "url": "https://cloud.frappe.io/marketplace/apps/digital_sewa"
+  },
+  {
+    "title": "NotiBell",
+"description": "NotiBell Frappe app enables the user to use NotiBell mobile app for Android and IOS. This app shows push notification from ERPNext and Frappe on phone with Workflow action through mobile app."
+    "url": "https://cloud.frappe.io/marketplace/apps/notibell"
+  },
+  {
+    "title": "Email Reminder",
+"description": "The role of this application is to send a reminder email to several users related to certain changes to any document type, in order to keep the users in complete communication and aware of every movement that takes place on any document type or of any change that occurs in the system, and a message or description of what happened on the document is also sent."
+    "url": "https://cloud.frappe.io/marketplace/apps/email_reminder"
+  },
+  {
+    "title": "Labor Management System",
+"description": "Laborers Management An integrated system for the management of daily (temporary) labors, starting from basic information and placement on projects and cost centers, then attendance, overtime and deductions, until the salary statement and the payment of financial dues."
+    "url": "https://cloud.frappe.io/marketplace/apps/laborers_management"
+  },
+  {
+    "title": "Branchy",
+"description": "This App contains a custom Frappe application designed to manage user permissions in ERPNext. The application provides an intuitive interface and robust backend functionalities to handle complex permission structures in ERPNext."
+    "url": "https://cloud.frappe.io/marketplace/apps/branchy"
+  },
+  {
+    "title": "Whatsapp app notification using UltraMsg",
+"description": "Open source app for integrating leading Whatspp messaging provider UltraMsg with ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/ultramsg_4_erpnext"
+  },
+  {
+    "title": "Appointedd Integration",
+"description": "Streamlined Appointment Management With Appointedd Integration With ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/appointedd_integration"
+  },
+  {
+    "title": "Tekton Theme",
+"description": "Tekton-Theme is a custom app for Frappe that enhances the theme switcher functionality by providing additional themes. As of now, it includes one theme called 'Tekton Blue'."
+    "url": "https://cloud.frappe.io/marketplace/apps/tekton_theme"
+  },
+  {
+    "title": "Price Lookup",
+"description": "Historical Pricing Insights"
+    "url": "https://cloud.frappe.io/marketplace/apps/price_lookup"
+  },
+  {
+    "title": "Frappe S3 Attachment",
+"description": "Frappe app to make file upload automatically upload and read from s3."
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_s3_attachment"
+  },
+  {
+    "title": "Webshop",
+"description": "Open source e-commerce platform"
+    "url": "https://cloud.frappe.io/marketplace/apps/webshop"
+  },
+  {
+    "title": "Awesome Whiteboard",
+"description": "Feature rich whiteboard, powered by tldraw.dev, right in your Frappe desk."
+    "url": "https://cloud.frappe.io/marketplace/apps/tldraw_whiteboard"
+  },
+  {
+    "title": "ERPNext IndiaMART Integration",
+"description": "Enhance CRM with IndiaMART Integration"
+    "url": "https://cloud.frappe.io/marketplace/apps/indiamart"
+  },
+  {
+    "title": "Nepali Date (BS)",
+"description": "This Frappe application allows you to use Nepali Date on the Frappe Framework"
+    "url": "https://cloud.frappe.io/marketplace/apps/nepalidate"
+  },
+  {
+    "title": "Tata Smartflo Call Integration",
+"description": "Enhance CRM with Tata Smartflo integration."
+    "url": "https://cloud.frappe.io/marketplace/apps/call_integration"
+  },
+  {
+    "title": "AutoInscribe",
+"description": "Seamless automatic data capture and integration solution"
+    "url": "https://cloud.frappe.io/marketplace/apps/autoinscribe"
+  },
+  {
+    "title": "Builder",
+"description": "Low-code website builder for designers and developers"
+    "url": "https://cloud.frappe.io/marketplace/apps/builder"
+  },
+  {
+    "title": "AI Invoice Importer",
+"description": "Open Source tool used to import invoices from a PDF file using Chat-GPT"
+    "url": "https://cloud.frappe.io/marketplace/apps/ipconnex_ai_invoice"
+  },
+  {
+    "title": "Telenor Sms",
+"description": "Send SMS using Telenor API"
+    "url": "https://cloud.frappe.io/marketplace/apps/telenor_sms"
+  },
+  {
+    "title": "CRM",
+"description": "Modern and 100% open source CRM solution to supercharge your sales operations"
+    "url": "https://cloud.frappe.io/marketplace/apps/crm"
+  },
+  {
+    "title": "SND Tooltip",
+"description": "SND Tooltip, is for display informative text when users hover over, focus on, or tap an fields"
+    "url": "https://cloud.frappe.io/marketplace/apps/snd_tooltip"
+  },
+  {
+    "title": "Rental Management",
+"description": "Machine and Equipment Rental ERPNext apps general functions which can be utilised for any rental business is quite well spread across many industry"
+    "url": "https://cloud.frappe.io/marketplace/apps/rental_management"
+  },
+  {
+    "title": "Mansico Meta Integration",
+"description": "Mansico Meta Integration is a powerful open-source application designed to seamlessly synchronize Facebook leads with ERPNext."
+    "url": "https://cloud.frappe.io/marketplace/apps/mansico_meta_integration"
+  },
+  {
+    "title": "Print Encrypt",
+"description": "A software tool designed to enhance security by encrypting sensitive information before sending email"
+    "url": "https://cloud.frappe.io/marketplace/apps/print_encrypt"
+  },
+  {
+    "title": "Whatsapp Chat",
+"description": "Chat app to Send and receive WhatsApp messages."
+    "url": "https://cloud.frappe.io/marketplace/apps/whatsapp_chat"
+  },
+  {
+    "title": "snapADDY Integration",
+"description": "Sync leads from snapADDY to ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_snapaddy"
+  },
+  {
+    "title": "mYojana",
+"description": "Enhance your NGO’s impact with a beneficiary management solution!"
+    "url": "https://cloud.frappe.io/marketplace/apps/myojana"
+  },
+  {
+    "title": "ERPNext Ecuador",
+"description": "ERPNext Ec is a localization for Ecuador of ERPNext, designed to comply with the country's legal and fiscal requirements."
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_ec"
+  },
+  {
+    "title": "KSA Compliance (ZATCA Phase 1 and 2 E-Invoicing)",
+"description": "A free and open-source Frappe application for KSA Compliance (ZATCA Integration) , offering support for both Phase 1 and Phase 2."
+    "url": "https://cloud.frappe.io/marketplace/apps/ksa_compliance"
+  },
+  {
+    "title": "Nepali Calendar",
+"description": "A simple app for adding Nepali Datepicker to Frappe Framework"
+    "url": "https://cloud.frappe.io/marketplace/apps/nepali_calendar"
+  },
+  {
+    "title": "ClefinCode Chat",
+"description": "Chat and Omni-channel integration of WhatsApp, Telegram, Facebook Messenger, and Instagram messaging for unified audience engagement."
+    "url": "https://cloud.frappe.io/marketplace/apps/clefincode_chat"
+  },
+  {
+    "title": "ERPNext GoCardless Bank",
+"description": "Synchronize payments from your bank to your ERPNext instance with our free and open-source GoCardless integration."
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_gocardless_bank"
+  },
+  {
+    "title": "WooCommerce Integration",
+"description": "Sync your stock levels from ERPNext to WooCommerce and receive sales orders from WooCommerce in ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/woocommerce_integration"
+  },
+  {
+    "title": "Zatca Phase-2 E-Invoicing",
+"description": "A Frappe app for users in Saudi Arabia, to be compliant with country tax laws"
+    "url": "https://cloud.frappe.io/marketplace/apps/zatca_erpgulf"
+  },
+  {
+    "title": "Egypt Compliance - E-Invoice & E-Receipt",
+"description": "ETA: Egyptian Tax Authority Full Integration, Egypt E-Invoice & Egypt E-Receipt"
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_egypt_compliance"
+  },
+  {
+    "title": "Drive",
+"description": "Delightful, open source file storage, and sharing solution"
+    "url": "https://cloud.frappe.io/marketplace/apps/drive"
+  },
+  {
+    "title": "Pane View",
+"description": "A Frappe add-on to add pane view feature to ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/paneview"
+  },
+  {
+    "title": "commit",
+"description": "Developer tooling for Frappe apps"
+    "url": "https://cloud.frappe.io/marketplace/apps/commit"
+  },
+  {
+    "title": "Payment Installments",
+"description": "Frappe add-on for adding Installment feature in Accounting"
+    "url": "https://cloud.frappe.io/marketplace/apps/payment_installment_kanak"
+  },
+  {
+    "title": "Islamic Calendar",
+"description": "A useful ERPNext add-on for providing Islamic date picker option to users"
+    "url": "https://cloud.frappe.io/marketplace/apps/islamic_calendar"
+  },
+  {
+    "title": "ProCredit Bank Statement Processing",
+"description": "Simplify your financial operations and enhance your ERPNext experience with the ProCredit Bank Statement Processing App"
+    "url": "https://cloud.frappe.io/marketplace/apps/procreditbank"
+  },
+  {
+    "title": "SigzenMSME",
+"description": "The SigzenMSME app is designed to enhance ERPNext by adding functionalities specific to MSME requirements."
+    "url": "https://cloud.frappe.io/marketplace/apps/sigzen_msme"
+  },
+  {
+    "title": "Planner",
+"description": "Employee Scheduling tool for ERPNext"
+    "url": "https://cloud.frappe.io/marketplace/apps/planner"
+  },
+  {
+    "title": "Swiss Accounting Software",
+"description": "Enables ERPNext for Switzerland with a built in QR Code generator, bank payment integration from XML files and more."
+    "url": "https://cloud.frappe.io/marketplace/apps/swiss_accounting_software"
+  },
+  {
+    "title": "Attendance and Timesheet",
+"description": "This app includes functionalities to calculate and create timesheets from attendance records. Timesheets are created based on any hours above normal working hours, recorded in attendance."
+    "url": "https://cloud.frappe.io/marketplace/apps/nl_attendance_timesheet"
+  },
+  {
+    "title": "Piece Rate Pay",
+"description": "The Piece Rate Pay streamlines the management of casual workers' payments by providing tools for setting up activity types and linking them to specific items/products."
+    "url": "https://cloud.frappe.io/marketplace/apps/nl_piece_rate_pay"
+  },
+  {
+    "title": "ProcurementNext",
+"description": "A powerful custom app to boost the procurement capabilities of ERPNext teams."
+    "url": "https://cloud.frappe.io/marketplace/apps/advanced_procurement"
+  },
+  {
+    "title": "Document Progress Tracker",
+"description": "📈 Document Progress Tracker is an essential app for ERPNext/Frappe users"
+    "url": "https://cloud.frappe.io/marketplace/apps/document_progress_tracker"
+  },
+  {
+    "title": "WMS",
+"description": "Streamline your warehouse operations with "
+    "url": "https://cloud.frappe.io/marketplace/apps/wms"
+  },
+  {
+    "title": "Biostar Biometric Integration",
+"description": "This application offers a robust integration with Suprema Biostar Biometrics, enabling seamless synchronization of employee check-in records based on specific user configurations."
+    "url": "https://cloud.frappe.io/marketplace/apps/navari_frappehr_biostar"
+  },
+  {
+    "title": "Burundi Compliance",
+"description": "Streamline Burundi EBMS (Electronic Billing) tax compliance in ERPNext. Effortlessly manage tax tasks and stay compliant with ease."
+    "url": "https://cloud.frappe.io/marketplace/apps/burundi_compliance"
+  },
+  {
+    "title": "eShipz - Logistics Automation Solution",
+"description": "Effortlessly integrate ERPNext with eShipz to streamline your logistics operations with leading multi-courier partners like Blue Dart, Delhivery, and FedEx. Experience faster, smoother, and more efficient shipping solutions, enhanced by eShipz’s comprehensive services, including real-time tracking, automated shipping, and advanced analytics. Optimize your supply chain and ensure reliable deliveries with our seamless ERPNext integration."
+    "url": "https://cloud.frappe.io/marketplace/apps/eshipz"
+  },
+  {
+    "title": "Organization Chart Advance",
+"description": "A useful frappe HR add-on which enhances the standard functionality to visualize complex hierarchical structures within the organization more effectively."
+    "url": "https://cloud.frappe.io/marketplace/apps/organizational_chart_knk"
+  },
+  {
+    "title": "POSNext",
+"description": "An open-source Point of Sale for ERPNext, forked from the default ERPNext POS, aiming to fulfill the features of POSAwesome. It serves as an alternative to POSAwesome."
+    "url": "https://cloud.frappe.io/marketplace/apps/posnext"
+  },
+  {
+    "title": "Rukntheme",
+"description": "RuknTheme is a custom Frappe theme designed to enhance the user experience and give a fresh, modern look to your Frappe applications. This theme focuses on clean design, intuitive navigation, and customization options to suit your application's unique needs."
+    "url": "https://cloud.frappe.io/marketplace/apps/rukntheme"
+  },
+  {
+    "title": "Item Translation",
+"description": "Create translations for Item descriptions and fetch them in transactions."
+    "url": "https://cloud.frappe.io/marketplace/apps/item_translation"
+  },
+  {
+    "title": "Swagger UI",
+"description": "This project provides a Swagger UI generator for Frappe apps, allowing developers to easily document and explore their APIs."
+    "url": "https://cloud.frappe.io/marketplace/apps/swagger"
+  },
+  {
+    "title": "Bezzie",
+"description": "The App Provides API's for free and open source Bezzie mobile app."
+    "url": "https://cloud.frappe.io/marketplace/apps/bezzie"
+  },
+  {
+    "title": "Super Admin",
+"description": "This app is a custom Frappe application built to manage user permissions in ERPNext. It features an intuitive interface and powerful backend functionality to handle complex permission structures within ERPNext."
+    "url": "https://cloud.frappe.io/marketplace/apps/super_admin"
+  },
+  {
+    "title": "ERPNext Mexico Compliance",
+"description": "Adapt ERPNext to comply with Mexican Authorities rules and regulations"
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_mexico_compliance"
+  },
+  {
+    "title": "DocType Permission",
+"description": "Restrict first, grant later - Document Permission Management"
+    "url": "https://cloud.frappe.io/marketplace/apps/doctype_permission"
+  },
+  {
+    "title": "Role Permission Manager",
+"description": "Centralized document to view, edit, and manage all user role permissions in one place for both native and custom roles."
+    "url": "https://cloud.frappe.io/marketplace/apps/role_permission_manager"
+  },
+  {
+    "title": "Productivity Next",
+"description": "Productify by FinByz is a productivity tool that tracks employee activity, work hours, and system usage to enhance workplace efficiency. Available as software and a browser extension, it offers detailed insights into web browsing, keystrokes, mouse clicks, and mobile call analysis."
+    "url": "https://cloud.frappe.io/marketplace/apps/productivity_next"
+  },
+  {
+    "title": "Frappe Slack Connector",
+"description": "Frappe app that integrates the Leave Management module with Slack"
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_slack_connector"
+  },
+  {
+    "title": "Esign App",
+"description": "Empower your business with seamless, secure, and legally binding digital signatures."
+    "url": "https://cloud.frappe.io/marketplace/apps/esign_app"
+  },
+  {
+    "title": "Ecommerce Theme",
+"description": "A modern, responsive theme builder for e-commerce webshops built on the Frappe Framework."
+    "url": "https://cloud.frappe.io/marketplace/apps/ecommerce_theme"
+  },
+  {
+    "title": "Audit Control Reports",
+"description": "This app provides simple maker checker controls on ERPNext Accounts module doctypes like Sales Invoice, Purchase Invoice, Payment entry and Journal Entry. It also provides a System Audit Trail report required for Audit purposes which shows the Audit Trail data in one place for selected Doctypes. It is compatible with version 13, version 14, version 15 of ERPNext."
+    "url": "https://cloud.frappe.io/marketplace/apps/audit_control_reports"
+  },
+  {
+    "title": "Pocket Wallet",
+"description": "The Pocket Wallet is a user-friendly web application designed to help individuals and small businesses manage their finances effortlessly."
+    "url": "https://cloud.frappe.io/marketplace/apps/pocket_wallet"
+  },
+  {
+    "title": "WooCommerce Fusion",
+"description": "Synchronise your ERPNext site with multiple WooCommerce websites, including Sales Orders, Items, Item Stock Levels and Item Prices"
+    "url": "https://cloud.frappe.io/marketplace/apps/woocommerce_fusion"
+  },
+  {
+    "title": "Dynamic Bulk PDF Downloader",
+"description": "Download Bulk Sorted PDF at One Click"
+    "url": "https://cloud.frappe.io/marketplace/apps/bulk_download"
+  },
+  {
+    "title": "European e-Invoice",
+"description": "Create and import e-invoices with ERPNext."
+    "url": "https://cloud.frappe.io/marketplace/apps/eu_einvoice"
+  },
+  {
+    "title": "ERPNext Indonesia Localization",
+"description": "ERPNext Indonesia Localization - Localization of ERPNext for Indonesia region, including Indonesia Tax and Charges feature."
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_indonesia_localization"
+  },
+  {
+    "title": "Frappe Attachment Preview",
+"description": "Frappe Attachment Preview provides an easy and convenient way to preview file attachments directly within the Frappe framework.",
+    "url": "https://cloud.frappe.io/marketplace/apps/preview_attachment"
+  },
+  {
+    "title": "AmPower Visualize",
+"description": "Ampower Visualize enables you to see your transactions in a natural dependency graph. Easier to parse, easier to trace - this view enables you to see which Orders are connected to which purchases or deliveries.",
+    "url": "https://cloud.frappe.io/marketplace/apps/ampower_visualize"
+  },
+  {
+    "title": "Cams Biometrics Integration",
+"description": "Integrating the CAMS biometrics system with FrappeHR enables real-time attendance tracking and automated data synchronization. This integration allows you to efficiently capture and manage punch logs directly from your biometric devices, ensuring accurate and up-to-date attendance records.",
+    "url": "https://cloud.frappe.io/marketplace/apps/navari_cams_biometric"
+  },
+  {
+    "title": "Mail Reminder",
+"description": "Quickly setup conditions and mail template and then, let ERPNext send email remainder to your customer for unpaid invoice, or not receive purchase order materials.",
+    "url": "https://cloud.frappe.io/marketplace/apps/mail_reminder"
+  },
+  {
+    "title": "TIMS Tevic Type-C Integration",
+"description": "TIMS Tevic Type C app enhances business operations by ensuring compliance with Kenya Revenue Authority (KRA) regulations through real-time submission of invoices and credit notes.",
+    "url": "https://cloud.frappe.io/marketplace/apps/tims_tevin_typec_integration"
+  },
+  {
+    "title": "Sajha Menu",
+"description": "Streamline restaurant operations with an ERP-based system for efficient management.",
+    "url": "https://cloud.frappe.io/marketplace/apps/sajha_menu"
+  },
+  {
+    "title": "Utility & Rental Billing",
+"description": "Streamline utility billing, leasing & tenants",
+    "url": "https://cloud.frappe.io/marketplace/apps/utility_billing"
+  },
+  {
+    "title": "Frappe Tingg Payments",
+"description": "This is a Frappe-based application that integrates with the Tingg API from Cellulant.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_tingg_payments"
+  },
+  {
+    "title": "Cargo Management",
+"description": "The Cargo Management App is a powerful tool designed to streamline logistics and transportation workflows. This app provides features for managing services, tracking orders, and optimizing transport modes across various operations.",
+    "url": "https://cloud.frappe.io/marketplace/apps/cargo_management"
+  },
+  {
+    "title": "Etims",
+"description": "eTIMS (electronic Tax Invoice Management System) is a module that integrates seamlessly with Frappe and ERPNext, providing taxpayers with a simple, convenient, and flexible solution for electronic invoicing while streamlining tax invoicing, inventory management, and sales processes.",
+    "url": "https://cloud.frappe.io/marketplace/apps/kenya_etims_compliance"
+  },
+  {
+    "title": "Kenya Compliance (KRA eTIMS)",
+"description": "This app works to integrate ERPNext with KRA's eTIMS via Slade360 to allow for the sharing of information with the revenue authority.",
+    "url": "https://cloud.frappe.io/marketplace/apps/kenya_compliance_via_slade"
+  },
+  {
+    "title": "Biometric Integration (Hikvision)",
+"description": "The Biometric Integration (Hikvision) app seamlessly connects your Hikvision Face Terminal with the Frappe framework, enabling smooth integration for biometric attendance management. This app is designed to streamline the process of recording and syncing employee attendance data, providing real-time access control and status updates directly within your Frappe-based ERP system.",
+    "url": "https://cloud.frappe.io/marketplace/apps/biometric_integration"
+  },
+  {
+    "title": "ERPNext Thailand",
+"description": "Useful feature set for Thailand community, i.e., Thai Tax, Bill (ใบวางบิล), Get Address from Tax ID / zip code.",
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_thailand"
+  },
+  {
+    "title": "Uganda Compliance",
+"description": "ERPNext integration with Uganda's EFRIS for VAT compliance",
+    "url": "https://cloud.frappe.io/marketplace/apps/uganda_compliance"
+  },
+  {
+    "title": "RFQ Opening Process",
+"description": "This a Frappe app extends the standard Request for Quotation (RFQ) functionality in ERPNext by introducing enhancements to streamline the procurement process.",
+    "url": "https://cloud.frappe.io/marketplace/apps/rfq_opening_process"
+  },
+  {
+    "title": "Payment Integration Utils",
+"description": "A base app for building secure bank integrations in ERPNext.",
+    "url": "https://cloud.frappe.io/marketplace/apps/payment_integration_utils"
+  },
+  {
+    "title": "Payments Processor",
+"description": "Automate, Optimize and Customize Payment Workflows for ERPNext",
+    "url": "https://cloud.frappe.io/marketplace/apps/payments_processor"
+  },
+  {
+    "title": "RazorpayX Integration",
+"description": "Seamless RazorpayX Integration for ERPNext | Automate Bulk Vendor Payouts",
+    "url": "https://cloud.frappe.io/marketplace/apps/razorpayx_integration"
+  },
+  {
+    "title": "QuickDo",
+"description": "Introducing our to-do management app, built with React and the Frappe framework. Simplify your task creation and management with an intuitive interface that allows you to categorize and organize your to-dos efficiently. Boost your productivity and stay on top of your tasks with ease.",
+    "url": "https://cloud.frappe.io/marketplace/apps/quickdo"
+  },
+  {
+    "title": "Frappe Appointment",
+"description": "Frappe app designed to streamline meeting scheduling with smart integrations with Google Calendar, Zoom and Frappe HRMS Leave Module.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_appointment"
+  },
+  {
+    "title": "Block Administrator",
+"description": "A app for Frappe that prevents direct login to the administrator account when email-password authentication is enabled",
+    "url": "https://cloud.frappe.io/marketplace/apps/block_administrator"
+  },
+  {
+    "title": "Insightly",
+"description": "Insightly - Customer & Supplier Intelligence",
+    "url": "https://cloud.frappe.io/marketplace/apps/insightly"
+  },
+  {
+    "title": "Colorful Material Theme",
+"description": "A Color full theme for Frappe Desk based on Google Material Design",
+    "url": "https://cloud.frappe.io/marketplace/apps/material_theme"
+  },
+  {
+    "title": "Sanpra Easypay",
+"description": "Easypay – ICICI Integrated Payments App",
+    "url": "https://cloud.frappe.io/marketplace/apps/sanpra_easypay"
+  },
+  {
+    "title": "ProjectIT",
+"description": "ProjectIT is an Open Source PWA mobile app to track the Employees out in the field. This mobile app is developed on Frappe Framework and it is integrated with the Project functionalities of ERPNext.",
+    "url": "https://cloud.frappe.io/marketplace/apps/projectit"
+  },
+  {
+    "title": "HRMS Checkin",
+"description": "We have added check-in and check-out button for employee",
+    "url": "https://cloud.frappe.io/marketplace/apps/hrms_checkin"
+  },
+  {
+    "title": "Frappe Zakat",
+"description": "Zakat app is a key Islamic duty that involves giving part of one’s wealth to those in need. This feature helps individuals and businesses accurately calculate their Zakat in line with Islamic guidelines.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_zakat"
+  },
+  {
+    "title": "Leave Calendar",
+"description": "A Leave Calendar to show employee leaves with role-based access and holiday integration",
+    "url": "https://cloud.frappe.io/marketplace/apps/leave_calendar"
+  },
+  {
+    "title": "MSG91 Integration",
+"description": "This app provides integration with the for MSG91 SMS gateway Frappe Framework.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_msg91_integration"
+  },
+  {
+    "title": "Digital Signer",
+"description": "This app allows you to digitally sign Sales Order, Sales Invoices, Purchase Order, and Purchase Invoice in ERPNext visible signature.",
+    "url": "https://cloud.frappe.io/marketplace/apps/digital_signer"
+  },
+  {
+    "title": "OpenAI Integration",
+"description": "An easy-to-use Frappe app that integrates OpenAI’s GPT models (like ChatGPT) into your ERP system. Send prompts and get AI responses directly from the Frappe interface.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_openai_integration"
+  },
+  {
+    "title": "Fax",
+"description": "A Faxing System for Frappe Framework using Telnyx API",
+    "url": "https://cloud.frappe.io/marketplace/apps/fax"
+  },
+  {
+    "title": "Professional Tax",
+"description": "This app enables automated Professional Tax calculation in the Salary Slip based on custom formulas defined at the state level.",
+    "url": "https://cloud.frappe.io/marketplace/apps/professional_tax"
+  },
+  {
+    "title": "FC Site Manager",
+"description": "An app that connects directly to Frappe Cloud(or press) and pulls relevant data to your instance and allows users to login directly to other instances, rotates user passwords and disable users periodically.",
+    "url": "https://cloud.frappe.io/marketplace/apps/fc_site_manager"
+  },
+  {
+    "title": "Customer Statements",
+"description": "Present prettier statements to your customers",
+    "url": "https://cloud.frappe.io/marketplace/apps/customer_statements"
+  },
+  {
+    "title": "ClickPost Logistics Intelligence",
+"description": "Automate your entire logistics operations from carrier allocation to EPOD using the ClickPost App in ERPNext.",
+    "url": "https://cloud.frappe.io/marketplace/apps/clickpost_erpnext_integration"
+  },
+  {
+    "title": "Postal Db",
+"description": "A comprehensive Frappe application containing complete Indian postal data, including PIN codes, areas, cities, districts, and states. This app provides easy access to Indian geographical and postal information for integration with your Frappe/ERPNext applications.",
+    "url": "https://cloud.frappe.io/marketplace/apps/postal_db"
+  },
+  {
+    "title": "Next AI",
+"description": "NextAI is a custom Frappe app that integrates with AI LLM to enhance content creation within the system. It allows users to generate text such as terms and conditions, correct grammar, and improve content using AI prompts directly in supported editor fields.",
+    "url": "https://cloud.frappe.io/marketplace/apps/next_ai"
+  },
+  {
+    "title": "Desk Themes",
+"description": "A comprehensive theming solution for Frappe / ERPNext desk interface that allows complete customization of the user interface appearance.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_desk_theme"
+  },
+  {
+    "title": "PCAT Exam",
+"description": "App for creating RIASEC-based personality assessment quizzes on top of the Frappe LMS. This app extends the existing LMS functionality to provide specialized personality career assessment tests.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_pcat_exam"
+  },
+  {
+    "title": "URY - Restaurant POS & ERP",
+"description": "URY is an ERP designed for restaurants, cafes, cloud kitchens, and QSRs that need more than just a POS, providing control, clarity, and reporting across operations. Trusted by high-volume, multi-branch restaurants, URY scales with your growth.",
+    "url": "https://cloud.frappe.io/marketplace/apps/ury"
+  },
+  {
+    "title": "AI Translate",
+"description": "The AI Translation System is a powerful ERPNext app that provides automatic translation of Sales Invoice item descriptions using multiple AI providers. It seamlessly integrates with your ERPNext workflow to deliver natural, context-aware translations in 19+ languages.",
+    "url": "https://cloud.frappe.io/marketplace/apps/ai_translate"
+  },
+  {
+    "title": "Mint",
+"description": "Better bank reconciliation for ERPNext",
+    "url": "https://cloud.frappe.io/marketplace/apps/mint"
+  },
+  {
+    "title": "Shift Allocation From Excel",
+"description": "Shift Allocation Tool",
+    "url": "https://cloud.frappe.io/marketplace/apps/shift_allocation_from_excel"
+  },
+  {
+    "title": "ERPNext Australian Localisation",
+"description": "AU localisation for ERPNext app will install the necessary setup to get the Business Activity Statement (BAS), ABA files for payment.",
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_australian_localisation"
+  },
+  {
+    "title": "Compliance Plus",
+"description": "Compliance Plus is an ERPNext/Frappe-based application designed to centralize and streamline the management of organizational compliance documents such as insurances, licenses, trademarks, and regulatory obligations. It provides an easy-to-use interface with reminders, categorizations, and tracking for timely renewals and follow-ups.",
+    "url": "https://cloud.frappe.io/marketplace/apps/compliance_plus"
+  },
+  {
+    "title": "WorkBoard",
+"description": "WorkBoard is an internal task management application built on the Frappe Framework.",
+    "url": "https://cloud.frappe.io/marketplace/apps/workboard"
+  },
+  {
+    "title": "Frappe Assistant Core",
+"description": "Give any Large Language Model the power to interact with your ERPNext system through standardised protocols (MCP)",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_assistant_core"
+  },
+  {
+    "title": "Duplicate Role",
+"description": "Allows you to easily duplicate roles with all their permissions, user permissions, and settings.",
+    "url": "https://cloud.frappe.io/marketplace/apps/duplicate"
+  },
+  {
+    "title": "Gamma Integration",
+"description": "A powerful Frappe/ERPNext app that seamlessly integrates Gamma.app interactive presentations with your quotations, enabling you to create, manage, and embed dynamic proposals directly within your ERP system.",
+    "url": "https://cloud.frappe.io/marketplace/apps/gamma_integration"
+  },
+  {
+    "title": "Appe - Frappe Mobile App",
+"description": "Frappe - Frappe Mobile App, you can develop a high-performance Mobile application tailored to your requirements using Frappe.",
+    "url": "https://cloud.frappe.io/marketplace/apps/appe"
+  },
+  {
+    "title": "Exchange Rate Sync",
+"description": "The Exchange Rate Sync App keeps currency rates in sync with automated daily updates and manual refreshes for customizable options.",
+    "url": "https://cloud.frappe.io/marketplace/apps/exchange_rate_sync"
+  },
+  {
+    "title": "ZKTeco Checkin Sync",
+"description": "ZKTeco Checkin Sync for Frappe auto-syncs attendance from ZKTeco biometric devices into ERPNext Employee Checkin records.",
+    "url": "https://cloud.frappe.io/marketplace/apps/zkteco_checkins_sync"
+  },
+  {
+    "title": "Telephony",
+"description": "Exotel and Twilio integration for Frappe apps",
+    "url": "https://cloud.frappe.io/marketplace/apps/telephony"
+  },
+  {
+    "title": "Tims Incotex",
+"description": "Integrate ERPNext with TIMS INCOTEX to automate electronic tax invoice submissions to KRA. Ensure seamless compliance and reporting.",
+    "url": "https://cloud.frappe.io/marketplace/apps/tims_incotex"
+  },
+  {
+    "title": "KSA ZATCA E-Invoicing (ERPNext FATOORAH Integration)",
+"description": "This app delivers clean, powerful features that are simple to install and configure for Saudi Arabia's ZATCA e-invoicing compliance.",
+    "url": "https://cloud.frappe.io/marketplace/apps/zatca_integration"
+  },
+  {
+    "title": "Argentina Compliance",
+"description": "Implementing electronic-invoicing compliance in ERPNext ensuring seamless integration with Argentina Government Tax Regulations",
+    "url": "https://cloud.frappe.io/marketplace/apps/argentina_compliance"
+  },
+  {
+    "title": "KLiK PoS",
+"description": "A modern, feature-rich Point of Sale system built specifically for ERPNext.",
+    "url": "https://cloud.frappe.io/marketplace/apps/klik_pos"
+  },
+  {
+    "title": "Portal Theme",
+"description": "This is App for Customising Portal themes According to the User.",
+    "url": "https://cloud.frappe.io/marketplace/apps/portal_theme"
+  },
+  {
+    "title": "ShortNR",
+"description": "Generate short URLs and branded QR codes for links or WebForms with optional pre-filled data.",
+    "url": "https://cloud.frappe.io/marketplace/apps/shortnr"
+  },
+  {
+    "title": "Suit Rental",
+"description": "Streamlines suit and dress rental businesses with a complete workflow from booking to return.",
+    "url": "https://cloud.frappe.io/marketplace/apps/suit_rental"
+  },
+  {
+    "title": "Company Global Filter",
+"description": "A comprehensive Frappe/ERPNext application that automatically applies company-level filters across all doctypes.",
+    "url": "https://cloud.frappe.io/marketplace/apps/company_global_filter"
+  },
+  {
+    "title": "Geo Extension",
+"description": "Enhance address entry in Frappe with country-specific, filterable, and autocomplete location fields.",
+    "url": "https://cloud.frappe.io/marketplace/apps/geo_extension"
+  },
+  {
+    "title": "Attendance Sync",
+"description": "A Frappe/ERPNext application for automatically synchronizing attendance data from multiple biometric devices to the Frappe HRMS system.",
+    "url": "https://cloud.frappe.io/marketplace/apps/attendance_sync"
+  },
+  {
+    "title": "PWA Frappe",
+"description": "PWA for enabling your applications to be installed and run as native-like apps on both desktop and mobile devices. 🚀",
+    "url": "https://cloud.frappe.io/marketplace/apps/pwa_frappe"
+  },
+  {
+    "title": "Frappe Mpesa Payments",
+"description": "Streamline your finance: Easy M-Pesa payments from customers, simple disbursements for your team. All in ERPNext.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_mpsa_payments"
+  },
+  {
+    "title": "Scan Me",
+"description": "QR Code Scan Me is a Frappe app that helps you generate QR codes and barcodes of any type.",
+    "url": "https://cloud.frappe.io/marketplace/apps/scan_me"
+  },
+  {
+    "title": "BigQuery Connector",
+"description": "One Click to BigQuery, Infinite Insights. PowerBI, Looker, Tableau from there.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_bigquery"
+  },
+  {
+    "title": "Gate Entry",
+"description": "A Gate Entry Module for ERPNext to track material movement at the Security Gate. It tracks material in and out transactions.",
+    "url": "https://cloud.frappe.io/marketplace/apps/gate_entry"
+  },
+  {
+    "title": "Working Time",
+"description": "Timetracking and Attendance in ERPNext, integrated with Jira",
+    "url": "https://cloud.frappe.io/marketplace/apps/working_time"
+  },
+  {
+    "title": "Employee Advance Enhanced",
+"description": "Enhancement to Employee Advance of HRMS. Which makes Return on Employee advances Automated via Installments.",
+    "url": "https://cloud.frappe.io/marketplace/apps/eae"
+  },
+  {
+    "title": "Bangladesh VAT Compliance",
+"description": "Automates your VAT compliance with ERPNext—handles Mushak challans, VDS, and treasury deposits for accurate, efficient business operations.",
+    "url": "https://cloud.frappe.io/marketplace/apps/vat_compliance"
+  },
+  {
+    "title": "Blog",
+"description": "Write, publish, and manage blog posts with author profiles & blog categories with interaction capabilities of comments & likes.",
+    "url": "https://cloud.frappe.io/marketplace/apps/blog"
+  },
+  {
+    "title": "Frappe WhatsApp Chatbot",
+"description": "A comprehensive chatbot solution for Frappe WhatsApp integration.",
+    "url": "https://cloud.frappe.io/marketplace/apps/frappe_whatsapp_chatbot"
+  },
+  {
+    "title": "EDocument (Peppol E-Invoicing xml generation)",
+"description": "Create and import PEPPOL-compliant e-documents with ERPNext with full support for PEPPOL BIS Billing 3.0 using UBL 2.1 XML format.",
+    "url": "https://cloud.frappe.io/marketplace/apps/edocument"
+  },
+  {
+    "title": "OTP Generation",
+"description": "Production-ready Frappe app for OTP generation and verification with Email/SMS support, REST APIs, auto expiration, and zero-code setup.",
+    "url": "https://cloud.frappe.io/marketplace/apps/otp_generation"
+  },
+  {
+    "title": "EDocument Integration (Peppol E-Invoicing Integration)",
+"description": "Integration app for sending and receiving PEPPOL e-documents via service providers (B2B Router, Recommand). An extension to EDocument App",
+    "url": "https://cloud.frappe.io/marketplace/apps/edocument_integration"
+  },
+  {
+    "title": "TSE Integration",
+"description": "Diese App erweitert ERPNext um die Anbindung an eine Technische Sicherheitseinrichtung (TSE)",
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_tse"
+  },
+  {
+    "title": "eSignatures Integration",
+"description": "Send ERPNext Quotations for electronic signature using esignatures.io - dynamic templates, configurable placeholders, auto-update on sign.",
+    "url": "https://cloud.frappe.io/marketplace/apps/esign"
+  },
+  {
+    "title": "Webapp template",
+"description": "A reusable website app template separating layout and styles from content for easy customization using documents or templates.",
+    "url": "https://cloud.frappe.io/marketplace/apps/webapp"
+  },
+  {
+    "title": "Singapore Compliance",
+"description": "Open-source app to manage Singapore-specific regulatory compliance. The app creates ledgers and tax templates and comes with GST reports.",
+    "url": "https://cloud.frappe.io/marketplace/apps/singapore_compliance"
+  },
+  {
+    "title": "Noreli North AI Assistant",
+"description": "Context-aware AI chat inside ERPNext documents",
+    "url": "https://cloud.frappe.io/marketplace/apps/norelinorth_ai_assistant"
+  },
+  {
+    "title": "SumUp POS Integration",
+"description": "SumUP integration for use in combination with ERPNext POS",
+    "url": "https://cloud.frappe.io/marketplace/apps/erpnext_sumup"
+  },
+  {
+    "title": "Warehouse Item Group Rules",
+"description": "Restrict which Item Groups can be used in specific Warehouses in ERPNext.",
+    "url": "https://cloud.frappe.io/marketplace/apps/warehouse_item_group_rules"
+  },
+  {
+    "title": "Web Forms Pro (Beta)",
+"description": "Better way to create Web Forms on Frappe",
+    "url": "https://cloud.frappe.io/marketplace/apps/forms_pro"
+  },
+  {
+    "title": "Noreli North AI Advanced Compliance",
+"description": "Automate compliance, manage risks, and reduce audit costs",
+    "url": "https://cloud.frappe.io/marketplace/apps/advanced_compliance"
+  },
+  {
+    "title": "Offsite Backups",
+"description": "Please add a short description about your app here...",
+    "url": "https://cloud.frappe.io/marketplace/apps/offsite_backups"
+  },
+  {
+    "title": "Material Price Control",
+"description": "Material Price Control prevents wrong inventory valuation by detecting, warning, and blocking abnormal stock-in rates in ERPNext.",
+    "url": "https://cloud.frappe.io/marketplace/apps/material_price_control"
+  },
+  {
+    "title": "Simple Subscription",
+"description": "A simple subscription that works the way you expect",
+    "url": "https://cloud.frappe.io/marketplace/apps/simple_subscription"
+  },
+  {
+    "title": "MultiCloud Storage",
+"description": "Multi-cloud file storage app for the Frappe framework. Uploads File attachments to Amazon S3 or Google Cloud Storage (GCS)",
+    "url": "https://cloud.frappe.io/marketplace/apps/multi_cloud_storage"
+  }
+]

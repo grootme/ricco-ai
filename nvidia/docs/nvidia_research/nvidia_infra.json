@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/brevdev/notebooks",
+    "name": "Collection of notebook guides created by the Brev.dev team! · GitHub",
+    "snippet": "NVIDIA Brev provides streamlined access to NVIDIA GPU instances on popular cloud platforms, automatic environment setup, and flexible deployment options, ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/brev",
+    "name": "Brev | NVIDIA Developer",
+    "snippet": "NVIDIA Brev provides streamlined access to NVIDIA GPU instances on popular cloud platforms, automatic environment setup, and flexible deployment options.",
+    "host_name": "developer.nvidia.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/single-cell-analysis-blueprint/blob/main/docs/creating_custom_brev.md",
+    "name": "Creating a custom GPU instance using Brev - GitHub",
+    "snippet": "The goal of this guide is to walk through the steps to create a custom GPU instance on NVIDIA Brev using the Brev Launchable interface.",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/ml-explore/mlx/discussions/2742",
+    "name": "NVIDIA Brev GPU Launchable to test CUDA Backend #2742 - GitHub",
+    "snippet": "I've been working on some features for the CUDA Backend, i took the time to make Brev launchable (great part of the script is based on the circle-ci config ... Missing: cloud | Show results with: cloud",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.rapids.ai/deployment/stable/cloud/nvidia/brev",
+    "name": "NVIDIA Brev — RAPIDS Deployment Documentation",
+    "snippet": "The NVIDIA Brev platform provides you a one stop menu of available GPU instances across many cloud providers, including Amazon Web Services and Google Cloud.",
+    "host_name": "docs.rapids.ai",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://brev.nvidia.com/launchable/deploy/now?launchableID=env-2tYIjRXL4eMCbH9Az8mJC5WPAI4",
+    "name": "video-search-and-summarization-blueprint - Console | Brev",
+    "snippet": "The NVIDIA AI Blueprint makes it easy to get started building and customizing video analytics AI agents for video search and summarization.",
+    "host_name": "brev.nvidia.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/brevdev/brev-cli",
+    "name": "GitHub - brevdev/brev-cli: Connect your laptop to cloud computers",
+    "snippet": "NVIDIA Brev CLI. NVIDIA Brev provides streamlined access to NVIDIA GPU instances on popular cloud platforms, automatic environment setup, and flexible ... Missing: Launchable | Show results with: Launchable",
+    "host_name": "github.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.nvidia.com/vss/2.3.1/content/cloud_brev.html",
+    "name": "NVIDIA Brev Launchable — Video Search and Summarization Agent",
+    "snippet": "This notebook is designed to run as a launchable on 8XL40S GPU CRUSOE Cloud Provider with Ephemeral storage. Add your NGC_API_KEY in the ... Missing: dev | Show results with: dev",
+    "host_name": "docs.nvidia.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/brevdev",
+    "name": "Brev - GitHub",
+    "snippet": "A dev tool that makes it easy to create and share dev environments. Pinned Loading brev-cli brev-cli Public Connect your laptop to cloud computers.",
+    "host_name": "github.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.isaacsim.omniverse.nvidia.com/6.0.0/installation/install_advanced_cloud_setup_brev.html",
+    "name": "NVIDIA Brev Deployment - Isaac Sim Documentation",
+    "snippet": "The requirements for running NVIDIA Isaac Sim on NVIDIA Brev are: An NVIDIA Brev account. Setup#. Follow these steps to launch a GPU instance in VM Mode on ...",
+    "host_name": "docs.isaacsim.omniverse.nvidia.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

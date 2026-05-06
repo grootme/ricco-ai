@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/orgs/NVIDIA-AI-Blueprints/repositories",
+    "name": "Repositories - NVIDIA AI Blueprints - GitHub",
+    "snippet": "NVIDIA AI Blueprints are reference examples that illustrate how NVIDIA NIM can be leveraged to build innovative solutions. - NVIDIA AI Blueprints.",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints",
+    "name": "NVIDIA AI Blueprints - GitHub",
+    "snippet": "NVIDIA AI Blueprints are reference examples that illustrate how NVIDIA NIM can be leveraged to build innovative solutions. Missing: list | Show results with: list",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://support.hpe.com/hpesc/public/docDisplay?docId=a00aie19hen_us&page=pcai/Blueprints/NVIDIA-blueprints.html&docLocale=en_US",
+    "name": "NVIDIA Blueprints | HPE AI Essentials Software 1.9.x Documentation",
+    "snippet": "Private Cloud AI Users can access and use the full catalog of Blueprints available at https://build.nvidia.com/blueprints, but only select Blueprints are tested ...",
+    "host_name": "support.hpe.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://build.nvidia.com/blueprints",
+    "name": "Build Your AI Application with Blueprints - Try NVIDIA NIM APIs",
+    "snippet": "Build your AI application with blueprints. Get started with workflows and code samples to build AI applications from the ground up. Missing: repositories | Show results with: repositories",
+    "host_name": "build.nvidia.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/aiq",
+    "name": "NVIDIA-AI-Blueprints/aiq: The AI-Q NVIDIA Blueprint is an  - GitHub",
+    "snippet": "The NVIDIA AI-Q Blueprint is an enterprise-grade research agent built on the NVIDIA NeMo Agent Toolkit and uses LangChain Deep Agents.",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "Apr 25, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://university.tenten.co/t/full-list-of-nvidias-all-ai-api/2148",
+    "name": "Full list of Nvidia's all AI API",
+    "snippet": "Full list of Nvidia's all AI API ; 1, LLM APIs (OpenAI-compatible), integrate.api.nvidia.com ; 2, Visual Models APIs, ai.api.nvidia.com ; 3 ... Missing: Blueprints repositories",
+    "host_name": "university.tenten.co",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/ai-models",
+    "name": "AI Models | NVIDIA Developer",
+    "snippet": "Explore and deploy top AI models built by the community, accelerated by NVIDIA's AI inference platform, and run on NVIDIA-accelerated infrastructure. Missing: repositories | Show results with: repositories",
+    "host_name": "developer.nvidia.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/video-search-and-summarization",
+    "name": "NVIDIA-AI-Blueprints/video-search-and-summarization - GitHub",
+    "snippet": "The NVIDIA AI Blueprint makes it easy to get started building and customizing video analytics AI agents for video search and summarization.",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blogs.nvidia.co.kr/blog/nvidia-and-global-partners-launch-nim-agent-blueprints-for-enterprises-to-make-their-own-ai",
+    "name": "기업의 자체 AI 제작 위한 'NVIDIA NIM Agent Blueprint' 출시",
+    "snippet": "NIM Agent Blueprint는 하나 이상의 AI 에이전트를 사용하는 AI 애플리케이션 개발자들에게 빠른 시작 환경을 제공합니다. Missing: repositories list",
+    "host_name": "blogs.nvidia.co.kr",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://catalog.ngc.nvidia.com/search?filters=resourceType%7CCollection%7Ccollection",
+    "name": "GPU-optimized AI, Machine Learning, & HPC Software | NVIDIA NGC",
+    "snippet": "Search thousands of GPU-optimized Containers, pretrained Models, SDKs, and Helm charts—ready to accelerate AI, digital twins, and HPC from cloud to ... Missing: repositories | Show results with: repositories",
+    "host_name": "catalog.ngc.nvidia.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

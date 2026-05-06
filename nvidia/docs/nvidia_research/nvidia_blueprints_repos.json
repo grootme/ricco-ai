@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/aiq",
+    "name": "NVIDIA-AI-Blueprints/aiq: The AI-Q",
+    "snippet": "2 days ago — The NVIDIA AI-Q Blueprint is an enterprise-grade research agent built on the NVIDIA NeMo Agent Toolkit and uses LangChain Deep Agents.",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/nim-usage-scanner",
+    "name": "NVIDIA-AI-Blueprints/nim-usage-scanner: Static code",
+    "snippet": "Static code analyzer that scans repositories to discover and catalog NVIDIA NIM usage (Local NIM containers and Hosted NIM endpoints).",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/video-search-and-summarization",
+    "name": "NVIDIA-AI-Blueprints/video-search-and-summarization",
+    "snippet": "This repository is what powers the build experience, showcasing video search and summarization agent with NVIDIA NIM microservices.",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/blueprint-scan-orchestrator",
+    "name": "NVIDIA-AI-Blueprints/blueprint-scan-orchestrator",
+    "snippet": "Orchestrates NIM scanning across multiple NVIDIA AI Blueprint repositories , collects results, and generates aggregated reports. Overview. This orchestrator:.",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/biomedical-aiq-research-agent",
+    "name": "NVIDIA-AI-Blueprints/biomedical-aiq-research-agent",
+    "snippet": "Jun 10, 2025 — The NVIDIA Biomedical AI-Q Research Agent Developer Blueprint allows you to create a deep research agent with virtual screening capabilities ...",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/Multi-Agent-Intelligent-Warehouse",
+    "name": "NVIDIA-AI-Blueprints/Multi-Agent-Intelligent-Warehouse",
+    "snippet": "Trending · Collections. Enterprise. ENTERPRISE ... list of users for dropdown selection (public, no auth required); GET /api/v1 ...",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/aiq/pulls",
+    "name": "Pull requests · NVIDIA-AI-Blueprints/aiq",
+    "snippet": "The AI-Q NVIDIA Blueprint is an open reference example for building intelligent AI agents that connect to your enterprise data, reason using ...",
+    "host_name": "github.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/data-flywheel/blob/main/README.md",
+    "name": "data-flywheel/README.md at main · NVIDIA-AI-Blueprints/",
+    "snippet": "Follow the repo for UI improvements, new experiment strategies, and future work on accuracy-oriented flywheels. Preparing your data. The Flywheel treats your ...",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/quantitative-portfolio-optimization/pulls",
+    "name": "NVIDIA-AI-Blueprints/quantitative-portfolio-optimization",
+    "snippet": "Trending · Collections. Enterprise. ENTERPRISE SOLUTIONS ... Pull requests list. fixed typo in launchable notebook. #30 opened on Feb 19 ...",
+    "host_name": "github.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/rag/pulls",
+    "name": "Pull requests · NVIDIA-AI-Blueprints/rag",
+    "snippet": "This NVIDIA RAG blueprint serves as a reference solution for a foundational Retrieval Augmented Generation (RAG) pipeline.",
+    "host_name": "github.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

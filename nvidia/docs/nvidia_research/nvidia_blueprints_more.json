@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/ai-virtual-assistant",
+    "name": "NVIDIA AI Blueprint: AI Virtual Assistant for Customer Service",
+    "snippet": "Dec 13, 2024 — This AI -powered bot can greet customers on your website or mobile app, respond to their inquiries, and guide them through common issues. Read more",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/digital-human",
+    "name": "NVIDIA-AI-Blueprints/digital-human",
+    "snippet": "The Tokkio NVIDIA AI Blueprint is a reference workflow bringing enterprise applications to life with a 3D animated digital human interface. Read more",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints",
+    "name": "NVIDIA AI Blueprints",
+    "snippet": "This NVIDIA RAG blueprint serves as a reference solution for a foundational Retrieval Augmented Generation ( RAG ) pipeline. Read more",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/blog/three-building-blocks-for-creating-ai-virtual-assistants-for-customer-service-with-an-nvidia-nim-agent-blueprint",
+    "name": "Three Building Blocks for Creating AI Virtual Assistants",
+    "snippet": "Oct 23, 2024 — This post outlines how developers can use the NVIDIA AI Blueprint for AI virtual assistants to scale operations with generative AI. Read more",
+    "host_name": "developer.nvidia.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://resources.nvidia.com/en-us-gen-ai-it-leadership/build-a-digital-huma",
+    "name": "Build a Digital Human Interface for AI Apps with an",
+    "snippet": "Sep 25, 2024 — Three Building Blocks for Creating AI Virtual Assistants for Customer Service with an NVIDIA AI Blueprint . Read more",
+    "host_name": "resources.nvidia.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/rag",
+    "name": "This NVIDIA RAG blueprint serves as a reference solution",
+    "snippet": "The NVIDIA RAG Blueprint is a reference solution and foundational starting point for building Retrieval-Augmented Generation (RAG) pipelines with NVIDIA NIM ... Read more",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-us/on-demand/session/gtc25-S71183",
+    "name": "Bringing Enterprise Chatbots to Life With AI-Powered",
+    "snippet": "Learn how to bring digital human experience to your enterprise chatbots . We'll dive deeper into building and customizing a reference virtual assistant workflow. Read more",
+    "host_name": "www.nvidia.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://build.nvidia.com/nvidia/ai-virtual-assistant-for-customer-service",
+    "name": "Build an AI Virtual Assistant Blueprint by NVIDIA",
+    "snippet": "Build an AI Virtual Assistant. Create intelligent virtual assistants for customer service across every industry. Read more",
+    "host_name": "build.nvidia.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/romioshoula/NVIDIA-AI-Blueprint-Digital-Human-for-Customer-Service",
+    "name": "NVIDIA AI Blueprint for digital human for customer service.",
+    "snippet": "This blueprint serves as a starting point for a team of developers to showcase how an LLM or a RAG application can be connected to a digital human pipeline. The ... Read more",
+    "host_name": "github.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forums.developer.nvidia.com/t/digital-humans-blueprint/323188",
+    "name": "Digital Humans Blueprint",
+    "snippet": "Feb 10, 2025 — So which steps do I need to take to run Digital Humans , for example a customer agent etc? Is there a clear documentation or help? Thank you! Read more",
+    "host_name": "forums.developer.nvidia.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

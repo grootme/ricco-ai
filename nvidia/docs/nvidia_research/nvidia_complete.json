@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://developer.nvidia.com/ja-jp/blog/building-japanese-healthcare-voice-agents-to-reduce-clinical-burden-with-nvidia-technology",
+    "name": "NVIDIA テクノロジを活用した日本語医療音声エージェントの構築",
+    "snippet": "Agent toolkit(1). AI(14). AI / Deep Learning(9). AI Agent(7). AI Cloud ... NVIDIA NIM と NVIDIA Blueprints で実現する日本語対応対話型 ...",
+    "host_name": "developer.nvidia.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/@wenqiglantz/extending-the-nvidia-agent-intelligence-toolkit-to-support-new-agentic-frameworks-a0e691bc0729",
+    "name": "Extending the NVIDIA NeMo Agent Toolkit to Support New  - Medium",
+    "snippet": "Step 0: Prerequisites. There are no specific GPU requirements for running Agent toolkit workflows when accessing NVIDIA NIM microservices.",
+    "host_name": "medium.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.facebook.com/groups/2753636021674871/posts/2793050884400051",
+    "name": "Nvidia's Nemoclaw enterprise-grade autonomous ai stack - Facebook",
+    "snippet": "Additionally, it is using NVIDIA NIM and NVIDIA NeMo™ microservices to ... It supports extensive customization through the NeMo framework ...",
+    "host_name": "www.facebook.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/ja-jp/blog/build-a-report-generator-ai-agent-with-nvidia-nemotron-on-openrouter",
+    "name": "OpenRouter で NVIDIA Nemotron を使用してレポート生成 AI",
+    "snippet": "Agent toolkit(1). AI(14). AI / Deep Learning(9). AI Agent(7). AI Cloud ... NVIDIA NIM は高性能な推論機能を提供し、以下の特長を備えています ...",
+    "host_name": "developer.nvidia.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://nvidia.electromaker.io/repositories",
+    "name": "Library Repository - Nvidia Jetson",
+    "snippet": "NeMo Retriever extraction uses specialized NVIDIA NIM microservices to find ... The NVIDIA NeMo Agent toolkit is an open-source library for efficiently ...",
+    "host_name": "nvidia.electromaker.io",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.instagram.com/reel/DWCOs3YAiff",
+    "name": "Nvidia just killed the biggest problem with AI agents. No  - Instagram",
+    "snippet": "NemoClaw deeply integrated with the NVIDIA NeMo framework and NIM ... It uses NVIDIA Agent Toolkit software to secure OpenClaw, installing NVIDIA ...",
+    "host_name": "www.instagram.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.facebook.com/NVIDIAAI/posts/boost-your-llm-apps-the-nvidia-ai-blueprint-for-enterprise-rag-pipelines-deliver/1169530735211206",
+    "name": "Boost your LLM apps The NVIDIA AI Blueprint for Enterprise RAG",
+    "snippet": "Additionally, it is using NVIDIA NIM and NVIDIA NeMo™ microservices to ... It supports extensive customization through the NeMo framework ...",
+    "host_name": "www.facebook.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.facebook.com/groups/cto.platform/posts/2403959470050081",
+    "name": "Nvidia launches open-source ai agent platform - Facebook",
+    "snippet": "Additionally, it is using NVIDIA NIM and NVIDIA NeMo™ microservices to ... It supports extensive customization through the NeMo framework ...",
+    "host_name": "www.facebook.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.facebook.com/newsplusth/posts/nemotron-coalition-thinking-machines-open-model-for-developers/1365733502263592",
+    "name": "Nemotron Coalition Thinking Machines open model for developers",
+    "snippet": "Built with NVIDIA NIM microservices, the blueprint integrates NVIDIA NeMo Retriever™ for multimodal information retrieval and enables agent and ...",
+    "host_name": "www.facebook.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.facebook.com/NVIDIAAI/posts/what-inspired-nvidia-to-make-its-own-open-source-modelswe-caught-up-with-bryan-c/1285733056924306",
+    "name": "What inspired NVIDIA to make its own open-source models? We",
+    "snippet": "It supports extensive customization through the NeMo framework ... Additionally, it is using NVIDIA NIM and NVIDIA NeMo™ microservices to ...",
+    "host_name": "www.facebook.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

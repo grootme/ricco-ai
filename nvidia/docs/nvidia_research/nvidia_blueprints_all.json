@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/orgs/NVIDIA-AI-Blueprints/repositories",
+    "name": "NVIDIA-AI-Blueprints repositories",
+    "snippet": "NVIDIA AI Blueprints are reference examples that illustrate how NVIDIA NIM ... Repositories list . 31 repositories . Sort by Last pushed descending.",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints",
+    "name": "NVIDIA AI Blueprints",
+    "snippet": "NVIDIA AI Blueprints are reference examples that illustrate how NVIDIA NIM can be leveraged to build innovative solutions.",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/aiq",
+    "name": "NVIDIA-AI-Blueprints/aiq: The AI-Q",
+    "snippet": "2 days ago — Getting Started. Clone the Repository . git clone https:// github .com/ NVIDIA-AI-Blueprints /aiq. git && cd aiq. Automated Setup. Run the setup ...",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/blog/advance-video-analytics-ai-agents-using-the-nvidia-ai-blueprint-for-video-search-and-summarization",
+    "name": "Advance Video Analytics AI Agents Using the NVIDIA",
+    "snippet": "18 May 2025 — NVIDIA-AI-Blueprints /video-search-and-summarization GitHub repo ; Visual AI Agent Forum. To learn more, join NVIDIA founder and CEO Jensen ...",
+    "host_name": "developer.nvidia.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/blog/make-sense-of-video-analytics-by-integrating-nvidia-ai-blueprints",
+    "name": "Make Sense of Video Analytics by Integrating NVIDIA AI",
+    "snippet": "3 Nov 2025 — NVIDIA AI Blueprints are customizable reference workflows for building generative AI pipelines. Developers can use NVIDIA AI Blueprints to build ...",
+    "host_name": "developer.nvidia.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.nvidia.com/enterprise-reference-architectures/ai-q-research-agent-blueprint.pdf",
+    "name": "AI-Q NVIDIA Research Agent Blueprint for Enterprise RA",
+    "snippet": "Git clone https:// github .com/ NVIDIA-AI-Blueprints /rag. git . Add the appropriate Helm Repos to the cluster helm repo add nvidia-nim https://helm.ngc.nvidia.com ...",
+    "host_name": "docs.nvidia.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.nvidia.com/rag/latest/deploy-docker-self-hosted.html",
+    "name": "Get Started With the NVIDIA RAG Blueprint",
+    "snippet": "Open a terminal and navigate to the directory where you want the project . git -scm. Clone the repository : git clone https:// github .com/ NVIDIA-AI-Blueprints /rag.",
+    "host_name": "docs.nvidia.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/video-search-and-summarization",
+    "name": "NVIDIA-AI-Blueprints/video-search-and-summarization",
+    "snippet": "Blueprint for Ingesting massive volumes of live or archived videos and extract insights for summarization and interactive Q&A - NVIDIA-AI-Blueprints /video-",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/blog/automate-early-security-patching-in-ci-pipelines-on-aws-using-nvidia-ai-blueprints",
+    "name": "Automate Early Security Patching in CI Pipelines on AWS",
+    "snippet": "3 Dec 2024 — Applying NVIDIA AI Blueprints to containerized applications on AWS. The sample solution uses a combination of AWS services, such as Amazon ...",
+    "host_name": "developer.nvidia.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.linkedin.com/posts/siva-sagar-47127224b_github-nvidia-ai-blueprintsdata-flywheel-activity-7365085911736348674-ZWOe",
+    "name": "Choosing Between GPT-4.0 and GPT-5.0 for AI Applications",
+    "snippet": "8 · Like Comment. Share.",
+    "host_name": "www.linkedin.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

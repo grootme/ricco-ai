@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/NVIDIA-Omniverse-blueprints",
+    "name": "NVIDIA Omniverse Blueprints - GitHub",
+    "snippet": "NVIDIA Omniverse Blueprints. Repeatable patterns for developing OpenUSD applications for industrial digitalization and physical AI simulation. Missing: Isaac ROS NIM Agent list",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints",
+    "name": "NVIDIA AI Blueprints - GitHub",
+    "snippet": "NVIDIA AI Blueprints are reference examples that illustrate how NVIDIA NIM can be leveraged to build innovative solutions. Missing: Isaac ROS Omniverse list 2025",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/j3soon/nvidia-isaac-summary",
+    "name": "j3soon/nvidia-isaac-summary - GitHub",
+    "snippet": "The NVIDIA Isaac robotics platform includes a full suite of GPU-accelerated innovations in AI perception, manipulation, simulation, and software.",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/isaac/sim",
+    "name": "Isaac Sim - Robotics Simulation and Synthetic Data Generation",
+    "snippet": "NVIDIA Isaac Sim™ is an open source reference framework built on NVIDIA Omniverse™ libraries for robotics simulation, testing, and synthetic data generation ... Missing: Agent 2025",
+    "host_name": "developer.nvidia.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/Multi-Agent-Intelligent-Warehouse",
+    "name": "NVIDIA-AI-Blueprints/Multi-Agent-Intelligent-Warehouse - GitHub",
+    "snippet": "NVIDIA NeMo Integration - Complete document processing pipeline with OCR, structured data extraction, and vision models; MCP Framework - Model Context Protocol ... Missing: Isaac ROS Omniverse",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/orgs/NVIDIA-AI-Blueprints/repositories",
+    "name": "Repositories - NVIDIA AI Blueprints - GitHub",
+    "snippet": "NVIDIA AI Blueprints are reference examples that illustrate how NVIDIA NIM can be leveraged to build innovative solutions. - NVIDIA AI Blueprints. Missing: Isaac ROS Omniverse",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-us/omniverse",
+    "name": "Develop Physical AI Applications | NVIDIA Omniverse",
+    "snippet": "Jump-start building physical AI solutions with NVIDIA Blueprints, comprehensive reference projects and workflows that use NVIDIA AI and Omniverse technologies ...",
+    "host_name": "www.nvidia.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://pollux.ai/en/tech-blog",
+    "name": "Tech Blog - Pollux AI",
+    "snippet": "Tech Blog. Dive deep into technical topics, coding tutorials, and cutting-edge technology insights. Isaac Lab 2.3.0 Key Updates at a Glance.",
+    "host_name": "pollux.ai",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.facebook.com/groups/DeepNetGroup/posts/2688300974896101",
+    "name": "NVIDIA Nemotron 3: Efficient and Open Intelligence  - Facebook",
+    "snippet": "Built with NVIDIA NIM microservices, the blueprint integrates NVIDIA NeMo Retriever™ for multimodal information retrieval and enables agent ...",
+    "host_name": "www.facebook.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-Omniverse-blueprints/synthetic-manipulation-motion-generation",
+    "name": "NVIDIA-Omniverse-blueprints/synthetic-manipulation-motion",
+    "snippet": "The NVIDIA Isaac GR00T blueprint for synthetic manipulation motion generation is the ideal place to start. This is a reference workflow for creating ... Missing: ROS NIM Agent list",
+    "host_name": "github.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/NVIDIA-NeMo/Nemotron",
+    "name": "NVIDIA Nemotron Developer Repository - GitHub",
+    "snippet": "NVIDIA Nemotron Developer Repository. Open and efficient models for agentic AI. Training recipes, deployment guides, and use-case examples for ... Missing: Triton CUDA cuDNN",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "Apr 25, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-NeMo",
+    "name": "NVIDIA-NeMo - GitHub",
+    "snippet": "NVIDIA-NeMo has 21 repositories available. Follow their code on GitHub ... NVIDIA-NeMo/Megatron-Bridge's past year of commit activity. Python 593 Apache ... Missing: Triton TensorRT CUDA cuDNN",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.nvidia.com/nemo/export-deploy/latest/llm/nemo_2/optimized/tensorrt-llm.html",
+    "name": "Deploy NeMo 2.0 LLMs with TensorRT-LLM and Triton Inference",
+    "snippet": "This section shows how to use scripts and APIs to export a NeMo 2.0 LLM to TensorRT-LLM and deploy it with the NVIDIA Triton Inference Server. Quick Example ...",
+    "host_name": "docs.nvidia.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-NeMo/Nemotron/blob/main/usage-cookbook/Nemotron-3-Nano/trtllm_cookbook.ipynb",
+    "name": "Deploying NVIDIA Nemotron-3-Nano with TensorRT LLM - GitHub",
+    "snippet": "Developer Asset Hub for NVIDIA Nemotron — A one-stop resource for training recipes, usage cookbooks, datasets, and full end-to-end reference ... Missing: Megatron cuDNN",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forums.developer.nvidia.com/t/how-to-deploy-and-run-an-llm-designed-with-the-nvidia-nemo-framework-and-nvidia-megatron/323562",
+    "name": "How to Deploy and Run an LLM Designed with the 'NVIDIA NeMo",
+    "snippet": "Hi folks! I want to deploy this LLM(Link) on a GPU-enabled Azure virtual machine. I created a GPU VM with an NVIDIA A100 GPU and selected ... Missing: Triton TensorRT cuDNN",
+    "host_name": "forums.developer.nvidia.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-NeMo/Megatron-Bridge",
+    "name": "NVIDIA-NeMo/Megatron-Bridge - GitHub",
+    "snippet": "Training library for Megatron-based models with bidirectional Hugging Face conversion capability - NVIDIA-NeMo/Megatron-Bridge. Missing: Triton TensorRT CUDA cuDNN",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/blog/optimizing-and-serving-models-with-nvidia-tensorrt-and-nvidia-triton",
+    "name": "Optimizing and Serving Models with NVIDIA TensorRT and NVIDIA",
+    "snippet": "This post discusses using NVIDIA TensorRT, its framework integrations for PyTorch and TensorFlow, NVIDIA Triton Inference Server, and NVIDIA GPUs to accelerate ...",
+    "host_name": "developer.nvidia.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/nvidia/tensorrt",
+    "name": "NVIDIA® TensorRT™ is an SDK for high-performance deep  - GitHub",
+    "snippet": "NVIDIA® TensorRT™ is an SDK for high-performance deep learning inference on NVIDIA GPUs. This repository contains the open source components of TensorRT. Missing: NeMo Megatron",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.nvidia.com/deeplearning/triton-inference-server/release-notes/rel-26-01.html",
+    "name": "Triton Inference Server Release 26.01 - NVIDIA Documentation Hub",
+    "snippet": "GPU Requirements. Release 26.01 supports CUDA compute capability 7.5 and later. This corresponds to GPUs in the NVIDIA Turing™, NVIDIA Ampere ... Missing: NeMo Megatron",
+    "host_name": "docs.nvidia.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forums.developer.nvidia.com/t/mask-rcnn-tensorrt-in-triton/141156",
+    "name": "Mask RCNN TensorRT in Triton - NVIDIA Developer Forums",
+    "snippet": "This is the GitHub pre-release documentation for Triton inference server. This documentation is an unstable documentation preview for developers ... Missing: NeMo Megatron repositories",
+    "host_name": "forums.developer.nvidia.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/NVIDIA/OpenShell",
+    "name": "NVIDIA/OpenShell: OpenShell is the safe, private runtime",
+    "snippet": "1 day ago — OpenShell is the safe, private runtime for autonomous AI agents . It provides sandboxed execution environments that protect your data, ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/data-flywheel",
+    "name": "NVIDIA-AI-Blueprints/data-flywheel",
+    "snippet": "Deploy this blueprint to create a production-grade autonomous Data Flywheel service that uses the NeMo Microservices platform to continuously discover and ...",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/ambient-healthcare-agents",
+    "name": "NVIDIA-AI-Blueprints/ambient-healthcare-agents",
+    "snippet": "Autonomous SOAP note generation . Ambient Patient Agent. Comprehensive Speech Pipeline. Riva speech-to-text and text-to-speech capabilities; Parakeet 1.1b ASR ...",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA/OSMO",
+    "name": "NVIDIA/OSMO: The developer-first platform for scaling",
+    "snippet": "Get Started | Documentation | Community | Roadmap. Use OSMO to manage your workflows , version your datasets and even remotely develop on a backend node.",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA/OpenShell-Community",
+    "name": "NVIDIA/OpenShell-Community",
+    "snippet": "OpenShell is the runtime environment for autonomous agents -- the infrastructure where they live, work, and verify. It provides a programmable factory where ...",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/nvidia-cosmos/cosmos-predict2.5",
+    "name": "nvidia-cosmos/cosmos-predict2.5",
+    "snippet": "Designed specifically for real-world systems, Cosmos enables developers to rapidly advance physical AI applications such as autonomous vehicles (AVs), robots, ...",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA/Isaac-GR00T/issues/586",
+    "name": "Robot Task Protocol (RTP) for Task Commissioning and",
+    "snippet": "Mar 22, 2026 — ... autonomous AI agent systems . Proposed Solution. The Robot Task Protocol (RTP) is an open standard for AI agents to commission robots via HTTP ...",
+    "host_name": "github.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA/OpenShell/blob/main/AGENTS.md",
+    "name": "AGENTS.md - NVIDIA/OpenShell",
+    "snippet": "The product provides safe, sandboxed runtimes for autonomous AI agents , and the project itself is built using the same agent-driven workflows it enables.",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/Retail-Agentic-Commerce/blob/main/docs/architecture.md",
+    "name": "Retail-Agentic-Commerce/docs/architecture.md at main",
+    "snippet": "Technical Summary The Intelligent Commerce Middleware is a Python 3.12+-based reference architecture designed to host autonomous merchant agents. It exposes two ...",
+    "host_name": "github.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/nvidia-cosmos/cosmos-cookbook/issues",
+    "name": "Issues · nvidia-cosmos/cosmos-cookbook",
+    "snippet": "cookoff recipe. Status: Open. #254 In nvidia-cosmos/cosmos-cookbook;. · AsteyaLaxmanan opened on Mar 5 ...",
+    "host_name": "github.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

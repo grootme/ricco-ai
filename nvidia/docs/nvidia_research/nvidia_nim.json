@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://developer.nvidia.com/blog/building-ai-agents-with-nvidia-nim-microservices-and-langchain",
+    "name": "Building AI Agents with NVIDIA NIM Microservices and LangChain",
+    "snippet": "The Llama 3.1 NIM microservice enables you to build generative AI applications with advanced functionality for production deployments.",
+    "host_name": "developer.nvidia.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA/NeMo-Agent-Toolkit",
+    "name": "NVIDIA/NeMo-Agent-Toolkit - GitHub",
+    "snippet": "The NVIDIA NeMo Agent toolkit is an open-source library for efficiently connecting and optimizing teams of AI agents. - NVIDIA/NeMo-Agent-Toolkit. Missing: microservices | Show results with: microservices",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/langchain-ai/langchain-nvidia/blob/main/cookbook/nvidia_nim_agents_llama3.1.ipynb",
+    "name": "langchain-nvidia/cookbook/nvidia_nim_agents_llama3.1.ipynb at",
+    "snippet": "This notebook will use a NVIDIA Llama 3.1 NIM with tool-calling agent capabilities in generative AI solutions. As mentioned in this Introductory Blog on LLM ...",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developers.llamaindex.ai/python/framework/integrations/llm/nvidia",
+    "name": "NVIDIA NIMs | LlamaIndex OSS Documentation",
+    "snippet": "The llama-index-llms-nvidia package contains LlamaIndex integrations for chat models and embeddings powered by NVIDIA AI Foundation Models, and hosted on ...",
+    "host_name": "developers.llamaindex.ai",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.langchain.com/oss/python/integrations/providers/nvidia",
+    "name": "NVIDIA - Docs by LangChain",
+    "snippet": "LangChain and NVIDIA have partnered to accelerate agents through four mechanisms: Components; LangGraph acceleration primitives; NeMo Agent Toolkit ...",
+    "host_name": "docs.langchain.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/nvidia/GenerativeAIExamples",
+    "name": "NVIDIA Generative AI Examples - GitHub",
+    "snippet": "NVIDIA has first-class support for popular generative AI developer frameworks like LangChain, LlamaIndex, and Haystack. These end-to-end notebooks show how to ...",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forums.developer.nvidia.com/t/nemo-agent-toolkit-for-latest-langchain-langgraph-versions/355174",
+    "name": "NeMo Agent Toolkit for latest langchain & langgraph versions",
+    "snippet": "I have been working on integrating agents using the NVIDIA Nemo Agent Toolkit. By default, the toolkit installs ... Open-Source CLI Agent Framework for NVIDIA AI Endpoints Building AI Agents with NVIDIA NIM Microservices and LangChain More results from forums.developer.nvidia.com",
+    "host_name": "forums.developer.nvidia.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.llamaindex.ai/blog/document-research-assistant-for-blog-creation-with-nvidia-nim-microservices",
+    "name": "Document Research Assistant: NVIDIA NIM Guide | LlamaIndex",
+    "snippet": "Use NVIDIA NIM microservices to build a blog research assistant. Automate fact-finding and writing with LlamaIndex multi-agent workflows. Missing: github LangChain",
+    "host_name": "www.llamaindex.ai",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/@wenqiglantz/extending-the-nvidia-agent-intelligence-toolkit-to-support-new-agentic-frameworks-a0e691bc0729",
+    "name": "Extending the NVIDIA NeMo Agent Toolkit to Support New  - Medium",
+    "snippet": "The Agent toolkit acts as a unifying framework that integrates existing agents, tools, and workflows across various platforms, such as LangChain ...",
+    "host_name": "medium.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developers.glean.com/guides/agents/nvidia-example",
+    "name": "Build an Agentic AI With NVIDIA NIM and Glean",
+    "snippet": "Introduction​. This article shows you how to create an agent using NVIDIA NIM™ and Glean that can answer user questions about an internal company knowledge ...",
+    "host_name": "developers.glean.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

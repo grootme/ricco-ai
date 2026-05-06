@@ -1,0 +1,36 @@
+ Volume in drive C has no label.
+ Volume Serial Number is E617-D959
+
+ Directory of C:\Users\Ricco\Desktop\Projects\Platform\tmp_apps
+
+03/26/2026  05:32 PM    <DIR>          .
+03/24/2026  06:42 PM    <DIR>          ..
+02/27/2026  03:27 PM    <DIR>          agriculture
+02/27/2026  03:24 PM    <DIR>          builder
+02/27/2026  04:01 AM    <DIR>          cargo_management
+02/27/2026  02:59 PM    <DIR>          clefincode_chat
+02/27/2026  03:01 PM    <DIR>          crm
+02/27/2026  03:08 PM    <DIR>          drive
+02/27/2026  03:25 PM    <DIR>          ecommerce_integrations
+02/27/2026  03:25 PM    <DIR>          eps
+02/27/2026  04:00 AM    <DIR>          erpnext-restaurant
+02/27/2026  03:27 PM    <DIR>          erpnext-shipping
+03/26/2026  05:32 PM                 0 frappe_apps.txt
+02/27/2026  02:38 PM    <DIR>          go1cms
+02/27/2026  03:58 AM    <DIR>          Gym-Management-System
+02/27/2026  04:00 AM    <DIR>          healthcare
+02/27/2026  03:05 PM    <DIR>          helpdesk
+02/27/2026  03:59 AM    <DIR>          hrms
+02/27/2026  03:07 PM    <DIR>          insights
+02/27/2026  04:00 AM    <DIR>          KLiK_PoS
+02/27/2026  03:08 PM    <DIR>          lending
+02/27/2026  03:04 PM    <DIR>          lms
+02/27/2026  03:26 PM    <DIR>          newsletter
+02/27/2026  03:25 PM    <DIR>          payments
+02/27/2026  04:01 AM    <DIR>          print_designer
+02/27/2026  03:57 AM    <DIR>          Real-Estate-ERPNext-App
+02/27/2026  03:07 PM    <DIR>          studio
+02/27/2026  03:26 PM    <DIR>          telephony
+02/27/2026  02:59 PM    <DIR>          webshop
+               1 File(s)              0 bytes
+              28 Dir(s)               0 bytes free

@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/NVIDIA/OpenShell",
+    "name": "GitHub - NVIDIA/OpenShell: OpenShell is the safe, private runtime",
+    "snippet": "OpenShell is the safe, private runtime for autonomous AI agents. It provides sandboxed execution environments that protect your data, ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "Apr 26, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/Scottcjn/awesome-agents",
+    "name": "Scottcjn/awesome-agents: A curated list of AI agent platforms",
+    "snippet": "Hosted platforms and services for building, deploying, and running AI agents. AutoGPT - Open-source attempt to make GPT-4 fully autonomous with self-prompting ...",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blogs.nvidia.com/blog/secure-autonomous-ai-agents-openshell",
+    "name": "How Autonomous AI Agents Become Secure by Design With NVIDIA",
+    "snippet": "NVIDIA OpenShell provides tools for controlling autonomous agents in a trusted infrastructure policy layer — adding security in the environment, ...",
+    "host_name": "blogs.nvidia.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/orgs/NVIDIA-AI-Blueprints/repositories",
+    "name": "Repositories - NVIDIA AI Blueprints - GitHub",
+    "snippet": "The AI-Q NVIDIA Blueprint is an open reference example for building intelligent AI agents that connect to your enterprise data, reason using ... Missing: autonomous infrastructure",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/@changshan/the-most-comprehensive-collection-of-ai-agent-infrastructure-open-source-projects-continuously-15998564e85c",
+    "name": "The Most Comprehensive Collection of AI Agent Infrastructure Open",
+    "snippet": "AutoGPT is a powerful platform for creating, deploying, and managing continuously running AI agents to automate complex workflows.",
+    "host_name": "medium.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/e2b-dev/awesome-ai-agents",
+    "name": "e2b-dev/awesome-ai-agents: A list of AI autonomous agents - GitHub",
+    "snippet": "Welcome to our list of AI agents. We structured the list into two parts: To filter the products by categories and use-cases, see the web version of this list.",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-us/ai/nemoclaw",
+    "name": "Safer AI Agents & Assistants with OpenClaw | NVIDIA NemoClaw",
+    "snippet": "NVIDIA OpenShell is an open source runtime that enables autonomous agents to operate and adapt faster and more safely. Read the Blog Post. Create Trustworthy ...",
+    "host_name": "www.nvidia.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://aimultiple.com/open-source-ai-agents",
+    "name": "Best 50+ Open Source AI Agents Listed - AIMultiple",
+    "snippet": "The top 10+ open source AI agent projects on GitHub: Open Interpreter, Jarvis, AgentGPT, evoninja, VannaCoding, Devon, PR-Agent, Aide, ...",
+    "host_name": "aimultiple.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blog.bytebytego.com/p/top-ai-github-repositories-in-2026",
+    "name": "Top AI GitHub Repositories in 2026 - ByteByteGo Newsletter",
+    "snippet": "Nearly every repository on this list incorporates some form of autonomous agent behavior. We have moved from AI that responds to AI that acts. Missing: NVIDIA | Show results with: NVIDIA",
+    "host_name": "blog.bytebytego.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/EvoMap/awesome-agent-evolution",
+    "name": "EvoMap/awesome-agent-evolution: A curated list of AI  - GitHub",
+    "snippet": "A curated list of AI Agent evolution, memory systems, multi-agent architectures, and self-improvement projects.",
+    "host_name": "github.com",
+    "rank": 9,
+    "date": "Apr 24, 2026",
+    "favicon": ""
+  }
+]
