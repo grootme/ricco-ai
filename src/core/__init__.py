@@ -6,6 +6,8 @@ This module provides core functionality:
 - Dependency Injection Container
 - Exception handling
 - Service bootstrap
+- PPCC Cycle (Proper Prompt Chat Cycle)
+- Obviousness Context (SMART+R+T Semantic Contract)
 """
 
 from .exceptions import (
@@ -14,6 +16,10 @@ from .exceptions import (
     InvalidParameterError,
     InvalidRequestError,
     InternalServerError,
+    RICCOError,
+    ValidationError,
+    AuthenticationError,
+    AuthorizationError,
 )
 from .protocols import (
     # Provider protocols
@@ -57,6 +63,21 @@ from .container import (
     async_inject,
     ServiceProvider,
 )
+from .obviousness import (
+    ObviousnessContext,
+    ObviousnessContextBuilder,
+    ObviousnessDimension,
+    OrganizationalImpact,
+    TaskPriority,
+)
+from .ppcc import (
+    PPCCCycle,
+    PPCCPhase,
+    PPCCState,
+    PPCCError,
+    AlignmentRequiredError,
+    ExecutionBlockedError,
+)
 
 __all__ = [
     # Exceptions
@@ -65,6 +86,10 @@ __all__ = [
     'InvalidParameterError',
     'InvalidRequestError',
     'InternalServerError',
+    'RICCOError',
+    'ValidationError',
+    'AuthenticationError',
+    'AuthorizationError',
     # Protocols
     'AIProviderProtocol',
     'AIProviderType',
@@ -96,4 +121,17 @@ __all__ = [
     'inject',
     'async_inject',
     'ServiceProvider',
+    # Obviousness
+    'ObviousnessContext',
+    'ObviousnessContextBuilder',
+    'ObviousnessDimension',
+    'OrganizationalImpact',
+    'TaskPriority',
+    # PPCC
+    'PPCCCycle',
+    'PPCCPhase',
+    'PPCCState',
+    'PPCCError',
+    'AlignmentRequiredError',
+    'ExecutionBlockedError',
 ]
