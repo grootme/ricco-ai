@@ -1,0 +1,3 @@
+"""
+RICCO AI Test Suite
+"""

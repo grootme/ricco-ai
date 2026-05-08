@@ -6,22 +6,35 @@ ERPNext + NebulaGraph + Flowise + n8n
 from typing import Dict, List, Optional, Any
 import asyncio
 
-# Importar clientes
-from .erpnext_integration.erpnext_service import (
-    ERPNextIntegration,
-    ERPNextConfig,
-    RICCOWebhooks
-)
-from .nebula.nebula_client import (
-    NebulaGraphClient,
-    NebulaConfig,
-    get_nebula_client
-)
-from .flowise.flowise_client import (
-    FlowiseClient,
-    FlowiseConfig,
-    RICCOChatflows
-)
+# Importar clientes (condicional para tests)
+try:
+    from .erpnext_integration.erpnext_service import (
+        ERPNextIntegration,
+        ERPNextConfig,
+        RICCOWebhooks
+    )
+    from .nebula.nebula_client import (
+        NebulaGraphClient,
+        NebulaConfig,
+        get_nebula_client
+    )
+    from .flowise.flowise_client import (
+        FlowiseClient,
+        FlowiseConfig,
+        RICCOChatflows
+    )
+    INTEGRATIONS_AVAILABLE = True
+except ImportError:
+    INTEGRATIONS_AVAILABLE = False
+    ERPNextIntegration = None  # type: ignore
+    ERPNextConfig = None  # type: ignore
+    RICCOWebhooks = None  # type: ignore
+    NebulaGraphClient = None  # type: ignore
+    NebulaConfig = None  # type: ignore
+    get_nebula_client = None  # type: ignore
+    FlowiseClient = None  # type: ignore
+    FlowiseConfig = None  # type: ignore
+    RICCOChatflows = None  # type: ignore
 
 
 class RICCOAIOrchestrator:

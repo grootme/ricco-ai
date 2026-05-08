@@ -31,6 +31,37 @@ from fastapi import HTTPException
 from typing import Optional, Dict, Any
 
 
+class RICCOError(Exception):
+    """Base exception for RICCO AI application errors"""
+    
+    def __init__(self, message: str, details: Optional[Dict[str, Any]] = None):
+        self.message = message
+        self.details = details or {}
+        super().__init__(self.message)
+
+
+class ValidationError(RICCOError):
+    """Exception for validation errors"""
+    
+    def __init__(self, message: str, field: Optional[str] = None, details: Optional[Dict[str, Any]] = None):
+        self.field = field
+        super().__init__(message, details)
+
+
+class AuthenticationError(RICCOError):
+    """Exception for authentication errors"""
+    
+    def __init__(self, message: str = "Authentication failed", details: Optional[Dict[str, Any]] = None):
+        super().__init__(message, details)
+
+
+class AuthorizationError(RICCOError):
+    """Exception for authorization errors"""
+    
+    def __init__(self, message: str = "Access denied", details: Optional[Dict[str, Any]] = None):
+        super().__init__(message, details)
+
+
 class BaseAPIException(HTTPException):
     """Base class for API exceptions"""
 

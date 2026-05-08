@@ -99,5 +99,10 @@ def get_service(service_name: str):
     return container.resolve(service_name)
 
 
+# Alias for backward compatibility
+register_services = bootstrap_services
+initialize_services = bootstrap_services
+
+
 # Auto-bootstrap on import (optional, can be disabled)
 # bootstrap_services()
