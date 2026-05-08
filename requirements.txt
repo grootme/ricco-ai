@@ -1,7 +1,7 @@
 # RICCO AI Service - Based on evo-ai with A2UI SDK integration
 # Repository: https://github.com/grootme/ecosystem
 
-# ==================== Core Framework (from evo-ai) ====================
+# ==================== Core Framework ====================
 fastapi==0.115.12
 uvicorn==0.34.2
 pydantic==2.11.3
@@ -10,34 +10,35 @@ pydantic[email]==2.11.3
 python-dotenv==1.1.0
 python-multipart==0.0.20
 
-# ==================== Database (from evo-ai) ====================
+# ==================== Database ====================
 sqlalchemy==2.0.40
 psycopg2-binary==2.9.10
 asyncpg==0.30.0
 alembic==1.15.2
 
-# ==================== Google ADK & AI (from evo-ai) ====================
+# ==================== Google ADK & AI ====================
 google-adk==0.3.0
 google-cloud-aiplatform==1.90.0
 litellm>=1.68.0,<1.69.0
 
-# ==================== A2A Protocol (from evo-ai) ====================
+# ==================== A2A Protocol ====================
 a2a-sdk==0.2.4
 
-# ==================== A2UI SDK (Google A2UI) ====================
-# Install from local: pip install -e ../../external/A2UI/agent_sdks/python/
+# ==================== A2UI SDK ====================
 jsonschema>=4.0.0
 packaging>=21.0
 
 # ==================== MCP (Model Context Protocol) ====================
 mcp==1.9.0
 
-# ==================== Agent Frameworks (from evo-ai) ====================
-langgraph==0.4.1
+# ==================== Agent Frameworks - UPDATED ====================
+langgraph==0.4.7
+langchain-core==0.3.60
+langchain-openai==0.3.18
 crewai==0.120.1
 crewai-tools==0.45.0
 
-# ==================== Redis (from evo-ai) ====================
+# ==================== Redis ====================
 redis==5.3.0
 
 # ==================== Security & Auth ====================
@@ -56,9 +57,10 @@ sse-starlette==2.3.3
 sendgrid==6.11.0
 jinja2==3.1.6
 
-# ==================== Observability (Langfuse) ====================
+# ==================== Observability ====================
 opentelemetry-sdk==1.33.0
 opentelemetry-exporter-otlp==1.33.0
+langfuse==2.60.0
 
 # ==================== OpenRouter / Additional LLM ====================
 openai==1.59.0
@@ -67,6 +69,7 @@ anthropic==0.40.0
 # ==================== Vector Store ====================
 chromadb==0.5.23
 qdrant-client==1.12.2
+pymilvus==2.5.6
 
 # ==================== Embeddings ====================
 sentence-transformers==3.3.1
@@ -85,6 +88,7 @@ loguru==0.7.3
 pytest==8.3.5
 pytest-cov==6.1.1
 pytest-asyncio==0.26.0
+pytest-mock==3.14.0
 
 # ==================== Development ====================
 black==25.1.0

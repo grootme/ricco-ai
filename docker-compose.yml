@@ -1,0 +1,143 @@
+# OpenClaw Agent SaaS - Infrastructure Stack
+# Includes: Qdrant (vector DB), Milvus (GPU vector DB), PostgreSQL (structured data)
+
+services:
+  # =========================================================================
+  # QDRANT - Vector Database (SaaS Multi-tenant Optimized)
+  # =========================================================================
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: openclaw-qdrant
+    ports:
+      - "6333:6333"   # REST API
+      - "6334:6334"   # gRPC API
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__LOG_LEVEL=INFO
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # =========================================================================
+  # MILVUS - Vector Database (GPU-accelerated, NVIDIA Blueprints Compatible)
+  # =========================================================================
+  milvus-standalone:
+    image: milvusdb/milvus:latest
+    container_name: openclaw-milvus
+    ports:
+      - "19530:19530"  # gRPC API
+      - "9091:9091"    # Metrics
+    volumes:
+      - milvus_storage:/var/lib/milvus
+    environment:
+      - ETCD_USE_EMBED=true
+      - COMMON_STORAGETYPE=local
+    command: ["milvus", "run", "standalone"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # =========================================================================
+  # ATTU - Milvus Admin UI (Optional)
+  # =========================================================================
+  attu:
+    image: zilliz/attu:latest
+    container_name: openclaw-attu
+    ports:
+      - "3001:3000"
+    environment:
+      - MILVUS_URL=milvus-standalone:19530
+    depends_on:
+      - milvus-standalone
+    restart: unless-stopped
+
+  # =========================================================================
+  # POSTGRESQL - Structured Data Store
+  # =========================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: openclaw-postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=openclaw
+      - POSTGRES_PASSWORD=openclaw_secret
+      - POSTGRES_DB=openclaw
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openclaw -d openclaw"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # =========================================================================
+  # TIMESCALEDB - Time-Series Extension (Optional)
+  # =========================================================================
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    container_name: openclaw-timescaledb
+    ports:
+      - "5433:5432"
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=openclaw
+      - POSTGRES_PASSWORD=openclaw_secret
+      - POSTGRES_DB=openclaw_ts
+    restart: unless-stopped
+
+  # =========================================================================
+  # REDIS - Cache & Session Store
+  # =========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: openclaw-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # =========================================================================
+  # MINIO - S3-Compatible Object Storage (Optional)
+  # =========================================================================
+  minio:
+    image: minio/minio:latest
+    container_name: openclaw-minio
+    ports:
+      - "9000:9000"   # API
+      - "9001:9001"   # Console
+    volumes:
+      - minio_data:/data
+    environment:
+      - MINIO_ROOT_USER=openclaw
+      - MINIO_ROOT_PASSWORD=openclaw_secret
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+
+volumes:
+  qdrant_storage:
+  milvus_storage:
+  postgres_data:
+  timescaledb_data:
+  redis_data:
+  minio_data:
+
+networks:
+  default:
+    name: openclaw-network
