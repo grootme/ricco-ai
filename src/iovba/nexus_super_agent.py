@@ -40,6 +40,19 @@ from ..ai_providers.providers.openrouter_provider import (
     OpenRouterProviderConfig,
 )
 
+# Import PPCC and Obviousness
+from ..core.ppcc import PPCCCycle, PPCCPhase, PPCCState
+from ..core.obviousness import ObviousnessContext, ObviousnessContextBuilder
+
+# Import cognitive capital store
+from ..cognitive.capital import (
+    CognitiveCapitalStore,
+    CognitiveCapitalGenerator,
+    CognitiveCapital as StoredCapital,
+    CapitalType,
+    CapitalSource,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -151,9 +164,17 @@ class NEXUSConfig:
     use_all_iovba_roles: bool = True
     generate_with_context: bool = True
     
+    # PPCC Configuration
+    enable_ppcc: bool = True  # Activar ciclo PPCC completo
+    require_alignment: bool = False  # Si True, requiere confirmación del usuario
+    
     # Learning
     enable_capital_learning: bool = True
     min_confidence_threshold: float = 0.6
+    
+    # Capital Cognitivo
+    max_engrams_per_interaction: int = 3
+    min_engram_importance: float = 0.3
 
 
 @dataclass
@@ -221,8 +242,15 @@ class NEXUSSuperAgent:
         # Cognitive Capital for NEXUS
         self.capital = CognitiveCapital(agent_id=self.config.id)
         
+        # Cognitive Capital Store for persistence
+        self.capital_store = CognitiveCapitalStore()
+        self.capital_generator = CognitiveCapitalGenerator(self.capital_store)
+        
         # Interaction history for learning
         self.interaction_history: List[Dict[str, Any]] = []
+        
+        # Active PPCC sessions
+        self.active_ppcc_sessions: Dict[str, PPCCCycle] = {}
         
         # Initialize all domain groups
         self._initialize_all_domains()
@@ -331,15 +359,25 @@ Enfoca tu respuesta principalmente desde esta perspectiva.
         domain: Optional[IOVBADomain] = None,
         role: Optional[IOVBARole] = None,
         context: Optional[Dict[str, Any]] = None,
+        session_id: Optional[str] = None,
+        user_id: Optional[str] = None,
     ) -> NEXUSResponse:
         """
         Procesa una consulta del usuario y genera una respuesta inteligente.
+        
+        Implementa el ciclo PPCC (Proper Prompt Chat Cycle):
+        1. PREPARACIÓN: Crear contexto de obviedad
+        2. ALINEACIÓN: Confirmar entendimiento (si está habilitado)
+        3. EJECUCIÓN: Generar respuesta con razonamiento visible
+        4. DECLARACIÓN: Guardar capital cognitivo
         
         Args:
             query: La consulta del usuario
             domain: Dominio específico (opcional, se detecta automáticamente)
             role: Rol específico a enfocar (opcional)
             context: Contexto adicional (opcional)
+            session_id: ID de sesión para PPCC
+            user_id: ID del usuario
             
         Returns:
             NEXUSResponse con la respuesta completa
@@ -353,18 +391,68 @@ Enfoca tu respuesta principalmente desde esta perspectiva.
         
         domain_brand = DOMAIN_BRANDING.get(domain, DOMAIN_BRANDING["custom"])
         
+        # === FASE 1: PREPARACIÓN ===
+        session_id = session_id or str(uuid.uuid4())
+        user_id = user_id or "anonymous"
+        
+        # Cargar capital cognitivo relevante
+        relevant_capital = await self._load_relevant_capital(query, domain)
+        
+        # Crear contexto de obviedad (SMART+R+T)
+        obviousness_context = self._create_obviousness_context(
+            query=query,
+            domain=domain,
+            session_id=session_id,
+            user_id=user_id,
+            relevant_capital=relevant_capital,
+        )
+        
         # Get thinking process
         thinking_process = await self._generate_thinking_process(query, domain, context)
+        thinking_process["ppcc_phase"] = "preparation"
+        thinking_process["capital_loaded"] = len(relevant_capital)
         
         # Determine which roles to consult
         roles_consulted = self._determine_roles(query, role)
         
-        # Generate response using LLM
-        content = await self._generate_response(query, domain, roles_consulted, context)
+        # === FASE 2: ALINEACIÓN (opcional) ===
+        # Por ahora, saltamos alineación explícita para respuestas directas
+        # Pero registramos el contexto en el thinking process
+        thinking_process["alignment"] = {
+            "understanding": f"Consulta sobre {domain_brand.elegant_name}",
+            "context_created": True,
+            "capital_context": len(relevant_capital) > 0,
+        }
+        
+        # === FASE 3: EJECUCIÓN ===
+        thinking_process["ppcc_phase"] = "execution"
+        
+        # Generate response using LLM with capital context
+        content = await self._generate_response_with_capital(
+            query=query,
+            domain=domain,
+            roles=roles_consulted,
+            context=context,
+            relevant_capital=relevant_capital,
+            obviousness_context=obviousness_context,
+        )
+        
+        # === FASE 4: DECLARACIÓN ===
+        thinking_process["ppcc_phase"] = "declaration"
         
         # Learn from interaction
         if self.config.enable_capital_learning:
             await self._learn_from_interaction(query, domain, content, confidence)
+            
+            # Guardar como capital cognitivo destilado
+            await self._store_cognitive_capital(
+                query=query,
+                response=content,
+                domain=domain,
+                confidence=confidence,
+                session_id=session_id,
+                user_id=user_id,
+            )
         
         return NEXUSResponse(
             content=content,
@@ -381,17 +469,20 @@ Enfoca tu respuesta principalmente desde esta perspectiva.
         domain: IOVBADomain,
         context: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        """Generate internal thinking process"""
+        """Generate internal thinking process con PPCC"""
         domain_brand = DOMAIN_BRANDING.get(domain, DOMAIN_BRANDING["custom"])
         
         return {
             "step_1_analysis": f"Consulta recibida: '{query[:100]}...'",
             "step_2_domain_detection": f"Dominio identificado: {domain_brand.elegant_name}",
-            "step_3_role_coordination": "Coordinando con roles IOVBA apropiados",
-            "step_4_knowledge_retrieval": "Accediendo capital cognitivo",
-            "step_5_response_generation": "Generando respuesta estructurada",
+            "step_3_preparation": "Creando contexto de obviedad (SMART+R+T)",
+            "step_4_capital_retrieval": "Buscando capital cognitivo relevante",
+            "step_5_alignment": "Verificando alineación semántica",
+            "step_6_execution": "Generando respuesta con razonamiento visible",
+            "step_7_declaration": "Guardando capital cognitivo destilado",
             "context_used": context is not None,
             "timestamp": datetime.utcnow().isoformat(),
+            "ppcc_enabled": self.config.enable_ppcc,
         }
     
     def _determine_roles(
@@ -426,20 +517,131 @@ Enfoca tu respuesta principalmente desde esta perspectiva.
         
         return roles
     
-    async def _generate_response(
+    async def _load_relevant_capital(
+        self,
+        query: str,
+        domain: IOVBADomain,
+    ) -> List[Dict[str, Any]]:
+        """
+        Carga capital cognitivo relevante para la consulta.
+        
+        Busca en:
+        1. Engrams del agente (memoria a corto plazo)
+        2. CognitiveCapitalStore (memoria a largo plazo)
+        """
+        relevant = []
+        
+        # Buscar en engrams locales
+        for engram in self.capital.engrams:
+            # Simple keyword matching - podría mejorarse con embeddings
+            if any(kw.lower() in engram.content.lower() for kw in query.split()[:5]):
+                relevant.append({
+                    "type": "engram",
+                    "content": engram.content,
+                    "importance": engram.importance_score,
+                    "source": "local_memory",
+                })
+        
+        # Buscar en el store global
+        try:
+            capital_results = self.capital_store.search(query, limit=3)
+            for cap in capital_results:
+                relevant.append({
+                    "type": "capital",
+                    "content": cap.content,
+                    "importance": cap.cognitive_value,
+                    "source": "global_store",
+                    "domain": cap.domain,
+                })
+        except Exception as e:
+            logger.warning(f"Could not search capital store: {e}")
+        
+        return relevant[:5]  # Limitar a 5 resultados
+    
+    def _create_obviousness_context(
+        self,
+        query: str,
+        domain: IOVBADomain,
+        session_id: str,
+        user_id: str,
+        relevant_capital: List[Dict[str, Any]],
+    ) -> ObviousnessContext:
+        """
+        Crea el contexto de obviedad (SMART+R+T) para la consulta.
+        """
+        domain_brand = DOMAIN_BRANDING.get(domain, DOMAIN_BRANDING["custom"])
+        
+        builder = ObviousnessContextBuilder(
+            session_id=session_id,
+            user_id=user_id,
+        )
+        
+        # S - Finalidad
+        builder.with_objective(
+            objective=query,
+            success_criteria=["Respuesta precisa y útil", "Información verificada"],
+            deliverables=["Respuesta estructurada", "Fuentes si aplica"],
+        )
+        
+        # A - Alcance
+        builder.with_boundaries(
+            allow=["web_search", "knowledge_base", "capital_cognitive"],
+            deny=["personal_data", "restricted_files"],
+            sandbox=True,
+        )
+        
+        # R - Relevancia
+        builder.with_relevance(
+            impact="medium",
+            ccv=5,
+            knowledge_nodes=[domain],
+        )
+        
+        # T - Tiempo
+        builder.with_time(
+            priority="normal",
+            timeout=60,
+        )
+        
+        # Dominio
+        builder.with_domain(domain)
+        
+        return builder.build()
+    
+    async def _generate_response_with_capital(
         self,
         query: str,
         domain: IOVBADomain,
         roles: List[IOVBARole],
-        context: Optional[Dict[str, Any]] = None,
+        context: Optional[Dict[str, Any]],
+        relevant_capital: List[Dict[str, Any]],
+        obviousness_context: ObviousnessContext,
     ) -> str:
-        """Generate the actual response using LLM"""
+        """
+        Genera respuesta usando LLM con contexto de capital cognitivo.
+        
+        Integra:
+        - Capital cognitivo relevante
+        - Contexto de obviedad (SMART+R+T)
+        - System prompt del dominio
+        """
         if not self.llm_provider:
-            # Fallback to template response
             return self._generate_fallback_response(query, domain, roles)
         
-        # Build messages
-        system_prompt = self.get_system_prompt(domain, roles[0] if roles else None)
+        # Construir system prompt con obviedad
+        base_system_prompt = self.get_system_prompt(domain, roles[0] if roles else None)
+        obviousness_prompt = obviousness_context.to_system_prompt()
+        
+        # Agregar capital cognitivo si existe
+        capital_context = ""
+        if relevant_capital:
+            capital_context = "\n\n## CAPITAL COGNITIVO RELEVANTE\n"
+            capital_context += "Información previamente aprendida que puede ser útil:\n\n"
+            for i, cap in enumerate(relevant_capital, 1):
+                capital_context += f"### Conocimiento {i} (importancia: {cap['importance']:.2f})\n"
+                capital_context += f"{cap['content'][:500]}\n\n"
+        
+        system_prompt = f"{base_system_prompt}\n\n{obviousness_prompt}{capital_context}"
         
         messages = [{"role": "user", "content": query}]
         
@@ -465,6 +667,42 @@ Enfoca tu respuesta principalmente desde esta perspectiva.
         except Exception as e:
             logger.error(f"Error generating response: {e}")
             return self._generate_fallback_response(query, domain, roles)
+    
+    async def _store_cognitive_capital(
+        self,
+        query: str,
+        response: str,
+        domain: IOVBADomain,
+        confidence: float,
+        session_id: str,
+        user_id: str,
+    ) -> None:
+        """
+        Almacena la interacción como capital cognitivo destilado.
+        
+        Diferencia entre:
+        - Información histórica: Registro bruto de la interacción
+        - Capital cognitivo: Conocimiento destilado, útil y ontológico
+        """
+        from uuid import UUID, uuid4
+        
+        try:
+            # Crear capital cognitivo destilado
+            capital = StoredCapital(
+                agent_id=uuid4(),  # ID del agente NEXUS
+                capital_type=CapitalType.KNOWLEDGE,
+                source=CapitalSource.INTERACTION,
+                domain=domain,
+                title=f"Q&A: {query[:50]}...",
+                content=f"Pregunta: {query}\n\nRespuesta: {response}",
+                keywords=query.split()[:5],
+                cognitive_value=confidence,
+            )
+            
+            self.capital_store.store(capital)
+            logger.info(f"Stored cognitive capital for query: {query[:50]}...")
+        except Exception as e:
+            logger.warning(f"Could not store cognitive capital: {e}")
     
     def _generate_fallback_response(
         self,

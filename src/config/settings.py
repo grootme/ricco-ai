@@ -5,8 +5,9 @@ Extended from evo-ai with RICCO-specific settings
 
 import os
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional, List, Union
 from pydantic_settings import BaseSettings
+from pydantic import field_validator
 import secrets
 from dotenv import load_dotenv
 
@@ -76,7 +77,14 @@ class Settings(BaseSettings):
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
 
     # CORS
-    CORS_ORIGINS: List[str] = os.getenv("CORS_ORIGINS", "*").split(",")
+    CORS_ORIGINS: Union[str, List[str]] = "*"
+    
+    @field_validator('CORS_ORIGINS', mode='before')
+    @classmethod
+    def parse_cors_origins(cls, v):
+        if isinstance(v, str):
+            return v.split(',')
+        return v
 
     # Security
     TOKEN_EXPIRY_HOURS: int = 24
