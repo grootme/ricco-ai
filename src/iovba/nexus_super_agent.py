@@ -141,7 +141,8 @@ class NEXUSConfig:
     
     # API Configuration
     openrouter_api_key: str = ""
-    default_model: str = "anthropic/claude-3.5-sonnet"
+    # Modelo gratuito de Meta a través de OpenRouter
+    default_model: str = "meta-llama/llama-3.1-8b-instruct"
     max_tokens: int = 4096
     temperature: float = 0.7
     

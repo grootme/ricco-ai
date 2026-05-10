@@ -4,12 +4,16 @@ Extended from evo-ai with RICCO-specific settings
 """
 
 import os
+from pathlib import Path
 from typing import Optional, List
 from pydantic_settings import BaseSettings
 import secrets
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load .env from project root
+project_root = Path(__file__).parent.parent.parent
+env_file = project_root / ".env"
+load_dotenv(env_file)
 
 
 class Settings(BaseSettings):
