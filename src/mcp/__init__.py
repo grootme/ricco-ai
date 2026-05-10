@@ -11,14 +11,14 @@ Components:
 
 Example:
 --------
-    from ricco_ai.mcp import ServerRegistry, MCPProxy
+    from ricco_ai.mcp import ServerRegistry, TokenAwareProxy
     
     # Register servers
     registry = ServerRegistry()
     await registry.register(server_config)
     
     # Execute through proxy
-    proxy = MCPProxy(registry=registry)
+    proxy = TokenAwareProxy(registry=registry)
     response = await proxy.execute(request)
 """
 
@@ -41,13 +41,18 @@ from .registry import (
     ToolRiskLevel,
 )
 from .proxy import (
-    MCPProxy,
+    TokenAwareProxy,
+    TokenContext,
     LoadBalancer,
     LoadBalancingStrategy,
+    ServerStats,
     CircuitBreaker,
     CircuitState,
-    TokenAwareProxy,
+    CircuitStats,
 )
+
+# Alias for backwards compatibility
+MCPProxy = TokenAwareProxy
 
 __version__ = "1.0.0"
 
@@ -70,10 +75,14 @@ __all__ = [
     "ToolParameter",
     "ToolRiskLevel",
     # Proxy
-    "MCPProxy",
+    "TokenAwareProxy",
+    "TokenContext",
     "LoadBalancer",
     "LoadBalancingStrategy",
+    "ServerStats",
     "CircuitBreaker",
     "CircuitState",
-    "TokenAwareProxy",
+    "CircuitStats",
+    # Backwards compatibility
+    "MCPProxy",
 ]

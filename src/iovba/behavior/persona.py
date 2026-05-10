@@ -402,3 +402,180 @@ class Persona:
             "total": len(self._interaction_history),
             "last_interaction": self._interaction_history[-1] if self._interaction_history else None
         }
+
+
+class PersonaManager:
+    """
+    Gestiona múltiples personas y su selección dinámica.
+    
+    Permite crear, almacenar y seleccionar personas basadas en
+    el contexto, dominio y preferencias del usuario.
+    
+    Usage:
+        manager = PersonaManager()
+        manager.create_persona("analyst", PersonaConfig(
+            persona_type=PersonaType.ANALYST
+        ))
+        persona = manager.get_persona_for_domain("data_science")
+    """
+    
+    def __init__(self):
+        """Inicializa el gestor de personas."""
+        self._personas: Dict[str, Persona] = {}
+        self._domain_mapping: Dict[str, str] = {}
+        self._default_persona_id: Optional[str] = None
+        
+        # Crear persona por defecto
+        self._create_default_personas()
+    
+    def _create_default_personas(self) -> None:
+        """Crea las personas por defecto del sistema."""
+        # Asistente general
+        default_config = PersonaConfig(
+            persona_type=PersonaType.ASSISTANT,
+            name="OpenClaw Assistant"
+        )
+        self.create_persona("default", default_config, is_default=True)
+        
+        # Investigador
+        researcher_config = PersonaConfig(
+            persona_type=PersonaType.RESEARCHER,
+            name="Investigador",
+            domain_expertise=["investigación", "análisis", "síntesis"]
+        )
+        self.create_persona("researcher", researcher_config)
+        
+        # Analista
+        analyst_config = PersonaConfig(
+            persona_type=PersonaType.ANALYST,
+            name="Analista de Datos",
+            domain_expertise=["datos", "estadísticas", "visualización"]
+        )
+        self.create_persona("analyst", analyst_config)
+        
+        # Desarrollador
+        developer_config = PersonaConfig(
+            persona_type=PersonaType.DEVELOPER,
+            name="Desarrollador",
+            domain_expertise=["software", "código", "arquitectura"]
+        )
+        self.create_persona("developer", developer_config)
+        
+        # Mapear dominios
+        self._domain_mapping = {
+            "software": "developer",
+            "data_science": "analyst",
+            "research": "researcher",
+            "investigación": "researcher",
+            "datos": "analyst",
+            "código": "developer",
+            "general": "default"
+        }
+    
+    def create_persona(
+        self,
+        persona_id: str,
+        config: PersonaConfig,
+        is_default: bool = False
+    ) -> Persona:
+        """
+        Crea una nueva persona.
+        
+        Args:
+            persona_id: Identificador único
+            config: Configuración de la persona
+            is_default: Si es la persona por defecto
+        
+        Returns:
+            La persona creada
+        """
+        persona = Persona(config)
+        self._personas[persona_id] = persona
+        
+        if is_default:
+            self._default_persona_id = persona_id
+        
+        logger.info(f"Persona creada: {persona_id}")
+        return persona
+    
+    def get_persona(self, persona_id: str) -> Optional[Persona]:
+        """
+        Obtiene una persona por ID.
+        
+        Args:
+            persona_id: Identificador de la persona
+        
+        Returns:
+            La persona o None si no existe
+        """
+        return self._personas.get(persona_id)
+    
+    def get_default_persona(self) -> Persona:
+        """
+        Obtiene la persona por defecto.
+        
+        Returns:
+            La persona por defecto
+        """
+        if self._default_persona_id:
+            return self._personas[self._default_persona_id]
+        return self._personas["default"]
+    
+    def get_persona_for_domain(self, domain: str) -> Persona:
+        """
+        Obtiene la persona más adecuada para un dominio.
+        
+        Args:
+            domain: Dominio de trabajo
+        
+        Returns:
+            La persona más adecuada
+        """
+        domain_lower = domain.lower()
+        
+        # Buscar mapeo directo
+        for key, persona_id in self._domain_mapping.items():
+            if key in domain_lower:
+                return self._personas.get(persona_id, self.get_default_persona())
+        
+        return self.get_default_persona()
+    
+    def list_personas(self) -> List[str]:
+        """Lista todas las personas disponibles."""
+        return list(self._personas.keys())
+    
+    def update_persona(self, persona_id: str, config: PersonaConfig) -> bool:
+        """
+        Actualiza la configuración de una persona.
+        
+        Args:
+            persona_id: Identificador
+            config: Nueva configuración
+        
+        Returns:
+            True si se actualizó, False si no existe
+        """
+        if persona_id in self._personas:
+            self._personas[persona_id] = Persona(config)
+            logger.info(f"Persona actualizada: {persona_id}")
+            return True
+        return False
+    
+    def delete_persona(self, persona_id: str) -> bool:
+        """
+        Elimina una persona.
+        
+        Args:
+            persona_id: Identificador
+        
+        Returns:
+            True si se eliminó, False si no existe
+        """
+        if persona_id in self._personas:
+            if persona_id == self._default_persona_id:
+                logger.warning(f"No se puede eliminar la persona por defecto: {persona_id}")
+                return False
+            del self._personas[persona_id]
+            logger.info(f"Persona eliminada: {persona_id}")
+            return True
+        return False

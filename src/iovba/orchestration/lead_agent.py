@@ -586,3 +586,7 @@ class LeadAgent:
     def on_error(self, callback: Callable) -> None:
         """Registra callback para errores"""
         self._on_error = callback
+
+
+# Alias for backward compatibility
+LeadAgentOrchestrator = LeadAgent

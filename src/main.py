@@ -30,6 +30,7 @@ import src.api.mcp_server_routes
 import src.api.tool_routes
 import src.api.client_routes
 import src.api.a2a_routes
+import src.api.nexus_routes  # NEXUS Super Agent routes
 
 # Add root to path
 root_dir = Path(__file__).parent.parent
@@ -94,6 +95,7 @@ app.include_router(src.api.chat_routes.router, prefix=API_PREFIX)
 app.include_router(src.api.session_routes.router, prefix=API_PREFIX)
 app.include_router(src.api.agent_routes.router, prefix=API_PREFIX)
 app.include_router(src.api.a2a_routes.router, prefix=API_PREFIX)
+app.include_router(src.api.nexus_routes.router, prefix=API_PREFIX)  # NEXUS Super Agent
 
 # OpenTelemetry
 init_otel()

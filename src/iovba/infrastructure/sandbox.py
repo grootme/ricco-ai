@@ -571,3 +571,7 @@ class SandboxManager:
     def on_sandbox_terminated(self, callback: Callable) -> None:
         """Registra callback para terminación de sandbox"""
         self._on_sandbox_terminated = callback
+
+
+# Alias for backward compatibility
+SandboxEnvironment = SandboxManager

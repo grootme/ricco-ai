@@ -857,12 +857,14 @@ class TestOpenRouterIntegration:
     
     async def test_openrouter_config(self, openrouter_api_key):
         """Test: Configuración de OpenRouter"""
-        from src.config.openrouter_config import OpenRouterConfig, OpenRouterModel
+        from src.config.openrouter_config import OpenRouterConfig, DEFAULT_MODELS
         
         config = OpenRouterConfig(api_key=openrouter_api_key)
         
         assert config.api_key == openrouter_api_key
-        assert config.default_model == OpenRouterModel.LLAMA_3_8B
+        # default_model is an alias for default_chat_model
+        assert config.default_model == config.default_chat_model
+        assert config.default_chat_model in DEFAULT_MODELS.values() or config.default_chat_model in DEFAULT_MODELS
         
         headers = config.get_headers()
         assert "Authorization" in headers

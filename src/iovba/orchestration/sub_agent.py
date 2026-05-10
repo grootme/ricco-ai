@@ -308,3 +308,7 @@ class SubAgent:
     def on_tool_call(self, callback: Callable) -> None:
         """Registra callback para llamadas a herramientas"""
         self._on_tool_call = callback
+
+
+# Alias for backward compatibility
+SubAgentCoordinator = SubAgent

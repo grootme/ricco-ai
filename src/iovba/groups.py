@@ -1,4 +1,5 @@
 """
+NEXUS - Neural Execution Unified System
 IOVBA Groups - Grupo de agentes orientado a dominio
 IOVBA = Investigador, Observador, Validador, Builder, Asistente
 
@@ -12,6 +13,19 @@ from datetime import datetime
 from enum import Enum
 import asyncio
 import uuid
+import re
+import json
+
+# ============================================
+# PLATFORM BRANDING
+# ============================================
+
+PLATFORM_BRAND = {
+    "name": "NEXUS",
+    "full_name": "Neural Execution Unified System",
+    "tagline": "Intelligent Agent Orchestration",
+    "version": "2.0.0"
+}
 
 # IOVBA Role Types
 IOVBARole = Literal["investigador", "observador", "validador", "builder", "asistente"]
@@ -22,6 +36,217 @@ IOVBADomain = Literal[
     "biologia", "biotecnologia", "geopolitica", "finanzas",
     "legal", "educacion", "investigacion", "marketing", "custom"
 ]
+
+
+# ============================================
+# DOMAIN BRANDING
+# ============================================
+
+@dataclass
+class IOVBADomainBrand:
+    """Branding elegante para cada dominio IOVBA"""
+    domain: str
+    name: str
+    elegant_name: str
+    tagline: str
+    icon: str
+    color: str
+    description: str
+
+
+DOMAIN_BRANDING: Dict[IOVBADomain, IOVBADomainBrand] = {
+    "swe": IOVBADomainBrand(
+        domain="swe",
+        name="Software Engineering",
+        elegant_name="CODEX",
+        tagline="Architecting Digital Excellence",
+        icon="Code",
+        color="#3B82F6",
+        description="Unidad de ingeniería de software para desarrollo, testing y arquitectura de sistemas"
+    ),
+    "salud": IOVBADomainBrand(
+        domain="salud",
+        name="Salud y Medicina",
+        elegant_name="VITALIS",
+        tagline="Advancing Healthcare Intelligence",
+        icon="Heart",
+        color="#EF4444",
+        description="Unidad de salud para diagnóstico, investigación médica y análisis clínico"
+    ),
+    "deportes": IOVBADomainBrand(
+        domain="deportes",
+        name="Deportes",
+        elegant_name="ATHLON",
+        tagline="Peak Performance Analytics",
+        icon="Trophy",
+        color="#F59E0B",
+        description="Unidad de análisis deportivo para performance, estadísticas y predicciones"
+    ),
+    "noticias": IOVBADomainBrand(
+        domain="noticias",
+        name="Noticias y Periodismo",
+        elegant_name="VERITAS",
+        tagline="Truth Through Intelligence",
+        icon="Newspaper",
+        color="#6366F1",
+        description="Unidad de noticias para investigación, verificación y análisis periodístico"
+    ),
+    "quimica": IOVBADomainBrand(
+        domain="quimica",
+        name="Química",
+        elegant_name="ALCHEMY",
+        tagline="Molecular Intelligence",
+        icon="FlaskConical",
+        color="#8B5CF6",
+        description="Unidad de investigación química para análisis molecular y síntesis"
+    ),
+    "biologia": IOVBADomainBrand(
+        domain="biologia",
+        name="Biología",
+        elegant_name="GENESIS",
+        tagline="Life Sciences Intelligence",
+        icon="Dna",
+        color="#10B981",
+        description="Unidad de investigación biológica para genómica y análisis de sistemas vivos"
+    ),
+    "biotecnologia": IOVBADomainBrand(
+        domain="biotecnologia",
+        name="Biotecnología",
+        elegant_name="HELIX",
+        tagline="Engineering Life Solutions",
+        icon="Atom",
+        color="#14B8A6",
+        description="Unidad de biotecnología para bioingeniería y aplicaciones terapéuticas"
+    ),
+    "geopolitica": IOVBADomainBrand(
+        domain="geopolitica",
+        name="Geopolítica",
+        elegant_name="DIPLOMAT",
+        tagline="Strategic Global Intelligence",
+        icon="Globe",
+        color="#F97316",
+        description="Unidad de análisis geopolítico para inteligencia estratégica y relaciones internacionales"
+    ),
+    "finanzas": IOVBADomainBrand(
+        domain="finanzas",
+        name="Finanzas",
+        elegant_name="APEX",
+        tagline="Financial Intelligence Redefined",
+        icon="TrendingUp",
+        color="#059669",
+        description="Unidad de análisis financiero para mercados, inversiones y riesgos"
+    ),
+    "legal": IOVBADomainBrand(
+        domain="legal",
+        name="Legal",
+        elegant_name="JUSTITIA",
+        tagline="Legal Intelligence & Justice",
+        icon="Scale",
+        color="#7C3AED",
+        description="Unidad de análisis legal para jurisprudencia, compliance y contratos"
+    ),
+    "educacion": IOVBADomainBrand(
+        domain="educacion",
+        name="Educación",
+        elegant_name="MENTOR",
+        tagline="Transforming Education Intelligence",
+        icon="GraduationCap",
+        color="#EC4899",
+        description="Unidad de educación para aprendizaje personalizado y contenido pedagógico"
+    ),
+    "investigacion": IOVBADomainBrand(
+        domain="investigacion",
+        name="Investigación",
+        elegant_name="PIONEER",
+        tagline="Pushing Knowledge Boundaries",
+        icon="Microscope",
+        color="#0EA5E9",
+        description="Unidad de investigación científica para descubrimiento y publicación académica"
+    ),
+    "marketing": IOVBADomainBrand(
+        domain="marketing",
+        name="Marketing",
+        elegant_name="PRISMA",
+        tagline="Multifaceted Marketing Intelligence",
+        icon="Megaphone",
+        color="#D946EF",
+        description="Unidad de marketing para campañas, análisis de audiencia y optimización"
+    ),
+    "custom": IOVBADomainBrand(
+        domain="custom",
+        name="Personalizado",
+        elegant_name="CUSTOM",
+        tagline="Tailored Intelligence Solutions",
+        icon="Settings",
+        color="#64748B",
+        description="Unidad personalizada para dominios específicos y configuraciones a medida"
+    ),
+}
+
+
+# ============================================
+# ROLE BRANDING
+# ============================================
+
+@dataclass
+class IOVBARoleBrand:
+    """Branding elegante para cada rol IOVBA"""
+    role: str
+    elegant_name: str
+    tagline: str
+    description: str
+    icon: str
+    color: str
+    gradient: str
+
+
+ROLE_BRANDING: Dict[IOVBARole, IOVBARoleBrand] = {
+    "investigador": IOVBARoleBrand(
+        role="investigador",
+        elegant_name="INVESTIGATOR",
+        tagline="Discovery & Analysis",
+        description="Investiga profundamente, analiza datos y descubre insights ocultos",
+        icon="Microscope",
+        color="#3B82F6",
+        gradient="from-blue-500 to-cyan-500"
+    ),
+    "observador": IOVBARoleBrand(
+        role="observador",
+        elegant_name="OBSERVER",
+        tagline="Monitoring & Patterns",
+        description="Monitorea sistemas, detecta patrones y anomalías",
+        icon="Eye",
+        color="#F59E0B",
+        gradient="from-amber-500 to-orange-500"
+    ),
+    "validador": IOVBARoleBrand(
+        role="validador",
+        elegant_name="VALIDATOR",
+        tagline="Quality & Verification",
+        description="Valida resultados, asegura calidad y verifica compliance",
+        icon="Shield",
+        color="#10B981",
+        gradient="from-emerald-500 to-teal-500"
+    ),
+    "builder": IOVBARoleBrand(
+        role="builder",
+        elegant_name="BUILDER",
+        tagline="Creation & Implementation",
+        description="Construye soluciones, implementa sistemas y optimiza código",
+        icon="Hammer",
+        color="#8B5CF6",
+        gradient="from-violet-500 to-purple-500"
+    ),
+    "asistente": IOVBARoleBrand(
+        role="asistente",
+        elegant_name="ASSISTANT",
+        tagline="Coordination & Support",
+        description="Coordina equipos, facilita comunicación y gestiona documentación",
+        icon="HelpCircle",
+        color="#14B8A6",
+        gradient="from-teal-500 to-cyan-500"
+    ),
+}
 
 
 class AgentStatus(str, Enum):
@@ -148,10 +373,26 @@ class AgentProfile:
 class IOVBAGroup:
     """
     Grupo IOVBA - 5 agentes orientados a dominio
-    Investidador, Observador, Validador, Builder, Asistente
+    Investigador, Observador, Validador, Builder, Asistente
+    
+    Cada grupo tiene un nombre elegante único según su dominio:
+    - CODEX (SWE)
+    - VITALIS (Salud)
+    - ATHLON (Deportes)
+    - VERITAS (Noticias)
+    - ALCHEMY (Química)
+    - GENESIS (Biología)
+    - HELIX (Biotecnología)
+    - DIPLOMAT (Geopolítica)
+    - APEX (Finanzas)
+    - JUSTITIA (Legal)
+    - MENTOR (Educación)
+    - PIONEER (Investigación)
+    - PRISMA (Marketing)
     """
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     name: str = ""
+    elegant_name: str = ""  # Nombre elegante del dominio
     domain: IOVBADomain = "swe"
     description: str = ""
     status: AgentStatus = AgentStatus.ACTIVE
@@ -183,6 +424,10 @@ class IOVBAGroup:
         if self.centralized_capital is None:
             self.centralized_capital = CognitiveCapital(agent_id=f"{self.id}_central")
         
+        # Set elegant name from domain branding
+        if not self.elegant_name and self.domain in DOMAIN_BRANDING:
+            self.elegant_name = DOMAIN_BRANDING[self.domain].elegant_name
+        
         # Crear agentes si no existen
         if not self.investigador:
             self.investigador = self._create_role_agent("investigador")
@@ -197,38 +442,36 @@ class IOVBAGroup:
     
     def _create_role_agent(self, role: IOVBARole) -> AgentProfile:
         """Crea un agente para un rol específico"""
+        domain_brand = DOMAIN_BRANDING.get(self.domain, DOMAIN_BRANDING["custom"])
+        role_brand = ROLE_BRANDING.get(role, ROLE_BRANDING["asistente"])
+        
         role_configs = {
             "investigador": {
-                "skills": ["research", "data-analysis", "web-search", "document-analysis"],
-                "tools": ["search", "scraper", "pdf-reader"],
-                "description": f"Investigador especializado en {self.domain}"
+                "skills": ["research", "data-analysis", "web-search", "document-analysis", "deep-investigation"],
+                "tools": ["search", "scraper", "pdf-reader", "database-query"],
             },
             "observador": {
-                "skills": ["monitoring", "pattern-recognition", "anomaly-detection", "reporting"],
-                "tools": ["logger", "metrics", "alerts"],
-                "description": f"Observador de patrones y anomalías en {self.domain}"
+                "skills": ["monitoring", "pattern-recognition", "anomaly-detection", "reporting", "metrics-analysis"],
+                "tools": ["logger", "metrics", "alerts", "dashboard"],
             },
             "validador": {
-                "skills": ["quality-assurance", "testing", "review", "verification"],
-                "tools": ["validator", "tester", "checker"],
-                "description": f"Validador de calidad y verificación en {self.domain}"
+                "skills": ["quality-assurance", "testing", "review", "verification", "compliance-check"],
+                "tools": ["validator", "tester", "checker", "linter"],
             },
             "builder": {
-                "skills": ["implementation", "development", "optimization", "refactoring"],
-                "tools": ["code-executor", "builder", "deployer"],
-                "description": f"Builder e implementador en {self.domain}"
+                "skills": ["implementation", "development", "optimization", "refactoring", "architecture"],
+                "tools": ["code-executor", "builder", "deployer", "compiler"],
             },
             "asistente": {
-                "skills": ["coordination", "communication", "documentation", "scheduling"],
-                "tools": ["scheduler", "notifier", "documenter"],
-                "description": f"Asistente coordinador en {self.domain}"
+                "skills": ["coordination", "communication", "documentation", "scheduling", "orchestration"],
+                "tools": ["scheduler", "notifier", "documenter", "workflow-manager"],
             }
         }
         
         config = role_configs.get(role, {})
         return AgentProfile(
-            name=f"{role.capitalize()} {self.domain.upper()}",
-            description=config.get("description", ""),
+            name=f"{role_brand.elegant_name} {domain_brand.elegant_name}",
+            description=f"{role_brand.description} en {domain_brand.name}",
             domain=self.domain,
             iovba_role=role,
             skills=config.get("skills", []),
@@ -349,22 +592,36 @@ class IOVBAGroupManager:
     
     def _init_templates(self) -> Dict[IOVBADomain, Dict[str, Any]]:
         """Inicializa templates por dominio"""
-        return {
-            "swe": {"name": "Software Engineering", "mcp_servers": ["github", "docker", "filesystem"]},
-            "salud": {"name": "Salud y Medicina", "mcp_servers": ["medical-db", "hl7-fhir"]},
-            "deportes": {"name": "Deportes", "mcp_servers": ["stats-api", "video-processing"]},
-            "noticias": {"name": "Noticias y Periodismo", "mcp_servers": ["brave-search", "news-api"]},
-            "quimica": {"name": "Química", "mcp_servers": ["pubchem", "chemspider"]},
-            "biologia": {"name": "Biología", "mcp_servers": ["ncbi", "ensembl"]},
-            "biotecnologia": {"name": "Biotecnología", "mcp_servers": ["ncbi", "uniprot", "pubmed"]},
-            "geopolitica": {"name": "Geopolítica", "mcp_servers": ["brave-search", "maps-api"]},
-            "finanzas": {"name": "Finanzas", "mcp_servers": ["alpha-vantage", "coingecko"]},
-            "legal": {"name": "Legal", "mcp_servers": ["court-api", "statute-db"]},
-            "educacion": {"name": "Educación", "mcp_servers": ["lms-integration", "content-db"]},
-            "investigacion": {"name": "Investigación", "mcp_servers": ["arxiv", "pubmed", "semantic-scholar"]},
-            "marketing": {"name": "Marketing", "mcp_servers": ["google-analytics", "social-apis"]},
-            "custom": {"name": "Personalizado", "mcp_servers": []},
+        templates = {}
+        for domain, brand in DOMAIN_BRANDING.items():
+            templates[domain] = {
+                "name": brand.name,
+                "elegant_name": brand.elegant_name,
+                "tagline": brand.tagline,
+                "description": brand.description,
+                "mcp_servers": self._get_mcp_servers_for_domain(domain)
+            }
+        return templates
+    
+    def _get_mcp_servers_for_domain(self, domain: IOVBADomain) -> List[str]:
+        """Retorna MCP servers recomendados para cada dominio"""
+        mcp_map = {
+            "swe": ["github", "docker", "filesystem", "git"],
+            "salud": ["medical-db", "hl7-fhir", "pubmed"],
+            "deportes": ["stats-api", "video-processing", "data-analytics"],
+            "noticias": ["brave-search", "news-api", "fact-checker"],
+            "quimica": ["pubchem", "chemspider", "rdkit"],
+            "biologia": ["ncbi", "ensembl", "uniprot"],
+            "biotecnologia": ["ncbi", "uniprot", "pubmed", "alphafold"],
+            "geopolitica": ["brave-search", "maps-api", "news-api"],
+            "finanzas": ["alpha-vantage", "coingecko", "yahoo-finance"],
+            "legal": ["court-api", "statute-db", "legal-search"],
+            "educacion": ["lms-integration", "content-db", "video-platform"],
+            "investigacion": ["arxiv", "pubmed", "semantic-scholar", "google-scholar"],
+            "marketing": ["google-analytics", "social-apis", "seo-tools"],
+            "custom": [],
         }
+        return mcp_map.get(domain, [])
     
     def create_group(
         self,
@@ -373,13 +630,15 @@ class IOVBAGroupManager:
         description: str = "",
         sync_mode: CapitalSyncMode = CapitalSyncMode.HYBRID,
     ) -> IOVBAGroup:
-        """Crea un nuevo grupo IOVBA"""
+        """Crea un nuevo grupo IOVBA con nombre elegante"""
         template = self.domain_templates.get(domain, {})
+        brand = DOMAIN_BRANDING.get(domain, DOMAIN_BRANDING["custom"])
         
         group = IOVBAGroup(
-            name=name,
+            name=name or f"{brand.elegant_name} Unit",
+            elegant_name=brand.elegant_name,
             domain=domain,
-            description=description or template.get("name", ""),
+            description=description or brand.description,
             sync_mode=sync_mode,
         )
         
@@ -413,3 +672,11 @@ class IOVBAGroupManager:
         for group_id, group in self.groups.items():
             results[group_id] = await group.auto_improve()
         return results
+    
+    def get_domain_branding(self, domain: IOVBADomain) -> IOVBADomainBrand:
+        """Retorna el branding de un dominio"""
+        return DOMAIN_BRANDING.get(domain, DOMAIN_BRANDING["custom"])
+    
+    def get_all_domain_brands(self) -> Dict[IOVBADomain, IOVBADomainBrand]:
+        """Retorna todos los brandings de dominio"""
+        return DOMAIN_BRANDING

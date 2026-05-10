@@ -14,6 +14,8 @@ Capital Cognitivo: Sistema de memoria y aprendizaje automejorado
 - Híbrido: Combinación de ambos
 
 HITL: Human In The Loop para aprobaciones
+
+NEXUS: Super Agente Coordinador que unifica todo el sistema
 """
 
 from .groups import (
@@ -52,6 +54,16 @@ from .orchestration.middleware import OrchestrationMiddleware
 
 from .infrastructure.sandbox import SandboxEnvironment
 from .infrastructure.openshell import OpenShellConnector
+
+# NEXUS Super Agent
+from .nexus_super_agent import (
+    NEXUSSuperAgent,
+    NEXUSConfig,
+    NEXUSResponse,
+    NEXUS_BRAND,
+    get_nexus,
+    reset_nexus,
+)
 
 # Try to import LangGraph integration if available
 try:
@@ -106,6 +118,14 @@ __all__ = [
     # Infrastructure Layer
     "SandboxEnvironment",
     "OpenShellConnector",
+    
+    # NEXUS Super Agent
+    "NEXUSSuperAgent",
+    "NEXUSConfig",
+    "NEXUSResponse",
+    "NEXUS_BRAND",
+    "get_nexus",
+    "reset_nexus",
     
     # LangGraph (conditional)
     "LANGGRAPH_AVAILABLE",

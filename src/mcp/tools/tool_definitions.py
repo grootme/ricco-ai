@@ -33,31 +33,61 @@ class RiskLevel(str, Enum):
 
 @dataclass
 class MCPTool:
-    """Definición de una herramienta MCP"""
-    id: str
-    name: str
-    description: str
-    category: ToolCategory
-    input_schema: Dict[str, Any]
-    output_schema: Dict[str, Any]
+    """
+    Definición de una herramienta MCP
+    
+    Todos los campos tienen valores por defecto para permitir
+    creación flexible de instancias con argumentos opcionales.
+    """
+    id: str = ""
+    name: str = ""
+    description: str = ""
+    category: ToolCategory = ToolCategory.AI
+    input_schema: Dict[str, Any] = field(default_factory=lambda: {"type": "object", "properties": {}})
+    output_schema: Dict[str, Any] = field(default_factory=lambda: {"type": "object", "properties": {}})
     risk_level: RiskLevel = RiskLevel.LOW
     requires_consent: bool = False
     requires_permission: str = ""
     examples: List[str] = field(default_factory=list)
     
+    def __post_init__(self):
+        """Validación post-inicialización"""
+        # Asegurar que los schemas tengan estructura válida
+        if not self.input_schema:
+            self.input_schema = {"type": "object", "properties": {}}
+        if not self.output_schema:
+            self.output_schema = {"type": "object", "properties": {}}
+    
     def to_dict(self) -> Dict[str, Any]:
+        """Convierte la herramienta a diccionario para serialización"""
         return {
             "id": self.id,
             "name": self.name,
             "description": self.description,
-            "category": self.category.value,
+            "category": self.category.value if isinstance(self.category, ToolCategory) else self.category,
             "input_schema": self.input_schema,
             "output_schema": self.output_schema,
-            "risk_level": self.risk_level.value,
+            "risk_level": self.risk_level.value if isinstance(self.risk_level, RiskLevel) else self.risk_level,
             "requires_consent": self.requires_consent,
             "requires_permission": self.requires_permission,
             "examples": self.examples,
         }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "MCPTool":
+        """Crea una instancia desde un diccionario"""
+        return cls(
+            id=data.get("id", ""),
+            name=data.get("name", ""),
+            description=data.get("description", ""),
+            category=ToolCategory(data.get("category", "ai")),
+            input_schema=data.get("input_schema", {"type": "object", "properties": {}}),
+            output_schema=data.get("output_schema", {"type": "object", "properties": {}}),
+            risk_level=RiskLevel(data.get("risk_level", "low")),
+            requires_consent=data.get("requires_consent", False),
+            requires_permission=data.get("requires_permission", ""),
+            examples=data.get("examples", []),
+        )
 
 
 # ============================================

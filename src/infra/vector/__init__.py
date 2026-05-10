@@ -270,13 +270,61 @@ def create_vector_store(
 
 
 # ============================================================================
+# SYNCHRONIZATION EXPORTS
+# ============================================================================
+
+from .vector_store_sync import (
+    SyncDirection,
+    SyncMode,
+    ConflictResolution,
+    SyncConfig,
+    SyncEvent,
+    SyncState,
+    SyncObserver,
+    LoggingSyncObserver,
+    MetricsSyncObserver,
+    SyncCommand,
+    UpsertSyncCommand,
+    DeleteSyncCommand,
+    SyncStrategy,
+    FullSyncStrategy,
+    IncrementalSyncStrategy,
+    DeltaSyncStrategy,
+    SyncStrategyFactory,
+    VectorStoreSynchronizer,
+    create_synchronizer,
+)
+
+
+# ============================================================================
 # EXPORTS
 # ============================================================================
 
 __all__ = [
+    # Core
     "VectorStoreType",
     "VectorStoreConfig",
     "UnifiedVectorStore",
     "CollectionType",
     "create_vector_store",
+    # Synchronization
+    "SyncDirection",
+    "SyncMode",
+    "ConflictResolution",
+    "SyncConfig",
+    "SyncEvent",
+    "SyncState",
+    "SyncObserver",
+    "LoggingSyncObserver",
+    "MetricsSyncObserver",
+    "SyncCommand",
+    "UpsertSyncCommand",
+    "DeleteSyncCommand",
+    "SyncStrategy",
+    "FullSyncStrategy",
+    "IncrementalSyncStrategy",
+    "DeltaSyncStrategy",
+    "SyncStrategyFactory",
+    "VectorStoreSynchronizer",
+    "create_synchronizer",
 ]

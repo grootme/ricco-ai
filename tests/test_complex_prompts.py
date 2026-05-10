@@ -165,11 +165,12 @@ RESPONDE EN FORMATO:
             vcs.upsert(topic_key=topic, content=content)
         
         # Prompt para consolidar
+        memories_data = {topic: vcs.get_by_key(topic)['content'] for topic, _ in memories}
         prompt = f"""
 Eres un agente especializado en consolidación de conocimiento. Tu tarea es sintetizar información dispersa en insights estratégicos.
 
 MEMORIAS DISPONIBLES:
-{json.dumps([{k: vcs.get_by_key(k)['content'] for k in [m[0] for m in memories]}, indent=2)}
+{json.dumps(memories_data, indent=2)}
 
 TU TAREA:
 1. Identifica patrones y conexiones entre las memorias

@@ -459,3 +459,7 @@ class GuardrailMiddleware:
             }
             for r in self._rules
         ]
+
+
+# Alias for backward compatibility
+GuardrailEngine = GuardrailMiddleware

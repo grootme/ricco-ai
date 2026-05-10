@@ -627,3 +627,7 @@ class CheckpointMiddleware(MiddlewareBase):
                 return context
         
         return None
+
+
+# Alias for backward compatibility
+OrchestrationMiddleware = MiddlewareChain

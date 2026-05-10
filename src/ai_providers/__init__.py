@@ -26,6 +26,24 @@ from .models import (
     AIQuotaInfo,
 )
 
+# Token Optimizer imports
+from .token_optimizer import (
+    OptimizationStrategy,
+    TokenOptimizationConfig,
+    TokenMetrics,
+    CompressionStrategy,
+    SemanticCacheStrategy,
+    DeduplicationStrategy,
+    ContextPruningStrategy,
+    AdaptiveStrategy,
+    OptimizingLLMWrapper,
+    TokenOptimizerService,
+    TokenOptimizerFactory,
+    SharedContextPool,
+    count_tokens,
+    create_token_optimizer,
+)
+
 __all__ = [
     # Base
     "AIProvider",
@@ -45,4 +63,19 @@ __all__ = [
     "ProductRecommendation",
     "PersonalizedFeed",
     "AIQuotaInfo",
+    # Token Optimizer
+    "OptimizationStrategy",
+    "TokenOptimizationConfig",
+    "TokenMetrics",
+    "CompressionStrategy",
+    "SemanticCacheStrategy",
+    "DeduplicationStrategy",
+    "ContextPruningStrategy",
+    "AdaptiveStrategy",
+    "OptimizingLLMWrapper",
+    "TokenOptimizerService",
+    "TokenOptimizerFactory",
+    "SharedContextPool",
+    "count_tokens",
+    "create_token_optimizer",
 ]

@@ -505,3 +505,7 @@ class OpenShell:
     def on_command_executed(self, callback: Callable) -> None:
         """Registra callback para comandos ejecutados"""
         self._on_command_executed = callback
+
+
+# Alias for backward compatibility
+OpenShellConnector = OpenShell

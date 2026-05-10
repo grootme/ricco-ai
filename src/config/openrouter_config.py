@@ -171,6 +171,16 @@ class OpenRouterConfig:
         if not self.api_key:
             self.api_key = os.environ.get("OPENROUTER_API_KEY")
     
+    @property
+    def default_model(self) -> str:
+        """Alias for default_chat_model for backwards compatibility."""
+        return self.default_chat_model
+    
+    @default_model.setter
+    def default_model(self, value: str) -> None:
+        """Setter for default_model alias."""
+        self.default_chat_model = value
+    
     def get_headers(self) -> Dict[str, str]:
         """Get API headers."""
         headers = {
@@ -192,6 +202,27 @@ class OpenRouterConfig:
     def list_free_models(self) -> List[OpenRouterModel]:
         """List all available free models."""
         return list(FREE_MODELS.values())
+    
+    def is_free_model(self, model_id: Optional[str] = None) -> bool:
+        """
+        Check if a model is free.
+        
+        Args:
+            model_id: Model ID to check. If None, uses default_chat_model.
+        
+        Returns:
+            True if the model is free, False otherwise.
+        """
+        model = model_id or self.default_chat_model
+        # Check in FREE_MODELS dict
+        if model in FREE_MODELS:
+            return FREE_MODELS[model].is_free
+        # Check if model key maps to a free model
+        if model in DEFAULT_MODELS:
+            actual_model = DEFAULT_MODELS[model]
+            return actual_model in FREE_MODELS and FREE_MODELS[actual_model].is_free
+        # Default to checking if ":free" is in the model name
+        return ":free" in model or "free" in model.lower()
 
 
 # ============================================================================
@@ -295,6 +326,110 @@ def get_default_config() -> OpenRouterConfig:
     return OpenRouterConfig()
 
 
+def get_openrouter_config(
+    api_key: Optional[str] = None,
+    base_url: Optional[str] = None,
+    default_model: Optional[str] = None,
+    temperature: Optional[float] = None,
+    max_tokens: Optional[int] = None,
+    timeout: Optional[int] = None,
+    site_url: Optional[str] = None,
+    site_name: Optional[str] = None,
+) -> OpenRouterConfig:
+    """
+    Get OpenRouter configuration with custom settings.
+    
+    This function creates a customized OpenRouter configuration for use
+    in tests, agents, and integrations throughout the OpenClaw ecosystem.
+    
+    Args:
+        api_key: OpenRouter API key (defaults to OPENROUTER_API_KEY env var)
+        base_url: API base URL (defaults to https://openrouter.ai/api/v1)
+        default_model: Default chat model key (e.g., "meta/llama-3.1-8b")
+        temperature: Default temperature for completions (0.0-2.0)
+        max_tokens: Default max tokens for completions
+        timeout: Request timeout in seconds
+        site_url: Your site URL for OpenRouter headers
+        site_name: Your site name for OpenRouter headers
+    
+    Returns:
+        OpenRouterConfig instance with the specified settings
+    
+    Example:
+        >>> config = get_openrouter_config(
+        ...     api_key="sk-or-...",
+        ...     default_model="deepseek/deepseek-chat",
+        ...     temperature=0.5,
+        ...     max_tokens=2048,
+        ... )
+        >>> client = OpenRouterClient(config)
+    
+    Environment Variables:
+        OPENROUTER_API_KEY: Default API key if not provided
+        OPENROUTER_BASE_URL: Override base URL
+        OPENROUTER_SITE_URL: Default site URL
+    """
+    # Load from environment if not provided
+    if api_key is None:
+        api_key = os.environ.get("OPENROUTER_API_KEY")
+    
+    if base_url is None:
+        base_url = os.environ.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+    
+    if site_url is None:
+        site_url = os.environ.get("OPENROUTER_SITE_URL")
+    
+    # Build config with provided settings
+    config_kwargs = {
+        "api_key": api_key,
+        "base_url": base_url,
+    }
+    
+    if default_model is not None:
+        config_kwargs["default_chat_model"] = default_model
+    
+    if temperature is not None:
+        config_kwargs["default_temperature"] = temperature
+    
+    if max_tokens is not None:
+        config_kwargs["default_max_tokens"] = max_tokens
+    
+    if timeout is not None:
+        config_kwargs["timeout"] = timeout
+    
+    if site_url is not None:
+        config_kwargs["site_url"] = site_url
+    
+    if site_name is not None:
+        config_kwargs["site_name"] = site_name
+    
+    return OpenRouterConfig(**config_kwargs)
+
+
+def get_openrouter_client(
+    api_key: Optional[str] = None,
+    **config_kwargs,
+) -> OpenRouterClient:
+    """
+    Convenience function to create an OpenRouter client directly.
+    
+    Args:
+        api_key: OpenRouter API key
+        **config_kwargs: Additional configuration options passed to get_openrouter_config
+    
+    Returns:
+        OpenRouterClient instance ready to use
+    
+    Example:
+        >>> client = get_openrouter_client(api_key="sk-or-...")
+        >>> response = await client.chat_completion([
+        ...     {"role": "user", "content": "Hello!"}
+        ... ])
+    """
+    config = get_openrouter_config(api_key=api_key, **config_kwargs)
+    return OpenRouterClient(config)
+
+
 # ============================================================================
 # EXPORTS
 # ============================================================================
@@ -307,4 +442,6 @@ __all__ = [
     "DEFAULT_MODELS",
     "create_openrouter_client",
     "get_default_config",
+    "get_openrouter_config",
+    "get_openrouter_client",
 ]

@@ -46,6 +46,7 @@ class HITLProposal:
     proposal_type: ProposalType = ProposalType.CREATE_AGENT
     title: str = ""
     description: str = ""
+    domain: Optional[IOVBADomain] = None  # Dominio asociado a la propuesta
     proposed_by: str = ""  # Agent ID
     created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
     status: ApprovalStatus = ApprovalStatus.PENDING
@@ -78,6 +79,24 @@ class HITLProposal:
             self.status = ApprovalStatus.TIMEOUT
             return True
         return False
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convierte la propuesta a diccionario para serialización"""
+        return {
+            "id": self.id,
+            "proposal_type": self.proposal_type.value if isinstance(self.proposal_type, ProposalType) else self.proposal_type,
+            "title": self.title,
+            "description": self.description,
+            "domain": self.domain,
+            "proposed_by": self.proposed_by,
+            "created_at": self.created_at,
+            "status": self.status.value if isinstance(self.status, ApprovalStatus) else self.status,
+            "details": self.details,
+            "approved_by": self.approved_by,
+            "approved_at": self.approved_at,
+            "rejection_reason": self.rejection_reason,
+            "timeout_seconds": self.timeout_seconds,
+        }
 
 
 @dataclass

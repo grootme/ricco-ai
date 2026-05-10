@@ -53,10 +53,10 @@ class MCPServerConfig:
 @dataclass
 class MCPTool:
     """Herramienta expuesta por un servidor MCP"""
-    name: str
-    description: str
-    input_schema: Dict[str, Any]
-    server_name: str
+    name: str = ""
+    description: str = ""
+    input_schema: Dict[str, Any] = field(default_factory=lambda: {"type": "object", "properties": {}})
+    server_name: str = ""
     category: str = "general"
     tags: List[str] = field(default_factory=list)
     requires_confirmation: bool = False
