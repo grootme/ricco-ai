@@ -8,9 +8,12 @@ import type {
   Skill,
   NVIDIABlueprint,
   DashboardStats,
-  IOVBAGroup,
-  IOVBATemplate,
+  AgentGroup,
+  DomainConfig,
+  RoleConfig,
   Engram,
+  PlatformConfig,
+  NEXUSConfig,
 } from '@/types';
 import apiClient from '@/lib/api/client';
 
@@ -42,49 +45,64 @@ export const useDashboardStore = create<DashboardState>()(
   )
 );
 
-// IOVBA Groups Store
-interface IOVBAGroupsState {
-  groups: IOVBAGroup[];
-  templates: IOVBATemplate[];
-  selectedGroup: IOVBAGroup | null;
+// Agent Groups Store (renamed from IOVBAGroupsStore)
+interface AgentGroupsState {
+  groups: AgentGroup[];
+  domains: DomainConfig[];
+  roles: RoleConfig[];
+  selectedGroup: AgentGroup | null;
   isLoading: boolean;
   error: string | null;
   fetchGroups: () => Promise<void>;
-  fetchTemplates: () => Promise<void>;
-  selectGroup: (group: IOVBAGroup | null) => void;
+  fetchDomains: () => Promise<void>;
+  fetchRoles: () => Promise<void>;
+  selectGroup: (group: AgentGroup | null) => void;
 }
 
-export const useIOVBAGroupsStore = create<IOVBAGroupsState>()(
+export const useAgentGroupsStore = create<AgentGroupsState>()(
   devtools(
     (set) => ({
       groups: [],
-      templates: [],
+      domains: [],
+      roles: [],
       selectedGroup: null,
       isLoading: false,
       error: null,
       fetchGroups: async () => {
         set({ isLoading: true, error: null });
         try {
-          const groups = await apiClient.getIOVBAGroups();
+          const groups = await apiClient.getAgentGroups();
           set({ groups, isLoading: false });
         } catch (error) {
           set({ error: (error as Error).message, isLoading: false });
         }
       },
-      fetchTemplates: async () => {
+      fetchDomains: async () => {
         set({ isLoading: true, error: null });
         try {
-          const templates = await apiClient.getIOVBATemplates();
-          set({ templates, isLoading: false });
+          const domains = await apiClient.getDomains();
+          set({ domains, isLoading: false });
+        } catch (error) {
+          set({ error: (error as Error).message, isLoading: false });
+        }
+      },
+      fetchRoles: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          const roles = await apiClient.getRoles();
+          set({ roles, isLoading: false });
         } catch (error) {
           set({ error: (error as Error).message, isLoading: false });
         }
       },
       selectGroup: (group) => set({ selectedGroup: group }),
     }),
-    { name: 'iovba-groups-store' }
+    { name: 'agent-groups-store' }
   )
 );
+
+// Backward compatibility alias
+export const useIOVBAGroupsStore = useAgentGroupsStore;
 
 // Agents Store
 interface AgentsState {
@@ -306,6 +324,46 @@ export const useBlueprintsStore = create<BlueprintsState>()(
       selectBlueprint: (blueprint) => set({ selectedBlueprint: blueprint }),
     }),
     { name: 'blueprints-store' }
+  )
+);
+
+// Platform Configuration Store
+interface PlatformState {
+  config: PlatformConfig | null;
+  nexusConfig: NEXUSConfig | null;
+  isLoading: boolean;
+  error: string | null;
+  fetchPlatformConfig: () => Promise<void>;
+  fetchNEXUSConfig: () => Promise<void>;
+}
+
+export const usePlatformStore = create<PlatformState>()(
+  devtools(
+    (set) => ({
+      config: null,
+      nexusConfig: null,
+      isLoading: false,
+      error: null,
+      fetchPlatformConfig: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          const config = await apiClient.getPlatformConfig();
+          set({ config, isLoading: false });
+        } catch (error) {
+          set({ error: (error as Error).message, isLoading: false });
+        }
+      },
+      fetchNEXUSConfig: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          const nexusConfig = await apiClient.getNEXUSConfig();
+          set({ nexusConfig, isLoading: false });
+        } catch (error) {
+          set({ error: (error as Error).message, isLoading: false });
+        }
+      },
+    }),
+    { name: 'platform-store' }
   )
 );
 

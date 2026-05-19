@@ -26,12 +26,13 @@ export interface CognitiveCapital {
   capital_value: number;
 }
 
-// Agent Types
+// Agent Types - Configuration-Driven (no hardcoded roles)
 export interface AgentProfile {
   id: string;
   name: string;
   description: string;
   domain: string;
+  role?: string;  // Dynamic role from configuration
   skills: string[];
   tools: string[];
   mcp_servers: string[];
@@ -41,7 +42,6 @@ export interface AgentProfile {
   created_at: string;
   updated_at: string;
   metrics: AgentMetrics;
-  iovba_role?: IOVBARole;
 }
 
 export interface AgentMetrics {
@@ -52,59 +52,52 @@ export interface AgentMetrics {
   last_interaction: string;
 }
 
-// IOVBA Types - Grupo de agentes orientado a dominio
-export type IOVBARole = 'investigador' | 'observador' | 'validador' | 'builder' | 'asistente';
-
-export interface IOVBAGroup {
+// Agent Group Types - Configuration-Driven
+export interface AgentGroup {
   id: string;
   name: string;
   domain: string;
+  elegant_name: string;
   description: string;
-  agents: {
-    investigador: AgentProfile;
-    observador: AgentProfile;
-    validador: AgentProfile;
-    builder: AgentProfile;
-    asistente: AgentProfile;
-  };
+  agents: Record<string, AgentProfile>;  // Dynamic roles
   status: 'active' | 'inactive' | 'learning';
   created_at: string;
-  metrics: IOVBAMetrics;
+  metrics: AgentGroupMetrics;
 }
 
-export interface IOVBAMetrics {
+export interface AgentGroupMetrics {
   total_tasks: number;
   success_rate: number;
   avg_completion_time: number;
   domain_expertise: number;
 }
 
-// Available domains for IOVBA groups
-export type IOVBADomain =
-  | 'swe'           // Software Engineering
-  | 'salud'         // Healthcare
-  | 'deportes'      // Sports
-  | 'noticias'      // News/Journalism
-  | 'quimica'       // Chemistry
-  | 'biologia'      // Biology
-  | 'biotecnologia' // Biotechnology
-  | 'geopolitica'   // Geopolitics
-  | 'finanzas'      // Finance
-  | 'legal'         // Legal
-  | 'educacion'     // Education
-  | 'investigacion' // Research
-  | 'marketing'     // Marketing
-  | 'custom';       // Custom domain
-
-export interface IOVBATemplate {
-  domain: IOVBADomain;
+// Domain Types - Loaded from configuration
+export interface DomainConfig {
+  id: string;
   name: string;
+  elegant_name: string;
+  tagline: string;
+  icon: string;
+  color: string;
   description: string;
-  investigador_config: Partial<AgentProfile>;
-  observador_config: Partial<AgentProfile>;
-  validador_config: Partial<AgentProfile>;
-  builder_config: Partial<AgentProfile>;
-  asistente_config: Partial<AgentProfile>;
+  keywords: string[];
+  mcp_servers: string[];
+}
+
+// Role Types - Loaded from configuration
+export interface RoleConfig {
+  id: string;
+  name: string;
+  elegant_name: string;
+  tagline: string;
+  description: string;
+  icon: string;
+  color: string;
+  gradient: string;
+  skills: string[];
+  tools: string[];
+  keywords: string[];
 }
 
 // Memory Types
@@ -235,6 +228,34 @@ export interface DashboardStats {
   total_engrams: number;
   mcp_servers_connected: number;
   skills_available: number;
-  iovba_groups: number;
+  agent_groups: number;
   system_health: number;
+}
+
+// Platform Configuration (loaded from backend)
+export interface PlatformConfig {
+  name: string;
+  full_name: string;
+  tagline: string;
+  version: string;
+  icon: string;
+  color: string;
+  gradient: string;
+  description: string;
+}
+
+// NEXUS Configuration
+export interface NEXUSConfig {
+  id: string;
+  name: string;
+  status: string;
+  domains_available: number;
+  llm_configured: boolean;
+  model: string;
+  capital: {
+    total_engrams: number;
+    total_interactions: number;
+    capital_value: number;
+  };
+  last_interactions: number;
 }

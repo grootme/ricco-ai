@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "description": "Platform branding and configuration",
+  "platform": {
+    "name": "NEXUS",
+    "full_name": "Neural Execution Unified System",
+    "tagline": "Intelligent Agent Orchestration",
+    "version": "3.0.0",
+    "icon": "Brain",
+    "color": "#6366F1",
+    "gradient": "from-indigo-500 via-purple-500 to-pink-500",
+    "description": "Super Agent Coordinator that unifies all domains and agents"
+  },
+  "nexus": {
+    "name": "NEXUS",
+    "full_name": "Neural Execution Unified System - eXtended Intelligence",
+    "tagline": "Your Intelligent Orchestrator",
+    "icon": "Brain",
+    "color": "#6366F1",
+    "gradient": "from-indigo-500 via-purple-500 to-pink-500",
+    "description": "Super Agent Coordinator that unifies all domains and agents"
+  },
+  "features": {
+    "auto_detect_domain": true,
+    "use_all_roles": true,
+    "generate_with_context": true,
+    "enable_ppcc": true,
+    "enable_capital_learning": true
+  },
+  "defaults": {
+    "domain": "custom",
+    "confidence_threshold": 0.3,
+    "max_confidence": 0.95,
+    "base_confidence": 0.4,
+    "keyword_weight": 0.5,
+    "max_engrams_per_interaction": 3,
+    "min_engram_importance": 0.3,
+    "interaction_history_limit": 100
+  }
+}

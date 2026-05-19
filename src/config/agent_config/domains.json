@@ -1,0 +1,160 @@
+{
+  "version": "1.0.0",
+  "description": "Configurable domains for agent system - NO hardcoded values",
+  "domains": {
+    "swe": {
+      "id": "swe",
+      "name": "Software Engineering",
+      "elegant_name": "CODEX",
+      "tagline": "Architecting Digital Excellence",
+      "icon": "Code",
+      "color": "#3B82F6",
+      "description": "Software engineering unit for development, testing and systems architecture",
+      "keywords": ["código", "programming", "software", "desarrollo", "api", "debug", "bug", "deploy", "git", "docker", "kubernetes", "react", "python", "javascript", "database", "arquitectura", "sistema", "backend", "frontend", "devops"],
+      "mcp_servers": ["github", "docker", "filesystem", "git"]
+    },
+    "salud": {
+      "id": "salud",
+      "name": "Salud y Medicina",
+      "elegant_name": "VITALIS",
+      "tagline": "Advancing Healthcare Intelligence",
+      "icon": "Heart",
+      "color": "#EF4444",
+      "description": "Healthcare unit for diagnosis, medical research and clinical analysis",
+      "keywords": ["salud", "health", "médico", "medical", "enfermedad", "disease", "síntomas", "diagnóstico", "diagnosis", "tratamiento", "treatment", "paciente", "patient", "medicamento", "medicine", "hospital", "doctor", "doctora", "clínica", "hantavirus", "virus", "bacteria", "infección", "vacuna", "vaccine"],
+      "mcp_servers": ["medical-db", "hl7-fhir", "pubmed"]
+    },
+    "deportes": {
+      "id": "deportes",
+      "name": "Deportes",
+      "elegant_name": "ATHLON",
+      "tagline": "Peak Performance Analytics",
+      "icon": "Trophy",
+      "color": "#F59E0B",
+      "description": "Sports analysis unit for performance, statistics and predictions",
+      "keywords": ["deporte", "sport", "fútbol", "soccer", "basketball", "tenis", "atletismo", "ejercicio", "exercise", "entrenamiento", "training", "jugador", "player", "equipo", "team", "competición", "competition", "olímpico", "olympic"],
+      "mcp_servers": ["stats-api", "video-processing", "data-analytics"]
+    },
+    "noticias": {
+      "id": "noticias",
+      "name": "Noticias y Periodismo",
+      "elegant_name": "VERITAS",
+      "tagline": "Truth Through Intelligence",
+      "icon": "Newspaper",
+      "color": "#6366F1",
+      "description": "News unit for investigation, verification and journalistic analysis",
+      "keywords": ["noticia", "news", "actualidad", "current events", "periódico", "newspaper", "periodismo", "journalism", "reportaje", "report", "entrevista", "interview", "breaking", "última hora", "titular", "headline"],
+      "mcp_servers": ["brave-search", "news-api", "fact-checker"]
+    },
+    "quimica": {
+      "id": "quimica",
+      "name": "Química",
+      "elegant_name": "ALCHEMY",
+      "tagline": "Molecular Intelligence",
+      "icon": "FlaskConical",
+      "color": "#8B5CF6",
+      "description": "Chemistry research unit for molecular analysis and synthesis",
+      "keywords": ["química", "chemistry", "molécula", "molecule", "compuesto", "compound", "reacción", "reaction", "elemento", "element", "átomo", "atom", "orgánica", "organic", "laboratorio", "laboratory"],
+      "mcp_servers": ["pubchem", "chemspider", "rdkit"]
+    },
+    "biologia": {
+      "id": "biologia",
+      "name": "Biología",
+      "elegant_name": "GENESIS",
+      "tagline": "Life Sciences Intelligence",
+      "icon": "Dna",
+      "color": "#10B981",
+      "description": "Biology research unit for genomics and living systems analysis",
+      "keywords": ["biología", "biology", "celular", "cell", "organismo", "organism", "ecosistema", "ecosystem", "evolución", "evolution", "especie", "species", "genética", "genetics", "adn", "dna", "ARN", "RNA"],
+      "mcp_servers": ["ncbi", "ensembl", "uniprot"]
+    },
+    "biotecnologia": {
+      "id": "biotecnologia",
+      "name": "Biotecnología",
+      "elegant_name": "HELIX",
+      "tagline": "Engineering Life Solutions",
+      "icon": "Atom",
+      "color": "#14B8A6",
+      "description": "Biotechnology unit for bioengineering and therapeutic applications",
+      "keywords": ["biotecnología", "biotechnology", "bioingeniería", "bioengineering", "terapia génica", "gene therapy", "crispr", "transgénico", "gmo", "biomedicina", "biomedicine", "farmacología", "pharmacology"],
+      "mcp_servers": ["ncbi", "uniprot", "pubmed", "alphafold"]
+    },
+    "geopolitica": {
+      "id": "geopolitica",
+      "name": "Geopolítica",
+      "elegant_name": "DIPLOMAT",
+      "tagline": "Strategic Global Intelligence",
+      "icon": "Globe",
+      "color": "#F97316",
+      "description": "Geopolitical analysis unit for strategic intelligence and international relations",
+      "keywords": ["geopolítica", "geopolitics", "política internacional", "international politics", "diplomacia", "diplomacy", "tratado", "treaty", "sanción", "sanction", "país", "country", "frontera", "border", "conflicto", "conflict"],
+      "mcp_servers": ["brave-search", "maps-api", "news-api"]
+    },
+    "finanzas": {
+      "id": "finanzas",
+      "name": "Finanzas",
+      "elegant_name": "APEX",
+      "tagline": "Financial Intelligence Redefined",
+      "icon": "TrendingUp",
+      "color": "#059669",
+      "description": "Financial analysis unit for markets, investments and risks",
+      "keywords": ["finanzas", "finance", "inversión", "investment", "mercado", "market", "acciones", "stocks", "crypto", "criptomoneda", "bitcoin", "ethereum", "banco", "bank", "préstamo", "loan", "interés", "interest"],
+      "mcp_servers": ["alpha-vantage", "coingecko", "yahoo-finance"]
+    },
+    "legal": {
+      "id": "legal",
+      "name": "Legal",
+      "elegant_name": "JUSTITIA",
+      "tagline": "Legal Intelligence & Justice",
+      "icon": "Scale",
+      "color": "#7C3AED",
+      "description": "Legal analysis unit for jurisprudence, compliance and contracts",
+      "keywords": ["legal", "ley", "law", "jurídico", "juridical", "contrato", "contract", "demanda", "lawsuit", "tribunal", "court", "abogado", "lawyer", "derechos", "rights", "constitución", "constitution", "reglamento"],
+      "mcp_servers": ["court-api", "statute-db", "legal-search"]
+    },
+    "educacion": {
+      "id": "educacion",
+      "name": "Educación",
+      "elegant_name": "MENTOR",
+      "tagline": "Transforming Education Intelligence",
+      "icon": "GraduationCap",
+      "color": "#EC4899",
+      "description": "Education unit for personalized learning and pedagogical content",
+      "keywords": ["educación", "education", "aprendizaje", "learning", "enseñanza", "teaching", "escuela", "school", "universidad", "university", "estudiante", "student", "profesor", "teacher", "curso", "course", "diploma", "certificado"],
+      "mcp_servers": ["lms-integration", "content-db", "video-platform"]
+    },
+    "investigacion": {
+      "id": "investigacion",
+      "name": "Investigación",
+      "elegant_name": "PIONEER",
+      "tagline": "Pushing Knowledge Boundaries",
+      "icon": "Microscope",
+      "color": "#0EA5E9",
+      "description": "Scientific research unit for discovery and academic publication",
+      "keywords": ["investigación", "research", "estudio", "study", "experimento", "experiment", "hipótesis", "hypothesis", "metodología", "methodology", "análisis", "analysis", "publicación", "publication", "paper", "artículo", "científico", "scientific"],
+      "mcp_servers": ["arxiv", "pubmed", "semantic-scholar", "google-scholar"]
+    },
+    "marketing": {
+      "id": "marketing",
+      "name": "Marketing",
+      "elegant_name": "PRISMA",
+      "tagline": "Multifaceted Marketing Intelligence",
+      "icon": "Megaphone",
+      "color": "#D946EF",
+      "description": "Marketing unit for campaigns, audience analysis and optimization",
+      "keywords": ["marketing", "publicidad", "advertising", "campaña", "campaign", "marca", "brand", "cliente", "customer", "ventas", "sales", "seo", "social media", "contenido", "content", "engagement"],
+      "mcp_servers": ["google-analytics", "social-apis", "seo-tools"]
+    },
+    "custom": {
+      "id": "custom",
+      "name": "Personalizado",
+      "elegant_name": "CUSTOM",
+      "tagline": "Tailored Intelligence Solutions",
+      "icon": "Settings",
+      "color": "#64748B",
+      "description": "Custom unit for specific domains and tailored configurations",
+      "keywords": [],
+      "mcp_servers": []
+    }
+  }
+}
