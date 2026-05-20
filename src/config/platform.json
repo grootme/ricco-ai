@@ -1,0 +1,87 @@
+{
+  "version": "1.0.0",
+  "description": "Platform configuration - NO hardcoded values",
+  "platform": {
+    "name": "NEXUS",
+    "full_name": "Neural Execution Unified System",
+    "tagline": "Intelligent Agent Orchestration",
+    "version": "3.0.0",
+    "icon": "Brain",
+    "color": "#6366F1",
+    "gradient": "from-indigo-500 via-purple-500 to-pink-500",
+    "description": "Super Agent Coordinator that unifies all domains and agents"
+  },
+  "features": {
+    "auto_detect_domain": true,
+    "use_all_roles": true,
+    "generate_with_context": true,
+    "enable_ppcc": true,
+    "enable_capital_learning": true,
+    "dynamic_agent_discovery": true
+  },
+  "defaults": {
+    "domain": "custom",
+    "confidence_threshold": 0.3,
+    "max_confidence": 0.95,
+    "base_confidence": 0.4,
+    "keyword_weight": 0.5,
+    "max_engrams_per_interaction": 3,
+    "min_engram_importance": 0.3,
+    "interaction_history_limit": 100
+  },
+  "agent_templates": {
+    "default": {
+      "capabilities": {
+        "skills": ["general"],
+        "tools": ["default"],
+        "mcp_servers": []
+      },
+      "behavior": {
+        "tone": "professional",
+        "style": "balanced",
+        "response_format": "default"
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      }
+    }
+  },
+  "role_defaults": {
+    "investigator": {
+      "skills": ["research", "analysis", "search"],
+      "tools": ["search", "scraper"],
+      "behavior": {"tone": "analytical", "style": "thorough"}
+    },
+    "observer": {
+      "skills": ["monitoring", "pattern-recognition"],
+      "tools": ["logger", "metrics"],
+      "behavior": {"tone": "watchful", "style": "concise"}
+    },
+    "validator": {
+      "skills": ["validation", "testing", "review"],
+      "tools": ["validator", "tester"],
+      "behavior": {"tone": "rigorous", "style": "detailed"}
+    },
+    "builder": {
+      "skills": ["implementation", "development"],
+      "tools": ["code-executor", "builder"],
+      "behavior": {"tone": "practical", "style": "action-oriented"}
+    },
+    "assistant": {
+      "skills": ["coordination", "communication"],
+      "tools": ["scheduler", "notifier"],
+      "behavior": {"tone": "helpful", "style": "organized"}
+    }
+  },
+  "domain_defaults": {
+    "mcp_servers_by_domain": {
+      "swe": ["github", "docker", "filesystem"],
+      "salud": ["pubmed", "hl7-fhir"],
+      "finanzas": ["alpha-vantage", "coingecko"],
+      "legal": ["court-api", "statute-db"],
+      "investigacion": ["arxiv", "pubmed", "semantic-scholar"]
+    }
+  }
+}

@@ -1,10 +1,10 @@
 {
   "version": "1.0.0",
-  "description": "Configurable roles for agent system - NO hardcoded values",
+  "description": "Configurable roles - Add new roles without touching code",
   "roles": {
     "investigator": {
       "id": "investigator",
-      "name": "investigador",
+      "name": "investigator",
       "elegant_name": "INVESTIGATOR",
       "tagline": "Discovery & Analysis",
       "description": "Investigates deeply, analyzes data and discovers hidden insights",
@@ -17,7 +17,7 @@
     },
     "observer": {
       "id": "observer",
-      "name": "observador",
+      "name": "observer",
       "elegant_name": "OBSERVER",
       "tagline": "Monitoring & Patterns",
       "description": "Monitors systems, detects patterns and anomalies",
@@ -30,7 +30,7 @@
     },
     "validator": {
       "id": "validator",
-      "name": "validador",
+      "name": "validator",
       "elegant_name": "VALIDATOR",
       "tagline": "Quality & Verification",
       "description": "Validates results, ensures quality and verifies compliance",
@@ -56,7 +56,7 @@
     },
     "assistant": {
       "id": "assistant",
-      "name": "asistente",
+      "name": "assistant",
       "elegant_name": "ASSISTANT",
       "tagline": "Coordination & Support",
       "description": "Coordinates teams, facilitates communication and manages documentation",

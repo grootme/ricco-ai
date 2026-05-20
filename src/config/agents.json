@@ -1,0 +1,3127 @@
+{
+  "version": "1.0.0",
+  "description": "Auto-generated agents from configuration - DO NOT EDIT generated agents directly",
+  "generated_at": "1779236223.351736",
+  "agents": {
+    "investigator_swe": {
+      "id": "investigator_swe",
+      "name": "CODEX INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Software Engineering",
+      "domain": "swe",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "github",
+          "filesystem",
+          "docker"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Software Engineering. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Software Engineering\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_swe": {
+      "id": "observer_swe",
+      "name": "CODEX OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Software Engineering",
+      "domain": "swe",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "github",
+          "filesystem",
+          "docker"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Software Engineering. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Software Engineering\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_swe": {
+      "id": "validator_swe",
+      "name": "CODEX VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Software Engineering",
+      "domain": "swe",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "github",
+          "filesystem",
+          "docker"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Software Engineering. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Software Engineering\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_swe": {
+      "id": "builder_swe",
+      "name": "CODEX BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Software Engineering",
+      "domain": "swe",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "github",
+          "filesystem",
+          "docker"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Software Engineering. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Software Engineering\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_swe": {
+      "id": "assistant_swe",
+      "name": "CODEX ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Software Engineering",
+      "domain": "swe",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "github",
+          "filesystem",
+          "docker"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Software Engineering. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Software Engineering\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_salud": {
+      "id": "investigator_salud",
+      "name": "VITALIS INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Salud y Medicina",
+      "domain": "salud",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "medical-db",
+          "hl7-fhir",
+          "pubmed"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Salud y Medicina. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Salud y Medicina\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_salud": {
+      "id": "observer_salud",
+      "name": "VITALIS OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Salud y Medicina",
+      "domain": "salud",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "medical-db",
+          "hl7-fhir",
+          "pubmed"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Salud y Medicina. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Salud y Medicina\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_salud": {
+      "id": "validator_salud",
+      "name": "VITALIS VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Salud y Medicina",
+      "domain": "salud",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "medical-db",
+          "hl7-fhir",
+          "pubmed"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Salud y Medicina. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Salud y Medicina\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_salud": {
+      "id": "builder_salud",
+      "name": "VITALIS BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Salud y Medicina",
+      "domain": "salud",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "medical-db",
+          "hl7-fhir",
+          "pubmed"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Salud y Medicina. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Salud y Medicina\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_salud": {
+      "id": "assistant_salud",
+      "name": "VITALIS ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Salud y Medicina",
+      "domain": "salud",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "medical-db",
+          "hl7-fhir",
+          "pubmed"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Salud y Medicina. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Salud y Medicina\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_deportes": {
+      "id": "investigator_deportes",
+      "name": "ATHLON INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Deportes",
+      "domain": "deportes",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "stats-api",
+          "video-processing",
+          "data-analytics"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Deportes. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Deportes\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_deportes": {
+      "id": "observer_deportes",
+      "name": "ATHLON OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Deportes",
+      "domain": "deportes",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "stats-api",
+          "video-processing",
+          "data-analytics"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Deportes. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Deportes\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_deportes": {
+      "id": "validator_deportes",
+      "name": "ATHLON VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Deportes",
+      "domain": "deportes",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "stats-api",
+          "video-processing",
+          "data-analytics"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Deportes. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Deportes\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_deportes": {
+      "id": "builder_deportes",
+      "name": "ATHLON BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Deportes",
+      "domain": "deportes",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "stats-api",
+          "video-processing",
+          "data-analytics"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Deportes. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Deportes\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_deportes": {
+      "id": "assistant_deportes",
+      "name": "ATHLON ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Deportes",
+      "domain": "deportes",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "stats-api",
+          "video-processing",
+          "data-analytics"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Deportes. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Deportes\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_noticias": {
+      "id": "investigator_noticias",
+      "name": "VERITAS INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Noticias y Periodismo",
+      "domain": "noticias",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "news-api",
+          "brave-search",
+          "fact-checker"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Noticias y Periodismo. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Noticias y Periodismo\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_noticias": {
+      "id": "observer_noticias",
+      "name": "VERITAS OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Noticias y Periodismo",
+      "domain": "noticias",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "news-api",
+          "brave-search",
+          "fact-checker"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Noticias y Periodismo. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Noticias y Periodismo\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_noticias": {
+      "id": "validator_noticias",
+      "name": "VERITAS VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Noticias y Periodismo",
+      "domain": "noticias",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "news-api",
+          "brave-search",
+          "fact-checker"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Noticias y Periodismo. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Noticias y Periodismo\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_noticias": {
+      "id": "builder_noticias",
+      "name": "VERITAS BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Noticias y Periodismo",
+      "domain": "noticias",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "news-api",
+          "brave-search",
+          "fact-checker"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Noticias y Periodismo. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Noticias y Periodismo\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_noticias": {
+      "id": "assistant_noticias",
+      "name": "VERITAS ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Noticias y Periodismo",
+      "domain": "noticias",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "news-api",
+          "brave-search",
+          "fact-checker"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Noticias y Periodismo. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Noticias y Periodismo\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_quimica": {
+      "id": "investigator_quimica",
+      "name": "ALCHEMY INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Química",
+      "domain": "quimica",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "rdkit",
+          "pubchem",
+          "chemspider"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Química. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Química\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_quimica": {
+      "id": "observer_quimica",
+      "name": "ALCHEMY OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Química",
+      "domain": "quimica",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "rdkit",
+          "pubchem",
+          "chemspider"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Química. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Química\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_quimica": {
+      "id": "validator_quimica",
+      "name": "ALCHEMY VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Química",
+      "domain": "quimica",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "rdkit",
+          "pubchem",
+          "chemspider"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Química. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Química\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_quimica": {
+      "id": "builder_quimica",
+      "name": "ALCHEMY BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Química",
+      "domain": "quimica",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "rdkit",
+          "pubchem",
+          "chemspider"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Química. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Química\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_quimica": {
+      "id": "assistant_quimica",
+      "name": "ALCHEMY ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Química",
+      "domain": "quimica",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "rdkit",
+          "pubchem",
+          "chemspider"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Química. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Química\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_biologia": {
+      "id": "investigator_biologia",
+      "name": "GENESIS INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Biología",
+      "domain": "biologia",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "uniprot",
+          "ensembl",
+          "ncbi"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Biología. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Biología\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_biologia": {
+      "id": "observer_biologia",
+      "name": "GENESIS OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Biología",
+      "domain": "biologia",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "uniprot",
+          "ensembl",
+          "ncbi"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Biología. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Biología\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_biologia": {
+      "id": "validator_biologia",
+      "name": "GENESIS VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Biología",
+      "domain": "biologia",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "uniprot",
+          "ensembl",
+          "ncbi"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Biología. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Biología\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_biologia": {
+      "id": "builder_biologia",
+      "name": "GENESIS BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Biología",
+      "domain": "biologia",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "uniprot",
+          "ensembl",
+          "ncbi"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Biología. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Biología\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_biologia": {
+      "id": "assistant_biologia",
+      "name": "GENESIS ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Biología",
+      "domain": "biologia",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "uniprot",
+          "ensembl",
+          "ncbi"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Biología. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Biología\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_biotecnologia": {
+      "id": "investigator_biotecnologia",
+      "name": "HELIX INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Biotecnología",
+      "domain": "biotecnologia",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "uniprot",
+          "pubmed",
+          "alphafold",
+          "ncbi"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Biotecnología. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Biotecnología\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_biotecnologia": {
+      "id": "observer_biotecnologia",
+      "name": "HELIX OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Biotecnología",
+      "domain": "biotecnologia",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "uniprot",
+          "pubmed",
+          "alphafold",
+          "ncbi"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Biotecnología. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Biotecnología\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_biotecnologia": {
+      "id": "validator_biotecnologia",
+      "name": "HELIX VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Biotecnología",
+      "domain": "biotecnologia",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "uniprot",
+          "pubmed",
+          "alphafold",
+          "ncbi"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Biotecnología. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Biotecnología\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_biotecnologia": {
+      "id": "builder_biotecnologia",
+      "name": "HELIX BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Biotecnología",
+      "domain": "biotecnologia",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "uniprot",
+          "pubmed",
+          "alphafold",
+          "ncbi"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Biotecnología. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Biotecnología\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_biotecnologia": {
+      "id": "assistant_biotecnologia",
+      "name": "HELIX ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Biotecnología",
+      "domain": "biotecnologia",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "uniprot",
+          "pubmed",
+          "alphafold",
+          "ncbi"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Biotecnología. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Biotecnología\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_geopolitica": {
+      "id": "investigator_geopolitica",
+      "name": "DIPLOMAT INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Geopolítica",
+      "domain": "geopolitica",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "maps-api",
+          "news-api",
+          "brave-search"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Geopolítica. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Geopolítica\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_geopolitica": {
+      "id": "observer_geopolitica",
+      "name": "DIPLOMAT OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Geopolítica",
+      "domain": "geopolitica",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "maps-api",
+          "news-api",
+          "brave-search"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Geopolítica. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Geopolítica\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_geopolitica": {
+      "id": "validator_geopolitica",
+      "name": "DIPLOMAT VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Geopolítica",
+      "domain": "geopolitica",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "maps-api",
+          "news-api",
+          "brave-search"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Geopolítica. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Geopolítica\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_geopolitica": {
+      "id": "builder_geopolitica",
+      "name": "DIPLOMAT BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Geopolítica",
+      "domain": "geopolitica",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "maps-api",
+          "news-api",
+          "brave-search"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Geopolítica. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Geopolítica\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_geopolitica": {
+      "id": "assistant_geopolitica",
+      "name": "DIPLOMAT ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Geopolítica",
+      "domain": "geopolitica",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "maps-api",
+          "news-api",
+          "brave-search"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Geopolítica. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Geopolítica\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_finanzas": {
+      "id": "investigator_finanzas",
+      "name": "APEX INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Finanzas",
+      "domain": "finanzas",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "coingecko",
+          "yahoo-finance",
+          "alpha-vantage"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Finanzas. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Finanzas\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_finanzas": {
+      "id": "observer_finanzas",
+      "name": "APEX OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Finanzas",
+      "domain": "finanzas",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "coingecko",
+          "yahoo-finance",
+          "alpha-vantage"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Finanzas. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Finanzas\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_finanzas": {
+      "id": "validator_finanzas",
+      "name": "APEX VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Finanzas",
+      "domain": "finanzas",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "coingecko",
+          "yahoo-finance",
+          "alpha-vantage"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Finanzas. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Finanzas\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_finanzas": {
+      "id": "builder_finanzas",
+      "name": "APEX BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Finanzas",
+      "domain": "finanzas",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "coingecko",
+          "yahoo-finance",
+          "alpha-vantage"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Finanzas. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Finanzas\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_finanzas": {
+      "id": "assistant_finanzas",
+      "name": "APEX ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Finanzas",
+      "domain": "finanzas",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "coingecko",
+          "yahoo-finance",
+          "alpha-vantage"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Finanzas. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Finanzas\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_legal": {
+      "id": "investigator_legal",
+      "name": "JUSTITIA INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Legal",
+      "domain": "legal",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "court-api",
+          "legal-search",
+          "statute-db"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Legal. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Legal\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_legal": {
+      "id": "observer_legal",
+      "name": "JUSTITIA OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Legal",
+      "domain": "legal",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "court-api",
+          "legal-search",
+          "statute-db"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Legal. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Legal\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_legal": {
+      "id": "validator_legal",
+      "name": "JUSTITIA VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Legal",
+      "domain": "legal",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "court-api",
+          "legal-search",
+          "statute-db"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Legal. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Legal\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_legal": {
+      "id": "builder_legal",
+      "name": "JUSTITIA BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Legal",
+      "domain": "legal",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "court-api",
+          "legal-search",
+          "statute-db"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Legal. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Legal\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_legal": {
+      "id": "assistant_legal",
+      "name": "JUSTITIA ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Legal",
+      "domain": "legal",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "court-api",
+          "legal-search",
+          "statute-db"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Legal. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Legal\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_educacion": {
+      "id": "investigator_educacion",
+      "name": "MENTOR INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Educación",
+      "domain": "educacion",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "video-platform",
+          "lms-integration",
+          "content-db"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Educación. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Educación\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_educacion": {
+      "id": "observer_educacion",
+      "name": "MENTOR OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Educación",
+      "domain": "educacion",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "video-platform",
+          "lms-integration",
+          "content-db"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Educación. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Educación\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_educacion": {
+      "id": "validator_educacion",
+      "name": "MENTOR VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Educación",
+      "domain": "educacion",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "video-platform",
+          "lms-integration",
+          "content-db"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Educación. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Educación\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_educacion": {
+      "id": "builder_educacion",
+      "name": "MENTOR BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Educación",
+      "domain": "educacion",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "video-platform",
+          "lms-integration",
+          "content-db"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Educación. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Educación\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_educacion": {
+      "id": "assistant_educacion",
+      "name": "MENTOR ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Educación",
+      "domain": "educacion",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "video-platform",
+          "lms-integration",
+          "content-db"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Educación. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Educación\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_investigacion": {
+      "id": "investigator_investigacion",
+      "name": "PIONEER INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Investigación",
+      "domain": "investigacion",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "google-scholar",
+          "semantic-scholar",
+          "arxiv",
+          "pubmed"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Investigación. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Investigación\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_investigacion": {
+      "id": "observer_investigacion",
+      "name": "PIONEER OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Investigación",
+      "domain": "investigacion",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "google-scholar",
+          "semantic-scholar",
+          "arxiv",
+          "pubmed"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Investigación. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Investigación\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_investigacion": {
+      "id": "validator_investigacion",
+      "name": "PIONEER VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Investigación",
+      "domain": "investigacion",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "google-scholar",
+          "semantic-scholar",
+          "arxiv",
+          "pubmed"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Investigación. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Investigación\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_investigacion": {
+      "id": "builder_investigacion",
+      "name": "PIONEER BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Investigación",
+      "domain": "investigacion",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "google-scholar",
+          "semantic-scholar",
+          "arxiv",
+          "pubmed"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Investigación. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Investigación\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_investigacion": {
+      "id": "assistant_investigacion",
+      "name": "PIONEER ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Investigación",
+      "domain": "investigacion",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "google-scholar",
+          "semantic-scholar",
+          "arxiv",
+          "pubmed"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Investigación. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Investigación\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "investigator_marketing": {
+      "id": "investigator_marketing",
+      "name": "PRISMA INVESTIGATOR",
+      "description": "Investigates deeply, analyzes data and discovers hidden insights for Marketing",
+      "domain": "marketing",
+      "role": "investigator",
+      "capabilities": {
+        "skills": [
+          "data-analysis",
+          "search",
+          "research",
+          "document-analysis",
+          "deep-investigation",
+          "web-search",
+          "analysis"
+        ],
+        "tools": [
+          "database-query",
+          "pdf-reader",
+          "search",
+          "scraper"
+        ],
+        "mcp_servers": [
+          "google-analytics",
+          "seo-tools",
+          "social-apis"
+        ]
+      },
+      "behavior": {
+        "tone": "analytical",
+        "style": "thorough",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a INVESTIGATOR agent specialized in Marketing. Investigates deeply, analyzes data and discovers hidden insights",
+        "task_template": "Task: {query}\nDomain: Marketing\nRole: INVESTIGATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "observer_marketing": {
+      "id": "observer_marketing",
+      "name": "PRISMA OBSERVER",
+      "description": "Monitors systems, detects patterns and anomalies for Marketing",
+      "domain": "marketing",
+      "role": "observer",
+      "capabilities": {
+        "skills": [
+          "reporting",
+          "monitoring",
+          "anomaly-detection",
+          "metrics-analysis",
+          "pattern-recognition"
+        ],
+        "tools": [
+          "metrics",
+          "logger",
+          "dashboard",
+          "alerts"
+        ],
+        "mcp_servers": [
+          "google-analytics",
+          "seo-tools",
+          "social-apis"
+        ]
+      },
+      "behavior": {
+        "tone": "watchful",
+        "style": "concise",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a OBSERVER agent specialized in Marketing. Monitors systems, detects patterns and anomalies",
+        "task_template": "Task: {query}\nDomain: Marketing\nRole: OBSERVER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "validator_marketing": {
+      "id": "validator_marketing",
+      "name": "PRISMA VALIDATOR",
+      "description": "Validates results, ensures quality and verifies compliance for Marketing",
+      "domain": "marketing",
+      "role": "validator",
+      "capabilities": {
+        "skills": [
+          "testing",
+          "review",
+          "compliance-check",
+          "quality-assurance",
+          "validation",
+          "verification"
+        ],
+        "tools": [
+          "checker",
+          "linter",
+          "tester",
+          "validator"
+        ],
+        "mcp_servers": [
+          "google-analytics",
+          "seo-tools",
+          "social-apis"
+        ]
+      },
+      "behavior": {
+        "tone": "rigorous",
+        "style": "detailed",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a VALIDATOR agent specialized in Marketing. Validates results, ensures quality and verifies compliance",
+        "task_template": "Task: {query}\nDomain: Marketing\nRole: VALIDATOR\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "builder_marketing": {
+      "id": "builder_marketing",
+      "name": "PRISMA BUILDER",
+      "description": "Builds solutions, implements systems and optimizes code for Marketing",
+      "domain": "marketing",
+      "role": "builder",
+      "capabilities": {
+        "skills": [
+          "optimization",
+          "implementation",
+          "architecture",
+          "refactoring",
+          "development"
+        ],
+        "tools": [
+          "builder",
+          "deployer",
+          "compiler",
+          "code-executor"
+        ],
+        "mcp_servers": [
+          "google-analytics",
+          "seo-tools",
+          "social-apis"
+        ]
+      },
+      "behavior": {
+        "tone": "practical",
+        "style": "action-oriented",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a BUILDER agent specialized in Marketing. Builds solutions, implements systems and optimizes code",
+        "task_template": "Task: {query}\nDomain: Marketing\nRole: BUILDER\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "assistant_marketing": {
+      "id": "assistant_marketing",
+      "name": "PRISMA ASSISTANT",
+      "description": "Coordinates teams, facilitates communication and manages documentation for Marketing",
+      "domain": "marketing",
+      "role": "assistant",
+      "capabilities": {
+        "skills": [
+          "scheduling",
+          "documentation",
+          "communication",
+          "orchestration",
+          "coordination"
+        ],
+        "tools": [
+          "scheduler",
+          "documenter",
+          "workflow-manager",
+          "notifier"
+        ],
+        "mcp_servers": [
+          "google-analytics",
+          "seo-tools",
+          "social-apis"
+        ]
+      },
+      "behavior": {
+        "tone": "helpful",
+        "style": "organized",
+        "response_format": "default"
+      },
+      "prompts": {
+        "system": "You are a ASSISTANT agent specialized in Marketing. Coordinates teams, facilitates communication and manages documentation",
+        "task_template": "Task: {query}\nDomain: Marketing\nRole: ASSISTANT\nProvide detailed response."
+      },
+      "limits": {
+        "max_tokens": 4096,
+        "timeout_seconds": 60,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": false,
+      "generated": true
+    },
+    "nexus_coordinator": {
+      "id": "nexus_coordinator",
+      "name": "NEXUS",
+      "description": "Super Agent Coordinator that unifies all domains and agents",
+      "domain": "system",
+      "role": "coordinator",
+      "capabilities": {
+        "skills": [
+          "orchestration",
+          "routing",
+          "aggregation",
+          "delegation"
+        ],
+        "tools": [
+          "agent-router",
+          "response-aggregator",
+          "context-manager"
+        ],
+        "mcp_servers": [
+          "all-available"
+        ]
+      },
+      "behavior": {
+        "tone": "authoritative",
+        "style": "comprehensive",
+        "response_format": "unified"
+      },
+      "prompts": {
+        "system": "You are NEXUS, the central coordinator. Intelligent Agent Orchestration",
+        "task_template": "Coordinate: {query}\nAvailable agents: {agents}\nProvide unified response."
+      },
+      "limits": {
+        "max_tokens": 8192,
+        "timeout_seconds": 300,
+        "max_retries": 3
+      },
+      "enabled": true,
+      "is_coordinator": true,
+      "generated": true
+    }
+  },
+  "agent_groups": {
+    "swe_team": {
+      "id": "swe_team",
+      "name": "CODEX Team",
+      "domain": "swe",
+      "agent_ids": [
+        "investigator_swe",
+        "observer_swe",
+        "validator_swe",
+        "builder_swe",
+        "assistant_swe"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "salud_team": {
+      "id": "salud_team",
+      "name": "VITALIS Team",
+      "domain": "salud",
+      "agent_ids": [
+        "investigator_salud",
+        "observer_salud",
+        "validator_salud",
+        "builder_salud",
+        "assistant_salud"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "deportes_team": {
+      "id": "deportes_team",
+      "name": "ATHLON Team",
+      "domain": "deportes",
+      "agent_ids": [
+        "investigator_deportes",
+        "observer_deportes",
+        "validator_deportes",
+        "builder_deportes",
+        "assistant_deportes"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "noticias_team": {
+      "id": "noticias_team",
+      "name": "VERITAS Team",
+      "domain": "noticias",
+      "agent_ids": [
+        "investigator_noticias",
+        "observer_noticias",
+        "validator_noticias",
+        "builder_noticias",
+        "assistant_noticias"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "quimica_team": {
+      "id": "quimica_team",
+      "name": "ALCHEMY Team",
+      "domain": "quimica",
+      "agent_ids": [
+        "investigator_quimica",
+        "observer_quimica",
+        "validator_quimica",
+        "builder_quimica",
+        "assistant_quimica"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "biologia_team": {
+      "id": "biologia_team",
+      "name": "GENESIS Team",
+      "domain": "biologia",
+      "agent_ids": [
+        "investigator_biologia",
+        "observer_biologia",
+        "validator_biologia",
+        "builder_biologia",
+        "assistant_biologia"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "biotecnologia_team": {
+      "id": "biotecnologia_team",
+      "name": "HELIX Team",
+      "domain": "biotecnologia",
+      "agent_ids": [
+        "investigator_biotecnologia",
+        "observer_biotecnologia",
+        "validator_biotecnologia",
+        "builder_biotecnologia",
+        "assistant_biotecnologia"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "geopolitica_team": {
+      "id": "geopolitica_team",
+      "name": "DIPLOMAT Team",
+      "domain": "geopolitica",
+      "agent_ids": [
+        "investigator_geopolitica",
+        "observer_geopolitica",
+        "validator_geopolitica",
+        "builder_geopolitica",
+        "assistant_geopolitica"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "finanzas_team": {
+      "id": "finanzas_team",
+      "name": "APEX Team",
+      "domain": "finanzas",
+      "agent_ids": [
+        "investigator_finanzas",
+        "observer_finanzas",
+        "validator_finanzas",
+        "builder_finanzas",
+        "assistant_finanzas"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "legal_team": {
+      "id": "legal_team",
+      "name": "JUSTITIA Team",
+      "domain": "legal",
+      "agent_ids": [
+        "investigator_legal",
+        "observer_legal",
+        "validator_legal",
+        "builder_legal",
+        "assistant_legal"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "educacion_team": {
+      "id": "educacion_team",
+      "name": "MENTOR Team",
+      "domain": "educacion",
+      "agent_ids": [
+        "investigator_educacion",
+        "observer_educacion",
+        "validator_educacion",
+        "builder_educacion",
+        "assistant_educacion"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "investigacion_team": {
+      "id": "investigacion_team",
+      "name": "PIONEER Team",
+      "domain": "investigacion",
+      "agent_ids": [
+        "investigator_investigacion",
+        "observer_investigacion",
+        "validator_investigacion",
+        "builder_investigacion",
+        "assistant_investigacion"
+      ],
+      "coordinator": "nexus_coordinator"
+    },
+    "marketing_team": {
+      "id": "marketing_team",
+      "name": "PRISMA Team",
+      "domain": "marketing",
+      "agent_ids": [
+        "investigator_marketing",
+        "observer_marketing",
+        "validator_marketing",
+        "builder_marketing",
+        "assistant_marketing"
+      ],
+      "coordinator": "nexus_coordinator"
+    }
+  }
+}

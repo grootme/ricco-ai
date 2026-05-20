@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "Configurable domains for agent system - NO hardcoded values",
+  "description": "Configurable domains - Add new domains without touching code",
   "domains": {
     "swe": {
       "id": "swe",
@@ -11,7 +11,7 @@
       "color": "#3B82F6",
       "description": "Software engineering unit for development, testing and systems architecture",
       "keywords": ["código", "programming", "software", "desarrollo", "api", "debug", "bug", "deploy", "git", "docker", "kubernetes", "react", "python", "javascript", "database", "arquitectura", "sistema", "backend", "frontend", "devops"],
-      "mcp_servers": ["github", "docker", "filesystem", "git"]
+      "mcp_servers": ["github", "docker", "filesystem"]
     },
     "salud": {
       "id": "salud",
@@ -21,8 +21,8 @@
       "icon": "Heart",
       "color": "#EF4444",
       "description": "Healthcare unit for diagnosis, medical research and clinical analysis",
-      "keywords": ["salud", "health", "médico", "medical", "enfermedad", "disease", "síntomas", "diagnóstico", "diagnosis", "tratamiento", "treatment", "paciente", "patient", "medicamento", "medicine", "hospital", "doctor", "doctora", "clínica", "hantavirus", "virus", "bacteria", "infección", "vacuna", "vaccine"],
-      "mcp_servers": ["medical-db", "hl7-fhir", "pubmed"]
+      "keywords": ["salud", "health", "médico", "medical", "enfermedad", "disease", "síntomas", "diagnóstico", "diagnosis", "tratamiento", "treatment", "paciente", "patient", "medicamento", "medicine", "hospital", "doctor", "clínica", "virus", "bacteria", "infección", "vacuna", "vaccine"],
+      "mcp_servers": ["pubmed", "hl7-fhir", "medical-db"]
     },
     "deportes": {
       "id": "deportes",
@@ -54,7 +54,7 @@
       "icon": "FlaskConical",
       "color": "#8B5CF6",
       "description": "Chemistry research unit for molecular analysis and synthesis",
-      "keywords": ["química", "chemistry", "molécula", "molecule", "compuesto", "compound", "reacción", "reaction", "elemento", "element", "átomo", "atom", "orgánica", "organic", "laboratorio", "laboratory"],
+      "keywords": ["química", "chemistry", "molécula", "molecule", "compuesto", "compound", "reacción", "reaction", "elemento", "element", "átomo", "atom", "orgánica", "organic", "laboratorio"],
       "mcp_servers": ["pubchem", "chemspider", "rdkit"]
     },
     "biologia": {
@@ -109,7 +109,7 @@
       "icon": "Scale",
       "color": "#7C3AED",
       "description": "Legal analysis unit for jurisprudence, compliance and contracts",
-      "keywords": ["legal", "ley", "law", "jurídico", "juridical", "contrato", "contract", "demanda", "lawsuit", "tribunal", "court", "abogado", "lawyer", "derechos", "rights", "constitución", "constitution", "reglamento"],
+      "keywords": ["legal", "ley", "law", "jurídico", "juridical", "contrato", "contract", "demanda", "lawsuit", "tribunal", "court", "abogado", "lawyer", "derechos", "rights", "constitución", "constitution"],
       "mcp_servers": ["court-api", "statute-db", "legal-search"]
     },
     "educacion": {
@@ -120,7 +120,7 @@
       "icon": "GraduationCap",
       "color": "#EC4899",
       "description": "Education unit for personalized learning and pedagogical content",
-      "keywords": ["educación", "education", "aprendizaje", "learning", "enseñanza", "teaching", "escuela", "school", "universidad", "university", "estudiante", "student", "profesor", "teacher", "curso", "course", "diploma", "certificado"],
+      "keywords": ["educación", "education", "aprendizaje", "learning", "enseñanza", "teaching", "escuela", "school", "universidad", "university", "estudiante", "student", "profesor", "teacher", "curso", "course"],
       "mcp_servers": ["lms-integration", "content-db", "video-platform"]
     },
     "investigacion": {
@@ -131,7 +131,7 @@
       "icon": "Microscope",
       "color": "#0EA5E9",
       "description": "Scientific research unit for discovery and academic publication",
-      "keywords": ["investigación", "research", "estudio", "study", "experimento", "experiment", "hipótesis", "hypothesis", "metodología", "methodology", "análisis", "analysis", "publicación", "publication", "paper", "artículo", "científico", "scientific"],
+      "keywords": ["investigación", "research", "estudio", "study", "experimento", "experiment", "hipótesis", "hypothesis", "metodología", "methodology", "análisis", "analysis", "publicación", "publication", "paper", "artículo", "científico"],
       "mcp_servers": ["arxiv", "pubmed", "semantic-scholar", "google-scholar"]
     },
     "marketing": {
