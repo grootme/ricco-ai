@@ -39,6 +39,21 @@ import {
   Shield,
   Hammer,
   HelpCircle,
+  Code,
+  Heart,
+  Trophy,
+  Newspaper,
+  FlaskConical,
+  Dna,
+  Atom,
+  Globe,
+  Scale,
+  GraduationCap,
+  Megaphone,
+  Play,
+  FileCheck,
+  BarChart3,
+  MessageSquare,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -49,6 +64,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { ThemeToggle } from '@/components/dashboard/theme-toggle'
+import { IOVBAChat } from '@/components/chat/iovba-chat'
 import {
   useDashboardStore,
   useAgentsStore,
@@ -57,7 +73,17 @@ import {
   useMCPServersStore,
   useIOVBAGroupsStore,
 } from '@/stores'
-import type { AgentProfile, Engram, IOVBAGroup, IOVBADomain } from '@/types'
+import { 
+  PLATFORM_BRAND, 
+  IOVBA_DOMAIN_BRANDING, 
+  IOVBA_ROLE_BRANDING,
+  type AgentProfile, 
+  type Engram, 
+  type IOVBAGroup, 
+  type IOVBADomain,
+  type IOVBARole,
+  type TestLevel,
+} from '@/types'
 
 // Use useSyncExternalStore for hydration-safe mounted state
 const emptySubscribe = () => () => {}
@@ -67,39 +93,50 @@ const getServerSnapshot = () => false
 // Navigation items
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: Activity },
+  { id: 'chat', label: 'IOVBA Chat', icon: MessageSquare },
   { id: 'iovba', label: 'IOVBA Groups', icon: Users },
   { id: 'agents', label: 'Agentes', icon: Bot },
   { id: 'capital', label: 'Capital Cognitivo', icon: Brain },
   { id: 'memory', label: 'Memoria', icon: Database },
   { id: 'mcp', label: 'MCP Servers', icon: Server },
   { id: 'domains', label: 'Dominios NVIDIA', icon: Network },
+  { id: 'testing', label: 'Testing', icon: FileCheck },
 ]
 
-// IOVBA Role icons and colors
-const iovbaRoleConfig: Record<string, { icon: React.ElementType; color: string; description: string }> = {
-  investigador: { icon: Microscope, color: 'text-blue-500', description: 'Investiga y analiza información' },
-  observador: { icon: Eye, color: 'text-amber-500', description: 'Monitorea y detecta patrones' },
-  validador: { icon: Shield, color: 'text-green-500', description: 'Valida y verifica calidad' },
-  builder: { icon: Hammer, color: 'text-purple-500', description: 'Construye e implementa' },
-  asistente: { icon: HelpCircle, color: 'text-teal-500', description: 'Coordina y asiste' },
+// Icon mapping for domains
+const domainIconMap: Record<string, React.ElementType> = {
+  Code,
+  Heart,
+  Trophy,
+  Newspaper,
+  FlaskConical,
+  Dna,
+  Atom,
+  Globe,
+  TrendingUp,
+  Scale,
+  GraduationCap,
+  Microscope,
+  Megaphone,
+  Settings,
 }
 
-// Domain names
-const domainNames: Record<IOVBADomain, string> = {
-  swe: 'Software Engineering',
-  salud: 'Salud y Medicina',
-  deportes: 'Deportes',
-  noticias: 'Noticias y Periodismo',
-  quimica: 'Química',
-  biologia: 'Biología',
-  biotecnologia: 'Biotecnología',
-  geopolitica: 'Geopolítica',
-  finanzas: 'Finanzas',
-  legal: 'Legal',
-  educacion: 'Educación',
-  investigacion: 'Investigación',
-  marketing: 'Marketing',
-  custom: 'Personalizado',
+// Icon mapping for roles
+const roleIconMap: Record<string, React.ElementType> = {
+  Microscope,
+  Eye,
+  Shield,
+  Hammer,
+  HelpCircle,
+}
+
+// Test level colors
+const testLevelColors: Record<TestLevel, string> = {
+  basic: 'bg-green-500',
+  intermediate: 'bg-blue-500',
+  advanced: 'bg-purple-500',
+  expert: 'bg-orange-500',
+  master: 'bg-red-500',
 }
 
 // Status badge component
@@ -121,6 +158,42 @@ function StatusBadge({ status }: { status: string }) {
   )
 }
 
+// Domain Badge Component
+function DomainBadge({ domain }: { domain: IOVBADomain }) {
+  const branding = IOVBA_DOMAIN_BRANDING[domain]
+  if (!branding) return <Badge variant="outline">{domain}</Badge>
+  
+  const Icon = domainIconMap[branding.icon] || Target
+  
+  return (
+    <Badge 
+      variant="outline" 
+      className="flex items-center gap-1.5 px-2 py-1"
+      style={{ borderColor: branding.color }}
+    >
+      <Icon className="h-3 w-3" style={{ color: branding.color }} />
+      <span className="font-semibold">{branding.elegantName}</span>
+    </Badge>
+  )
+}
+
+// Role Badge Component
+function RoleBadge({ role }: { role: IOVBARole }) {
+  const branding = IOVBA_ROLE_BRANDING[role]
+  if (!branding) return <Badge variant="outline">{role}</Badge>
+  
+  const Icon = roleIconMap[branding.icon] || Bot
+  
+  return (
+    <Badge 
+      className={`flex items-center gap-1.5 bg-gradient-to-r ${branding.gradient} text-white`}
+    >
+      <Icon className="h-3 w-3" />
+      <span>{branding.elegantName}</span>
+    </Badge>
+  )
+}
+
 export default function Dashboard() {
   const mounted = useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot)
   const [sidebarOpen, setSidebarOpen] = useState(true)
@@ -128,6 +201,8 @@ export default function Dashboard() {
   const [selectedAgent, setSelectedAgent] = useState<AgentProfile | null>(null)
   const [selectedIOVBAGroup, setSelectedIOVBAGroup] = useState<IOVBAGroup | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [testRunning, setTestRunning] = useState(false)
+  const [testResults, setTestResults] = useState<Record<string, unknown>[]>([])
 
   // Stores
   const { stats, fetchStats } = useDashboardStore()
@@ -153,6 +228,24 @@ export default function Dashboard() {
     }
   }, [selectedAgent, fetchCapital, fetchEngrams, fetchMemory])
 
+  // Run tests for a group
+  const handleRunTests = async (groupId: string, level: TestLevel = 'basic') => {
+    setTestRunning(true)
+    try {
+      const response = await fetch(`/api/iovba/${groupId}/test`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ level }),
+      })
+      const data = await response.json()
+      setTestResults(data.results || [])
+    } catch (error) {
+      console.error('Test failed:', error)
+    } finally {
+      setTestRunning(false)
+    }
+  }
+
   if (!mounted) return null
 
   return (
@@ -167,10 +260,17 @@ export default function Dashboard() {
         <div className="h-14 flex items-center justify-between px-4 border-b border-border/50">
           {sidebarOpen && (
             <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500">
+              <div className="p-1.5 rounded-lg bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 shadow-lg shadow-purple-500/25">
                 <Sparkles className="h-4 w-4 text-white" />
               </div>
-              <span className="font-semibold">OpenClaw SaaS</span>
+              <div className="flex flex-col">
+                <span className="font-bold text-lg bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent">
+                  {PLATFORM_BRAND.name}
+                </span>
+                <span className="text-[10px] text-muted-foreground -mt-0.5">
+                  {PLATFORM_BRAND.tagline}
+                </span>
+              </div>
             </div>
           )}
           <Button
@@ -205,7 +305,10 @@ export default function Dashboard() {
           <div className="p-4 border-t border-border/50">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Cpu className="h-3 w-3" />
-              <span>IOVBA Stack • v2.0</span>
+              <span>IOVBA Stack • {PLATFORM_BRAND.version}</span>
+            </div>
+            <div className="mt-2 text-[10px] text-muted-foreground">
+              {PLATFORM_BRAND.fullName}
             </div>
           </div>
         )}
@@ -240,39 +343,39 @@ export default function Dashboard() {
             <div className="space-y-6">
               {/* Stats Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card>
+                <Card className="bg-gradient-to-br from-violet-500/10 to-purple-500/10 border-violet-500/20">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">Total Agentes</p>
                         <p className="text-2xl font-bold">{stats?.total_agents || 0}</p>
                       </div>
-                      <Bot className="h-8 w-8 text-primary opacity-50" />
+                      <Bot className="h-8 w-8 text-violet-500 opacity-50" />
                     </div>
                     <Progress value={(stats?.active_agents || 0) / (stats?.total_agents || 1) * 100} className="mt-2 h-1" />
                     <p className="text-xs text-muted-foreground mt-1">{stats?.active_agents || 0} activos</p>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card className="bg-gradient-to-br from-fuchsia-500/10 to-pink-500/10 border-fuchsia-500/20">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">IOVBA Groups</p>
                         <p className="text-2xl font-bold">{stats?.iovba_groups || 0}</p>
                       </div>
-                      <Users className="h-8 w-8 text-primary opacity-50" />
+                      <Users className="h-8 w-8 text-fuchsia-500 opacity-50" />
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">Grupos orientados a dominio</p>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-emerald-500/20">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">Capital Cognitivo</p>
                         <p className="text-2xl font-bold">{stats?.total_capital?.toLocaleString() || 0}</p>
                       </div>
-                      <Brain className="h-8 w-8 text-primary opacity-50" />
+                      <Brain className="h-8 w-8 text-emerald-500 opacity-50" />
                     </div>
                     <div className="flex items-center gap-1 mt-2 text-emerald-500 text-xs">
                       <TrendingUp className="h-3 w-3" />
@@ -280,14 +383,14 @@ export default function Dashboard() {
                     </div>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/20">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">MCP Servers</p>
                         <p className="text-2xl font-bold">{stats?.mcp_servers_connected || 0}</p>
                       </div>
-                      <Server className="h-8 w-8 text-primary opacity-50" />
+                      <Server className="h-8 w-8 text-amber-500 opacity-50" />
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">{stats?.skills_available || 0} skills disponibles</p>
                   </CardContent>
@@ -312,30 +415,33 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {groups.slice(0, 3).map((group) => (
-                      <div
-                        key={group.id}
-                        className="p-4 rounded-lg border hover:border-primary/50 cursor-pointer transition-colors"
-                        onClick={() => {
-                          setSelectedIOVBAGroup(group)
-                          setActiveView('iovba')
-                        }}
-                      >
-                        <div className="flex items-center justify-between mb-2">
+                    {groups.slice(0, 3).map((group) => {
+                      const branding = IOVBA_DOMAIN_BRANDING[group.domain as IOVBADomain]
+                      return (
+                        <div
+                          key={group.id}
+                          className="p-4 rounded-lg border hover:border-primary/50 cursor-pointer transition-colors"
+                          onClick={() => {
+                            setSelectedIOVBAGroup(group)
+                            setActiveView('iovba')
+                          }}
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <DomainBadge domain={group.domain as IOVBADomain} />
+                            </div>
+                            <StatusBadge status={group.status} />
+                          </div>
                           <h3 className="font-medium">{group.name}</h3>
-                          <StatusBadge status={group.status} />
+                          <p className="text-sm text-muted-foreground mb-3">{group.description}</p>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-muted-foreground">
+                              {group.metrics.success_rate * 100}% éxito
+                            </span>
+                          </div>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-3">{group.description}</p>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-xs">
-                            {domainNames[group.domain as IOVBADomain] || group.domain}
-                          </Badge>
-                          <span className="text-xs text-muted-foreground">
-                            {group.metrics.success_rate * 100}% éxito
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 </CardContent>
               </Card>
@@ -352,46 +458,57 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {agents.slice(0, 5).map((agent) => (
-                      <div
-                        key={agent.id}
-                        className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted cursor-pointer"
-                        onClick={() => {
-                          setSelectedAgent(agent)
-                          setActiveView('capital')
-                        }}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/20">
-                            {agent.iovba_role && iovbaRoleConfig[agent.iovba_role] ? (
-                              <motion.div
-                                initial={{ scale: 0.8, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                className={iovbaRoleConfig[agent.iovba_role].color}
-                              >
-                                {(() => {
-                                  const Icon = iovbaRoleConfig[agent.iovba_role!].icon
-                                  return <Icon className="h-4 w-4" />
-                                })()}
-                              </motion.div>
-                            ) : (
-                              <Bot className="h-4 w-4" />
-                            )}
+                    {agents.slice(0, 5).map((agent) => {
+                      const roleBranding = agent.iovba_role ? IOVBA_ROLE_BRANDING[agent.iovba_role] : null
+                      return (
+                        <div
+                          key={agent.id}
+                          className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted cursor-pointer"
+                          onClick={() => {
+                            setSelectedAgent(agent)
+                            setActiveView('capital')
+                          }}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-lg bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20">
+                              {roleBranding ? (
+                                <motion.div
+                                  initial={{ scale: 0.8, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  className={`bg-gradient-to-r ${roleBranding.gradient} bg-clip-text`}
+                                >
+                                  {(() => {
+                                    const Icon = roleIconMap[roleBranding.icon] || Bot
+                                    return <Icon className="h-4 w-4" style={{ color: roleBranding.color }} />
+                                  })()}
+                                </motion.div>
+                              ) : (
+                                <Bot className="h-4 w-4" />
+                              )}
+                            </div>
+                            <div>
+                              <p className="font-medium text-sm">{agent.name}</p>
+                              <p className="text-xs text-muted-foreground">{agent.domain}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-medium text-sm">{agent.name}</p>
-                            <p className="text-xs text-muted-foreground">{agent.domain}</p>
+                          <div className="flex items-center gap-2">
+                            {agent.iovba_role && <RoleBadge role={agent.iovba_role} />}
+                            <span className="text-xs text-muted-foreground">{agent.cognitive_capital.capital_value}</span>
+                            <StatusBadge status={agent.status} />
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground">{agent.cognitive_capital.capital_value}</span>
-                          <StatusBadge status={agent.status} />
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 </CardContent>
               </Card>
+            </div>
+          )}
+
+          {/* IOVBA Chat View */}
+          {activeView === 'chat' && (
+            <div className="h-[calc(100vh-8rem)]">
+              <IOVBAChat />
             </div>
           )}
 
@@ -402,7 +519,7 @@ export default function Dashboard() {
                 <div>
                   <h2 className="text-2xl font-bold">IOVBA Groups</h2>
                   <p className="text-muted-foreground">
-                    Grupos de agentes orientados a dominio: Investigador, Observador, Validador, Builder, Asistente
+                    Grupos de agentes orientados a dominio con nombres únicos y elegantes
                   </p>
                 </div>
                 <Button>
@@ -416,15 +533,15 @@ export default function Dashboard() {
                 <CardContent className="p-4">
                   <h3 className="font-medium mb-3">Roles IOVBA</h3>
                   <div className="grid grid-cols-5 gap-4">
-                    {Object.entries(iovbaRoleConfig).map(([role, config]) => {
-                      const Icon = config.icon
+                    {Object.entries(IOVBA_ROLE_BRANDING).map(([role, config]) => {
+                      const Icon = roleIconMap[config.icon] || Bot
                       return (
                         <div key={role} className="text-center">
-                          <div className={`p-3 rounded-full bg-background mx-auto w-fit ${config.color}`}>
+                          <div className={`p-3 rounded-full bg-gradient-to-r ${config.gradient} mx-auto w-fit text-white`}>
                             <Icon className="h-5 w-5" />
                           </div>
-                          <p className="text-sm font-medium mt-2 capitalize">{role}</p>
-                          <p className="text-xs text-muted-foreground">{config.description}</p>
+                          <p className="text-sm font-medium mt-2">{config.elegantName}</p>
+                          <p className="text-xs text-muted-foreground">{config.tagline}</p>
                         </div>
                       )
                     })}
@@ -434,76 +551,78 @@ export default function Dashboard() {
 
               {/* Groups Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {groups.map((group) => (
-                  <Card key={group.id} className="overflow-hidden">
-                    <CardHeader className="pb-2">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <CardTitle className="text-lg">{group.name}</CardTitle>
-                          <CardDescription>{group.description}</CardDescription>
-                        </div>
-                        <StatusBadge status={group.status} />
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="mb-4">
-                        <Badge variant="outline" className="text-xs">
-                          {domainNames[group.domain as IOVBADomain] || group.domain}
-                        </Badge>
-                      </div>
-
-                      {/* Agents in Group */}
-                      <div className="space-y-2 mb-4">
-                        {Object.entries(group.agents).map(([role, agent]) => {
-                          const config = iovbaRoleConfig[role]
-                          const Icon = config.icon
-                          return (
-                            <div
-                              key={role}
-                              className="flex items-center justify-between p-2 rounded bg-muted/50 hover:bg-muted cursor-pointer"
-                              onClick={() => {
-                                setSelectedAgent(agent)
-                                setActiveView('capital')
-                              }}
-                            >
-                              <div className="flex items-center gap-2">
-                                <Icon className={`h-4 w-4 ${config.color}`} />
-                                <span className="text-sm capitalize">{role}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs text-muted-foreground">
-                                  {agent.cognitive_capital.capital_value}
-                                </span>
-                                <StatusBadge status={agent.status} />
-                              </div>
+                {groups.map((group) => {
+                  const branding = IOVBA_DOMAIN_BRANDING[group.domain as IOVBADomain]
+                  return (
+                    <Card key={group.id} className="overflow-hidden">
+                      <CardHeader className="pb-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <DomainBadge domain={group.domain as IOVBADomain} />
+                            <div>
+                              <CardTitle className="text-lg">{group.elegant_name || group.name}</CardTitle>
+                              <CardDescription>{branding?.tagline}</CardDescription>
                             </div>
-                          )
-                        })}
-                      </div>
+                          </div>
+                          <StatusBadge status={group.status} />
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground mb-4">{group.description}</p>
 
-                      {/* Metrics */}
-                      <Separator className="my-3" />
-                      <div className="grid grid-cols-4 gap-2 text-center text-xs">
-                        <div>
-                          <p className="text-muted-foreground">Tasks</p>
-                          <p className="font-medium">{group.metrics.total_tasks}</p>
+                        {/* Agents in Group */}
+                        <div className="space-y-2 mb-4">
+                          {Object.entries(group.agents).map(([role, agent]) => {
+                            const roleBrand = IOVBA_ROLE_BRANDING[role as IOVBARole]
+                            const Icon = roleBrand ? roleIconMap[roleBrand.icon] : Bot
+                            return (
+                              <div
+                                key={role}
+                                className="flex items-center justify-between p-2 rounded bg-muted/50 hover:bg-muted cursor-pointer"
+                                onClick={() => {
+                                  setSelectedAgent(agent)
+                                  setActiveView('capital')
+                                }}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <Icon className="h-4 w-4" style={{ color: roleBrand?.color }} />
+                                  <span className="text-sm">{roleBrand?.elegantName || role}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-muted-foreground">
+                                    {agent.cognitive_capital.capital_value}
+                                  </span>
+                                  <StatusBadge status={agent.status} />
+                                </div>
+                              </div>
+                            )
+                          })}
                         </div>
-                        <div>
-                          <p className="text-muted-foreground">Success</p>
-                          <p className="font-medium text-emerald-500">{(group.metrics.success_rate * 100).toFixed(0)}%</p>
+
+                        {/* Metrics */}
+                        <Separator className="my-3" />
+                        <div className="grid grid-cols-4 gap-2 text-center text-xs">
+                          <div>
+                            <p className="text-muted-foreground">Tasks</p>
+                            <p className="font-medium">{group.metrics.total_tasks}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Success</p>
+                            <p className="font-medium text-emerald-500">{(group.metrics.success_rate * 100).toFixed(0)}%</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Avg Time</p>
+                            <p className="font-medium">{group.metrics.avg_completion_time}h</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Expertise</p>
+                            <p className="font-medium">{(group.metrics.domain_expertise * 100).toFixed(0)}%</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-muted-foreground">Avg Time</p>
-                          <p className="font-medium">{group.metrics.avg_completion_time}h</p>
-                        </div>
-                        <div>
-                          <p className="text-muted-foreground">Expertise</p>
-                          <p className="font-medium">{(group.metrics.domain_expertise * 100).toFixed(0)}%</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
 
               {/* Available Templates */}
@@ -513,20 +632,141 @@ export default function Dashboard() {
                   <CardDescription>Templates para crear nuevos grupos IOVBA orientados a dominio</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-                    {templates.map((template) => (
-                      <Button
-                        key={template.domain}
-                        variant="outline"
-                        className="justify-start h-auto py-2"
-                      >
-                        <Target className="h-4 w-4 mr-2" />
-                        <span className="text-xs">{template.name}</span>
-                      </Button>
+                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
+                    {Object.entries(IOVBA_DOMAIN_BRANDING).map(([domain, brand]) => {
+                      const Icon = domainIconMap[brand.icon] || Target
+                      return (
+                        <Button
+                          key={domain}
+                          variant="outline"
+                          className="justify-start h-auto py-3 px-3 flex-col items-center"
+                          style={{ borderColor: brand.color + '40' }}
+                        >
+                          <Icon className="h-5 w-5 mb-1" style={{ color: brand.color }} />
+                          <span className="text-xs font-semibold">{brand.elegantName}</span>
+                          <span className="text-[10px] text-muted-foreground">{brand.name}</span>
+                        </Button>
+                      )
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Testing View */}
+          {activeView === 'testing' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold">IOVBA Testing</h2>
+                  <p className="text-muted-foreground">
+                    Sistema de pruebas en caliente para validar el funcionamiento de cada grupo IOVBA
+                  </p>
+                </div>
+              </div>
+
+              {/* Test Levels */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Niveles de Testing</CardTitle>
+                  <CardDescription>Cada nivel aumenta la complejidad y validación</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-5 gap-4">
+                    {(['basic', 'intermediate', 'advanced', 'expert', 'master'] as TestLevel[]).map((level) => (
+                      <div key={level} className="text-center p-4 rounded-lg border">
+                        <div className={`w-4 h-4 rounded-full ${testLevelColors[level]} mx-auto mb-2`} />
+                        <p className="font-medium capitalize">{level}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {level === 'basic' && 'Funcionalidad básica'}
+                          {level === 'intermediate' && 'Casos de uso comunes'}
+                          {level === 'advanced' && 'Escenarios complejos'}
+                          {level === 'expert' && 'Edge cases y estrés'}
+                          {level === 'master' && 'Integración completa'}
+                        </p>
+                      </div>
                     ))}
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Test Groups */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {groups.map((group) => {
+                  const branding = IOVBA_DOMAIN_BRANDING[group.domain as IOVBADomain]
+                  return (
+                    <Card key={group.id}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <DomainBadge domain={group.domain as IOVBADomain} />
+                            <CardTitle className="text-lg">{group.elegant_name}</CardTitle>
+                          </div>
+                          <Badge variant="outline">5 Tests</Badge>
+                        </div>
+                        <CardDescription>{branding?.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Última ejecución</span>
+                            <span>Hace 2 horas</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Tasa de éxito</span>
+                            <span className="text-emerald-500">85%</span>
+                          </div>
+                          <Separator />
+                          <div className="flex gap-2">
+                            <Button 
+                              size="sm" 
+                              className="flex-1"
+                              onClick={() => handleRunTests(group.id, 'basic')}
+                              disabled={testRunning}
+                            >
+                              {testRunning ? (
+                                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                              ) : (
+                                <Play className="h-4 w-4 mr-2" />
+                              )}
+                              Run Basic Tests
+                            </Button>
+                            <Button variant="outline" size="sm">
+                              <BarChart3 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+
+              {/* Test Results */}
+              {testResults.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Resultados de Tests</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {testResults.map((result, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                          <div className="flex items-center gap-3">
+                            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                            <span className="text-sm">{result.test_name as string}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline">{result.score as string}/{result.max_score as string}</Badge>
+                            <span className="text-xs text-muted-foreground">{result.execution_time_ms as number}ms</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           )}
 
@@ -558,63 +798,60 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {agents
                   .filter((a) => a.name.toLowerCase().includes(searchQuery.toLowerCase()))
-                  .map((agent) => (
-                    <Card
-                      key={agent.id}
-                      className="cursor-pointer hover:border-primary/50 transition-colors"
-                      onClick={() => {
-                        setSelectedAgent(agent)
-                        setActiveView('capital')
-                      }}
-                    >
-                      <CardHeader className="pb-2">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            {agent.iovba_role && iovbaRoleConfig[agent.iovba_role] && (
-                              <div className={iovbaRoleConfig[agent.iovba_role].color}>
-                                {(() => {
-                                  const Icon = iovbaRoleConfig[agent.iovba_role].icon
-                                  return <Icon className="h-4 w-4" />
-                                })()}
-                              </div>
-                            )}
-                            <CardTitle className="text-base">{agent.name}</CardTitle>
+                  .map((agent) => {
+                    const roleBrand = agent.iovba_role ? IOVBA_ROLE_BRANDING[agent.iovba_role] : null
+                    const Icon = roleBrand ? roleIconMap[roleBrand.icon] : Bot
+                    return (
+                      <Card
+                        key={agent.id}
+                        className="cursor-pointer hover:border-primary/50 transition-colors"
+                        onClick={() => {
+                          setSelectedAgent(agent)
+                          setActiveView('capital')
+                        }}
+                      >
+                        <CardHeader className="pb-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Icon className="h-4 w-4" style={{ color: roleBrand?.color }} />
+                              <CardTitle className="text-base">{agent.name}</CardTitle>
+                            </div>
+                            <StatusBadge status={agent.status} />
                           </div>
-                          <StatusBadge status={agent.status} />
-                        </div>
-                        <CardDescription className="line-clamp-2">{agent.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-muted-foreground">Dominio</span>
-                            <Badge variant="outline">{agent.domain}</Badge>
+                          <CardDescription className="line-clamp-2">{agent.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-muted-foreground">Dominio</span>
+                              <DomainBadge domain={agent.domain as IOVBADomain} />
+                            </div>
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-muted-foreground">Capital</span>
+                              <span className="font-medium">{agent.cognitive_capital.capital_value.toLocaleString()}</span>
+                            </div>
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-muted-foreground">Success Rate</span>
+                              <span className="font-medium text-emerald-500">{(agent.metrics.success_rate * 100).toFixed(0)}%</span>
+                            </div>
+                            <Separator />
+                            <div className="flex flex-wrap gap-1">
+                              {agent.skills.slice(0, 3).map((skill) => (
+                                <Badge key={skill} variant="secondary" className="text-xs">
+                                  {skill}
+                                </Badge>
+                              ))}
+                              {agent.skills.length > 3 && (
+                                <Badge variant="secondary" className="text-xs">
+                                  +{agent.skills.length - 3}
+                                </Badge>
+                              )}
+                            </div>
                           </div>
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-muted-foreground">Capital</span>
-                            <span className="font-medium">{agent.cognitive_capital.capital_value.toLocaleString()}</span>
-                          </div>
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-muted-foreground">Success Rate</span>
-                            <span className="font-medium text-emerald-500">{(agent.metrics.success_rate * 100).toFixed(0)}%</span>
-                          </div>
-                          <Separator />
-                          <div className="flex flex-wrap gap-1">
-                            {agent.skills.slice(0, 3).map((skill) => (
-                              <Badge key={skill} variant="secondary" className="text-xs">
-                                {skill}
-                              </Badge>
-                            ))}
-                            {agent.skills.length > 3 && (
-                              <Badge variant="secondary" className="text-xs">
-                                +{agent.skills.length - 3}
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    )
+                  })}
               </div>
             </div>
           )}
@@ -629,10 +866,11 @@ export default function Dashboard() {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className="p-3 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500">
-                            {selectedAgent.iovba_role && iovbaRoleConfig[selectedAgent.iovba_role] ? (
+                          <div className="p-3 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500">
+                            {selectedAgent.iovba_role && IOVBA_ROLE_BRANDING[selectedAgent.iovba_role] ? (
                               (() => {
-                                const Icon = iovbaRoleConfig[selectedAgent.iovba_role!].icon
+                                const brand = IOVBA_ROLE_BRANDING[selectedAgent.iovba_role!]
+                                const Icon = roleIconMap[brand.icon] || Bot
                                 return <Icon className="h-6 w-6 text-white" />
                               })()
                             ) : (
@@ -645,11 +883,7 @@ export default function Dashboard() {
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          {selectedAgent.iovba_role && (
-                            <Badge variant="outline" className="capitalize">
-                              {selectedAgent.iovba_role}
-                            </Badge>
-                          )}
+                          {selectedAgent.iovba_role && <RoleBadge role={selectedAgent.iovba_role} />}
                           <StatusBadge status={selectedAgent.status} />
                           <Button variant="outline" size="sm">
                             <Settings className="h-4 w-4" />
@@ -876,34 +1110,24 @@ export default function Dashboard() {
           {activeView === 'domains' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <Input placeholder="Buscar dominio..." className="w-64" />
-                <Link href="/domains">
-                  <Button>
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Ver todos los Blueprints
-                  </Button>
-                </Link>
+                <div>
+                  <h2 className="text-2xl font-bold">Dominios NVIDIA</h2>
+                  <p className="text-muted-foreground">
+                    Blueprints y arquitecturas de referencia de NVIDIA
+                  </p>
+                </div>
               </div>
-              <div className="text-center py-12">
-                <Network className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-lg font-medium">NVIDIA AI Blueprints</p>
-                <p className="text-muted-foreground">Explora e implementa blueprints de NVIDIA</p>
-                <Link href="/domains">
-                  <Button className="mt-4">Explorar Dominios</Button>
-                </Link>
-              </div>
+              
+              <Card>
+                <CardContent className="p-12 text-center">
+                  <Network className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                  <p className="text-lg font-medium">NVIDIA Blueprints</p>
+                  <p className="text-muted-foreground">Integración con arquitecturas de NVIDIA AI Enterprise</p>
+                </CardContent>
+              </Card>
             </div>
           )}
         </main>
-
-        {/* Footer */}
-        <footer className="h-10 border-t border-border/50 bg-card/30 flex items-center justify-between px-6 text-xs text-muted-foreground">
-          <span>OpenClaw Agent SaaS • Cognitive Capital System</span>
-          <div className="flex items-center gap-4">
-            <span>IOVBA: {groups.length} grupos activos</span>
-            <span>Memory VCS: v{capital?.memory_vcs_version || '1.0'}</span>
-          </div>
-        </footer>
       </div>
     </div>
   )

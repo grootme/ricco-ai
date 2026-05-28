@@ -79,3 +79,26 @@ temp/
 
 # Redis dump
 dump.rdb
+
+# Virtual environments (additional patterns)
+frappe-env/
+*-env/
+env*/
+
+# Compiled/installation directories
+nginx/
+nginx.tar.gz
+=1.2.0
+
+# Download directory (generated files)
+download/
+
+# Worklog (session files)
+worklog.md
+
+# Test files at root
+test_*.py
+!tests/
+
+# Generated scripts at root
+generate_*.py
