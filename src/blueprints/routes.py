@@ -18,6 +18,20 @@ from .video_search import (
     VideoSearchBlueprint, DataFlywheelBlueprint,
     DigitalHumanBlueprint, HealthcareBlueprint, RetailCommerceBlueprint
 )
+from .extended import (
+    AmbientPatientBlueprint,
+    BiomedicalResearchBlueprint,
+    FinancialDistillationBlueprint,
+    GenomicsBlueprint,
+    IndustrialBlueprint,
+    IntelligentWarehouseBlueprint,
+    MultiAgentBlueprint,
+    PortfolioOptimizationBlueprint,
+    RetailShoppingBlueprint,
+    StreamingRAGBlueprint,
+    VirtualAssistantBlueprint,
+    VoiceAgentBlueprint,
+)
 
 
 router = APIRouter(prefix="/blueprints", tags=["NVIDIA Blueprints"])
@@ -93,6 +107,7 @@ async def get_blueprint_readme(blueprint_name: str):
 def get_blueprint_instance(name: str, config: Optional[BlueprintConfig] = None):
     """Get the appropriate blueprint instance"""
     blueprints = {
+        # Core blueprints
         "aiq": AIQResearchBlueprint,
         "rag": RAGBlueprint,
         "video-search": VideoSearchBlueprint,
@@ -100,6 +115,19 @@ def get_blueprint_instance(name: str, config: Optional[BlueprintConfig] = None):
         "digital-human": DigitalHumanBlueprint,
         "healthcare": HealthcareBlueprint,
         "retail-commerce": RetailCommerceBlueprint,
+        # Extended blueprints
+        "ambient-patient": AmbientPatientBlueprint,
+        "biomedical-research": BiomedicalResearchBlueprint,
+        "financial-distillation": FinancialDistillationBlueprint,
+        "genomics": GenomicsBlueprint,
+        "industrial": IndustrialBlueprint,
+        "intelligent-warehouse": IntelligentWarehouseBlueprint,
+        "multi-agent": MultiAgentBlueprint,
+        "portfolio-optimization": PortfolioOptimizationBlueprint,
+        "retail-shopping": RetailShoppingBlueprint,
+        "streaming-rag": StreamingRAGBlueprint,
+        "virtual-assistant": VirtualAssistantBlueprint,
+        "voice-agent": VoiceAgentBlueprint,
     }
     
     blueprint_class = blueprints.get(name)
@@ -244,4 +272,104 @@ async def test_retail_commerce_blueprint(action: str = "recommend"):
     """Test Retail Commerce Blueprint"""
     blueprint = RetailCommerceBlueprint()
     result = await blueprint.execute({"action": action})
+    return result.to_dict()
+
+
+# ============================================================================
+# Test Routes for Extended Blueprints
+# ============================================================================
+
+@router.post("/test/ambient-patient")
+async def test_ambient_patient_blueprint(action: str = "intake"):
+    """Test Ambient Patient Blueprint"""
+    blueprint = AmbientPatientBlueprint()
+    result = await blueprint.execute({"action": action, "agent_type": "full"})
+    return result.to_dict()
+
+
+@router.post("/test/biomedical-research")
+async def test_biomedical_research_blueprint(query: str = "Latest advances in cancer immunotherapy"):
+    """Test Biomedical Research Blueprint"""
+    blueprint = BiomedicalResearchBlueprint()
+    result = await blueprint.execute({"query": query})
+    return result.to_dict()
+
+
+@router.post("/test/financial-distillation")
+async def test_financial_distillation_blueprint(model_name: str = "financial-model-v1"):
+    """Test Financial Distillation Blueprint"""
+    blueprint = FinancialDistillationBlueprint()
+    result = await blueprint.execute({"model_name": model_name})
+    return result.to_dict()
+
+
+@router.post("/test/genomics")
+async def test_genomics_blueprint(analysis_type: str = "variant_calling"):
+    """Test Genomics Blueprint"""
+    blueprint = GenomicsBlueprint()
+    result = await blueprint.execute({"analysis_type": analysis_type})
+    return result.to_dict()
+
+
+@router.post("/test/industrial")
+async def test_industrial_blueprint(equipment_id: str = "equipment-001"):
+    """Test Industrial Blueprint"""
+    blueprint = IndustrialBlueprint()
+    result = await blueprint.execute({"equipment_id": equipment_id})
+    return result.to_dict()
+
+
+@router.post("/test/intelligent-warehouse")
+async def test_intelligent_warehouse_blueprint(operation: str = "inventory_check"):
+    """Test Intelligent Warehouse Blueprint"""
+    blueprint = IntelligentWarehouseBlueprint()
+    result = await blueprint.execute({"operation": operation})
+    return result.to_dict()
+
+
+@router.post("/test/multi-agent")
+async def test_multi_agent_blueprint(task: str = "Research and summarize AI trends"):
+    """Test Multi-Agent Blueprint"""
+    blueprint = MultiAgentBlueprint()
+    result = await blueprint.execute({"task": task, "pattern": "hierarchical"})
+    return result.to_dict()
+
+
+@router.post("/test/portfolio-optimization")
+async def test_portfolio_optimization_blueprint(target: str = "sharpe_ratio"):
+    """Test Portfolio Optimization Blueprint"""
+    blueprint = PortfolioOptimizationBlueprint()
+    result = await blueprint.execute({"optimization_target": target})
+    return result.to_dict()
+
+
+@router.post("/test/retail-shopping")
+async def test_retail_shopping_blueprint(user_id: str = "user-001"):
+    """Test Retail Shopping Blueprint"""
+    blueprint = RetailShoppingBlueprint()
+    result = await blueprint.execute({"user_id": user_id})
+    return result.to_dict()
+
+
+@router.post("/test/streaming-rag")
+async def test_streaming_rag_blueprint(query: str = "What is machine learning?"):
+    """Test Streaming RAG Blueprint"""
+    blueprint = StreamingRAGBlueprint()
+    result = await blueprint.execute({"query": query})
+    return result.to_dict()
+
+
+@router.post("/test/virtual-assistant")
+async def test_virtual_assistant_blueprint(command: str = "schedule_meeting"):
+    """Test Virtual Assistant Blueprint"""
+    blueprint = VirtualAssistantBlueprint()
+    result = await blueprint.execute({"command": command})
+    return result.to_dict()
+
+
+@router.post("/test/voice-agent")
+async def test_voice_agent_blueprint(session_id: str = "voice-session-001"):
+    """Test Voice Agent Blueprint"""
+    blueprint = VoiceAgentBlueprint()
+    result = await blueprint.execute({"session_id": session_id})
     return result.to_dict()

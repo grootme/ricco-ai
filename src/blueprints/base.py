@@ -30,6 +30,19 @@ class BlueprintType(str, Enum):
     DIGITAL_HUMAN = "digital_human"
     HEALTHCARE = "healthcare"
     RETAIL_COMMERCE = "retail_commerce"
+    # Extended blueprints
+    AMBIENT_PATIENT = "ambient_patient"
+    BIOMEDICAL_RESEARCH = "biomedical_research"
+    FINANCIAL_DISTILLATION = "financial_distillation"
+    GENOMICS = "genomics"
+    INDUSTRIAL = "industrial"
+    INTELLIGENT_WAREHOUSE = "intelligent_warehouse"
+    MULTI_AGENT = "multi_agent"
+    PORTFOLIO_OPTIMIZATION = "portfolio_optimization"
+    RETAIL_SHOPPING = "retail_shopping"
+    STREAMING_RAG = "streaming_rag"
+    VIRTUAL_ASSISTANT = "virtual_assistant"
+    VOICE_AGENT = "voice_agent"
 
 
 @dataclass

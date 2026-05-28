@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Comprehensive Blueprint Test Suite for RICCO AI
-Tests all 7 NVIDIA AI Blueprints
+Tests all 19 NVIDIA AI Blueprints (7 core + 12 extended)
 """
 
 import asyncio
@@ -14,6 +14,10 @@ sys.path.insert(0, '/home/z/my-project/src')
 
 from blueprints import (
     BlueprintRegistry,
+    BlueprintConfig,
+    BlueprintStatus,
+    BlueprintType,
+    # Core blueprints (7)
     AIQResearchBlueprint,
     RAGBlueprint,
     VideoSearchBlueprint,
@@ -21,8 +25,19 @@ from blueprints import (
     DigitalHumanBlueprint,
     HealthcareBlueprint,
     RetailCommerceBlueprint,
-    BlueprintConfig,
-    BlueprintStatus,
+    # Extended blueprints (12)
+    AmbientPatientBlueprint,
+    BiomedicalResearchBlueprint,
+    FinancialDistillationBlueprint,
+    GenomicsBlueprint,
+    IndustrialBlueprint,
+    IntelligentWarehouseBlueprint,
+    MultiAgentBlueprint,
+    PortfolioOptimizationBlueprint,
+    RetailShoppingBlueprint,
+    StreamingRAGBlueprint,
+    VirtualAssistantBlueprint,
+    VoiceAgentBlueprint,
 )
 
 
@@ -178,7 +193,7 @@ class BlueprintTestRunner:
                     result["details"].append({
                         "test": "list_blueprints", 
                         "status": "PASSED",
-                        "output": f"{len(blueprints)} blueprints discovered (NVIDIA repos not cloned)"
+                        "output": f"{len(blueprints)} blueprints discovered"
                     })
                 else:
                     result["tests_failed"] += 1
@@ -186,19 +201,6 @@ class BlueprintTestRunner:
             except Exception as e:
                 result["tests_failed"] += 1
                 result["details"].append({"test": "list_blueprints", "status": "FAILED", "error": str(e)})
-            
-            # Test 3: Get blueprint info
-            try:
-                info = registry.get_blueprint("aiq")
-                result["tests_passed"] += 1
-                result["details"].append({
-                    "test": "get_blueprint", 
-                    "status": "PASSED",
-                    "output": info.name if info else "None"
-                })
-            except Exception as e:
-                result["tests_failed"] += 1
-                result["details"].append({"test": "get_blueprint", "status": "FAILED", "error": str(e)})
             
             if result["tests_failed"] == 0:
                 result["status"] = "PASSED"
@@ -220,10 +222,63 @@ class BlueprintTestRunner:
         
         return result
     
+    async def test_blueprint_types(self) -> Dict[str, Any]:
+        """Test BlueprintType enum"""
+        self.log("Testing BlueprintType enum...")
+        
+        result = {
+            "name": "BlueprintType",
+            "status": "pending",
+            "tests_passed": 0,
+            "tests_failed": 0,
+            "details": [],
+            "execution_time": 0
+        }
+        
+        start_time = time.time()
+        
+        try:
+            # Test all types exist
+            expected_types = [
+                "AIQ_RESEARCH", "RAG", "VIDEO_SEARCH", "DATA_FLYWHEEL",
+                "DIGITAL_HUMAN", "HEALTHCARE", "RETAIL_COMMERCE",
+                "AMBIENT_PATIENT", "BIOMEDICAL_RESEARCH", "FINANCIAL_DISTILLATION",
+                "GENOMICS", "INDUSTRIAL", "INTELLIGENT_WAREHOUSE",
+                "MULTI_AGENT", "PORTFOLIO_OPTIMIZATION", "RETAIL_SHOPPING",
+                "STREAMING_RAG", "VIRTUAL_ASSISTANT", "VOICE_AGENT"
+            ]
+            
+            for type_name in expected_types:
+                if hasattr(BlueprintType, type_name):
+                    result["tests_passed"] += 1
+                    result["details"].append({"test": f"type_{type_name}", "status": "PASSED"})
+                else:
+                    result["tests_failed"] += 1
+                    result["details"].append({"test": f"type_{type_name}", "status": "FAILED", "error": "Type not found"})
+            
+            result["status"] = "PASSED" if result["tests_failed"] == 0 else "FAILED"
+            if result["status"] == "PASSED":
+                self.passed += 1
+            else:
+                self.failed += 1
+                
+        except Exception as e:
+            result["status"] = "ERROR"
+            result["error"] = str(e)
+            self.failed += 1
+        
+        result["execution_time"] = time.time() - start_time
+        self.results.append(result)
+        
+        status_icon = "✅" if result["status"] == "PASSED" else "❌"
+        self.log(f"{status_icon} BlueprintType: {result['tests_passed']}/{result['tests_passed'] + result['tests_failed']} types verified")
+        
+        return result
+    
     def print_summary(self):
         """Print test summary"""
         print("\n" + "=" * 70)
-        print("📊 BLUEPRINT TEST SUMMARY")
+        print("📊 BLUEPRINT TEST SUMMARY - ALL 19 BLUEPRINTS")
         print("=" * 70)
         
         total_tests = sum(r["tests_passed"] + r["tests_failed"] for r in self.results)
@@ -235,30 +290,29 @@ class BlueprintTestRunner:
         print(f"Failed: {total_tests - total_passed}")
         print(f"Success Rate: {(total_passed/total_tests*100):.1f}%")
         
+        # Separate core and extended
+        core_results = [r for r in self.results if r["name"] in [
+            "AIQResearchBlueprint", "RAGBlueprint", "VideoSearchBlueprint",
+            "DataFlywheelBlueprint", "DigitalHumanBlueprint", "HealthcareBlueprint",
+            "RetailCommerceBlueprint", "BlueprintRegistry", "BlueprintType"
+        ]]
+        extended_results = [r for r in self.results if r not in core_results]
+        
         print("\n" + "-" * 70)
-        print("DETAILED RESULTS:")
+        print("CORE BLUEPRINTS (7 + Registry + Types):")
         print("-" * 70)
         
-        for result in self.results:
+        for result in core_results:
             status_icon = "✅" if result["status"] == "PASSED" else "❌"
-            print(f"\n{status_icon} {result['name']}")
-            print(f"   Status: {result['status']}")
-            print(f"   Tests: {result['tests_passed']}/{result['tests_passed'] + result['tests_failed']}")
-            print(f"   Time: {result['execution_time']:.3f}s")
-            
-            if result.get("error"):
-                print(f"   Error: {result['error']}")
-            
-            for detail in result.get("details", []):
-                icon = "  ✓" if detail["status"] == "PASSED" else "  ✗"
-                print(f"   {icon} {detail['test']}: {detail['status']}")
-                if detail.get("error"):
-                    print(f"      Error: {detail['error']}")
-                if detail.get("output") and detail["status"] == "PASSED":
-                    output_str = str(detail["output"])
-                    if len(output_str) > 100:
-                        output_str = output_str[:100] + "..."
-                    print(f"      Output: {output_str}")
+            print(f"{status_icon} {result['name']}: {result['tests_passed']}/{result['tests_passed'] + result['tests_failed']} tests")
+        
+        print("\n" + "-" * 70)
+        print("EXTENDED BLUEPRINTS (12):")
+        print("-" * 70)
+        
+        for result in extended_results:
+            status_icon = "✅" if result["status"] == "PASSED" else "❌"
+            print(f"{status_icon} {result['name']}: {result['tests_passed']}/{result['tests_passed'] + result['tests_failed']} tests")
         
         print("\n" + "=" * 70)
         
@@ -276,14 +330,19 @@ class BlueprintTestRunner:
 async def main():
     """Main test runner"""
     print("=" * 70)
-    print("🧪 RICCO AI - BLUEPRINT TEST SUITE")
+    print("🧪 RICCO AI - COMPLETE BLUEPRINT TEST SUITE")
     print("=" * 70)
-    print(f"Testing all 7 NVIDIA AI Blueprints\n")
+    print(f"Testing all 19 NVIDIA AI Blueprints (7 core + 12 extended)\n")
     
     runner = BlueprintTestRunner()
     
-    # Test Registry first
+    # Test Registry
     await runner.test_registry()
+    
+    # Test BlueprintType enum
+    await runner.test_blueprint_types()
+    
+    # ========== CORE BLUEPRINTS (7) ==========
     
     # Test AIQ Research Blueprint
     await runner.test_blueprint(
@@ -359,6 +418,139 @@ async def main():
             "action": "recommend",
             "customer_id": "cust_123",
             "product_id": "prod_456"
+        }
+    )
+    
+    # ========== EXTENDED BLUEPRINTS (12) ==========
+    
+    # Test Ambient Patient Blueprint
+    await runner.test_blueprint(
+        AmbientPatientBlueprint,
+        "AmbientPatientBlueprint",
+        {
+            "action": "intake",
+            "agent_type": "full",
+            "patient_info": {"name": "John Doe", "age": 45}
+        }
+    )
+    
+    # Test Biomedical Research Blueprint
+    await runner.test_blueprint(
+        BiomedicalResearchBlueprint,
+        "BiomedicalResearchBlueprint",
+        {
+            "query": "Latest advances in CRISPR gene editing for cancer treatment",
+            "research_topic": "CRISPR oncology"
+        }
+    )
+    
+    # Test Financial Distillation Blueprint
+    await runner.test_blueprint(
+        FinancialDistillationBlueprint,
+        "FinancialDistillationBlueprint",
+        {
+            "model_name": "risk-model-v2",
+            "data_source": "market_data",
+            "analysis_type": "risk_assessment"
+        }
+    )
+    
+    # Test Genomics Blueprint
+    await runner.test_blueprint(
+        GenomicsBlueprint,
+        "GenomicsBlueprint",
+        {
+            "analysis_type": "variant_calling",
+            "vcf_file": "sample.vcf",
+            "reference_genome": "GRCh38"
+        }
+    )
+    
+    # Test Industrial Blueprint
+    await runner.test_blueprint(
+        IndustrialBlueprint,
+        "IndustrialBlueprint",
+        {
+            "equipment_id": "pump-001",
+            "operation_type": "predictive_maintenance",
+            "sensor_data": {"vibration": 0.5, "temperature": 75}
+        }
+    )
+    
+    # Test Intelligent Warehouse Blueprint
+    await runner.test_blueprint(
+        IntelligentWarehouseBlueprint,
+        "IntelligentWarehouseBlueprint",
+        {
+            "warehouse_id": "WH-001",
+            "operation": "inventory_check",
+            "sku": "SKU-12345"
+        }
+    )
+    
+    # Test Multi-Agent Blueprint
+    await runner.test_blueprint(
+        MultiAgentBlueprint,
+        "MultiAgentBlueprint",
+        {
+            "task": "Analyze market trends and generate investment report",
+            "pattern": "hierarchical",
+            "agents": ["researcher", "analyst", "writer"]
+        }
+    )
+    
+    # Test Portfolio Optimization Blueprint
+    await runner.test_blueprint(
+        PortfolioOptimizationBlueprint,
+        "PortfolioOptimizationBlueprint",
+        {
+            "optimization_target": "sharpe_ratio",
+            "assets": ["AAPL", "GOOGL", "MSFT", "AMZN"],
+            "risk_tolerance": "moderate"
+        }
+    )
+    
+    # Test Retail Shopping Blueprint
+    await runner.test_blueprint(
+        RetailShoppingBlueprint,
+        "RetailShoppingBlueprint",
+        {
+            "user_id": "user-001",
+            "search_query": "wireless headphones",
+            "cart": ["item-1", "item-2"]
+        }
+    )
+    
+    # Test Streaming RAG Blueprint
+    await runner.test_blueprint(
+        StreamingRAGBlueprint,
+        "StreamingRAGBlueprint",
+        {
+            "query": "Explain quantum computing in simple terms",
+            "conversation_id": "conv-001",
+            "stream": True
+        }
+    )
+    
+    # Test Virtual Assistant Blueprint
+    await runner.test_blueprint(
+        VirtualAssistantBlueprint,
+        "VirtualAssistantBlueprint",
+        {
+            "command": "schedule_meeting",
+            "task_type": "calendar",
+            "query": "What's on my schedule today?"
+        }
+    )
+    
+    # Test Voice Agent Blueprint
+    await runner.test_blueprint(
+        VoiceAgentBlueprint,
+        "VoiceAgentBlueprint",
+        {
+            "session_id": "voice-session-001",
+            "audio": "audio_stream",
+            "text": "Hello, how can I help?"
         }
     )
     

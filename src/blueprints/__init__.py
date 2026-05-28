@@ -9,6 +9,18 @@ This module provides integration with NVIDIA AI Blueprints:
 - Digital Human
 - Ambient Healthcare
 - Retail Commerce
+- Ambient Patient
+- Biomedical Research
+- Financial Distillation
+- Genomics
+- Industrial
+- Intelligent Warehouse
+- Multi-Agent
+- Portfolio Optimization
+- Retail Shopping
+- Streaming RAG
+- Virtual Assistant
+- Voice Agent
 """
 
 from .base import BlueprintBase, BlueprintConfig, BlueprintResult, BlueprintStatus, BlueprintType
@@ -21,14 +33,30 @@ from .video_search import (
     HealthcareBlueprint,
     RetailCommerceBlueprint
 )
+from .extended import (
+    AmbientPatientBlueprint,
+    BiomedicalResearchBlueprint,
+    FinancialDistillationBlueprint,
+    GenomicsBlueprint,
+    IndustrialBlueprint,
+    IntelligentWarehouseBlueprint,
+    MultiAgentBlueprint,
+    PortfolioOptimizationBlueprint,
+    RetailShoppingBlueprint,
+    StreamingRAGBlueprint,
+    VirtualAssistantBlueprint,
+    VoiceAgentBlueprint,
+)
 from .registry import BlueprintRegistry
 
 __all__ = [
+    # Base classes
     "BlueprintBase",
     "BlueprintConfig", 
     "BlueprintResult",
     "BlueprintStatus",
     "BlueprintType",
+    # Core blueprints
     "AIQResearchBlueprint",
     "RAGBlueprint",
     "VideoSearchBlueprint",
@@ -36,5 +64,19 @@ __all__ = [
     "DigitalHumanBlueprint",
     "HealthcareBlueprint",
     "RetailCommerceBlueprint",
+    # Extended blueprints
+    "AmbientPatientBlueprint",
+    "BiomedicalResearchBlueprint",
+    "FinancialDistillationBlueprint",
+    "GenomicsBlueprint",
+    "IndustrialBlueprint",
+    "IntelligentWarehouseBlueprint",
+    "MultiAgentBlueprint",
+    "PortfolioOptimizationBlueprint",
+    "RetailShoppingBlueprint",
+    "StreamingRAGBlueprint",
+    "VirtualAssistantBlueprint",
+    "VoiceAgentBlueprint",
+    # Registry
     "BlueprintRegistry",
 ]
