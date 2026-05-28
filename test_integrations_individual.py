@@ -93,7 +93,7 @@ async def test_ai_providers():
     print("="*60)
     
     providers_to_test = [
-        ("OpenAI", "ai_providers.providers.openai_provider", "OpenAIProvider"),
+        ("OpenAI", "ai_providers.providers", "OpenAIProvider"),
         ("Anthropic", "ai_providers.providers.anthropic_provider", "AnthropicProvider"),
         ("Local", "ai_providers.providers.local_provider", "LocalProvider"),
     ]

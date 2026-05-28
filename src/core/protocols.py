@@ -535,3 +535,36 @@ class FactoryProtocol(Protocol, Generic[T]):
     def get_registered_types(self) -> List[str]:
         """Get registered types"""
         ...
+
+
+# =============================================================================
+# ALIASES FOR BACKWARD COMPATIBILITY
+# =============================================================================
+
+# Alias for backward compatibility - generic service protocol
+ServiceProtocol = AIProviderProtocol
+
+__all__ = [
+    "AIProviderType",
+    "AIProviderProtocol",
+    "ServiceProtocol",  # Alias
+    "EmbeddingProviderProtocol",
+    "AgentType",
+    "AgentProtocol",
+    "MCPAwareAgentProtocol",
+    "MemoryServiceProtocol",
+    "SessionServiceProtocol",
+    "UIContextMode",
+    "A2UIProviderProtocol",
+    "ContextAwareUIProtocol",
+    "ContextProviderProtocol",
+    "ContextBundleProtocol",
+    "VectorStoreProtocol",
+    "CacheProtocol",
+    "MCPServerProtocol",
+    "MCPRegistryProtocol",
+    "EventSubscriberProtocol",
+    "EventPublisherProtocol",
+    "RepositoryProtocol",
+    "FactoryProtocol",
+]

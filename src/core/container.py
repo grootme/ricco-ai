@@ -479,3 +479,26 @@ class ServiceProvider(Generic[T]):
     def reset(self) -> None:
         """Reset the cached instance"""
         self._instance = None
+
+
+# =============================================================================
+# ALIASES FOR BACKWARD COMPATIBILITY
+# =============================================================================
+
+# Alias for backward compatibility
+ServiceContainer = Container
+
+__all__ = [
+    "Container",
+    "ServiceContainer",  # Alias
+    "ServiceLifetime",
+    "ServiceDescriptor",
+    "ResolutionError",
+    "RegistrationError",
+    "ServiceProvider",
+    "get_container",
+    "set_container",
+    "reset_container",
+    "inject",
+    "async_inject",
+]

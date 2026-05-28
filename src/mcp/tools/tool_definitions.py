@@ -751,3 +751,23 @@ SKILL_TO_TOOLS = {
     "recommendations": ["ai_generate_text", "ricco_get_recommendations", "ai_embed"],
     "communication": ["comm_send_email", "comm_send_whatsapp", "comm_push_notification"],
 }
+
+# Alias for backward compatibility
+TOOL_DEFINITIONS = ALL_MCP_TOOLS
+
+__all__ = [
+    "MCPTool",
+    "ToolCategory",
+    "RiskLevel",
+    "DATABASE_TOOLS",
+    "FILESYSTEM_TOOLS",
+    "WEB_TOOLS",
+    "AI_TOOLS",
+    "FINANCE_TOOLS",
+    "COMMUNICATION_TOOLS",
+    "RICCO_TOOLS",
+    "ALL_MCP_TOOLS",
+    "TOOL_DEFINITIONS",
+    "TOOLS_BY_CATEGORY",
+    "SKILL_TO_TOOLS",
+]

@@ -68,3 +68,35 @@ class ErrorResponse(BaseModel):
     """Model to represent an error response."""
 
     detail: str = Field(..., description="Error details")
+
+
+class ChatMessage(BaseModel):
+    """Model to represent a single chat message."""
+
+    role: str = Field(..., description="Message role (user/assistant/system)")
+    content: str = Field(..., description="Message content")
+    timestamp: Optional[str] = Field(None, description="Message timestamp")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
+
+
+class ChatSession(BaseModel):
+    """Model to represent a chat session."""
+
+    session_id: str = Field(..., description="Unique session identifier")
+    user_id: Optional[str] = Field(None, description="User identifier")
+    agent_id: Optional[str] = Field(None, description="Agent identifier")
+    messages: List[ChatMessage] = Field(default_factory=list, description="List of messages")
+    created_at: Optional[str] = Field(None, description="Session creation timestamp")
+    updated_at: Optional[str] = Field(None, description="Last update timestamp")
+    status: str = Field(default="active", description="Session status")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional session metadata")
+
+
+__all__ = [
+    "FileData",
+    "ChatRequest",
+    "ChatResponse",
+    "ErrorResponse",
+    "ChatMessage",
+    "ChatSession",
+]

@@ -629,5 +629,9 @@ __all__ = [
     "VectorSyncIntegration",
     "TokenOptimizerIntegration",
     "UnifiedIntegrationService",
+    "IntegrationService",  # Alias for backward compatibility
     "create_integration_service",
 ]
+
+# Alias for backward compatibility
+IntegrationService = UnifiedIntegrationService
