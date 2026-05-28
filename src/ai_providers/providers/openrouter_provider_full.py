@@ -26,15 +26,29 @@ from uuid import uuid4
 
 import aiohttp
 
-from ..base import AIProvider, AIProviderConfig, AIGenerationOptions
-from ..models import AIResponse, AIProviderType
-from ...config.openrouter_config import (
-    OpenRouterConfig, 
-    OpenRouterModel, 
-    FREE_MODELS, 
-    DEFAULT_MODELS,
-    get_openrouter_config
-)
+try:
+    from ..base import AIProvider, AIProviderConfig, AIGenerationOptions
+    from ..models import AIResponse, AIProviderType
+except ImportError:
+    from src.ai_providers.base import AIProvider, AIProviderConfig, AIGenerationOptions
+    from src.ai_providers.models import AIResponse, AIProviderType
+
+try:
+    from ...config.openrouter_config import (
+        OpenRouterConfig, 
+        OpenRouterModel, 
+        FREE_MODELS, 
+        DEFAULT_MODELS,
+        get_openrouter_config
+    )
+except ImportError:
+    from src.config.openrouter_config import (
+        OpenRouterConfig, 
+        OpenRouterModel, 
+        FREE_MODELS, 
+        DEFAULT_MODELS,
+        get_openrouter_config
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -718,7 +732,10 @@ class OpenRouterProviderFull(AIProvider):
 
 def register_openrouter_provider():
     """Register OpenRouter provider with the factory."""
-    from ..base import AIProviderFactory
+    try:
+        from ..base import AIProviderFactory
+    except ImportError:
+        from src.ai_providers.base import AIProviderFactory
     AIProviderFactory.register(AIProviderType.OPENROUTER, OpenRouterProviderFull)
 
 

@@ -6,9 +6,14 @@ Catálogo completo de herramientas disponibles con sus descripciones claras
 from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
 from enum import Enum
-import structlog
 
-logger = structlog.get_logger(__name__)
+# Conditional import for structlog with fallback to standard logging
+try:
+    import structlog
+    logger = structlog.get_logger(__name__)
+except ImportError:
+    import logging
+    logger = logging.getLogger(__name__)
 
 
 class ToolCategory(str, Enum):
@@ -754,6 +759,7 @@ SKILL_TO_TOOLS = {
 
 # Alias for backward compatibility
 TOOL_DEFINITIONS = ALL_MCP_TOOLS
+MCP_TOOLS = ALL_MCP_TOOLS  # Additional alias for compatibility
 
 __all__ = [
     "MCPTool",
@@ -768,6 +774,7 @@ __all__ = [
     "RICCO_TOOLS",
     "ALL_MCP_TOOLS",
     "TOOL_DEFINITIONS",
+    "MCP_TOOLS",
     "TOOLS_BY_CATEGORY",
     "SKILL_TO_TOOLS",
 ]

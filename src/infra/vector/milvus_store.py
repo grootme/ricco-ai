@@ -29,6 +29,7 @@ try:
 except ImportError:
     MILVUS_AVAILABLE = False
     connections = None
+    Collection = None  # type: ignore
 
 
 # ============================================================================

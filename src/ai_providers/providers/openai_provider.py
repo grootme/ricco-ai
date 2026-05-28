@@ -8,8 +8,13 @@ import time
 from typing import Optional, Dict, Any, List, AsyncIterator
 import logging
 
-from ..base import AIProvider, AIProviderConfig, AIGenerationOptions
-from ..models import AIResponse, AIProviderType
+try:
+    from ..base import AIProvider, AIProviderConfig, AIGenerationOptions
+    from ..models import AIResponse, AIProviderType
+except ImportError:
+    # Fallback for direct imports
+    from src.ai_providers.base import AIProvider, AIProviderConfig, AIGenerationOptions
+    from src.ai_providers.models import AIResponse, AIProviderType
 
 logger = logging.getLogger(__name__)
 

@@ -12,7 +12,10 @@ from dataclasses import dataclass
 import json
 import logging
 
-from ...config.openrouter_config import OpenRouterConfig, OpenRouterModel, get_openrouter_config
+try:
+    from ...config.openrouter_config import OpenRouterConfig, OpenRouterModel, get_openrouter_config
+except ImportError:
+    from src.config.openrouter_config import OpenRouterConfig, OpenRouterModel, get_openrouter_config
 
 logger = logging.getLogger(__name__)
 

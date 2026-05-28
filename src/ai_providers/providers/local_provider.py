@@ -9,8 +9,12 @@ from typing import Optional, Dict, Any, List, AsyncIterator
 import logging
 import json
 
-from ..base import AIProvider, AIProviderConfig, AIGenerationOptions
-from ..models import AIResponse, AIProviderType
+try:
+    from ..base import AIProvider, AIProviderConfig, AIGenerationOptions
+    from ..models import AIResponse, AIProviderType
+except ImportError:
+    from src.ai_providers.base import AIProvider, AIProviderConfig, AIGenerationOptions
+    from src.ai_providers.models import AIResponse, AIProviderType
 
 logger = logging.getLogger(__name__)
 
