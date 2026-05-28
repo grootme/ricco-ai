@@ -46,6 +46,34 @@ from .providers.openrouter_provider_full import (
     FUNCTION_CALLING_MODELS as OPENROUTER_FUNCTION_MODELS,
 )
 
+# OpenAI Provider
+from .providers.openai_provider import OpenAIProvider
+
+# Anthropic Provider
+from .providers.anthropic_provider import AnthropicProvider
+
+# Local Provider
+from .providers.local_provider import LocalProvider
+
+# Provider factory functions
+def create_openai_provider(api_key: str = None, model: str = "gpt-4o"):
+    """Create an OpenAI provider instance."""
+    from .base import AIProviderConfig
+    config = AIProviderConfig(api_key=api_key, model=model)
+    return OpenAIProvider(config)
+
+def create_anthropic_provider(api_key: str = None, model: str = "claude-3-5-sonnet-20241022"):
+    """Create an Anthropic provider instance."""
+    from .base import AIProviderConfig
+    config = AIProviderConfig(api_key=api_key, model=model)
+    return AnthropicProvider(config)
+
+def create_local_provider(model: str = "local-model"):
+    """Create a local provider instance for development."""
+    from .base import AIProviderConfig
+    config = AIProviderConfig(api_key="local", model=model)
+    return LocalProvider(config)
+
 # Token Optimizer imports
 from .token_optimizer import (
     OptimizationStrategy,
@@ -94,6 +122,15 @@ __all__ = [
     "OPENROUTER_CONTEXT_LENGTHS",
     "OPENROUTER_VISION_MODELS",
     "OPENROUTER_FUNCTION_MODELS",
+    # OpenAI Provider
+    "OpenAIProvider",
+    "create_openai_provider",
+    # Anthropic Provider
+    "AnthropicProvider",
+    "create_anthropic_provider",
+    # Local Provider
+    "LocalProvider",
+    "create_local_provider",
     # Token Optimizer
     "OptimizationStrategy",
     "TokenOptimizationConfig",

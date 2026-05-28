@@ -16,8 +16,12 @@ from .jwt_auth import (
     get_authenticator,
 )
 
+# Alias for backward compatibility
+JWTAuth = MCPAuthenticator
+
 __all__ = [
     "MCPAuthenticator",
+    "JWTAuth",  # Alias
     "MCPAuthConfig",
     "AuthToken",
     "AuthMethod",
