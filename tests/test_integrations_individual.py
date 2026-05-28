@@ -43,7 +43,10 @@ async def test_openrouter():
     
     import httpx
     
-    api_key = os.environ.get("OPENROUTER_API_KEY", "REDACTED_API_KEY")
+    api_key = os.environ.get("OPENROUTER_API_KEY", "")
+    if not api_key:
+        log_test("OpenRouter", "Models Endpoint", False, "OPENROUTER_API_KEY not set")
+        return
     
     # Test 1a: Models endpoint
     try:

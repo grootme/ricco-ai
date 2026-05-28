@@ -8,8 +8,11 @@ import os
 import sys
 import httpx
 
-# Set the API key
-OPENROUTER_API_KEY = "REDACTED_API_KEY"
+# Set the API key from environment
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
+if not OPENROUTER_API_KEY:
+    print("ERROR: OPENROUTER_API_KEY environment variable not set")
+    sys.exit(1)
 
 async def test_openrouter_api():
     """Test OpenRouter API directly"""
