@@ -183,6 +183,24 @@ services:
       - ricco-monitoring
 
   # ===========================================================================
+  # TEMPO - Distributed Tracing Backend (Grafana Tempo)
+  # ===========================================================================
+  tempo:
+    image: grafana/tempo:2.3.1
+    container_name: ricco-tempo
+    ports:
+      - "3200:3200"   # HTTP API
+      - "4319:4317"   # OTLP gRPC (different port to avoid conflict with Jaeger)
+      - "4320:4318"   # OTLP HTTP
+    volumes:
+      - ./monitoring/tempo/tempo-config.yml:/etc/tempo.yaml:ro
+      - tempo_data:/var/tempo
+    command: ["-config.file=/etc/tempo.yaml"]
+    restart: unless-stopped
+    networks:
+      - ricco-monitoring
+
+  # ===========================================================================
   # CADDY - Reverse Proxy for Monitoring
   # ===========================================================================
   monitoring-proxy:
@@ -206,6 +224,7 @@ volumes:
   grafana_data:
   alertmanager_data:
   loki_data:
+  tempo_data:
 
 networks:
   ricco-monitoring:

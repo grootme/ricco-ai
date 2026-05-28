@@ -1,0 +1,52 @@
+# RICCO AI - Grafana Tempo Configuration
+# Distributed tracing backend with OTLP support
+
+server:
+  http_listen_port: 3200
+  log_level: info
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: "0.0.0.0:4317"
+        http:
+          endpoint: "0.0.0.0:4318"
+
+ingester:
+  max_block_duration: 5m
+  trace_idle_period: 10s
+  complete_block_timeout: 5m
+
+compactor:
+  compaction:
+    block_retention: 48h
+    compaction_window: 1h
+    max_block_bytes: 100_000_000
+    max_compaction_objects: 1000000
+
+storage:
+  trace:
+    backend: local
+    local:
+      path: /var/tempo/blocks
+    pool:
+      max_workers: 100
+      queue_depth: 10000
+
+metrics_generator:
+  registry:
+    external_labels:
+      source: tempo
+      cluster: ricco-ai
+  storage:
+    path: /var/tempo/generator/wal
+    remote_write:
+      - url: http://prometheus:9090/api/v1/write
+        send_exemplars: true
+
+overrides:
+  defaults:
+    metrics_generator:
+      processors: [service-graphs, span-metrics]
