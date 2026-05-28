@@ -11,7 +11,7 @@ This module provides integration with NVIDIA AI Blueprints:
 - Retail Commerce
 """
 
-from .base import BlueprintBase, BlueprintConfig, BlueprintResult
+from .base import BlueprintBase, BlueprintConfig, BlueprintResult, BlueprintStatus, BlueprintType
 from .aiq import AIQResearchBlueprint
 from .rag import RAGBlueprint
 from .video_search import (
@@ -27,6 +27,8 @@ __all__ = [
     "BlueprintBase",
     "BlueprintConfig", 
     "BlueprintResult",
+    "BlueprintStatus",
+    "BlueprintType",
     "AIQResearchBlueprint",
     "RAGBlueprint",
     "VideoSearchBlueprint",
