@@ -1,0 +1,341 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "WA-MSG-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "message_details_section",
+  "message_type",
+  "direction",
+  "from_number",
+  "to_number",
+  "column_break_details",
+  "message_id",
+  "status",
+  "timestamp",
+  "content_section",
+  "content",
+  "media_url",
+  "media_type",
+  "column_break_content",
+  "template_name",
+  "template_language",
+  "template_parameters",
+  "reference_section",
+  "reference_doctype",
+  "reference_docname",
+  "column_break_reference",
+  "customer",
+  "sales_order",
+  "sales_invoice",
+  "delivery_note",
+  "metadata_section",
+  "whatsapp_message_id",
+  "conversation_id",
+  "pricing_model",
+  "column_break_metadata",
+  "error_code",
+  "error_message",
+  "retry_count"
+ ],
+ "fields": [
+  {
+   "fieldname": "message_details_section",
+   "fieldtype": "Section Break",
+   "label": "Message Details"
+  },
+  {
+   "fieldname": "message_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Message Type",
+   "options": "Text\nTemplate\nImage\nVideo\nAudio\nDocument\nLocation\nContact\nInteractive",
+   "reqd": 1,
+   "default": "Text"
+  },
+  {
+   "fieldname": "direction",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Direction",
+   "options": "Outbound\nInbound",
+   "reqd": 1,
+   "default": "Outbound"
+  },
+  {
+   "fieldname": "from_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "From Number",
+   "reqd": 1,
+   "description": "Sender phone number with country code"
+  },
+  {
+   "fieldname": "to_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "To Number",
+   "reqd": 1,
+   "description": "Recipient phone number with country code"
+  },
+  {
+   "fieldname": "column_break_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "message_id",
+   "fieldtype": "Data",
+   "label": "Internal Message ID",
+   "hidden": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Queued\nSent\nDelivered\nRead\nFailed\nReceived",
+   "default": "Queued"
+  },
+  {
+   "fieldname": "timestamp",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Timestamp",
+   "default": "Now",
+   "read_only": 1
+  },
+  {
+   "fieldname": "content_section",
+   "fieldtype": "Section Break",
+   "label": "Content"
+  },
+  {
+   "depends_on": "eval:doc.message_type=='Text'",
+   "fieldname": "content",
+   "fieldtype": "Text",
+   "label": "Message Content",
+   "description": "Text message body"
+  },
+  {
+   "depends_on": "eval:in_list(['Image', 'Video', 'Audio', 'Document'], doc.message_type)",
+   "fieldname": "media_url",
+   "fieldtype": "Data",
+   "label": "Media URL",
+   "description": "URL of the media file"
+  },
+  {
+   "depends_on": "eval:in_list(['Image', 'Video', 'Audio', 'Document'], doc.message_type)",
+   "fieldname": "media_type",
+   "fieldtype": "Select",
+   "label": "Media Type",
+   "options": "image/jpeg\nimage/png\nvideo/mp4\naudio/mpeg\naudio/ogg\napplication/pdf"
+  },
+  {
+   "fieldname": "column_break_content",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.message_type=='Template'",
+   "fieldname": "template_name",
+   "fieldtype": "Link",
+   "label": "Template Name",
+   "options": "WhatsApp Template"
+  },
+  {
+   "depends_on": "eval:doc.message_type=='Template'",
+   "fieldname": "template_language",
+   "fieldtype": "Data",
+   "label": "Template Language",
+   "default": "en"
+  },
+  {
+   "depends_on": "eval:doc.message_type=='Template'",
+   "description": "JSON array of template parameters",
+   "fieldname": "template_parameters",
+   "fieldtype": "Code",
+   "label": "Template Parameters",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "reference_section",
+   "fieldtype": "Section Break",
+   "label": "Reference"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "label": "Reference DocType",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "reference_docname",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Document",
+   "options": "reference_doctype"
+  },
+  {
+   "fieldname": "column_break_reference",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Sales Order",
+   "options": "Sales Order"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Sales Invoice",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "delivery_note",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Delivery Note",
+   "options": "Delivery Note"
+  },
+  {
+   "fieldname": "metadata_section",
+   "fieldtype": "Section Break",
+   "label": "Metadata"
+  },
+  {
+   "fieldname": "whatsapp_message_id",
+   "fieldtype": "Data",
+   "label": "WhatsApp Message ID",
+   "description": "Message ID returned by WhatsApp API"
+  },
+  {
+   "fieldname": "conversation_id",
+   "fieldtype": "Data",
+   "label": "Conversation ID",
+   "description": "WhatsApp conversation ID for billing"
+  },
+  {
+   "fieldname": "pricing_model",
+   "fieldtype": "Select",
+   "label": "Pricing Model",
+   "options": "Authentication\nMarketing\nUtility\nService\nConversation"
+  },
+  {
+   "fieldname": "column_break_metadata",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "error_code",
+   "fieldtype": "Data",
+   "label": "Error Code",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_message",
+   "fieldtype": "Text",
+   "label": "Error Message",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "retry_count",
+   "fieldtype": "Int",
+   "label": "Retry Count",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "group": "Conversation",
+   "link_doctype": "WhatsApp Conversation",
+   "link_fieldname": "last_message"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Ricco WhatsApp",
+ "name": "WhatsApp Message",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Sales User",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Sales Manager",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "WhatsApp Agent",
+   "write": 1
+  }
+ ],
+ "sort_field": "timestamp",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Gray",
+   "state": "Queued"
+  },
+  {
+   "color": "Blue",
+   "state": "Sent"
+  },
+  {
+   "color": "Green",
+   "state": "Delivered"
+  },
+  {
+   "color": "Dark Green",
+   "state": "Read"
+  },
+  {
+   "color": "Red",
+   "state": "Failed"
+  },
+  {
+   "color": "Orange",
+   "state": "Received"
+  }
+ ],
+ "timeline_field": "customer",
+ "track_changes": 1,
+ "track_seen": 1
+}

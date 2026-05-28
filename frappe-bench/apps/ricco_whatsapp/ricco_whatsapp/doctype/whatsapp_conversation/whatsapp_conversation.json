@@ -1,0 +1,291 @@
+{
+ "actions": [
+  {
+   "action": "Mark as Read",
+   "action_type": "Server Action",
+   "group": "Actions",
+   "label": "Mark All as Read",
+   "server_action": "ricco_whatsapp.doctype.whatsapp_conversation.whatsapp_conversation.mark_conversation_read"
+  },
+  {
+   "action": "Send Message",
+   "action_type": "Server Action",
+   "group": "Actions",
+   "label": "Send Quick Reply",
+   "server_action": "ricco_whatsapp.doctype.whatsapp_conversation.whatsapp_conversation.send_quick_reply"
+  }
+ ],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:phone_number",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "conversation_details_section",
+  "phone_number",
+  "customer",
+  "contact_name",
+  "column_break_details",
+  "status",
+  "assigned_to",
+  "priority",
+  "last_message_section",
+  "last_message",
+  "last_message_time",
+  "last_message_type",
+  "last_message_content",
+  "column_break_last",
+  "unread_count",
+  "last_message_direction",
+  "statistics_section",
+  "total_messages",
+  "first_message_time",
+  "column_break_stats",
+  "last_response_time",
+  "avg_response_time",
+  "tags_section",
+  "tags",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "conversation_details_section",
+   "fieldtype": "Section Break",
+   "label": "Conversation Details"
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Phone Number",
+   "reqd": 1,
+   "unique": 1,
+   "description": "Customer phone number with country code"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "contact_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Contact Name",
+   "description": "Display name from WhatsApp profile"
+  },
+  {
+   "fieldname": "column_break_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Open",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Open\nPending\nResolved\nClosed\nSpam",
+   "default": "Open"
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Assigned To",
+   "options": "User"
+  },
+  {
+   "default": "Normal",
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Priority",
+   "options": "Low\nNormal\nHigh\nUrgent"
+  },
+  {
+   "fieldname": "last_message_section",
+   "fieldtype": "Section Break",
+   "label": "Last Message"
+  },
+  {
+   "fieldname": "last_message",
+   "fieldtype": "Link",
+   "label": "Last Message",
+   "options": "WhatsApp Message",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_message_time",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Last Message Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_message_type",
+   "fieldtype": "Select",
+   "label": "Last Message Type",
+   "options": "Text\nTemplate\nImage\nVideo\nAudio\nDocument\nLocation\nContact\nInteractive",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_message_content",
+   "fieldtype": "Text",
+   "label": "Last Message Content",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_last",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "unread_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Unread Count",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_message_direction",
+   "fieldtype": "Select",
+   "label": "Last Message Direction",
+   "options": "Inbound\nOutbound",
+   "read_only": 1
+  },
+  {
+   "fieldname": "statistics_section",
+   "fieldtype": "Section Break",
+   "label": "Statistics"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_messages",
+   "fieldtype": "Int",
+   "label": "Total Messages",
+   "read_only": 1
+  },
+  {
+   "fieldname": "first_message_time",
+   "fieldtype": "Datetime",
+   "label": "First Message Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_stats",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_response_time",
+   "fieldtype": "Datetime",
+   "label": "Last Response Time",
+   "read_only": 1
+  },
+  {
+   "description": "Average response time in minutes",
+   "fieldname": "avg_response_time",
+   "fieldtype": "Float",
+   "label": "Avg Response Time (mins)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tags_section",
+   "fieldtype": "Section Break",
+   "label": "Tags & Notes"
+  },
+  {
+   "fieldname": "tags",
+   "fieldtype": "Data",
+   "label": "Tags",
+   "description": "Comma-separated tags"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "group": "Messages",
+   "link_doctype": "WhatsApp Message",
+   "link_fieldname": "name"
+  },
+  {
+   "group": "Customer",
+   "link_doctype": "Customer",
+   "link_fieldname": "name"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Ricco WhatsApp",
+ "name": "WhatsApp Conversation",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Sales User",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Sales Manager",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "WhatsApp Agent",
+   "write": 1
+  }
+ ],
+ "sort_field": "last_message_time",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Blue",
+   "state": "Open"
+  },
+  {
+   "color": "Orange",
+   "state": "Pending"
+  },
+  {
+   "color": "Green",
+   "state": "Resolved"
+  },
+  {
+   "color": "Gray",
+   "state": "Closed"
+  },
+  {
+   "color": "Red",
+   "state": "Spam"
+  }
+ ],
+ "track_changes": 1,
+ "track_seen": 1
+}

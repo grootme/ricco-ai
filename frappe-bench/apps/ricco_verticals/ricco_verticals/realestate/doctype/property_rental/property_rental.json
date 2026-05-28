@@ -1,0 +1,540 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "RENT-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "rental_details_section",
+  "property_listing",
+  "property_name",
+  "property_type",
+  "column_break_4",
+  "rental_type",
+  "status",
+  "agreement_number",
+  "tenant_section",
+  "tenant",
+  "tenant_name",
+  "tenant_contact",
+  "column_break_10",
+  "tenant_email",
+  "tenant_id_type",
+  "tenant_id_number",
+  "term_section",
+  "start_date",
+  "end_date",
+  "duration_months",
+  "column_break_16",
+  "notice_period_days",
+  "renewal_option",
+  "auto_renew",
+  "rent_details_section",
+  "monthly_rent",
+  "rent_due_day",
+  "security_deposit",
+  "column_break_23",
+  "currency",
+  "rent_increase_type",
+  "rent_increase_percentage",
+  "last_rent_increase",
+  "payment_details_section",
+  "payment_method",
+  "bank_account",
+  "column_break_30",
+  "next_payment_date",
+  "payment_terms",
+  "payment_history",
+  "charges_section",
+  "maintenance_charges",
+  "utility_charges",
+  "column_break_37",
+  "other_charges",
+  "total_monthly_charges",
+  "security_section",
+  "security_deposit_held",
+  "deposit_received_date",
+  "column_break_43",
+  "deposit_refundable",
+  "deductions",
+  "documents_section",
+  "rental_agreement",
+  "tenant_id_document",
+  "column_break_49",
+  "inventory_checklist",
+  "handover_document",
+  "conditions_section",
+  "special_conditions",
+  "restrictions",
+  "column_break_54",
+  "allowed_modifications",
+  "pet_policy",
+  "integration_section",
+  "customer",
+  "sales_invoice",
+  "column_break_60",
+  "recurring_entry",
+  "company"
+ ],
+ "fields": [
+  {
+   "fieldname": "rental_details_section",
+   "fieldtype": "Section Break",
+   "label": "Rental Details"
+  },
+  {
+   "fieldname": "property_listing",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Property",
+   "options": "Property Listing",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property_name",
+   "fieldtype": "Data",
+   "label": "Property Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "property_type",
+   "fieldtype": "Data",
+   "label": "Property Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rental_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Rental Type",
+   "options": "Residential\nCommercial\nIndustrial\nShort-term\nVacation Rental"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nActive\nExpired\nTerminated\nUnder Notice\nPending Renewal"
+  },
+  {
+   "fieldname": "agreement_number",
+   "fieldtype": "Data",
+   "label": "Agreement Number"
+  },
+  {
+   "fieldname": "tenant_section",
+   "fieldtype": "Section Break",
+   "label": "Tenant Information"
+  },
+  {
+   "fieldname": "tenant",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Tenant",
+   "options": "Tenant",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tenant_name",
+   "fieldtype": "Data",
+   "label": "Tenant Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tenant_contact",
+   "fieldtype": "Data",
+   "label": "Tenant Contact",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tenant_email",
+   "fieldtype": "Data",
+   "label": "Tenant Email",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tenant_id_type",
+   "fieldtype": "Data",
+   "label": "Tenant ID Type"
+  },
+  {
+   "fieldname": "tenant_id_number",
+   "fieldtype": "Data",
+   "label": "Tenant ID Number"
+  },
+  {
+   "fieldname": "term_section",
+   "fieldtype": "Section Break",
+   "label": "Rental Term"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "End Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "duration_months",
+   "fieldtype": "Int",
+   "label": "Duration (Months)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_16",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "30",
+   "fieldname": "notice_period_days",
+   "fieldtype": "Int",
+   "label": "Notice Period (Days)"
+  },
+  {
+   "default": "0",
+   "fieldname": "renewal_option",
+   "fieldtype": "Check",
+   "label": "Renewal Option"
+  },
+  {
+   "default": "0",
+   "fieldname": "auto_renew",
+   "fieldtype": "Check",
+   "label": "Auto Renew"
+  },
+  {
+   "fieldname": "rent_details_section",
+   "fieldtype": "Section Break",
+   "label": "Rent Details"
+  },
+  {
+   "fieldname": "monthly_rent",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Monthly Rent",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "rent_due_day",
+   "fieldtype": "Int",
+   "label": "Rent Due Day"
+  },
+  {
+   "fieldname": "security_deposit",
+   "fieldtype": "Currency",
+   "label": "Security Deposit"
+  },
+  {
+   "fieldname": "column_break_23",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "rent_increase_type",
+   "fieldtype": "Select",
+   "label": "Rent Increase Type",
+   "options": "Fixed\nPercentage\nMarket Rate\nNone"
+  },
+  {
+   "fieldname": "rent_increase_percentage",
+   "fieldtype": "Percent",
+   "label": "Rent Increase (%)"
+  },
+  {
+   "fieldname": "last_rent_increase",
+   "fieldtype": "Date",
+   "label": "Last Rent Increase"
+  },
+  {
+   "fieldname": "payment_details_section",
+   "fieldtype": "Section Break",
+   "label": "Payment Details"
+  },
+  {
+   "fieldname": "payment_method",
+   "fieldtype": "Select",
+   "label": "Payment Method",
+   "options": "Cash\nBank Transfer\nCheque\nCredit Card\nDirect Debit"
+  },
+  {
+   "fieldname": "bank_account",
+   "fieldtype": "Link",
+   "label": "Bank Account",
+   "options": "Bank Account"
+  },
+  {
+   "fieldname": "column_break_30",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "next_payment_date",
+   "fieldtype": "Date",
+   "label": "Next Payment Date"
+  },
+  {
+   "fieldname": "payment_terms",
+   "fieldtype": "Link",
+   "label": "Payment Terms",
+   "options": "Payment Terms"
+  },
+  {
+   "fieldname": "payment_history",
+   "fieldtype": "Table",
+   "label": "Payment History",
+   "options": "Property Rental Payment"
+  },
+  {
+   "fieldname": "charges_section",
+   "fieldtype": "Section Break",
+   "label": "Additional Charges"
+  },
+  {
+   "fieldname": "maintenance_charges",
+   "fieldtype": "Currency",
+   "label": "Maintenance Charges"
+  },
+  {
+   "fieldname": "utility_charges",
+   "fieldtype": "Currency",
+   "label": "Utility Charges"
+  },
+  {
+   "fieldname": "column_break_37",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "other_charges",
+   "fieldtype": "Currency",
+   "label": "Other Charges"
+  },
+  {
+   "fieldname": "total_monthly_charges",
+   "fieldtype": "Currency",
+   "label": "Total Monthly Charges",
+   "read_only": 1
+  },
+  {
+   "fieldname": "security_section",
+   "fieldtype": "Section Break",
+   "label": "Security Deposit"
+  },
+  {
+   "fieldname": "security_deposit_held",
+   "fieldtype": "Currency",
+   "label": "Security Deposit Held"
+  },
+  {
+   "fieldname": "deposit_received_date",
+   "fieldtype": "Date",
+   "label": "Deposit Received Date"
+  },
+  {
+   "fieldname": "column_break_43",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "deposit_refundable",
+   "fieldtype": "Check",
+   "label": "Deposit Refundable"
+  },
+  {
+   "fieldname": "deductions",
+   "fieldtype": "Currency",
+   "label": "Deductions"
+  },
+  {
+   "fieldname": "documents_section",
+   "fieldtype": "Section Break",
+   "label": "Documents"
+  },
+  {
+   "fieldname": "rental_agreement",
+   "fieldtype": "Attach",
+   "label": "Rental Agreement"
+  },
+  {
+   "fieldname": "tenant_id_document",
+   "fieldtype": "Attach",
+   "label": "Tenant ID Document"
+  },
+  {
+   "fieldname": "column_break_49",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "inventory_checklist",
+   "fieldtype": "Attach",
+   "label": "Inventory Checklist"
+  },
+  {
+   "fieldname": "handover_document",
+   "fieldtype": "Attach",
+   "label": "Handover Document"
+  },
+  {
+   "fieldname": "conditions_section",
+   "fieldtype": "Section Break",
+   "label": "Conditions"
+  },
+  {
+   "fieldname": "special_conditions",
+   "fieldtype": "Text",
+   "label": "Special Conditions"
+  },
+  {
+   "fieldname": "restrictions",
+   "fieldtype": "Text",
+   "label": "Restrictions"
+  },
+  {
+   "fieldname": "column_break_54",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "allowed_modifications",
+   "fieldtype": "Text",
+   "label": "Allowed Modifications"
+  },
+  {
+   "fieldname": "pet_policy",
+   "fieldtype": "Select",
+   "label": "Pet Policy",
+   "options": "No Pets\nCats Only\nSmall Dogs\nAll Pets Allowed\nWith Approval"
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_60",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "recurring_entry",
+   "fieldtype": "Link",
+   "label": "Recurring Entry",
+   "options": "Recurring Entry"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  }
+ ],
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Real Estate",
+ "name": "Property Rental",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Agent",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Gray",
+   "title": "Draft"
+  },
+  {
+   "color": "Green",
+   "title": "Active"
+  },
+  {
+   "color": "Orange",
+   "title": "Expired"
+  },
+  {
+   "color": "Red",
+   "title": "Terminated"
+  }
+ ],
+ "track_changes": 1
+}

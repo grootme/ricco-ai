@@ -1,0 +1,58 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "season_name",
+  "start_date",
+  "end_date",
+  "rate_multiplier",
+  "fixed_rate"
+ ],
+ "fields": [
+  {
+   "fieldname": "season_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Season Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "End Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "rate_multiplier",
+   "fieldtype": "Float",
+   "label": "Rate Multiplier (%)"
+  },
+  {
+   "fieldname": "fixed_rate",
+   "fieldtype": "Currency",
+   "label": "Fixed Rate"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Room Rate",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

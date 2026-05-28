@@ -1,0 +1,197 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:category_name",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "category_details_section",
+  "category_name",
+  "category_code",
+  "parent_category",
+  "column_break_4",
+  "is_active",
+  "sort_order",
+  "display_settings_section",
+  "description",
+  "image",
+  "column_break_9",
+  "icon",
+  "display_color",
+  "availability_section",
+  "available_all_day",
+  "available_from",
+  "available_to",
+  "column_break_15",
+  "available_days",
+  "availability_notes",
+  "integration_section",
+  "item_group",
+  "column_break_20"
+ ],
+ "fields": [
+  {
+   "fieldname": "category_details_section",
+   "fieldtype": "Section Break",
+   "label": "Category Details"
+  },
+  {
+   "fieldname": "category_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Category Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "category_code",
+   "fieldtype": "Data",
+   "label": "Category Code"
+  },
+  {
+   "fieldname": "parent_category",
+   "fieldtype": "Link",
+   "label": "Parent Category",
+   "options": "Menu Category"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Active"
+  },
+  {
+   "default": "0",
+   "fieldname": "sort_order",
+   "fieldtype": "Int",
+   "label": "Sort Order"
+  },
+  {
+   "fieldname": "display_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Display Settings"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Category Image"
+  },
+  {
+   "fieldname": "column_break_9",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Data",
+   "label": "Icon (Font Awesome Class)"
+  },
+  {
+   "fieldname": "display_color",
+   "fieldtype": "Color",
+   "label": "Display Color"
+  },
+  {
+   "fieldname": "availability_section",
+   "fieldtype": "Section Break",
+   "label": "Availability"
+  },
+  {
+   "default": "1",
+   "fieldname": "available_all_day",
+   "fieldtype": "Check",
+   "label": "Available All Day"
+  },
+  {
+   "depends_on": "eval:doc.available_all_day==0",
+   "fieldname": "available_from",
+   "fieldtype": "Time",
+   "label": "Available From"
+  },
+  {
+   "depends_on": "eval:doc.available_all_day==0",
+   "fieldname": "available_to",
+   "fieldtype": "Time",
+   "label": "Available To"
+  },
+  {
+   "fieldname": "column_break_15",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "available_days",
+   "fieldtype": "Data",
+   "label": "Available Days (comma separated)"
+  },
+  {
+   "fieldname": "availability_notes",
+   "fieldtype": "Text",
+   "label": "Availability Notes"
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "label": "Linked Item Group",
+   "options": "Item Group"
+  },
+  {
+   "fieldname": "column_break_20",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "is_tree": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Restaurant",
+ "name": "Menu Category",
+ "naming_rule": "By fieldname",
+ "nsm_parent_field": "parent_category",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Restaurant Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

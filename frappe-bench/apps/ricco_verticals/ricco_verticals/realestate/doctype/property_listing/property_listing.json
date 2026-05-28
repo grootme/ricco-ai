@@ -1,0 +1,562 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:property_id",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "property_details_section",
+  "property_id",
+  "property_name",
+  "property_type",
+  "property_status",
+  "column_break_4",
+  "is_active",
+  "is_featured",
+  "availability_status",
+  "location_section",
+  "address_line1",
+  "address_line2",
+  "city",
+  "column_break_10",
+  "state",
+  "country",
+  "pincode",
+  "geo_location",
+  "property_specs_section",
+  "total_area",
+  "area_unit",
+  "built_up_area",
+  "column_break_17",
+  "bedrooms",
+  "bathrooms",
+  "parking_spaces",
+  "floors",
+  "ownership_section",
+  "ownership_type",
+  "owner_name",
+  "owner_contact",
+  "column_break_24",
+  "owner_email",
+  "property_age",
+  "possession_date",
+  "pricing_section",
+  "expected_price",
+  "price_per_unit",
+  "price_negotiable",
+  "column_break_31",
+  "booking_amount",
+  "maintenance_charges",
+  "other_charges",
+  "currency",
+  "amenities_section",
+  "amenities",
+  "furnishing_status",
+  "column_break_38",
+  "facilities",
+  "nearby_landmarks",
+  "media_section",
+  "images",
+  "video_url",
+  "column_break_43",
+  "virtual_tour_url",
+  "brochure",
+  "description_section",
+  "property_description",
+  "highlights",
+  "column_break_48",
+  "legal_description",
+  "restrictions",
+  "integration_section",
+  "customer",
+  "item",
+  "column_break_53",
+  "warehouse",
+  "project",
+  "valuation_section",
+  "valuation_amount",
+  "valuation_date",
+  "valuer",
+  "column_break_59",
+  "last_transaction_date",
+  "last_transaction_amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "property_details_section",
+   "fieldtype": "Section Break",
+   "label": "Property Details"
+  },
+  {
+   "fieldname": "property_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Property ID",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "property_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Property Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Property Type",
+   "options": "Apartment\nHouse\nVilla\nCondo\nTownhouse\nCommercial Office\nRetail Space\nWarehouse\nIndustrial\nLand\nFarm House\nPenthouse\nStudio",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property_status",
+   "fieldtype": "Select",
+   "label": "Property Status",
+   "options": "New Construction\nReady to Move\nUnder Construction\nResale\nForeclosure"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Active"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_featured",
+   "fieldtype": "Check",
+   "label": "Is Featured"
+  },
+  {
+   "default": "Available",
+   "fieldname": "availability_status",
+   "fieldtype": "Select",
+   "label": "Availability Status",
+   "options": "Available\nSold\nRented\nReserved\nUnder Maintenance\nWithdrawn"
+  },
+  {
+   "fieldname": "location_section",
+   "fieldtype": "Section Break",
+   "label": "Location"
+  },
+  {
+   "fieldname": "address_line1",
+   "fieldtype": "Data",
+   "label": "Address Line 1",
+   "reqd": 1
+  },
+  {
+   "fieldname": "address_line2",
+   "fieldtype": "Data",
+   "label": "Address Line 2"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "City",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "pincode",
+   "fieldtype": "Data",
+   "label": "Pincode"
+  },
+  {
+   "fieldname": "geo_location",
+   "fieldtype": "Data",
+   "label": "Geo Location (Lat, Long)"
+  },
+  {
+   "fieldname": "property_specs_section",
+   "fieldtype": "Section Break",
+   "label": "Property Specifications"
+  },
+  {
+   "fieldname": "total_area",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Total Area"
+  },
+  {
+   "fieldname": "area_unit",
+   "fieldtype": "Select",
+   "label": "Area Unit",
+   "options": "Square Feet\nSquare Meters\nSquare Yards\nAcres\nHectares\nMarla\nKanal"
+  },
+  {
+   "fieldname": "built_up_area",
+   "fieldtype": "Float",
+   "label": "Built-up Area"
+  },
+  {
+   "fieldname": "column_break_17",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "bedrooms",
+   "fieldtype": "Int",
+   "label": "Bedrooms"
+  },
+  {
+   "fieldname": "bathrooms",
+   "fieldtype": "Int",
+   "label": "Bathrooms"
+  },
+  {
+   "fieldname": "parking_spaces",
+   "fieldtype": "Int",
+   "label": "Parking Spaces"
+  },
+  {
+   "fieldname": "floors",
+   "fieldtype": "Int",
+   "label": "Total Floors"
+  },
+  {
+   "fieldname": "ownership_section",
+   "fieldtype": "Section Break",
+   "label": "Ownership Details"
+  },
+  {
+   "fieldname": "ownership_type",
+   "fieldtype": "Select",
+   "label": "Ownership Type",
+   "options": "Freehold\nLeasehold\nCo-operative Society\nCondominium\nTimeshare"
+  },
+  {
+   "fieldname": "owner_name",
+   "fieldtype": "Data",
+   "label": "Owner Name"
+  },
+  {
+   "fieldname": "owner_contact",
+   "fieldtype": "Data",
+   "label": "Owner Contact"
+  },
+  {
+   "fieldname": "column_break_24",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "owner_email",
+   "fieldtype": "Data",
+   "label": "Owner Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "property_age",
+   "fieldtype": "Int",
+   "label": "Property Age (Years)"
+  },
+  {
+   "fieldname": "possession_date",
+   "fieldtype": "Date",
+   "label": "Possession Date"
+  },
+  {
+   "fieldname": "pricing_section",
+   "fieldtype": "Section Break",
+   "label": "Pricing"
+  },
+  {
+   "fieldname": "expected_price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Expected Price"
+  },
+  {
+   "fieldname": "price_per_unit",
+   "fieldtype": "Currency",
+   "label": "Price Per Unit",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "price_negotiable",
+   "fieldtype": "Check",
+   "label": "Price Negotiable"
+  },
+  {
+   "fieldname": "column_break_31",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "booking_amount",
+   "fieldtype": "Currency",
+   "label": "Booking Amount"
+  },
+  {
+   "fieldname": "maintenance_charges",
+   "fieldtype": "Currency",
+   "label": "Maintenance Charges"
+  },
+  {
+   "fieldname": "other_charges",
+   "fieldtype": "Currency",
+   "label": "Other Charges"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "amenities_section",
+   "fieldtype": "Section Break",
+   "label": "Amenities & Facilities"
+  },
+  {
+   "fieldname": "amenities",
+   "fieldtype": "Text",
+   "label": "Amenities"
+  },
+  {
+   "fieldname": "furnishing_status",
+   "fieldtype": "Select",
+   "label": "Furnishing Status",
+   "options": "Unfurnished\nSemi-Furnished\nFully Furnished"
+  },
+  {
+   "fieldname": "column_break_38",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "facilities",
+   "fieldtype": "Text",
+   "label": "Building Facilities"
+  },
+  {
+   "fieldname": "nearby_landmarks",
+   "fieldtype": "Text",
+   "label": "Nearby Landmarks"
+  },
+  {
+   "fieldname": "media_section",
+   "fieldtype": "Section Break",
+   "label": "Media"
+  },
+  {
+   "fieldname": "images",
+   "fieldtype": "Attach Image",
+   "label": "Property Images"
+  },
+  {
+   "fieldname": "video_url",
+   "fieldtype": "Data",
+   "label": "Video URL"
+  },
+  {
+   "fieldname": "column_break_43",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "virtual_tour_url",
+   "fieldtype": "Data",
+   "label": "Virtual Tour URL"
+  },
+  {
+   "fieldname": "brochure",
+   "fieldtype": "Attach",
+   "label": "Brochure"
+  },
+  {
+   "fieldname": "description_section",
+   "fieldtype": "Section Break",
+   "label": "Description"
+  },
+  {
+   "fieldname": "property_description",
+   "fieldtype": "Text Editor",
+   "label": "Property Description"
+  },
+  {
+   "fieldname": "highlights",
+   "fieldtype": "Text",
+   "label": "Highlights"
+  },
+  {
+   "fieldname": "column_break_48",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "legal_description",
+   "fieldtype": "Text",
+   "label": "Legal Description"
+  },
+  {
+   "fieldname": "restrictions",
+   "fieldtype": "Text",
+   "label": "Restrictions"
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Owner (Customer)",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Linked Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "column_break_53",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "valuation_section",
+   "fieldtype": "Section Break",
+   "label": "Valuation"
+  },
+  {
+   "fieldname": "valuation_amount",
+   "fieldtype": "Currency",
+   "label": "Valuation Amount"
+  },
+  {
+   "fieldname": "valuation_date",
+   "fieldtype": "Date",
+   "label": "Valuation Date"
+  },
+  {
+   "fieldname": "valuer",
+   "fieldtype": "Data",
+   "label": "Valuer"
+  },
+  {
+   "fieldname": "column_break_59",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_transaction_date",
+   "fieldtype": "Date",
+   "label": "Last Transaction Date"
+  },
+  {
+   "fieldname": "last_transaction_amount",
+   "fieldtype": "Currency",
+   "label": "Last Transaction Amount"
+  }
+ ],
+ "links": [
+  {
+   "group": "Rentals",
+   "link_doctype": "Property Rental",
+   "link_fieldname": "property_listing"
+  },
+  {
+   "group": "Maintenance",
+   "link_doctype": "Property Maintenance",
+   "link_fieldname": "property"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Real Estate",
+ "name": "Property Listing",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Agent",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Green",
+   "title": "Available"
+  },
+  {
+   "color": "Red",
+   "title": "Sold"
+  },
+  {
+   "color": "Blue",
+   "title": "Rented"
+  },
+  {
+   "color": "Orange",
+   "title": "Reserved"
+  }
+ ],
+ "timeline_field": "customer",
+ "track_changes": 1
+}

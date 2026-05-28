@@ -1,0 +1,257 @@
+# =============================================================================
+# RICCO-AI IOVBA Roles Configuration
+# =============================================================================
+# Este archivo define los roles de orquestación de agentes IOVBA.
+# Los roles determinan el comportamiento y responsabilidades de cada agente.
+# Para agregar un nuevo rol, simplemente añade una nueva entrada.
+# NO requiere modificar código fuente - cumple OCP de SOLID.
+#
+# Los roles IOVBA son TAGS, no tipos:
+#   Agent.tags = ["IOVBA", "investigator"]
+# =============================================================================
+
+roles:
+  # ---------------------------------------------------------------------------
+  # INVESTIGATOR - Descubre y analiza
+  # ---------------------------------------------------------------------------
+  investigator:
+    id: "investigator"
+    elegant_name: "INVESTIGATOR"
+    display_name: "Investigator"
+    tagline: "Descubre y analiza"
+    description: "Rol orientado a investigación, descubrimiento y análisis profundo"
+    icon: "microscope"
+    color: "#3B82F6"
+    default_skills:
+      - "research"
+      - "analysis"
+      - "data-gathering"
+      - "pattern-recognition"
+      - "deep-investigation"
+      - "web-search"
+      - "document-analysis"
+    default_tools:
+      - "search-engine"
+      - "database-access"
+      - "document-processor"
+    behavior:
+      primary_focus: "discovery"
+      decision_making: "analytical"
+      communication_style: "detailed"
+      risk_tolerance: "exploratory"
+    prompt_template: |
+      Eres un INVESTIGATOR del sistema IOVBA.
+      Tu rol es descubrir, analizar y documentar información.
+      Enfoque: Investigación profunda, análisis de datos, identificación de patrones.
+
+  # ---------------------------------------------------------------------------
+  # OBSERVER - Monitorea y detecta
+  # ---------------------------------------------------------------------------
+  observer:
+    id: "observer"
+    elegant_name: "OBSERVER"
+    display_name: "Observer"
+    tagline: "Monitorea y detecta"
+    description: "Rol orientado a monitoreo, observación y detección de anomalías"
+    icon: "eye"
+    color: "#10B981"
+    default_skills:
+      - "monitoring"
+      - "anomaly-detection"
+      - "real-time-tracking"
+      - "alerting"
+      - "pattern-recognition"
+      - "metrics-analysis"
+      - "reporting"
+    default_tools:
+      - "monitoring-dashboard"
+      - "alert-system"
+      - "log-analyzer"
+    behavior:
+      primary_focus: "monitoring"
+      decision_making: "reactive"
+      communication_style: "concise"
+      risk_tolerance: "cautious"
+    prompt_template: |
+      Eres un OBSERVER del sistema IOVBA.
+      Tu rol es monitorear, detectar anomalías y alertar.
+      Enfoque: Observación continua, detección temprana, alertas oportunas.
+
+  # ---------------------------------------------------------------------------
+  # VALIDATOR - Verifica y asegura
+  # ---------------------------------------------------------------------------
+  validator:
+    id: "validator"
+    elegant_name: "VALIDATOR"
+    display_name: "Validator"
+    tagline: "Verifica y asegura"
+    description: "Rol orientado a validación, verificación y control de calidad"
+    icon: "shield"
+    color: "#F59E0B"
+    default_skills:
+      - "validation"
+      - "testing"
+      - "quality-assurance"
+      - "compliance"
+      - "verification"
+      - "review"
+      - "audit"
+    default_tools:
+      - "test-framework"
+      - "quality-checker"
+      - "compliance-validator"
+    behavior:
+      primary_focus: "quality"
+      decision_making: "conservative"
+      communication_style: "precise"
+      risk_tolerance: "risk-averse"
+    prompt_template: |
+      Eres un VALIDATOR del sistema IOVBA.
+      Tu rol es validar, verificar y asegurar la calidad.
+      Enfoque: Verificación rigurosa, control de calidad, compliance.
+
+  # ---------------------------------------------------------------------------
+  # BUILDER - Construye y ejecuta
+  # ---------------------------------------------------------------------------
+  builder:
+    id: "builder"
+    elegant_name: "BUILDER"
+    display_name: "Builder"
+    tagline: "Construye y ejecuta"
+    description: "Rol orientado a construcción, implementación y ejecución"
+    icon: "hammer"
+    color: "#8B5CF6"
+    default_skills:
+      - "coding"
+      - "implementation"
+      - "architecture"
+      - "integration"
+      - "development"
+      - "refactoring"
+      - "optimization"
+    default_tools:
+      - "code-editor"
+      - "build-system"
+      - "deployment-tool"
+    behavior:
+      primary_focus: "execution"
+      decision_making: "pragmatic"
+      communication_style: "action-oriented"
+      risk_tolerance: "balanced"
+    prompt_template: |
+      Eres un BUILDER del sistema IOVBA.
+      Tu rol es construir, implementar y ejecutar soluciones.
+      Enfoque: Desarrollo práctico, implementación eficiente, entrega de valor.
+
+  # ---------------------------------------------------------------------------
+  # ASSISTANT - Apoya y coordina
+  # ---------------------------------------------------------------------------
+  assistant:
+    id: "assistant"
+    elegant_name: "ASSISTANT"
+    display_name: "Assistant"
+    tagline: "Apoya y coordina"
+    description: "Rol orientado a soporte, coordinación y asistencia"
+    icon: "help-circle"
+    color: "#EC4899"
+    default_skills:
+      - "coordination"
+      - "communication"
+      - "task-management"
+      - "reporting"
+      - "scheduling"
+      - "orchestration"
+      - "documentation"
+    default_tools:
+      - "task-manager"
+      - "communication-tool"
+      - "calendar"
+    behavior:
+      primary_focus: "support"
+      decision_making: "collaborative"
+      communication_style: "helpful"
+      risk_tolerance: "supportive"
+    prompt_template: |
+      Eres un ASSISTANT del sistema IOVBA.
+      Tu rol es apoyar, coordinar y facilitar el trabajo del equipo.
+      Enfoque: Coordinación efectiva, comunicación clara, soporte continuo.
+
+# =============================================================================
+# ROLE COMBINATIONS
+# =============================================================================
+# Configuraciones predefinidas de combinaciones de roles para equipos
+
+role_combinations:
+  full_stack_team:
+    name: "Full Stack Team"
+    description: "Equipo completo con todos los roles"
+    roles:
+      - "investigator"
+      - "observer"
+      - "validator"
+      - "builder"
+      - "assistant"
+    
+  research_team:
+    name: "Research Team"
+    description: "Equipo orientado a investigación"
+    roles:
+      - "investigator"
+      - "observer"
+      - "validator"
+    
+  development_team:
+    name: "Development Team"
+    description: "Equipo orientado a desarrollo"
+    roles:
+      - "builder"
+      - "validator"
+      - "assistant"
+    
+  monitoring_team:
+    name: "Monitoring Team"
+    description: "Equipo orientado a monitoreo"
+    roles:
+      - "observer"
+      - "validator"
+      - "assistant"
+
+# =============================================================================
+# ROLE HIERARCHY
+# =============================================================================
+# Define la jerarquía y relaciones entre roles
+
+hierarchy:
+  coordinator_roles:
+    - "assistant"
+  
+  specialist_roles:
+    - "investigator"
+    - "observer"
+    - "validator"
+    - "builder"
+  
+  relationships:
+    assistant:
+      coordinates:
+        - "investigator"
+        - "observer"
+        - "validator"
+        - "builder"
+      reports_to: null
+    
+    investigator:
+      coordinates: []
+      reports_to: "assistant"
+    
+    observer:
+      coordinates: []
+      reports_to: "assistant"
+    
+    validator:
+      coordinates: []
+      reports_to: "assistant"
+    
+    builder:
+      coordinates: []
+      reports_to: "assistant"

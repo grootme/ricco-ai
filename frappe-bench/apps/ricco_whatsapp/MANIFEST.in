@@ -1,0 +1,12 @@
+include ricco_whatsapp/**/*.json
+include ricco_whatsapp/**/*.py
+include ricco_whatsapp/**/*.txt
+include ricco_whatsapp/**/*.html
+include ricco_whatsapp/**/*.js
+include ricco_whatsapp/**/*.css
+recursive-include ricco_whatsapp *.json
+recursive-include ricco_whatsapp *.py
+recursive-include ricco_whatsapp *.txt
+recursive-include ricco_whatsapp *.html
+recursive-include ricco_whatsapp *.js
+recursive-include ricco_whatsapp *.css

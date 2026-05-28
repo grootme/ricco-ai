@@ -1,0 +1,525 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "BOOK-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "booking_details_section",
+  "booking_date",
+  "check_in_date",
+  "check_out_date",
+  "nights",
+  "column_break_4",
+  "status",
+  "booking_source",
+  "booking_channel",
+  "confirmation_number",
+  "guest_section",
+  "customer",
+  "guest_name",
+  "guest_email",
+  "column_break_10",
+  "guest_phone",
+  "guest_id_type",
+  "guest_id_number",
+  "number_of_guests",
+  "room_details_section",
+  "hotel_room",
+  "room_type",
+  "floor",
+  "column_break_17",
+  "room_rate",
+  "rate_type",
+  "meal_plan",
+  "pricing_section",
+  "room_charges",
+  "meal_charges",
+  "additional_charges",
+  "column_break_23",
+  "taxes",
+  "discount",
+  "total_amount",
+  "currency",
+  "payment_section",
+  "payment_status",
+  "amount_paid",
+  "balance_due",
+  "column_break_30",
+  "payment_method",
+  "deposit_amount",
+  "payment_terms",
+  "special_requests_section",
+  "special_requests",
+  "preferences",
+  "column_break_36",
+  "occasion",
+  "loyalty_program",
+  "membership_number",
+  "additional_services_section",
+  "extra_beds",
+  "airport_transfer",
+  "column_break_41",
+  "parking_required",
+  "early_check_in",
+  "late_check_out",
+  "integration_section",
+  "sales_order",
+  "sales_invoice",
+  "column_break_47",
+  "company",
+  "branch",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "booking_details_section",
+   "fieldtype": "Section Break",
+   "label": "Booking Details"
+  },
+  {
+   "default": "Today",
+   "fieldname": "booking_date",
+   "fieldtype": "Date",
+   "label": "Booking Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "check_in_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Check-in Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "check_out_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Check-out Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "nights",
+   "fieldtype": "Int",
+   "label": "Number of Nights",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Confirmed",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Pending\nConfirmed\nChecked In\nChecked Out\nCancelled\nNo Show\nWaitlisted"
+  },
+  {
+   "fieldname": "booking_source",
+   "fieldtype": "Select",
+   "label": "Booking Source",
+   "options": "Direct\nOTA\nTravel Agent\nCorporate\nWalk-in\nPhone\nWebsite\nMobile App"
+  },
+  {
+   "fieldname": "booking_channel",
+   "fieldtype": "Data",
+   "label": "Booking Channel"
+  },
+  {
+   "fieldname": "confirmation_number",
+   "fieldtype": "Data",
+   "label": "Confirmation Number"
+  },
+  {
+   "fieldname": "guest_section",
+   "fieldtype": "Section Break",
+   "label": "Guest Information"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "guest_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Guest Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "guest_email",
+   "fieldtype": "Data",
+   "label": "Guest Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "guest_phone",
+   "fieldtype": "Data",
+   "label": "Guest Phone",
+   "reqd": 1
+  },
+  {
+   "fieldname": "guest_id_type",
+   "fieldtype": "Select",
+   "label": "Guest ID Type",
+   "options": "Passport\nNational ID\nDrivers License\nOther"
+  },
+  {
+   "fieldname": "guest_id_number",
+   "fieldtype": "Data",
+   "label": "Guest ID Number"
+  },
+  {
+   "default": "1",
+   "fieldname": "number_of_guests",
+   "fieldtype": "Int",
+   "label": "Number of Guests"
+  },
+  {
+   "fieldname": "room_details_section",
+   "fieldtype": "Section Break",
+   "label": "Room Details"
+  },
+  {
+   "fieldname": "hotel_room",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Room",
+   "options": "Hotel Room"
+  },
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Select",
+   "label": "Room Type",
+   "options": "Standard\nDeluxe\nSuite\nExecutive Suite\nPresidential Suite\nFamily Room"
+  },
+  {
+   "fieldname": "floor",
+   "fieldtype": "Int",
+   "label": "Floor",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_17",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "room_rate",
+   "fieldtype": "Currency",
+   "label": "Room Rate/Night"
+  },
+  {
+   "fieldname": "rate_type",
+   "fieldtype": "Select",
+   "label": "Rate Type",
+   "options": "Rack Rate\nCorporate Rate\nPromotional\nPackage\nSeasonal"
+  },
+  {
+   "fieldname": "meal_plan",
+   "fieldtype": "Select",
+   "label": "Meal Plan",
+   "options": "Room Only\nBed & Breakfast\nHalf Board\nFull Board\nAll Inclusive"
+  },
+  {
+   "fieldname": "pricing_section",
+   "fieldtype": "Section Break",
+   "label": "Pricing"
+  },
+  {
+   "fieldname": "room_charges",
+   "fieldtype": "Currency",
+   "label": "Room Charges"
+  },
+  {
+   "fieldname": "meal_charges",
+   "fieldtype": "Currency",
+   "label": "Meal Charges"
+  },
+  {
+   "fieldname": "additional_charges",
+   "fieldtype": "Currency",
+   "label": "Additional Charges"
+  },
+  {
+   "fieldname": "column_break_23",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "taxes",
+   "fieldtype": "Currency",
+   "label": "Taxes"
+  },
+  {
+   "fieldname": "discount",
+   "fieldtype": "Percent",
+   "label": "Discount (%)"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "payment_section",
+   "fieldtype": "Section Break",
+   "label": "Payment"
+  },
+  {
+   "default": "Pending",
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "Pending\nDeposit Paid\nPaid\nPartially Paid\nRefunded"
+  },
+  {
+   "fieldname": "amount_paid",
+   "fieldtype": "Currency",
+   "label": "Amount Paid"
+  },
+  {
+   "fieldname": "balance_due",
+   "fieldtype": "Currency",
+   "label": "Balance Due",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_30",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payment_method",
+   "fieldtype": "Select",
+   "label": "Payment Method",
+   "options": "Cash\nCredit Card\nDebit Card\nBank Transfer\nMobile Payment\nTravelers Check"
+  },
+  {
+   "fieldname": "deposit_amount",
+   "fieldtype": "Currency",
+   "label": "Deposit Amount"
+  },
+  {
+   "fieldname": "payment_terms",
+   "fieldtype": "Link",
+   "label": "Payment Terms",
+   "options": "Payment Terms"
+  },
+  {
+   "fieldname": "special_requests_section",
+   "fieldtype": "Section Break",
+   "label": "Special Requests"
+  },
+  {
+   "fieldname": "special_requests",
+   "fieldtype": "Text",
+   "label": "Special Requests"
+  },
+  {
+   "fieldname": "preferences",
+   "fieldtype": "Text",
+   "label": "Room Preferences"
+  },
+  {
+   "fieldname": "column_break_36",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "occasion",
+   "fieldtype": "Select",
+   "label": "Occasion",
+   "options": "Business\nLeisure\nHoneymoon\nAnniversary\nBirthday\nFamily Trip\nOther"
+  },
+  {
+   "fieldname": "loyalty_program",
+   "fieldtype": "Data",
+   "label": "Loyalty Program"
+  },
+  {
+   "fieldname": "membership_number",
+   "fieldtype": "Data",
+   "label": "Membership Number"
+  },
+  {
+   "fieldname": "additional_services_section",
+   "fieldtype": "Section Break",
+   "label": "Additional Services"
+  },
+  {
+   "default": "0",
+   "fieldname": "extra_beds",
+   "fieldtype": "Int",
+   "label": "Extra Beds"
+  },
+  {
+   "default": "0",
+   "fieldname": "airport_transfer",
+   "fieldtype": "Check",
+   "label": "Airport Transfer"
+  },
+  {
+   "fieldname": "column_break_41",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "parking_required",
+   "fieldtype": "Check",
+   "label": "Parking Required"
+  },
+  {
+   "default": "0",
+   "fieldname": "early_check_in",
+   "fieldtype": "Check",
+   "label": "Early Check-in"
+  },
+  {
+   "default": "0",
+   "fieldname": "late_check_out",
+   "fieldtype": "Check",
+   "label": "Late Check-out"
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "Sales Order",
+   "options": "Sales Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_47",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Hotel Booking",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Booking",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Hotel Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Front Desk",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Orange",
+   "title": "Pending"
+  },
+  {
+   "color": "Green",
+   "title": "Confirmed"
+  },
+  {
+   "color": "Blue",
+   "title": "Checked In"
+  },
+  {
+   "color": "Gray",
+   "title": "Checked Out"
+  },
+  {
+   "color": "Red",
+   "title": "Cancelled"
+  }
+ ],
+ "timeline_field": "customer",
+ "track_changes": 1
+}

@@ -1,0 +1,237 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "WC-WHL-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "webhook_information_section",
+  "topic",
+  "resource",
+  "event",
+  "woocommerce_settings",
+  "column_break_info",
+  "status",
+  "processed_at",
+  "processing_time_ms",
+  "source_section",
+  "source_ip",
+  "user_agent",
+  "delivery_id",
+  "column_break_source",
+  "signature",
+  "signature_valid",
+  "webhook_id",
+  "payload_section",
+  "payload",
+  "processing_result_section",
+  "result_message",
+  "error_details",
+  "column_break_result",
+  "related_doctype",
+  "related_docname"
+ ],
+ "fields": [
+  {
+   "fieldname": "webhook_information_section",
+   "fieldtype": "Section Break",
+   "label": "Webhook Information"
+  },
+  {
+   "fieldname": "topic",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Topic",
+   "options": "order.created\norder.updated\norder.deleted\norder.restored\norder.refunded\nproduct.created\nproduct.updated\nproduct.deleted\nproduct.restored\ncustomer.created\ncustomer.updated\ncustomer.deleted\ncustomer.restore\ncoupon.created\ncoupon.updated\ncoupon.deleted\n",
+   "reqd": 1
+  },
+  {
+   "fieldname": "resource",
+   "fieldtype": "Data",
+   "label": "Resource",
+   "read_only": 1
+  },
+  {
+   "fieldname": "event",
+   "fieldtype": "Data",
+   "label": "Event",
+   "read_only": 1
+  },
+  {
+   "fieldname": "woocommerce_settings",
+   "fieldtype": "Link",
+   "label": "WooCommerce Settings",
+   "options": "WooCommerce Settings"
+  },
+  {
+   "fieldname": "column_break_info",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Received\nProcessing\nProcessed\nFailed\nIgnored",
+   "default": "Received"
+  },
+  {
+   "fieldname": "processed_at",
+   "fieldtype": "Datetime",
+   "label": "Processed At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "processing_time_ms",
+   "fieldtype": "Int",
+   "label": "Processing Time (ms)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "source_section",
+   "fieldtype": "Section Break",
+   "label": "Source"
+  },
+  {
+   "fieldname": "source_ip",
+   "fieldtype": "Data",
+   "label": "Source IP"
+  },
+  {
+   "fieldname": "user_agent",
+   "fieldtype": "Data",
+   "label": "User Agent"
+  },
+  {
+   "fieldname": "delivery_id",
+   "fieldtype": "Data",
+   "label": "Delivery ID"
+  },
+  {
+   "fieldname": "column_break_source",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "signature",
+   "fieldtype": "Data",
+   "label": "Signature"
+  },
+  {
+   "fieldname": "signature_valid",
+   "fieldtype": "Check",
+   "label": "Signature Valid",
+   "read_only": 1
+  },
+  {
+   "fieldname": "webhook_id",
+   "fieldtype": "Data",
+   "label": "WooCommerce Webhook ID"
+  },
+  {
+   "fieldname": "payload_section",
+   "fieldtype": "Section Break",
+   "label": "Payload"
+  },
+  {
+   "fieldname": "payload",
+   "fieldtype": "Code",
+   "label": "Payload",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "processing_result_section",
+   "fieldtype": "Section Break",
+   "label": "Processing Result"
+  },
+  {
+   "fieldname": "result_message",
+   "fieldtype": "Text",
+   "label": "Result Message",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_details",
+   "fieldtype": "Code",
+   "label": "Error Details",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_result",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "related_doctype",
+   "fieldtype": "Link",
+   "label": "Related DocType",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "related_docname",
+   "fieldtype": "Dynamic Link",
+   "label": "Related Document",
+   "options": "related_doctype"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "WooCommerce Webhook Log",
+ "name": "WooCommerce Webhook Log",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 0
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Red",
+   "title": "Failed"
+  },
+  {
+   "color": "Orange",
+   "title": "Received"
+  },
+  {
+   "color": "Blue",
+   "title": "Processing"
+  },
+  {
+   "color": "Green",
+   "title": "Processed"
+  },
+  {
+   "color": "Gray",
+   "title": "Ignored"
+  }
+ ],
+ "track_changes": 1
+}

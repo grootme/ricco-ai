@@ -5,6 +5,7 @@ Based on evo-ai with RICCO customizations
 
 import os
 import sys
+import time
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -37,6 +38,17 @@ root_dir = Path(__file__).parent.parent
 sys.path.append(str(root_dir))
 
 logger = setup_logger(__name__)
+
+# ===========================================================================
+# Production Validation - Fail Fast
+# ===========================================================================
+if settings.PRODUCTION_MODE:
+    errors = settings.validate_production_secrets()
+    if errors:
+        error_msg = f"Production validation failed: {', '.join(errors)}"
+        logger.critical(error_msg)
+        raise RuntimeError(error_msg)
+    logger.info("Production validation passed")
 
 app = FastAPI(
     title=settings.API_TITLE,
@@ -73,6 +85,97 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ===========================================================================
+# Rate Limiting Middleware
+# ===========================================================================
+rate_limiter = None
+if settings.RATE_LIMIT_ENABLED:
+    try:
+        from src.middleware.rate_limiter import (
+            setup_rate_limiting,
+            RateLimitConfig,
+        )
+        
+        # Configure route-specific rate limits
+        route_configs = {
+            "/api/v1/auth": RateLimitConfig(
+                requests=settings.RATE_LIMIT_AUTH_REQUESTS,
+                window_seconds=60,
+                block_duration=300  # 5 min block after exceeding
+            ),
+            "/api/v1/chat": RateLimitConfig(
+                requests=settings.RATE_LIMIT_CHAT_REQUESTS,
+                window_seconds=60
+            ),
+            "/api/v1/stream": RateLimitConfig(
+                requests=10,
+                window_seconds=60
+            ),
+        }
+        
+        # Setup Redis URL if available
+        redis_url = None
+        if settings.REDIS_HOST:
+            redis_url = f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}"
+        
+        rate_limiter = setup_rate_limiting(
+            app=app,
+            redis_url=redis_url,
+            default_requests=settings.RATE_LIMIT_DEFAULT_REQUESTS,
+            default_window=settings.RATE_LIMIT_DEFAULT_WINDOW,
+            route_configs=route_configs,
+            excluded_paths=["/health", "/docs", "/openapi.json", "/", "/metrics"]
+        )
+        logger.info("Rate limiting enabled")
+    except ImportError as e:
+        logger.warning(f"Rate limiting disabled: {e}")
+
+# ===========================================================================
+# Prometheus Metrics
+# ===========================================================================
+if settings.PROMETHEUS_ENABLED:
+    try:
+        from src.monitoring.metrics import init_metrics, health_checker
+        
+        # Initialize metrics collection
+        init_metrics(app, version=settings.API_VERSION)
+        
+        # Register health checks with real dependency verification
+        async def check_database():
+            """Real PostgreSQL health check."""
+            try:
+                from sqlalchemy import text
+                with engine.connect() as conn:
+                    conn.execute(text("SELECT 1"))
+                return {"status": "healthy", "type": "postgresql"}
+            except Exception as e:
+                logger.error(f"Database health check failed: {e}")
+                return {"status": "unhealthy", "error": str(e), "type": "postgresql"}
+        
+        async def check_redis():
+            """Real Redis health check."""
+            try:
+                import redis
+                r = redis.Redis(
+                    host=settings.REDIS_HOST,
+                    port=settings.REDIS_PORT,
+                    password=settings.REDIS_PASSWORD,
+                    ssl=settings.REDIS_SSL,
+                    socket_timeout=5
+                )
+                r.ping()
+                return {"status": "healthy", "type": "redis"}
+            except Exception as e:
+                logger.error(f"Redis health check failed: {e}")
+                return {"status": "unhealthy", "error": str(e), "type": "redis"}
+        
+        health_checker.register_check("database", check_database)
+        health_checker.register_check("redis", check_redis)
+        
+        logger.info("Prometheus metrics enabled at /metrics")
+    except ImportError as e:
+        logger.warning(f"Prometheus metrics disabled: {e}")
 
 # Static files
 static_dir = Path("static")
@@ -119,10 +222,52 @@ def read_root():
 
 
 @app.get("/health")
-def health_check():
+async def health_check():
+    """Health check endpoint with detailed status"""
+    from src.monitoring.metrics import health_checker
+    
+    health_status = await health_checker.check_health()
+    
+    # Get 4 DNA status
+    dna_status = {
+        "deerflow": "available",
+        "gentle_ai": "available",
+        "engram": "available",
+        "gentle_pi": "available"
+    }
+    
+    try:
+        from ricco_ai.deerflow.core import WorkflowEngine
+        dna_status["deerflow"] = "operational"
+    except ImportError:
+        dna_status["deerflow"] = "unavailable"
+    
+    try:
+        from ricco_ai.gentle_ai.behavior import BehaviorEngine
+        dna_status["gentle_ai"] = "operational"
+    except ImportError:
+        dna_status["gentle_ai"] = "unavailable"
+    
+    try:
+        from ricco_ai.engram.store import EngramStore
+        dna_status["engram"] = "operational"
+    except ImportError:
+        dna_status["engram"] = "unavailable"
+    
+    try:
+        from ricco_ai.gentle_pi.orchestrator import GentlePiOrchestrator
+        dna_status["gentle_pi"] = "operational"
+    except ImportError:
+        dna_status["gentle_pi"] = "unavailable"
+    
     return {
-        "status": "healthy",
+        "status": health_status["status"],
         "service": settings.API_TITLE,
         "version": settings.API_VERSION,
-        "ai_engine": settings.AI_ENGINE
+        "ai_engine": settings.AI_ENGINE,
+        "checks": health_status["checks"],
+        "dna_status": dna_status,
+        "rate_limiting": "enabled" if settings.RATE_LIMIT_ENABLED else "disabled",
+        "monitoring": "enabled" if settings.MONITORING_ENABLED else "disabled",
+        "production_mode": settings.PRODUCTION_MODE
     }

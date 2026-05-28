@@ -1,0 +1,177 @@
+/* Ricco WooCommerce Integration - Styles */
+
+/* Sync Status Indicators */
+.wc-sync-status {
+	display: inline-flex;
+	align-items: center;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.wc-sync-status.synced {
+	background-color: #d4edda;
+	color: #155724;
+}
+
+.wc-sync-status.pending {
+	background-color: #fff3cd;
+	color: #856404;
+}
+
+.wc-sync-status.failed {
+	background-color: #f8d7da;
+	color: #721c24;
+}
+
+.wc-sync-status.processing {
+	background-color: #cce5ff;
+	color: #004085;
+}
+
+/* Dashboard Widgets */
+.wc-dashboard-widget {
+	padding: 15px;
+	border-radius: 8px;
+	background: var(--bg-color);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.wc-dashboard-widget h4 {
+	margin-bottom: 10px;
+	font-weight: 600;
+}
+
+.wc-dashboard-stat {
+	display: flex;
+	justify-content: space-between;
+	padding: 8px 0;
+	border-bottom: 1px solid var(--border-color);
+}
+
+.wc-dashboard-stat:last-child {
+	border-bottom: none;
+}
+
+.wc-dashboard-stat .label {
+	color: var(--text-muted);
+}
+
+.wc-dashboard-stat .value {
+	font-weight: 600;
+}
+
+/* Webhook Log Status */
+.wc-webhook-status {
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 11px;
+}
+
+.wc-webhook-status.received {
+	background-color: #fff3cd;
+	color: #856404;
+}
+
+.wc-webhook-status.processing {
+	background-color: #cce5ff;
+	color: #004085;
+}
+
+.wc-webhook-status.processed {
+	background-color: #d4edda;
+	color: #155724;
+}
+
+.wc-webhook-status.failed {
+	background-color: #f8d7da;
+	color: #721c24;
+}
+
+.wc-webhook-status.ignored {
+	background-color: #e2e3e5;
+	color: #383d41;
+}
+
+/* Sync Progress Bar */
+.wc-sync-progress {
+	width: 100%;
+	height: 4px;
+	background-color: #e9ecef;
+	border-radius: 2px;
+	overflow: hidden;
+}
+
+.wc-sync-progress .bar {
+	height: 100%;
+	background-color: var(--primary-color);
+	transition: width 0.3s ease;
+}
+
+/* Connection Status */
+.wc-connection-status {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.wc-connection-status .indicator {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+}
+
+.wc-connection-status .indicator.connected {
+	background-color: #28a745;
+}
+
+.wc-connection-status .indicator.disconnected {
+	background-color: #dc3545;
+}
+
+/* Error Display */
+.wc-error-display {
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	border-radius: 4px;
+	padding: 12px;
+	margin-top: 10px;
+}
+
+.wc-error-display .error-title {
+	font-weight: 600;
+	color: #721c24;
+	margin-bottom: 8px;
+}
+
+.wc-error-display .error-message {
+	font-family: monospace;
+	font-size: 12px;
+	background-color: #fff;
+	padding: 8px;
+	border-radius: 4px;
+	overflow-x: auto;
+}
+
+/* Multi-store indicator */
+.wc-multi-store-badge {
+	display: inline-block;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 10px;
+	background-color: var(--primary-color);
+	color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.wc-dashboard-widget {
+		padding: 10px;
+	}
+
+	.wc-dashboard-stat {
+		flex-direction: column;
+		gap: 4px;
+	}
+}

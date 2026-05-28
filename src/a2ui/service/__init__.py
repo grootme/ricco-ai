@@ -255,7 +255,7 @@ export const {component.name} = ({{
 }}) => {{
   return (
     <div className="{component.component_type.value}">
-      {/* Component content */}
+      {{/* Component content */}}
     </div>
   );
 }};

@@ -1,0 +1,498 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "MAINT-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "request_details_section",
+  "property",
+  "property_name",
+  "property_address",
+  "column_break_4",
+  "request_date",
+  "priority",
+  "status",
+  "tenant_section",
+  "tenant",
+  "tenant_name",
+  "tenant_contact",
+  "column_break_10",
+  "tenant_email",
+  "reported_by",
+  "issue_details_section",
+  "issue_type",
+  "issue_category",
+  "issue_description",
+  "column_break_17",
+  "attachment",
+  "photos",
+  "access_instructions",
+  "assignment_section",
+  "assigned_to",
+  "assigned_date",
+  "estimated_cost",
+  "column_break_23",
+  "assigned_vendor",
+  "vendor_contact",
+  "vendor_quotation",
+  "scheduling_section",
+  "scheduled_date",
+  "scheduled_time",
+  "estimated_duration",
+  "column_break_30",
+  "completion_date",
+  "actual_duration",
+  "reschedule_reason",
+  "work_details_section",
+  "work_performed",
+  "parts_used",
+  "column_break_37",
+  "labor_hours",
+  "actual_cost",
+  "cost_breakdown",
+  "billing_section",
+  "billable",
+  "billed_to_tenant",
+  "billing_amount",
+  "column_break_44",
+  "sales_invoice",
+  "payment_status",
+  "followup_section",
+  "followup_required",
+  "followup_date",
+  "column_break_49",
+  "notes",
+  "rating",
+  "integration_section",
+  "company",
+  "cost_center",
+  "column_break_55",
+  "purchase_order",
+  "material_request"
+ ],
+ "fields": [
+  {
+   "fieldname": "request_details_section",
+   "fieldtype": "Section Break",
+   "label": "Request Details"
+  },
+  {
+   "fieldname": "property",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Property",
+   "options": "Property Listing",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property_name",
+   "fieldtype": "Data",
+   "label": "Property Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "property_address",
+   "fieldtype": "Data",
+   "label": "Property Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "request_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Request Date",
+   "reqd": 1
+  },
+  {
+   "default": "Medium",
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Priority",
+   "options": "Low\nMedium\nHigh\nEmergency"
+  },
+  {
+   "default": "Open",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Open\nIn Progress\nScheduled\nOn Hold\nCompleted\nCancelled\nPending Parts"
+  },
+  {
+   "fieldname": "tenant_section",
+   "fieldtype": "Section Break",
+   "label": "Tenant Information"
+  },
+  {
+   "fieldname": "tenant",
+   "fieldtype": "Link",
+   "label": "Tenant",
+   "options": "Tenant"
+  },
+  {
+   "fieldname": "tenant_name",
+   "fieldtype": "Data",
+   "label": "Tenant Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tenant_contact",
+   "fieldtype": "Data",
+   "label": "Tenant Contact",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tenant_email",
+   "fieldtype": "Data",
+   "label": "Tenant Email",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reported_by",
+   "fieldtype": "Data",
+   "label": "Reported By"
+  },
+  {
+   "fieldname": "issue_details_section",
+   "fieldtype": "Section Break",
+   "label": "Issue Details"
+  },
+  {
+   "fieldname": "issue_type",
+   "fieldtype": "Select",
+   "label": "Issue Type",
+   "options": "Plumbing\nElectrical\nHVAC\nAppliance\nStructural\nPest Control\nLandscaping\nSecurity\nCleaning\nOther"
+  },
+  {
+   "fieldname": "issue_category",
+   "fieldtype": "Select",
+   "label": "Issue Category",
+   "options": "Repair\nReplacement\nInspection\nInstallation\nEmergency\nRoutine Maintenance"
+  },
+  {
+   "fieldname": "issue_description",
+   "fieldtype": "Text Editor",
+   "label": "Issue Description",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_17",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "attachment",
+   "fieldtype": "Attach",
+   "label": "Attachment"
+  },
+  {
+   "fieldname": "photos",
+   "fieldtype": "Attach Image",
+   "label": "Photos"
+  },
+  {
+   "fieldname": "access_instructions",
+   "fieldtype": "Text",
+   "label": "Access Instructions"
+  },
+  {
+   "fieldname": "assignment_section",
+   "fieldtype": "Section Break",
+   "label": "Assignment"
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Link",
+   "label": "Assigned To",
+   "options": "User"
+  },
+  {
+   "fieldname": "assigned_date",
+   "fieldtype": "Date",
+   "label": "Assigned Date"
+  },
+  {
+   "fieldname": "estimated_cost",
+   "fieldtype": "Currency",
+   "label": "Estimated Cost"
+  },
+  {
+   "fieldname": "column_break_23",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "assigned_vendor",
+   "fieldtype": "Link",
+   "label": "Assigned Vendor",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "vendor_contact",
+   "fieldtype": "Data",
+   "label": "Vendor Contact"
+  },
+  {
+   "fieldname": "vendor_quotation",
+   "fieldtype": "Link",
+   "label": "Vendor Quotation",
+   "options": "Supplier Quotation"
+  },
+  {
+   "fieldname": "scheduling_section",
+   "fieldtype": "Section Break",
+   "label": "Scheduling"
+  },
+  {
+   "fieldname": "scheduled_date",
+   "fieldtype": "Date",
+   "label": "Scheduled Date"
+  },
+  {
+   "fieldname": "scheduled_time",
+   "fieldtype": "Time",
+   "label": "Scheduled Time"
+  },
+  {
+   "fieldname": "estimated_duration",
+   "fieldtype": "Int",
+   "label": "Estimated Duration (hours)"
+  },
+  {
+   "fieldname": "column_break_30",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "completion_date",
+   "fieldtype": "Date",
+   "label": "Completion Date"
+  },
+  {
+   "fieldname": "actual_duration",
+   "fieldtype": "Int",
+   "label": "Actual Duration (hours)"
+  },
+  {
+   "fieldname": "reschedule_reason",
+   "fieldtype": "Data",
+   "label": "Reschedule Reason"
+  },
+  {
+   "fieldname": "work_details_section",
+   "fieldtype": "Section Break",
+   "label": "Work Details"
+  },
+  {
+   "fieldname": "work_performed",
+   "fieldtype": "Text Editor",
+   "label": "Work Performed"
+  },
+  {
+   "fieldname": "parts_used",
+   "fieldtype": "Table",
+   "label": "Parts Used",
+   "options": "Property Maintenance Item"
+  },
+  {
+   "fieldname": "column_break_37",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "labor_hours",
+   "fieldtype": "Float",
+   "label": "Labor Hours"
+  },
+  {
+   "fieldname": "actual_cost",
+   "fieldtype": "Currency",
+   "label": "Actual Cost"
+  },
+  {
+   "fieldname": "cost_breakdown",
+   "fieldtype": "Text",
+   "label": "Cost Breakdown"
+  },
+  {
+   "fieldname": "billing_section",
+   "fieldtype": "Section Break",
+   "label": "Billing"
+  },
+  {
+   "default": "0",
+   "fieldname": "billable",
+   "fieldtype": "Check",
+   "label": "Billable"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.billable==1",
+   "fieldname": "billed_to_tenant",
+   "fieldtype": "Check",
+   "label": "Billed to Tenant"
+  },
+  {
+   "depends_on": "eval:doc.billable==1",
+   "fieldname": "billing_amount",
+   "fieldtype": "Currency",
+   "label": "Billing Amount"
+  },
+  {
+   "fieldname": "column_break_44",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "Pending\nPaid\nPartially Paid\nWaived"
+  },
+  {
+   "fieldname": "followup_section",
+   "fieldtype": "Section Break",
+   "label": "Follow-up"
+  },
+  {
+   "default": "0",
+   "fieldname": "followup_required",
+   "fieldtype": "Check",
+   "label": "Follow-up Required"
+  },
+  {
+   "depends_on": "eval:doc.followup_required==1",
+   "fieldname": "followup_date",
+   "fieldtype": "Date",
+   "label": "Follow-up Date"
+  },
+  {
+   "fieldname": "column_break_49",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "rating",
+   "fieldtype": "Select",
+   "label": "Tenant Rating",
+   "options": "1\n2\n3\n4\n5"
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Cost Center",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "column_break_55",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "Purchase Order",
+   "options": "Purchase Order"
+  },
+  {
+   "fieldname": "material_request",
+   "fieldtype": "Link",
+   "label": "Material Request",
+   "options": "Material Request"
+  }
+ ],
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Real Estate",
+ "name": "Property Maintenance",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Agent",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Gray",
+   "title": "Open"
+  },
+  {
+   "color": "Blue",
+   "title": "In Progress"
+  },
+  {
+   "color": "Orange",
+   "title": "On Hold"
+  },
+  {
+   "color": "Green",
+   "title": "Completed"
+  }
+ ],
+ "track_changes": 1
+}

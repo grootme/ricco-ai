@@ -1,0 +1,95 @@
+[project]
+name = "super-assistant-cognitive"
+version = "1.0.0"
+description = "Super Asistente Cognitivo con Capital Cognitivo Automejorable"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Super Assistant Team"}
+]
+keywords = ["ai", "agents", "llm", "cognitive", "assistant"]
+
+dependencies = [
+    # Core
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "python-dotenv>=1.0.0",
+    
+    # Async
+    "asyncio>=3.4.3",
+    "aiofiles>=23.0.0",
+    "httpx>=0.25.0",
+    
+    # Database
+    "sqlalchemy>=2.0.0",
+    "aiosqlite>=0.19.0",
+    "neo4j>=5.14.0",
+    "pymilvus>=2.3.0",
+    
+    # API
+    "fastapi>=0.109.0",
+    "uvicorn>=0.27.0",
+    "python-multipart>=0.0.6",
+    
+    # AI/ML
+    "openai>=1.12.0",
+    "tiktoken>=0.5.0",
+    "langchain>=0.1.0",
+    "langchain-openai>=0.0.5",
+    "langchain-community>=0.0.20",
+    "sentence-transformers>=2.2.0",
+    
+    # Utils
+    "rich>=13.7.0",
+    "typer>=0.9.0",
+    "pyyaml>=6.0",
+    "jinja2>=3.1.0",
+    "python-slugify>=8.0.0",
+    "uuid6>=2024.1.12",
+    
+    # Sandbox
+    "docker>=7.0.0",
+    
+    # Monitoring
+    "prometheus-client>=0.19.0",
+    "opentelemetry-api>=1.22.0",
+    "opentelemetry-sdk>=1.22.0",
+    
+    # HITL
+    "slack-sdk>=3.26.0",
+    "python-telegram-bot>=21.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "black>=24.1.0",
+    "ruff>=0.2.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+]
+
+[project.scripts]
+super-assistant = "super_assistant.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["super_assistant"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true

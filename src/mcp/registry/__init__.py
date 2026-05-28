@@ -23,12 +23,18 @@ from .server_registry import (
     ToolRiskLevel,
 )
 from .tool_registry import ToolRegistry, ToolDiscoveryService
+from .skill_registry import (
+    SkillRegistry,
+    SkillMetadata,
+    SkillCategory,
+    SkillStatus,
+    skill_registry,
+)
 
 __all__ = [
+    # Server Registry
     "ServerRegistry",
     "ToolsRegistry",
-    "ToolRegistry",
-    "ToolDiscoveryService",
     "MCPServer",
     "MCPServerCreate",
     "MCPServerUpdate",
@@ -43,4 +49,13 @@ __all__ = [
     "MCPToolSummary",
     "ToolParameter",
     "ToolRiskLevel",
+    # Tool Registry
+    "ToolRegistry",
+    "ToolDiscoveryService",
+    # Skill Registry
+    "SkillRegistry",
+    "SkillMetadata",
+    "SkillCategory",
+    "SkillStatus",
+    "skill_registry",
 ]

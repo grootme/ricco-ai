@@ -1,0 +1,319 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "general_settings_section",
+  "restaurant_name",
+  "branch",
+  "company",
+  "column_break_4",
+  "currency",
+  "default_warehouse",
+  "pos_profile",
+  "timing_settings_section",
+  "opening_time",
+  "closing_time",
+  "column_break_9",
+  "timezone",
+  "reservation_settings_section",
+  "enable_reservations",
+  "reservation_advance_days",
+  "auto_confirm_reservation",
+  "column_break_14",
+  "max_guests_per_reservation",
+  "reservation_deposit_required",
+  "deposit_amount",
+  "menu_settings_section",
+  "enable_menu_variants",
+  "show_calories",
+  "show_allergens",
+  "column_break_20",
+  "default_menu_category",
+  "enable_special_items",
+  "integration_settings_section",
+  "sync_with_pos",
+  "auto_create_sales_invoice",
+  "column_break_25",
+  "default_customer",
+  "default_item_group",
+  "notification_settings_section",
+  "send_reservation_confirmation",
+  "send_reminder",
+  "reminder_hours_before",
+  "column_break_31",
+  "notification_email",
+  "notification_phone"
+ ],
+ "fields": [
+  {
+   "fieldname": "general_settings_section",
+   "fieldtype": "Section Break",
+   "label": "General Settings"
+  },
+  {
+   "fieldname": "restaurant_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Restaurant Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "default_warehouse",
+   "fieldtype": "Link",
+   "label": "Default Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "pos_profile",
+   "fieldtype": "Link",
+   "label": "POS Profile",
+   "options": "POS Profile"
+  },
+  {
+   "fieldname": "timing_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Timing Settings"
+  },
+  {
+   "fieldname": "opening_time",
+   "fieldtype": "Time",
+   "label": "Opening Time"
+  },
+  {
+   "fieldname": "closing_time",
+   "fieldtype": "Time",
+   "label": "Closing Time"
+  },
+  {
+   "fieldname": "column_break_9",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "timezone",
+   "fieldtype": "Select",
+   "label": "Timezone",
+   "options": "Asia/Karachi\nAsia/Dubai\nAmerica/New_York\nEurope/London\nAsia/Singapore"
+  },
+  {
+   "fieldname": "reservation_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Reservation Settings"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_reservations",
+   "fieldtype": "Check",
+   "label": "Enable Reservations"
+  },
+  {
+   "default": "30",
+   "fieldname": "reservation_advance_days",
+   "fieldtype": "Int",
+   "label": "Reservation Advance Days"
+  },
+  {
+   "default": "0",
+   "fieldname": "auto_confirm_reservation",
+   "fieldtype": "Check",
+   "label": "Auto Confirm Reservation"
+  },
+  {
+   "fieldname": "column_break_14",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "10",
+   "fieldname": "max_guests_per_reservation",
+   "fieldtype": "Int",
+   "label": "Max Guests Per Reservation"
+  },
+  {
+   "default": "0",
+   "fieldname": "reservation_deposit_required",
+   "fieldtype": "Check",
+   "label": "Reservation Deposit Required"
+  },
+  {
+   "depends_on": "eval:doc.reservation_deposit_required==1",
+   "fieldname": "deposit_amount",
+   "fieldtype": "Currency",
+   "label": "Deposit Amount"
+  },
+  {
+   "fieldname": "menu_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Menu Settings"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_menu_variants",
+   "fieldtype": "Check",
+   "label": "Enable Menu Variants"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_calories",
+   "fieldtype": "Check",
+   "label": "Show Calories"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_allergens",
+   "fieldtype": "Check",
+   "label": "Show Allergens"
+  },
+  {
+   "fieldname": "column_break_20",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_menu_category",
+   "fieldtype": "Link",
+   "label": "Default Menu Category",
+   "options": "Menu Category"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_special_items",
+   "fieldtype": "Check",
+   "label": "Enable Special Items"
+  },
+  {
+   "fieldname": "integration_settings_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "default": "1",
+   "fieldname": "sync_with_pos",
+   "fieldtype": "Check",
+   "label": "Sync with POS"
+  },
+  {
+   "default": "0",
+   "fieldname": "auto_create_sales_invoice",
+   "fieldtype": "Check",
+   "label": "Auto Create Sales Invoice"
+  },
+  {
+   "fieldname": "column_break_25",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_customer",
+   "fieldtype": "Link",
+   "label": "Default Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "default_item_group",
+   "fieldtype": "Link",
+   "label": "Default Item Group",
+   "options": "Item Group"
+  },
+  {
+   "fieldname": "notification_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Notification Settings"
+  },
+  {
+   "default": "1",
+   "fieldname": "send_reservation_confirmation",
+   "fieldtype": "Check",
+   "label": "Send Reservation Confirmation"
+  },
+  {
+   "default": "0",
+   "fieldname": "send_reminder",
+   "fieldtype": "Check",
+   "label": "Send Reminder"
+  },
+  {
+   "default": "24",
+   "depends_on": "eval:doc.send_reminder==1",
+   "fieldname": "reminder_hours_before",
+   "fieldtype": "Int",
+   "label": "Reminder Hours Before"
+  },
+  {
+   "fieldname": "column_break_31",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "notification_email",
+   "fieldtype": "Data",
+   "label": "Notification Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "notification_phone",
+   "fieldtype": "Data",
+   "label": "Notification Phone"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Restaurant",
+ "name": "Restaurant Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Restaurant Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

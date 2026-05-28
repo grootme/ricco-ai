@@ -1,0 +1,422 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:item_code",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item_details_section",
+  "item_code",
+  "item_name",
+  "menu_category",
+  "column_break_4",
+  "is_active",
+  "is_vegetarian",
+  "is_vegan",
+  "is_gluten_free",
+  "description_section",
+  "description",
+  "image",
+  "column_break_10",
+  "preparation_time",
+  "serves",
+  "pricing_section",
+  "price",
+  "currency",
+  "column_break_15",
+  "cost_price",
+  "profit_margin",
+  "variants_section",
+  "has_variants",
+  "variant_of",
+  "variants",
+  "column_break_22",
+  "variant_attribute",
+  "variant_values",
+  "nutritional_info_section",
+  "calories",
+  "protein",
+  "carbs",
+  "column_break_28",
+  "fat",
+  "fiber",
+  "sodium",
+  "allergens",
+  "availability_section",
+  "is_available",
+  "available_from_time",
+  "available_to_time",
+  "column_break_35",
+  "available_days",
+  "out_of_stock_reason",
+  "tags_section",
+  "is_featured",
+  "is_spicy",
+  "is_chefs_special",
+  "column_break_42",
+  "spice_level",
+  "tags",
+  "integration_section",
+  "item",
+  "item_group",
+  "column_break_48",
+  "uom",
+  "sync_with_erpnext"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_details_section",
+   "fieldtype": "Section Break",
+   "label": "Item Details"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Item Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Item Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "menu_category",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Menu Category",
+   "options": "Menu Category",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Active"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_vegetarian",
+   "fieldtype": "Check",
+   "label": "Vegetarian"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_vegan",
+   "fieldtype": "Check",
+   "label": "Vegan"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_gluten_free",
+   "fieldtype": "Check",
+   "label": "Gluten Free"
+  },
+  {
+   "fieldname": "description_section",
+   "fieldtype": "Section Break",
+   "label": "Description & Media"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Item Image"
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "preparation_time",
+   "fieldtype": "Int",
+   "label": "Preparation Time (minutes)"
+  },
+  {
+   "fieldname": "serves",
+   "fieldtype": "Int",
+   "label": "Serves"
+  },
+  {
+   "fieldname": "pricing_section",
+   "fieldtype": "Section Break",
+   "label": "Pricing"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Selling Price",
+   "reqd": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "column_break_15",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cost_price",
+   "fieldtype": "Currency",
+   "label": "Cost Price"
+  },
+  {
+   "fieldname": "profit_margin",
+   "fieldtype": "Percent",
+   "label": "Profit Margin",
+   "read_only": 1
+  },
+  {
+   "fieldname": "variants_section",
+   "fieldtype": "Section Break",
+   "label": "Variants"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_variants",
+   "fieldtype": "Check",
+   "label": "Has Variants"
+  },
+  {
+   "depends_on": "eval:doc.has_variants==0",
+   "fieldname": "variant_of",
+   "fieldtype": "Link",
+   "label": "Variant Of",
+   "options": "Menu Item"
+  },
+  {
+   "depends_on": "eval:doc.has_variants==1",
+   "fieldname": "variants",
+   "fieldtype": "Table",
+   "label": "Variants",
+   "options": "Menu Item Variant"
+  },
+  {
+   "fieldname": "column_break_22",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.has_variants==1",
+   "fieldname": "variant_attribute",
+   "fieldtype": "Select",
+   "label": "Variant Attribute",
+   "options": "Size\nPortion\nAdd-on\nCustom"
+  },
+  {
+   "fieldname": "variant_values",
+   "fieldtype": "Data",
+   "label": "Variant Values"
+  },
+  {
+   "fieldname": "nutritional_info_section",
+   "fieldtype": "Section Break",
+   "label": "Nutritional Information"
+  },
+  {
+   "fieldname": "calories",
+   "fieldtype": "Int",
+   "label": "Calories (kcal)"
+  },
+  {
+   "fieldname": "protein",
+   "fieldtype": "Float",
+   "label": "Protein (g)"
+  },
+  {
+   "fieldname": "carbs",
+   "fieldtype": "Float",
+   "label": "Carbohydrates (g)"
+  },
+  {
+   "fieldname": "column_break_28",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fat",
+   "fieldtype": "Float",
+   "label": "Fat (g)"
+  },
+  {
+   "fieldname": "fiber",
+   "fieldtype": "Float",
+   "label": "Fiber (g)"
+  },
+  {
+   "fieldname": "sodium",
+   "fieldtype": "Float",
+   "label": "Sodium (mg)"
+  },
+  {
+   "fieldname": "allergens",
+   "fieldtype": "Data",
+   "label": "Allergens (comma separated)"
+  },
+  {
+   "fieldname": "availability_section",
+   "fieldtype": "Section Break",
+   "label": "Availability"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_available",
+   "fieldtype": "Check",
+   "label": "Currently Available"
+  },
+  {
+   "depends_on": "eval:doc.is_available==0",
+   "fieldname": "available_from_time",
+   "fieldtype": "Time",
+   "label": "Available From Time"
+  },
+  {
+   "depends_on": "eval:doc.is_available==0",
+   "fieldname": "available_to_time",
+   "fieldtype": "Time",
+   "label": "Available To Time"
+  },
+  {
+   "fieldname": "column_break_35",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "available_days",
+   "fieldtype": "Data",
+   "label": "Available Days"
+  },
+  {
+   "depends_on": "eval:doc.is_available==0",
+   "fieldname": "out_of_stock_reason",
+   "fieldtype": "Select",
+   "label": "Out of Stock Reason",
+   "options": "Out of Stock\nSeasonal\nDiscontinued\nTemporarily Unavailable"
+  },
+  {
+   "fieldname": "tags_section",
+   "fieldtype": "Section Break",
+   "label": "Tags & Attributes"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_featured",
+   "fieldtype": "Check",
+   "label": "Featured Item"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_spicy",
+   "fieldtype": "Check",
+   "label": "Spicy"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_chefs_special",
+   "fieldtype": "Check",
+   "label": "Chef's Special"
+  },
+  {
+   "fieldname": "column_break_42",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.is_spicy==1",
+   "fieldname": "spice_level",
+   "fieldtype": "Select",
+   "label": "Spice Level",
+   "options": "Mild\nMedium\nHot\nExtra Hot"
+  },
+  {
+   "fieldname": "tags",
+   "fieldtype": "Data",
+   "label": "Tags"
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Linked Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "label": "Item Group",
+   "options": "Item Group"
+  },
+  {
+   "fieldname": "column_break_48",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "label": "UOM",
+   "options": "UOM"
+  },
+  {
+   "default": "1",
+   "fieldname": "sync_with_erpnext",
+   "fieldtype": "Check",
+   "label": "Sync with ERPNext"
+  }
+ ],
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Restaurant",
+ "name": "Menu Item",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Restaurant Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

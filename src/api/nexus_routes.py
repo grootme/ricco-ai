@@ -363,7 +363,7 @@ async def nexus_websocket(websocket: WebSocket):
         logger.error(f"WebSocket error: {e}")
         try:
             await websocket.close()
-        except:
+        except Exception:
             pass
 
 

@@ -1,0 +1,629 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "MED-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "record_details_section",
+  "patient",
+  "patient_name",
+  "patient_dob",
+  "patient_gender",
+  "column_break_4",
+  "record_date",
+  "record_type",
+  "status",
+  "visit_section",
+  "appointment",
+  "practitioner",
+  "practitioner_name",
+  "column_break_10",
+  "department",
+  "service_unit",
+  "visit_type",
+  "vitals_section",
+  "blood_pressure_systolic",
+  "blood_pressure_diastolic",
+  "heart_rate",
+  "temperature",
+  "column_break_17",
+  "respiratory_rate",
+  "oxygen_saturation",
+  "weight",
+  "height",
+  "bmi",
+  "chief_complaint_section",
+  "chief_complaint",
+  "present_illness",
+  "duration_of_symptoms",
+  "column_break_25",
+  "symptom_severity",
+  "associated_symptoms",
+  "pain_scale",
+  "examination_section",
+  "physical_examination",
+  "examination_findings",
+  "column_break_30",
+  "clinical_observations",
+  "abnormal_findings",
+  "diagnosis_section",
+  "primary_diagnosis",
+  "icd_code",
+  "secondary_diagnoses",
+  "column_break_36",
+  "diagnosis_type",
+  "differential_diagnosis",
+  "diagnosis_notes",
+  "investigation_section",
+  "lab_tests_ordered",
+  "imaging_ordered",
+  "column_break_42",
+  "investigation_notes",
+  "investigation_results",
+  "treatment_section",
+  "treatment_plan",
+  "prescribed_medications",
+  "procedures_performed",
+  "column_break_48",
+  "referrals",
+  "follow_up_instructions",
+  "lifestyle_recommendations",
+  "vital_signs_section",
+  "allergies_noted",
+  "drug_interactions",
+  "column_break_54",
+  "contraindications",
+  "special_precautions",
+  "outcome_section",
+  "visit_outcome",
+  "follow_up_required",
+  "follow_up_date",
+  "column_break_60",
+  "discharge_status",
+  "hospitalization_required",
+  "referral_made",
+  "attachments_section",
+  "attachments",
+  "notes",
+  "column_break_66",
+  "external_reports",
+  "lab_results",
+  "integration_section",
+  "company",
+  "medical_department",
+  "column_break_72"
+ ],
+ "fields": [
+  {
+   "fieldname": "record_details_section",
+   "fieldtype": "Section Break",
+   "label": "Record Details"
+  },
+  {
+   "fieldname": "patient",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Patient",
+   "options": "Patient Record",
+   "reqd": 1
+  },
+  {
+   "fieldname": "patient_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Patient Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "patient_dob",
+   "fieldtype": "Date",
+   "label": "Patient DOB",
+   "read_only": 1
+  },
+  {
+   "fieldname": "patient_gender",
+   "fieldtype": "Data",
+   "label": "Patient Gender",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "record_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Record Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "record_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Record Type",
+   "options": "Consultation\nFollow-up\nEmergency\nProcedure\nLab Report\nImaging\nSurgery\nDischarge Summary"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nPending Review\nFinalized\nAmended\nCancelled"
+  },
+  {
+   "fieldname": "visit_section",
+   "fieldtype": "Section Break",
+   "label": "Visit Information"
+  },
+  {
+   "fieldname": "appointment",
+   "fieldtype": "Link",
+   "label": "Appointment",
+   "options": "Appointment Booking"
+  },
+  {
+   "fieldname": "practitioner",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Practitioner",
+   "options": "Healthcare Practitioner",
+   "reqd": 1
+  },
+  {
+   "fieldname": "practitioner_name",
+   "fieldtype": "Data",
+   "label": "Practitioner Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Medical Department"
+  },
+  {
+   "fieldname": "service_unit",
+   "fieldtype": "Link",
+   "label": "Service Unit",
+   "options": "Healthcare Service Unit"
+  },
+  {
+   "fieldname": "visit_type",
+   "fieldtype": "Select",
+   "label": "Visit Type",
+   "options": "Outpatient\nInpatient\nEmergency\nTelemedicine\nHome Visit"
+  },
+  {
+   "fieldname": "vitals_section",
+   "fieldtype": "Section Break",
+   "label": "Vital Signs"
+  },
+  {
+   "fieldname": "blood_pressure_systolic",
+   "fieldtype": "Int",
+   "label": "Blood Pressure (Systolic)"
+  },
+  {
+   "fieldname": "blood_pressure_diastolic",
+   "fieldtype": "Int",
+   "label": "Blood Pressure (Diastolic)"
+  },
+  {
+   "fieldname": "heart_rate",
+   "fieldtype": "Int",
+   "label": "Heart Rate (bpm)"
+  },
+  {
+   "fieldname": "temperature",
+   "fieldtype": "Float",
+   "label": "Temperature (°C)"
+  },
+  {
+   "fieldname": "column_break_17",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "respiratory_rate",
+   "fieldtype": "Int",
+   "label": "Respiratory Rate"
+  },
+  {
+   "fieldname": "oxygen_saturation",
+   "fieldtype": "Float",
+   "label": "Oxygen Saturation (%)"
+  },
+  {
+   "fieldname": "weight",
+   "fieldtype": "Float",
+   "label": "Weight (kg)"
+  },
+  {
+   "fieldname": "height",
+   "fieldtype": "Float",
+   "label": "Height (cm)"
+  },
+  {
+   "fieldname": "bmi",
+   "fieldtype": "Float",
+   "label": "BMI",
+   "read_only": 1
+  },
+  {
+   "fieldname": "chief_complaint_section",
+   "fieldtype": "Section Break",
+   "label": "Chief Complaint"
+  },
+  {
+   "fieldname": "chief_complaint",
+   "fieldtype": "Text",
+   "label": "Chief Complaint",
+   "reqd": 1
+  },
+  {
+   "fieldname": "present_illness",
+   "fieldtype": "Text Editor",
+   "label": "History of Present Illness"
+  },
+  {
+   "fieldname": "duration_of_symptoms",
+   "fieldtype": "Data",
+   "label": "Duration of Symptoms"
+  },
+  {
+   "fieldname": "column_break_25",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "symptom_severity",
+   "fieldtype": "Select",
+   "label": "Symptom Severity",
+   "options": "Mild\nModerate\nSevere\nCritical"
+  },
+  {
+   "fieldname": "associated_symptoms",
+   "fieldtype": "Text",
+   "label": "Associated Symptoms"
+  },
+  {
+   "fieldname": "pain_scale",
+   "fieldtype": "Int",
+   "label": "Pain Scale (0-10)"
+  },
+  {
+   "fieldname": "examination_section",
+   "fieldtype": "Section Break",
+   "label": "Physical Examination"
+  },
+  {
+   "fieldname": "physical_examination",
+   "fieldtype": "Text Editor",
+   "label": "Physical Examination"
+  },
+  {
+   "fieldname": "examination_findings",
+   "fieldtype": "Text Editor",
+   "label": "Examination Findings"
+  },
+  {
+   "fieldname": "column_break_30",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "clinical_observations",
+   "fieldtype": "Text",
+   "label": "Clinical Observations"
+  },
+  {
+   "fieldname": "abnormal_findings",
+   "fieldtype": "Text",
+   "label": "Abnormal Findings"
+  },
+  {
+   "fieldname": "diagnosis_section",
+   "fieldtype": "Section Break",
+   "label": "Diagnosis"
+  },
+  {
+   "fieldname": "primary_diagnosis",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Primary Diagnosis",
+   "reqd": 1
+  },
+  {
+   "fieldname": "icd_code",
+   "fieldtype": "Data",
+   "label": "ICD Code"
+  },
+  {
+   "fieldname": "secondary_diagnoses",
+   "fieldtype": "Text",
+   "label": "Secondary Diagnoses"
+  },
+  {
+   "fieldname": "column_break_36",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "diagnosis_type",
+   "fieldtype": "Select",
+   "label": "Diagnosis Type",
+   "options": "Provisional\nConfirmed\nDifferential\nRule Out"
+  },
+  {
+   "fieldname": "differential_diagnosis",
+   "fieldtype": "Text",
+   "label": "Differential Diagnosis"
+  },
+  {
+   "fieldname": "diagnosis_notes",
+   "fieldtype": "Text",
+   "label": "Diagnosis Notes"
+  },
+  {
+   "fieldname": "investigation_section",
+   "fieldtype": "Section Break",
+   "label": "Investigations"
+  },
+  {
+   "fieldname": "lab_tests_ordered",
+   "fieldtype": "Text",
+   "label": "Lab Tests Ordered"
+  },
+  {
+   "fieldname": "imaging_ordered",
+   "fieldtype": "Text",
+   "label": "Imaging Ordered"
+  },
+  {
+   "fieldname": "column_break_42",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "investigation_notes",
+   "fieldtype": "Text",
+   "label": "Investigation Notes"
+  },
+  {
+   "fieldname": "investigation_results",
+   "fieldtype": "Text Editor",
+   "label": "Investigation Results"
+  },
+  {
+   "fieldname": "treatment_section",
+   "fieldtype": "Section Break",
+   "label": "Treatment"
+  },
+  {
+   "fieldname": "treatment_plan",
+   "fieldtype": "Text Editor",
+   "label": "Treatment Plan"
+  },
+  {
+   "fieldname": "prescribed_medications",
+   "fieldtype": "Table",
+   "label": "Prescribed Medications",
+   "options": "Medical Record Medication"
+  },
+  {
+   "fieldname": "procedures_performed",
+   "fieldtype": "Text",
+   "label": "Procedures Performed"
+  },
+  {
+   "fieldname": "column_break_48",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "referrals",
+   "fieldtype": "Text",
+   "label": "Referrals"
+  },
+  {
+   "fieldname": "follow_up_instructions",
+   "fieldtype": "Text",
+   "label": "Follow-up Instructions"
+  },
+  {
+   "fieldname": "lifestyle_recommendations",
+   "fieldtype": "Text",
+   "label": "Lifestyle Recommendations"
+  },
+  {
+   "fieldname": "vital_signs_section",
+   "fieldtype": "Section Break",
+   "label": "Safety Information"
+  },
+  {
+   "fieldname": "allergies_noted",
+   "fieldtype": "Text",
+   "label": "Allergies Noted"
+  },
+  {
+   "fieldname": "drug_interactions",
+   "fieldtype": "Text",
+   "label": "Drug Interactions"
+  },
+  {
+   "fieldname": "column_break_54",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "contraindications",
+   "fieldtype": "Text",
+   "label": "Contraindications"
+  },
+  {
+   "fieldname": "special_precautions",
+   "fieldtype": "Text",
+   "label": "Special Precautions"
+  },
+  {
+   "fieldname": "outcome_section",
+   "fieldtype": "Section Break",
+   "label": "Outcome"
+  },
+  {
+   "fieldname": "visit_outcome",
+   "fieldtype": "Select",
+   "label": "Visit Outcome",
+   "options": "Recovered\nImproving\nStable\nDeteriorated\nReferred\nAdmitted"
+  },
+  {
+   "default": "0",
+   "fieldname": "follow_up_required",
+   "fieldtype": "Check",
+   "label": "Follow-up Required"
+  },
+  {
+   "depends_on": "eval:doc.follow_up_required==1",
+   "fieldname": "follow_up_date",
+   "fieldtype": "Date",
+   "label": "Follow-up Date"
+  },
+  {
+   "fieldname": "column_break_60",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "discharge_status",
+   "fieldtype": "Select",
+   "label": "Discharge Status",
+   "options": "Not Applicable\nDischarged\nTransferred\nAdmitted\nAgainst Medical Advice"
+  },
+  {
+   "default": "0",
+   "fieldname": "hospitalization_required",
+   "fieldtype": "Check",
+   "label": "Hospitalization Required"
+  },
+  {
+   "default": "0",
+   "fieldname": "referral_made",
+   "fieldtype": "Check",
+   "label": "Referral Made"
+  },
+  {
+   "fieldname": "attachments_section",
+   "fieldtype": "Section Break",
+   "label": "Attachments"
+  },
+  {
+   "fieldname": "attachments",
+   "fieldtype": "Attach",
+   "label": "Attachments"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Additional Notes"
+  },
+  {
+   "fieldname": "column_break_66",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "external_reports",
+   "fieldtype": "Attach",
+   "label": "External Reports"
+  },
+  {
+   "fieldname": "lab_results",
+   "fieldtype": "Attach",
+   "label": "Lab Results"
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "medical_department",
+   "fieldtype": "Link",
+   "label": "Medical Department",
+   "options": "Medical Department"
+  },
+  {
+   "fieldname": "column_break_72",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Healthcare",
+ "name": "Medical Record",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Healthcare Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Healthcare Practitioner",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Gray",
+   "title": "Draft"
+  },
+  {
+   "color": "Orange",
+   "title": "Pending Review"
+  },
+  {
+   "color": "Green",
+   "title": "Finalized"
+  }
+ ],
+ "timeline_field": "patient",
+ "track_changes": 1
+}

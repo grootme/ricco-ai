@@ -35,6 +35,7 @@ class Settings(BaseSettings):
         "POSTGRES_CONNECTION_STRING", 
         "postgresql://postgres:root@localhost:5432/ricco_ai"
     )
+    DATABASE_URL: Optional[str] = os.getenv("DATABASE_URL", None)  # For SQLite/other DBs
 
     # AI Engine (adk or crewai)
     AI_ENGINE: str = os.getenv("AI_ENGINE", "adk")
@@ -54,9 +55,12 @@ class Settings(BaseSettings):
     TOOLS_CACHE_TTL: int = 3600
 
     # JWT
-    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", secrets.token_urlsafe(32))
+    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "")  # MUST be set via environment
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRATION_TIME: int = 3600
+    
+    # Production Mode
+    PRODUCTION_MODE: bool = os.getenv("PRODUCTION_MODE", "false").lower() == "true"
 
     # Encryption
     ENCRYPTION_KEY: str = os.getenv("ENCRYPTION_KEY", secrets.token_urlsafe(32))
@@ -76,8 +80,8 @@ class Settings(BaseSettings):
     PORT: int = int(os.getenv("PORT", 8000))
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
 
-    # CORS
-    CORS_ORIGINS: Union[str, List[str]] = "*"
+    # CORS - Restricted for security
+    CORS_ORIGINS: Union[str, List[str]] = "http://localhost:3000,http://localhost:8000"
     
     @field_validator('CORS_ORIGINS', mode='before')
     @classmethod
@@ -94,7 +98,7 @@ class Settings(BaseSettings):
 
     # Admin
     ADMIN_EMAIL: str = os.getenv("ADMIN_EMAIL", "admin@ricco.com")
-    ADMIN_INITIAL_PASSWORD: str = os.getenv("ADMIN_INITIAL_PASSWORD", "changeme123")
+    ADMIN_INITIAL_PASSWORD: str = os.getenv("ADMIN_INITIAL_PASSWORD", "")  # MUST be set in production
 
     # Observability
     LANGFUSE_PUBLIC_KEY: str = os.getenv("LANGFUSE_PUBLIC_KEY", "")
@@ -144,10 +148,49 @@ class Settings(BaseSettings):
     ENABLE_A2A: bool = True
     ENABLE_A2UI: bool = True
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = True
+    # ========== Rate Limiting ==========
+    RATE_LIMIT_ENABLED: bool = os.getenv("RATE_LIMIT_ENABLED", "true").lower() == "true"
+    RATE_LIMIT_DEFAULT_REQUESTS: int = int(os.getenv("RATE_LIMIT_DEFAULT_REQUESTS", 100))
+    RATE_LIMIT_DEFAULT_WINDOW: int = int(os.getenv("RATE_LIMIT_DEFAULT_WINDOW", 60))
+    RATE_LIMIT_AUTH_REQUESTS: int = int(os.getenv("RATE_LIMIT_AUTH_REQUESTS", 10))
+    RATE_LIMIT_CHAT_REQUESTS: int = int(os.getenv("RATE_LIMIT_CHAT_REQUESTS", 30))
+    RATE_LIMIT_API_KEY_REQUESTS: int = int(os.getenv("RATE_LIMIT_API_KEY_REQUESTS", 1000))
+
+    # ========== Monitoring ==========
+    MONITORING_ENABLED: bool = os.getenv("MONITORING_ENABLED", "true").lower() == "true"
+    PROMETHEUS_ENABLED: bool = os.getenv("PROMETHEUS_ENABLED", "true").lower() == "true"
+    METRICS_PATH: str = os.getenv("METRICS_PATH", "/metrics")
+    JAEGER_ENABLED: bool = os.getenv("JAEGER_ENABLED", "false").lower() == "true"
+    JAEGER_AGENT_HOST: str = os.getenv("JAEGER_AGENT_HOST", "localhost")
+    JAEGER_AGENT_PORT: int = int(os.getenv("JAEGER_AGENT_PORT", 6831))
+
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "case_sensitive": True,
+        "extra": "allow"  # Allow extra fields from .env
+    }
+    
+    def validate_production_secrets(self) -> List[str]:
+        """
+        Validate that required secrets are set in production mode.
+        
+        Returns:
+            List of validation error messages
+        """
+        errors = []
+        
+        if self.PRODUCTION_MODE:
+            if not self.JWT_SECRET_KEY:
+                errors.append("JWT_SECRET_KEY must be set in production mode")
+            if not self.ADMIN_INITIAL_PASSWORD:
+                errors.append("ADMIN_INITIAL_PASSWORD must be set in production mode")
+            if not self.ENCRYPTION_KEY:
+                errors.append("ENCRYPTION_KEY must be set in production mode")
+            if self.CORS_ORIGINS == "*":
+                errors.append("CORS_ORIGINS should not be '*' in production mode")
+        
+        return errors
 
 
 settings = Settings()

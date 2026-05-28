@@ -1,0 +1,45 @@
+{
+	"name": "Gameplan",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "frappe",
+	"workspaceFolder": "/workspace",
+
+	"forwardPorts": [8000, 8080],
+	"portsAttributes": {
+		"8000": {
+			"label": "Frappe Backend",
+			"onAutoForward": "notify"
+		},
+		"8080": {
+			"label": "Vite Dev Server",
+			"onAutoForward": "notify"
+		}
+	},
+
+	"postCreateCommand": "bash /workspace/.devcontainer/setup.sh",
+
+	"remoteUser": "frappe",
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"Vue.volar",
+				"dbaeumer.vscode-eslint",
+				"bradlc.vscode-tailwindcss",
+				"esbenp.prettier-vscode",
+				"eamodio.gitlens",
+				"usernamehw.errorlens"
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "/home/frappe/frappe-bench/env/bin/python",
+				"editor.formatOnSave": true,
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"[python]": {
+					"editor.defaultFormatter": "ms-python.python"
+				}
+			}
+		}
+	}
+}

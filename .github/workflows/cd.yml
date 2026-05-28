@@ -1,0 +1,268 @@
+# RICCO AI - Continuous Deployment Pipeline
+# Deploys to staging/production after successful CI
+
+name: CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+env:
+  PYTHON_VERSION: '3.11'
+  NODE_VERSION: '20'
+  REGISTRY: ghcr.io
+
+jobs:
+  # ===========================================================================
+  # Determine Environment
+  # ===========================================================================
+  setup:
+    name: Setup Deployment
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.env.outputs.environment }}
+      version: ${{ steps.env.outputs.version }}
+    
+    steps:
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "version=$(date +'%Y%m%d')-$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
+            echo "version=$(date +'%Y%m%d')-$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+          else
+            echo "environment=staging" >> $GITHUB_OUTPUT
+            echo "version=dev-$(date +'%Y%m%d')-$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+          fi
+
+  # ===========================================================================
+  # Build and Push Images
+  # ===========================================================================
+  build:
+    name: Build Images
+    runs-on: ubuntu-latest
+    needs: [setup]
+    permissions:
+      contents: read
+      packages: write
+    
+    outputs:
+      backend_image: ${{ steps.build.outputs.backend_image }}
+      frontend_image: ${{ steps.build.outputs.frontend_image }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ github.repository }}/backend
+            ${{ env.REGISTRY }}/${{ github.repository }}/frontend
+          tags: |
+            type=ref,event=branch
+            type=sha
+            type=raw,value=${{ needs.setup.outputs.version }}
+
+      - name: Build and push backend
+        id: build-backend
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}/backend:${{ needs.setup.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push frontend
+        id: build-frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./ecosystem/ricco-ai/frontend
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}/frontend:${{ needs.setup.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Output image names
+        id: build
+        run: |
+          echo "backend_image=${{ env.REGISTRY }}/${{ github.repository }}/backend:${{ needs.setup.outputs.version }}" >> $GITHUB_OUTPUT
+          echo "frontend_image=${{ env.REGISTRY }}/${{ github.repository }}/frontend:${{ needs.setup.outputs.version }}" >> $GITHUB_OUTPUT
+
+  # ===========================================================================
+  # Deploy to Staging
+  # ===========================================================================
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [setup, build]
+    if: needs.setup.outputs.environment == 'staging'
+    environment:
+      name: staging
+      url: https://staging.ricco-ai.example.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Set kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG_STAGING }}" | base64 -d > ~/.kube/config
+
+      - name: Deploy to Kubernetes
+        run: |
+          # Update image tags in deployment
+          kubectl set image deployment/ricco-backend \
+            backend=${{ needs.build.outputs.backend_image }} \
+            -n ricco-staging
+          
+          kubectl set image deployment/ricco-frontend \
+            frontend=${{ needs.build.outputs.frontend_image }} \
+            -n ricco-staging
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/ricco-backend -n ricco-staging --timeout=300s
+          kubectl rollout status deployment/ricco-frontend -n ricco-staging --timeout=300s
+
+      - name: Run smoke tests
+        run: |
+          # Wait for service to be ready
+          sleep 30
+          
+          # Health check
+          curl -f https://staging.ricco-ai.example.com/health || exit 1
+          echo "Smoke tests passed!"
+
+  # ===========================================================================
+  # Deploy to Production
+  # ===========================================================================
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [setup, build]
+    if: needs.setup.outputs.environment == 'production'
+    environment:
+      name: production
+      url: https://ricco-ai.example.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Set kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG_PRODUCTION }}" | base64 -d > ~/.kube/config
+
+      - name: Create deployment record
+        run: |
+          kubectl create namespace ricco-production --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy backend
+        run: |
+          kubectl set image deployment/ricco-backend \
+            backend=${{ needs.build.outputs.backend_image }} \
+            -n ricco-production
+
+      - name: Deploy frontend
+        run: |
+          kubectl set image deployment/ricco-frontend \
+            frontend=${{ needs.build.outputs.frontend_image }} \
+            -n ricco-production
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/ricco-backend -n ricco-production --timeout=600s
+          kubectl rollout status deployment/ricco-frontend -n ricco-production --timeout=600s
+
+      - name: Run production health checks
+        run: |
+          sleep 60
+          curl -f https://ricco-ai.example.com/health || exit 1
+          curl -f https://ricco-ai.example.com/api/v1/health || exit 1
+
+      - name: Create GitHub release notes
+        if: github.event_name == 'release'
+        run: |
+          echo "## Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: ${{ needs.setup.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Backend Image**: ${{ needs.build.outputs.backend_image }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frontend Image**: ${{ needs.build.outputs.frontend_image }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: production" >> $GITHUB_STEP_SUMMARY
+
+  # ===========================================================================
+  # Rollback (Manual Trigger)
+  # ===========================================================================
+  rollback:
+    name: Rollback Deployment
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.rollback == 'true'
+    environment:
+      name: ${{ github.event.inputs.environment }}
+    
+    steps:
+      - name: Configure kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Set kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          if [[ "${{ github.event.inputs.environment }}" == "production" ]]; then
+            echo "${{ secrets.KUBE_CONFIG_PRODUCTION }}" | base64 -d > ~/.kube/config
+          else
+            echo "${{ secrets.KUBE_CONFIG_STAGING }}" | base64 -d > ~/.kube/config
+          fi
+
+      - name: Rollback backend
+        run: |
+          kubectl rollout undo deployment/ricco-backend -n ricco-${{ github.event.inputs.environment }}
+
+      - name: Rollback frontend
+        run: |
+          kubectl rollout undo deployment/ricco-frontend -n ricco-${{ github.event.inputs.environment }}
+
+      - name: Verify rollback
+        run: |
+          kubectl rollout status deployment/ricco-backend -n ricco-${{ github.event.inputs.environment }} --timeout=300s
+          kubectl rollout status deployment/ricco-frontend -n ricco-${{ github.event.inputs.environment }} --timeout=300s

@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://build.nvidia.com/nvidia/multi-agent-intelligent-warehouse",
+    "name": "Multi-Agent Intelligent Warehouse Blueprint by NVIDIA",
+    "snippet": "An AI-powered, multi - agent system designed to optimize warehouse operations through intelligent automation, real-time monitoring, and natural language ...",
+    "host_name": "build.nvidia.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/Multi-Agent-Intelligent-Warehouse",
+    "name": "NVIDIA-AI-Blueprints/Multi-Agent-Intelligent-Warehouse",
+    "snippet": "Hybrid RAG Stack - PostgreSQL/TimescaleDB + Milvus vector database with intelligent query routing (90%+ accuracy); Production-Grade Vector Search - Llama ... Read more",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blogs.nvidia.com/blog/multi-agent-intelligent-warehouse-and-catalog-enrichment-blueprints",
+    "name": "NVIDIA Unveils Multi-Agent Intelligent Warehouse and",
+    "snippet": "Easing Warehouse Workflows. Read more",
+    "host_name": "blogs.nvidia.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://build.nvidia.com/nvidia/multi-agent-intelligent-warehouse/nim",
+    "name": "Multi-Agent Intelligent Warehouse Blueprint by NVIDIA",
+    "snippet": "An AI-powered, multi - agent system designed to optimize warehouse operations through intelligent automation, real-time monitoring, and natural language ...",
+    "host_name": "build.nvidia.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=mMQfnMTXp6M",
+    "name": "Multi-Agent Intelligent Warehouse AI: NVIDIA Blueprint Deep",
+    "snippet": "Miwi introduces an agentic AI coordination layer that sits between your existing IT infrastructure and operational technology systems.",
+    "host_name": "www.youtube.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/blog/multi-agent-warehouse-ai-command-layer-enables-operational-excellence-and-supply-chain-intelligence",
+    "name": "Multi-Agent Warehouse AI Command Layer Enables",
+    "snippet": "Jan 9, 2026 — The Multi-Agent Intelligent Warehouse delivers a unified AI command layer for modern warehouse operations, transforming fragmented systems, ... Read more",
+    "host_name": "developer.nvidia.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-us/on-demand/session/gtc25-dlit72055",
+    "name": "Build Visual AI Agents With RAG Using an",
+    "snippet": "Mar 19, 2025 — In this session, you'll construct an agentic retrieval-augmented generation ( RAG ) pipeline by using an Agentic AI Toolkit to integrate NVIDIA Riva Speech ... Read more",
+    "host_name": "www.nvidia.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/blog/build-your-first-human-in-the-loop-ai-agent-with-nvidia-nim",
+    "name": "Build Your First Human-in-the-Loop AI Agent with NVIDIA",
+    "snippet": "Nov 21, 2024 — In this post, you'll learn how to build a human -in-the-loop AI agent using NVIDIA NIM microservices, an accelerated API optimized for AI inference. Read more",
+    "host_name": "developer.nvidia.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://genaiprotos.medium.com/nvidia-powered-research-agent-e68552e2c1c8",
+    "name": "NVIDIA-Powered Research Agent. Overview | by GenAI Protos",
+    "snippet": "Nov 12, 2025 — At its core, the system is a Retrieval-Augmented Generation ( RAG ) pipeline orchestrated by a collaborative multi - agent framework and powered by ... Read more",
+    "host_name": "genaiprotos.medium.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/video-search-and-summarization",
+    "name": "NVIDIA-AI-Blueprints/video-search-and-summarization",
+    "snippet": "The NVIDIA AI Blueprint makes it easy to get started building and customizing video analytics AI agents for video search and summarization. Read more",
+    "host_name": "github.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

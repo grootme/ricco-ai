@@ -3,6 +3,12 @@ AI Providers Module for RICCO AI
 
 Provider implementations and base classes for AI services.
 Integrated from genui.
+
+Supported Providers:
+- OpenAI: GPT-4o, GPT-4o-mini, o1-preview, o1-mini
+- Anthropic: Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku
+- OpenRouter: 200+ models including free Llama 3.1, Mistral, DeepSeek
+- Local: Local model support for development
 """
 
 from .base import (
@@ -24,6 +30,20 @@ from .models import (
     ProductRecommendation,
     PersonalizedFeed,
     AIQuotaInfo,
+)
+
+# OpenRouter Provider (full implementation)
+from .providers.openrouter_provider_full import (
+    OpenRouterProviderFull,
+    OpenRouterProviderConfigExtra,
+    create_openrouter_provider,
+    quick_chat,
+    quick_stream,
+    register_openrouter_provider,
+    MODEL_PRICING as OPENROUTER_MODEL_PRICING,
+    MODEL_CONTEXT_LENGTHS as OPENROUTER_CONTEXT_LENGTHS,
+    VISION_MODELS as OPENROUTER_VISION_MODELS,
+    FUNCTION_CALLING_MODELS as OPENROUTER_FUNCTION_MODELS,
 )
 
 # Token Optimizer imports
@@ -63,6 +83,17 @@ __all__ = [
     "ProductRecommendation",
     "PersonalizedFeed",
     "AIQuotaInfo",
+    # OpenRouter Provider
+    "OpenRouterProviderFull",
+    "OpenRouterProviderConfigExtra",
+    "create_openrouter_provider",
+    "quick_chat",
+    "quick_stream",
+    "register_openrouter_provider",
+    "OPENROUTER_MODEL_PRICING",
+    "OPENROUTER_CONTEXT_LENGTHS",
+    "OPENROUTER_VISION_MODELS",
+    "OPENROUTER_FUNCTION_MODELS",
     # Token Optimizer
     "OptimizationStrategy",
     "TokenOptimizationConfig",
@@ -79,3 +110,6 @@ __all__ = [
     "count_tokens",
     "create_token_optimizer",
 ]
+
+# Auto-register OpenRouter provider on import
+register_openrouter_provider()

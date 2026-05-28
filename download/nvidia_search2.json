@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://developer.nvidia.com/blog/run-autonomous-self-evolving-agents-more-safely-with-nvidia-openshell",
+    "name": "Run Autonomous, Self-Evolving Agents More Safely with",
+    "snippet": "16 Mar 2026 — OpenShell's architecture for safer autonomous agents , illustrating the core components: the sandbox, the policy engine, and the privacy router.",
+    "host_name": "developer.nvidia.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/nemo-agent-toolkit",
+    "name": "NVIDIA NeMo Agent Toolkit",
+    "snippet": "NVIDIA NeMo ™ Agent Toolkit is an open-source AI library that adds intelligence to AI agents across any framework—enhancing speed, accuracy, and decision-making ...\nLearn how to use NeMo Agent Toolkit Python library to build agentic AI applications in this step-by-step tutorial video. Learn how to use the toolkit profiler to get deeper insights into the performance and behavioral characteristics of your AI agent workflows.",
+    "host_name": "developer.nvidia.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blogs.nvidia.com/blog/secure-autonomous-ai-agents-openshell",
+    "name": "How Autonomous AI Agents Become Secure by Design",
+    "snippet": "23 Mar 2026 — Part of NVIDIA Agent Toolkit, OpenShell is an open source, secure-by-design runtime for running autonomous agents such as claws. It works by ...",
+    "host_name": "blogs.nvidia.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA/OpenShell",
+    "name": "OpenShell is the safe, private runtime for autonomous AI",
+    "snippet": "1 day ago — OpenShell is the safe, private runtime for autonomous AI agents . It provides sandboxed execution environments that protect your data, ...\nOpenShell is the safe, private runtime for autonomous AI agents. It provides sandboxed execution environments that protect your data, credentials, and infrastructure — governed by declarative YAML policies that prevent unauthorized file access, data exfiltration, and uncontrolled network activity.",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-in/ai/nemoclaw",
+    "name": "NVIDIA NemoClaw: Deploy Safer AI Agents",
+    "snippet": "NVIDIA NemoClaw is an open source stack that adds privacy and security controls to OpenClaw. With one command, anyone can run always-on, self-evolving ...",
+    "host_name": "www.nvidia.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.trendmicro.com/en_us/research/26/c/securing-autonomous-ai-agents-with-trendai-and-nvidia-openshell.html",
+    "name": "Securing Autonomous AI Agents with TrendAI & NVIDIA",
+    "snippet": "16 Mar 2026 — NVIDIA OpenShell is an open source runtime to build and deploy autonomous, self-evolving agents more safely with planning, memory, and tool ...",
+    "host_name": "www.trendmicro.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-in/ai-data-science/products/nemo",
+    "name": "NeMo | Build, monitor, and optimize AI agents",
+    "snippet": "NVIDIA NeMo ™ is a comprehensive toolkit for managing the AI agent lifecycle. It includes open libraries and microservices for data processing, ...",
+    "host_name": "www.nvidia.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.redhat.com/en/blog/red-hat-and-nvidia-collaborate-more-secure-foundation-agent-ready-workforce",
+    "name": "Red Hat and NVIDIA collaborate for a more secure",
+    "snippet": "16 Mar 2026 — NVIDIA OpenShell helps deliver the necessary security capabilities and functions as an agent sandbox. Building upon this, the new NVIDIA AI-Q ...",
+    "host_name": "www.redhat.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.spheron.network/blog/nvidia-openshell-agent-toolkit-gpu-cloud-guide",
+    "name": "NVIDIA OpenShell and Agent Toolkit: Deploy Secure",
+    "snippet": "Architecture: OpenShell Runtime, NemoClaw, and Policy-Based Agent Governance · GPU Requirements ...\nThe short version: it is an open-source runtime that wraps autonomous agents in policy-governed sandboxes using kernel-level security primitives, so agents can run shell commands and call external tools without touching the host system.",
+    "host_name": "www.spheron.network",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.evoart.ai/blog/nvidia-ai-agent-toolkit-enterprise-platform-2026",
+    "name": "NVIDIA AI Agent Toolkit 2026 - Enterprise Autonomous Agent",
+    "snippet": "Discover how NVIDIA's open Agent Development Platform is transforming enterprise AI with the NeMo Agent Toolkit, OpenShell, and Nemotron models.",
+    "host_name": "www.evoart.ai",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

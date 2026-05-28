@@ -316,6 +316,12 @@ def _register_providers():
         AIProviderFactory.register(AIProviderType.LOCAL, LocalProvider)
     except ImportError:
         pass
+    
+    try:
+        from .providers.openrouter_provider_full import OpenRouterProviderFull
+        AIProviderFactory.register(AIProviderType.OPENROUTER, OpenRouterProviderFull)
+    except ImportError:
+        pass
 
 
 # Register providers on module load

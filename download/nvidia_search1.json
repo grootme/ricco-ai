@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://docs.nvidia.com/ai-enterprise/index.html",
+    "name": "NVIDIA AI Enterprise",
+    "snippet": "NVIDIA AI Enterprise is an end-to-end platform for developing, deploying, and managing AI applications. It includes AI frameworks, NIM microservices, ...",
+    "host_name": "docs.nvidia.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-us/data-center/products/ai-enterprise",
+    "name": "NVIDIA AI Enterprise | Cloud-native Software Platform",
+    "snippet": "NVIDIA AI Enterprise brings together microservices, frameworks, and libraries for AI development with advanced GPU orchestration and infrastructure ...",
+    "host_name": "www.nvidia.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://introl.com/blog/nvidias-computex-2025-revolution-transforming-data-centers-into-ai-factories",
+    "name": "NVIDIA Computex 2025: AI Factory Blueprint | Introl Blog",
+    "snippet": "May 19, 2025 — Jensen Huang's Computex 2025 blueprint for computing's third revolution. Data centers transform into token-producing AI factories.",
+    "host_name": "introl.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://hiverlab.com/how-nvidia-ai-is-transforming-enterprises-ces-2025",
+    "name": "Nvidia AI Is Transforming Enterprise Industries at CES 2025",
+    "snippet": "Jan 8, 2025 — Nvidia's advancements in robotics center around the Nvidia Isaac platform , a cornerstone for enterprises automating manufacturing and logistics.",
+    "host_name": "hiverlab.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://build.nvidia.com/blueprints",
+    "name": "Build Your AI Application with Blueprints",
+    "snippet": "Experience the leading models to build enterprise generative AI apps now ... Create intelligent embeddings by using transformer architecture on tabular data.",
+    "host_name": "build.nvidia.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints",
+    "name": "NVIDIA AI Blueprints",
+    "snippet": "The AI-Q NVIDIA Blueprint is an open reference example for building intelligent AI agents that connect to your enterprise data , reason using state-of-the-art ...",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://rafay.co/solutions/nvidia-blueprints-as-a-service-powered-by-rafay",
+    "name": "Blueprints-as-a-Service | Deploy NVIDIA AI",
+    "snippet": "NVIDIA Blueprints-as-a-Service powered by Rafay enables organizations to transform NVIDIA NIM Blueprints into fully operational, self-service AI services ...",
+    "host_name": "rafay.co",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://markets.financialcontent.com/stocks/article/predictstreet-2025-12-8-nvidia-nvdanasdaq-the-ai-architects-blueprint-for-the-future",
+    "name": "NVIDIA (NVDA/NASDAQ): The AI Architect's Blueprint for",
+    "snippet": "Dec 8, 2025 — NVIDIA AI Enterprise : Cloud-native software platform for secure and scalable AI factories. NVIDIA NGC: Hub for GPU-optimized software.",
+    "host_name": "markets.financialcontent.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blogs.nvidia.com/blog/ai-blueprint-telco-network-configuration",
+    "name": "New NVIDIA AI Blueprint Helps Automate Telco Network",
+    "snippet": "Jun 11, 2025 — The blueprint provides telcos with a recipe for building autonomous networks to drive significant improvements in network performance and efficiency.",
+    "host_name": "blogs.nvidia.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.wwt.com/product/nvidia-blueprints/explore",
+    "name": "NVIDIA Blueprints - Explore",
+    "snippet": "NVIDIA Blueprints include everything an enterprise developer needs to build and deploy customized generative AI applications that make an impact on business ...",
+    "host_name": "www.wwt.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

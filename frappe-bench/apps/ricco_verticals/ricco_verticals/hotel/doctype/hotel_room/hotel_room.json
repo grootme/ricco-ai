@@ -1,0 +1,464 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:room_number",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "room_details_section",
+  "room_number",
+  "room_name",
+  "room_type",
+  "column_break_4",
+  "floor",
+  "wing",
+  "status",
+  "capacity_section",
+  "max_occupancy",
+  "bed_count",
+  "bed_type",
+  "column_break_10",
+  "extra_bed_available",
+  "extra_bed_count",
+  "total_capacity",
+  "room_features_section",
+  "room_size",
+  "size_unit",
+  "view_type",
+  "column_break_17",
+  "balcony",
+  "connecting_rooms",
+  "accessible_room",
+  "amenities_section",
+  "amenities",
+  "room_features",
+  "column_break_23",
+  "room_facilities",
+  "entertainment",
+  "pricing_section",
+  "base_rate",
+  "currency",
+  "seasonal_rates",
+  "column_break_29",
+  "extra_bed_rate",
+  "taxes_included",
+  "additional_charges",
+  "current_status_section",
+  "current_booking",
+  "current_guest",
+  "check_in_date",
+  "column_break_36",
+  "expected_checkout",
+  "housekeeping_status",
+  "last_cleaned",
+  "maintenance_section",
+  "maintenance_status",
+  "maintenance_notes",
+  "column_break_42",
+  "next_maintenance_date",
+  "out_of_order",
+  "integration_section",
+  "item",
+  "warehouse",
+  "column_break_48",
+  "company",
+  "branch"
+ ],
+ "fields": [
+  {
+   "fieldname": "room_details_section",
+   "fieldtype": "Section Break",
+   "label": "Room Details"
+  },
+  {
+   "fieldname": "room_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Room Number",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "room_name",
+   "fieldtype": "Data",
+   "label": "Room Name"
+  },
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Room Type",
+   "options": "Standard\nDeluxe\nSuite\nExecutive Suite\nPresidential Suite\nFamily Room\nTwin Room\nDouble Room\nSingle Room\nDormitory",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "floor",
+   "fieldtype": "Int",
+   "label": "Floor"
+  },
+  {
+   "fieldname": "wing",
+   "fieldtype": "Data",
+   "label": "Wing/Block"
+  },
+  {
+   "default": "Available",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Available\nOccupied\nReserved\nMaintenance\nOut of Order\nCleaning"
+  },
+  {
+   "fieldname": "capacity_section",
+   "fieldtype": "Section Break",
+   "label": "Capacity"
+  },
+  {
+   "default": "2",
+   "fieldname": "max_occupancy",
+   "fieldtype": "Int",
+   "label": "Max Occupancy"
+  },
+  {
+   "fieldname": "bed_count",
+   "fieldtype": "Int",
+   "label": "Bed Count"
+  },
+  {
+   "fieldname": "bed_type",
+   "fieldtype": "Select",
+   "label": "Bed Type",
+   "options": "Single\nDouble\nQueen\nKing\nTwin\nSofa Bed\nBunk Bed"
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "extra_bed_available",
+   "fieldtype": "Check",
+   "label": "Extra Bed Available"
+  },
+  {
+   "depends_on": "eval:doc.extra_bed_available==1",
+   "fieldname": "extra_bed_count",
+   "fieldtype": "Int",
+   "label": "Extra Bed Count"
+  },
+  {
+   "fieldname": "total_capacity",
+   "fieldtype": "Int",
+   "label": "Total Capacity",
+   "read_only": 1
+  },
+  {
+   "fieldname": "room_features_section",
+   "fieldtype": "Section Break",
+   "label": "Room Features"
+  },
+  {
+   "fieldname": "room_size",
+   "fieldtype": "Float",
+   "label": "Room Size"
+  },
+  {
+   "fieldname": "size_unit",
+   "fieldtype": "Select",
+   "label": "Size Unit",
+   "options": "Square Feet\nSquare Meters"
+  },
+  {
+   "fieldname": "view_type",
+   "fieldtype": "Select",
+   "label": "View Type",
+   "options": "Sea View\nGarden View\nPool View\nCity View\nMountain View\nNo View"
+  },
+  {
+   "fieldname": "column_break_17",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "balcony",
+   "fieldtype": "Check",
+   "label": "Has Balcony"
+  },
+  {
+   "fieldname": "connecting_rooms",
+   "fieldtype": "Data",
+   "label": "Connecting Rooms"
+  },
+  {
+   "default": "0",
+   "fieldname": "accessible_room",
+   "fieldtype": "Check",
+   "label": "Accessible Room"
+  },
+  {
+   "fieldname": "amenities_section",
+   "fieldtype": "Section Break",
+   "label": "Amenities"
+  },
+  {
+   "fieldname": "amenities",
+   "fieldtype": "Text",
+   "label": "Room Amenities"
+  },
+  {
+   "fieldname": "room_features",
+   "fieldtype": "Text",
+   "label": "Room Features"
+  },
+  {
+   "fieldname": "column_break_23",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "room_facilities",
+   "fieldtype": "Text",
+   "label": "Room Facilities"
+  },
+  {
+   "fieldname": "entertainment",
+   "fieldtype": "Text",
+   "label": "Entertainment Options"
+  },
+  {
+   "fieldname": "pricing_section",
+   "fieldtype": "Section Break",
+   "label": "Pricing"
+  },
+  {
+   "fieldname": "base_rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Base Rate/Night"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "seasonal_rates",
+   "fieldtype": "Table",
+   "label": "Seasonal Rates",
+   "options": "Hotel Room Rate"
+  },
+  {
+   "fieldname": "column_break_29",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "extra_bed_rate",
+   "fieldtype": "Currency",
+   "label": "Extra Bed Rate"
+  },
+  {
+   "default": "0",
+   "fieldname": "taxes_included",
+   "fieldtype": "Check",
+   "label": "Taxes Included in Rate"
+  },
+  {
+   "fieldname": "additional_charges",
+   "fieldtype": "Currency",
+   "label": "Additional Charges"
+  },
+  {
+   "fieldname": "current_status_section",
+   "fieldtype": "Section Break",
+   "label": "Current Status"
+  },
+  {
+   "fieldname": "current_booking",
+   "fieldtype": "Link",
+   "label": "Current Booking",
+   "options": "Hotel Booking",
+   "read_only": 1
+  },
+  {
+   "fieldname": "current_guest",
+   "fieldtype": "Data",
+   "label": "Current Guest",
+   "read_only": 1
+  },
+  {
+   "fieldname": "check_in_date",
+   "fieldtype": "Date",
+   "label": "Check-in Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_36",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "expected_checkout",
+   "fieldtype": "Date",
+   "label": "Expected Checkout",
+   "read_only": 1
+  },
+  {
+   "fieldname": "housekeeping_status",
+   "fieldtype": "Select",
+   "label": "Housekeeping Status",
+   "options": "Clean\nDirty\nInspection Needed\nOut of Service"
+  },
+  {
+   "fieldname": "last_cleaned",
+   "fieldtype": "Datetime",
+   "label": "Last Cleaned"
+  },
+  {
+   "fieldname": "maintenance_section",
+   "fieldtype": "Section Break",
+   "label": "Maintenance"
+  },
+  {
+   "fieldname": "maintenance_status",
+   "fieldtype": "Select",
+   "label": "Maintenance Status",
+   "options": "Good\nNeeds Repair\nUnder Maintenance\nOut of Order"
+  },
+  {
+   "fieldname": "maintenance_notes",
+   "fieldtype": "Text",
+   "label": "Maintenance Notes"
+  },
+  {
+   "fieldname": "column_break_42",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "next_maintenance_date",
+   "fieldtype": "Date",
+   "label": "Next Maintenance Date"
+  },
+  {
+   "default": "0",
+   "fieldname": "out_of_order",
+   "fieldtype": "Check",
+   "label": "Out of Order"
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Linked Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "column_break_48",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch"
+  }
+ ],
+ "links": [
+  {
+   "group": "Bookings",
+   "link_doctype": "Hotel Booking",
+   "link_fieldname": "hotel_room"
+  },
+  {
+   "group": "Check-ins",
+   "link_doctype": "Hotel Checkin",
+   "link_fieldname": "room"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Room",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Hotel Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Front Desk",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Green",
+   "title": "Available"
+  },
+  {
+   "color": "Red",
+   "title": "Occupied"
+  },
+  {
+   "color": "Blue",
+   "title": "Reserved"
+  },
+  {
+   "color": "Orange",
+   "title": "Maintenance"
+  }
+ ],
+ "track_changes": 1
+}

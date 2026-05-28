@@ -1,0 +1,433 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:wc_customer_id",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer_information_section",
+  "wc_customer_id",
+  "customer",
+  "woocommerce_settings",
+  "column_break_customer",
+  "sync_status",
+  "last_sync_at",
+  "sync_error",
+  "personal_information_section",
+  "first_name",
+  "last_name",
+  "email",
+  "username",
+  "column_break_personal",
+  "phone",
+  "date_created",
+  "date_modified",
+  "billing_address_section",
+  "billing_first_name",
+  "billing_last_name",
+  "billing_company",
+  "billing_address_1",
+  "billing_address_2",
+  "column_break_billing",
+  "billing_city",
+  "billing_state",
+  "billing_postcode",
+  "billing_country",
+  "billing_phone",
+  "billing_email",
+  "shipping_address_section",
+  "shipping_first_name",
+  "shipping_last_name",
+  "shipping_company",
+  "shipping_address_1",
+  "shipping_address_2",
+  "column_break_shipping",
+  "shipping_city",
+  "shipping_state",
+  "shipping_postcode",
+  "shipping_country",
+  "shipping_phone",
+  "order_statistics_section",
+  "total_orders",
+  "total_spent",
+  "column_break_stats",
+  "average_order_value",
+  "last_order_date",
+  "sync_history_section",
+  "sync_attempts",
+  "last_sync_error",
+  "column_break_history",
+  "created_at",
+  "modified_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer_information_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Information"
+  },
+  {
+   "fieldname": "wc_customer_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "WooCommerce Customer ID",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "ERPNext Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "woocommerce_settings",
+   "fieldtype": "Link",
+   "label": "WooCommerce Settings",
+   "options": "WooCommerce Settings"
+  },
+  {
+   "fieldname": "column_break_customer",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sync_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Sync Status",
+   "options": "Pending\nSynced\nFailed\nProcessing",
+   "default": "Pending"
+  },
+  {
+   "fieldname": "last_sync_at",
+   "fieldtype": "Datetime",
+   "label": "Last Sync At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sync_error",
+   "fieldtype": "Text",
+   "label": "Sync Error",
+   "read_only": 1
+  },
+  {
+   "fieldname": "personal_information_section",
+   "fieldtype": "Section Break",
+   "label": "Personal Information"
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "label": "First Name"
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "label": "Last Name"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "username",
+   "fieldtype": "Data",
+   "label": "Username"
+  },
+  {
+   "fieldname": "column_break_personal",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "date_created",
+   "fieldtype": "Datetime",
+   "label": "Date Created"
+  },
+  {
+   "fieldname": "date_modified",
+   "fieldtype": "Datetime",
+   "label": "Date Modified"
+  },
+  {
+   "fieldname": "billing_address_section",
+   "fieldtype": "Section Break",
+   "label": "Billing Address"
+  },
+  {
+   "fieldname": "billing_first_name",
+   "fieldtype": "Data",
+   "label": "Billing First Name"
+  },
+  {
+   "fieldname": "billing_last_name",
+   "fieldtype": "Data",
+   "label": "Billing Last Name"
+  },
+  {
+   "fieldname": "billing_company",
+   "fieldtype": "Data",
+   "label": "Billing Company"
+  },
+  {
+   "fieldname": "billing_address_1",
+   "fieldtype": "Data",
+   "label": "Billing Address 1"
+  },
+  {
+   "fieldname": "billing_address_2",
+   "fieldtype": "Data",
+   "label": "Billing Address 2"
+  },
+  {
+   "fieldname": "column_break_billing",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "billing_city",
+   "fieldtype": "Data",
+   "label": "Billing City"
+  },
+  {
+   "fieldname": "billing_state",
+   "fieldtype": "Data",
+   "label": "Billing State"
+  },
+  {
+   "fieldname": "billing_postcode",
+   "fieldtype": "Data",
+   "label": "Billing Postcode"
+  },
+  {
+   "fieldname": "billing_country",
+   "fieldtype": "Link",
+   "label": "Billing Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "billing_phone",
+   "fieldtype": "Data",
+   "label": "Billing Phone"
+  },
+  {
+   "fieldname": "billing_email",
+   "fieldtype": "Data",
+   "label": "Billing Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "shipping_address_section",
+   "fieldtype": "Section Break",
+   "label": "Shipping Address"
+  },
+  {
+   "fieldname": "shipping_first_name",
+   "fieldtype": "Data",
+   "label": "Shipping First Name"
+  },
+  {
+   "fieldname": "shipping_last_name",
+   "fieldtype": "Data",
+   "label": "Shipping Last Name"
+  },
+  {
+   "fieldname": "shipping_company",
+   "fieldtype": "Data",
+   "label": "Shipping Company"
+  },
+  {
+   "fieldname": "shipping_address_1",
+   "fieldtype": "Data",
+   "label": "Shipping Address 1"
+  },
+  {
+   "fieldname": "shipping_address_2",
+   "fieldtype": "Data",
+   "label": "Shipping Address 2"
+  },
+  {
+   "fieldname": "column_break_shipping",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "shipping_city",
+   "fieldtype": "Data",
+   "label": "Shipping City"
+  },
+  {
+   "fieldname": "shipping_state",
+   "fieldtype": "Data",
+   "label": "Shipping State"
+  },
+  {
+   "fieldname": "shipping_postcode",
+   "fieldtype": "Data",
+   "label": "Shipping Postcode"
+  },
+  {
+   "fieldname": "shipping_country",
+   "fieldtype": "Link",
+   "label": "Shipping Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "shipping_phone",
+   "fieldtype": "Data",
+   "label": "Shipping Phone"
+  },
+  {
+   "fieldname": "order_statistics_section",
+   "fieldtype": "Section Break",
+   "label": "Order Statistics"
+  },
+  {
+   "fieldname": "total_orders",
+   "fieldtype": "Int",
+   "label": "Total Orders",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_spent",
+   "fieldtype": "Currency",
+   "label": "Total Spent",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_stats",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "average_order_value",
+   "fieldtype": "Currency",
+   "label": "Average Order Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_order_date",
+   "fieldtype": "Date",
+   "label": "Last Order Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sync_history_section",
+   "fieldtype": "Section Break",
+   "label": "Sync History"
+  },
+  {
+   "fieldname": "sync_attempts",
+   "fieldtype": "Int",
+   "label": "Sync Attempts",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_sync_error",
+   "fieldtype": "Text",
+   "label": "Last Sync Error",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_history",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "created_at",
+   "fieldtype": "Datetime",
+   "label": "Created At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "modified_at",
+   "fieldtype": "Datetime",
+   "label": "Modified At",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "group": "Related Documents",
+   "link_doctype": "Customer",
+   "link_fieldname": "customer"
+  },
+  {
+   "group": "Related Documents",
+   "link_doctype": "WooCommerce Order",
+   "link_fieldname": "wc_customer_id"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "WooCommerce Customer",
+ "name": "WooCommerce Customer",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 0
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Red",
+   "title": "Failed"
+  },
+  {
+   "color": "Orange",
+   "title": "Pending"
+  },
+  {
+   "color": "Blue",
+   "title": "Processing"
+  },
+  {
+   "color": "Green",
+   "title": "Synced"
+  }
+ ],
+ "track_changes": 1
+}

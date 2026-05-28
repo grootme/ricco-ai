@@ -1,0 +1,65 @@
+[
+  {
+    "url": "https://thomas-wiegold.com/blog/ralph-loop-how-recursive-ai-agents-work",
+    "name": "The Ralph Loop: How Recursive AI Agents Actually Work",
+    "snippet": "In this article I'll walk you through what a Ralph loop is, how it works, how to actually run one in Claude Code or Codex, and (the part I find most fascinating) what you can read in its journal in the morning. I'll also be honest about where it falls over and where it's the wrong tool entirely.",
+    "host_name": "thomas-wiegold.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/vercel-labs/ralph-loop-agent",
+    "name": "GitHub - vercel-labs/ralph-loop-agent: Continuous Autonomy",
+    "snippet": "What is the Ralph Wiggum Technique? The Ralph Wiggum technique is a development methodology built around continuous AI agent loops. At its core, it's elegantly simple: keep feeding an AI agent a task until the job is done. As Geoffrey Huntley describes it: \"Ralph is a Bash loop.\"",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blakecrosley.com/blog/ralph-agent-architecture",
+    "name": "The Ralph Loop: How I Run Autonomous AI Agents Overnight",
+    "snippet": "I built an autonomous agent system with stop hooks, spawn budgets, and filesystem memory. Here are the failures and what actually ships code.",
+    "host_name": "blakecrosley.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.zerosync.co/blog/ralph-loop-technical-deep-dive",
+    "name": "The Ralph Loop: Long-Running AI Agents | ZeroSync Blog",
+    "snippet": "The Ralph Loop (also known as the \"Ralph Wiggum technique\") is an AI agent orchestration method for reliable, long-running autonomous coding tasks. Named after the endearingly simple-minded character from The Simpsons, the technique embraces limitations rather than fighting them.",
+    "host_name": "www.zerosync.co",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://ai.plainenglish.io/the-ralph-loop-why-your-ai-agent-keeps-forgetting-what-its-doing-dce2bfa549cf",
+    "name": "The Ralph Loop: The loop that fixes AI Agents Memory problem",
+    "snippet": "The Ralph Loop (also called the Ralph Wiggum Technique) is a methodology for running AI agents in continuous, self-correcting loops until a task is fully complete. It was popularized by developer Geoffrey Huntley in 2024–2025 and is now widely used with autonomous coding agents like Claude Code.",
+    "host_name": "ai.plainenglish.io",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://claude.com/plugins/ralph-loop",
+    "name": "Ralph Loop – Claude Plugin | Anthropic",
+    "snippet": "Ralph Loop enables iterative, self-referential AI development loops where Claude works on the same task repeatedly until completion. The plugin intercepts session exits via a stop hook and automatically re-feeds your prompt while preserving all file modifications and git history between iterations.",
+    "host_name": "claude.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://agentfactory.panaversity.org/docs/General-Agents-Foundations/general-agents/ralph-wiggum-loop",
+    "name": "Ralph Wiggum Loop: Autonomous Iteration Workflows | The AI",
+    "snippet": "What is Ralph Wiggum Loop? Definition: Ralph Wiggum Loop is a Claude Code plugin that enables autonomous iteration:Claude Code runs a task, checks the result, identifies what needs fixing, makes corrections, and repeats until a completion condition is met, all without your intervention.",
+    "host_name": "agentfactory.panaversity.org",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  }
+]

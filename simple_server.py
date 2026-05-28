@@ -1,14 +1,34 @@
 """
-RICCO AI - Simple Server for Demo
+RICCO AI - Integrated Server with NVIDIA Blueprints
 """
 import os
+import sys
+from pathlib import Path
+
+# Add src to path
+sys.path.insert(0, str(Path(__file__).parent))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+# Import blueprint routes
+from src.blueprints.routes import router as blueprints_router
+
 app = FastAPI(
-    title="RICCO AI",
-    description="RICCO AI - Multi-agent orchestration with A2UI",
-    version="2.0.0",
+    title="RICCO AI - NVIDIA Blueprints Integration",
+    description="""
+    RICCO AI with NVIDIA AI Blueprints Integration
+    
+    ## Available Blueprints
+    - **AI-Q Research Agent** - Enterprise-grade research with deep reasoning
+    - **RAG Blueprint** - Retrieval-Augmented Generation with multimodal support
+    - **Video Search** - AI agents for video analytics
+    - **Data Flywheel** - Autonomous data improvement pipeline
+    - **Digital Human** - 3D animated virtual assistant
+    - **Healthcare** - SOAP note generation with speech-to-text
+    - **Retail Commerce** - Intelligent commerce middleware
+    """,
+    version="2.1.0",
 )
 
 # CORS
@@ -20,17 +40,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 def read_root():
     return {
         "service": "RICCO AI",
-        "version": "2.0.0",
+        "version": "2.1.0",
         "status": "running",
         "features": {
             "multi_agent": True,
             "a2a_protocol": True,
             "mcp_support": True,
             "langgraph": True,
+            "nvidia_blueprints": True,
+        },
+        "blueprints": {
+            "aiq": "AI-Q Research Agent",
+            "rag": "Retrieval-Augmented Generation",
+            "video-search": "Video Search & Summarization",
+            "data-flywheel": "Data Flywheel",
+            "digital-human": "Digital Human (Tokkio)",
+            "healthcare": "Ambient Healthcare Agents",
+            "retail-commerce": "Retail Agentic Commerce"
         },
         "integrations": {
             "openrouter": "configured" if os.getenv("OPENROUTER_API_KEY") else "not configured",
@@ -38,14 +69,17 @@ def read_root():
         }
     }
 
+
 @app.get("/health")
 def health_check():
     return {
         "status": "healthy",
         "service": "RICCO AI",
-        "version": "2.0.0"
+        "version": "2.1.0"
     }
 
+
+# Legacy endpoints for compatibility
 @app.get("/api/v1/agents")
 def list_agents():
     return {
@@ -57,6 +91,7 @@ def list_agents():
             {"id": "finance-assistant", "name": "Finance Assistant", "type": "assistant"},
         ]
     }
+
 
 @app.get("/api/v1/mcp-arsenal")
 def list_mcp_tools():
@@ -71,6 +106,7 @@ def list_mcp_tools():
         ]
     }
 
+
 @app.post("/api/v1/chat")
 async def chat(message: dict):
     """Simple chat endpoint for demo"""
@@ -80,6 +116,11 @@ async def chat(message: dict):
         "status": "success",
         "agent": "demo-agent"
     }
+
+
+# Include NVIDIA Blueprints routes
+app.include_router(blueprints_router, prefix="/api/v1")
+
 
 if __name__ == "__main__":
     import uvicorn

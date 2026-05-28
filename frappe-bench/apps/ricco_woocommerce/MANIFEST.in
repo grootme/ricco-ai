@@ -1,0 +1,8 @@
+include MANIFEST.in
+include requirements.txt
+include license.txt
+recursive-include ricco_woocommerce *.json
+recursive-include ricco_woocommerce *.py
+recursive-include ricco_woocommerce *.js
+recursive-include ricco_woocommerce *.css
+recursive-include ricco_woocommerce *.html

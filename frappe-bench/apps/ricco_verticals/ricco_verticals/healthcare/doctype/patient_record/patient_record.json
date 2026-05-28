@@ -1,0 +1,588 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "PAT-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "patient_details_section",
+  "patient_id",
+  "first_name",
+  "last_name",
+  "photo",
+  "column_break_5",
+  "gender",
+  "date_of_birth",
+  "blood_group",
+  "marital_status",
+  "contact_details_section",
+  "email",
+  "phone",
+  "mobile",
+  "column_break_13",
+  "address_line1",
+  "address_line2",
+  "city",
+  "state",
+  "country",
+  "pincode",
+  "emergency_section",
+  "emergency_contact_name",
+  "emergency_contact_phone",
+  "emergency_contact_relationship",
+  "column_break_22",
+  "emergency_contact_address",
+  "emergency_email",
+  "medical_info_section",
+  "allergies",
+  "current_medications",
+  "chronic_conditions",
+  "column_break_28",
+  "past_surgeries",
+  "family_history",
+  "immunization_records",
+  "insurance_section",
+  "insurance_provider",
+  "insurance_policy_number",
+  "insurance_expiry",
+  "column_break_35",
+  "insurance_group_number",
+  "copay_amount",
+  "insurance_notes",
+  "primary_care_section",
+  "primary_physician",
+  "preferred_hospital",
+  "column_break_41",
+  "preferred_pharmacy",
+  "referring_physician",
+  "identification_section",
+  "id_type",
+  "id_number",
+  "id_expiry_date",
+  "column_break_47",
+  "id_document",
+  "secondary_id",
+  "employment_section",
+  "occupation",
+  "employer",
+  "column_break_52",
+  "employment_status",
+  "work_phone",
+  "preferences_section",
+  "preferred_language",
+  "communication_preference",
+  "column_break_57",
+  "notification_preference",
+  "accessibility_needs",
+  "status_section",
+  "status",
+  "registration_date",
+  "column_break_62",
+  "last_visit_date",
+  "total_visits",
+  "integration_section",
+  "customer",
+  "customer_group",
+  "column_break_68",
+  "territory",
+  "company"
+ ],
+ "fields": [
+  {
+   "fieldname": "patient_details_section",
+   "fieldtype": "Section Break",
+   "label": "Patient Details"
+  },
+  {
+   "fieldname": "patient_id",
+   "fieldtype": "Data",
+   "label": "Patient ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "First Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Last Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "photo",
+   "fieldtype": "Attach Image",
+   "label": "Photo"
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Gender",
+   "options": "Male\nFemale\nOther\nPrefer not to say"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date of Birth",
+   "reqd": 1
+  },
+  {
+   "fieldname": "blood_group",
+   "fieldtype": "Select",
+   "label": "Blood Group",
+   "options": "A+\nA-\nB+\nB-\nAB+\nAB-\nO+\nO-\nUnknown"
+  },
+  {
+   "fieldname": "marital_status",
+   "fieldtype": "Select",
+   "label": "Marital Status",
+   "options": "Single\nMarried\nDivorced\nWidowed\nSeparated"
+  },
+  {
+   "fieldname": "contact_details_section",
+   "fieldtype": "Section Break",
+   "label": "Contact Details"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "mobile",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Mobile",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_13",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address_line1",
+   "fieldtype": "Data",
+   "label": "Address Line 1"
+  },
+  {
+   "fieldname": "address_line2",
+   "fieldtype": "Data",
+   "label": "Address Line 2"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "pincode",
+   "fieldtype": "Data",
+   "label": "Pincode"
+  },
+  {
+   "fieldname": "emergency_section",
+   "fieldtype": "Section Break",
+   "label": "Emergency Contact"
+  },
+  {
+   "fieldname": "emergency_contact_name",
+   "fieldtype": "Data",
+   "label": "Emergency Contact Name"
+  },
+  {
+   "fieldname": "emergency_contact_phone",
+   "fieldtype": "Data",
+   "label": "Emergency Contact Phone"
+  },
+  {
+   "fieldname": "emergency_contact_relationship",
+   "fieldtype": "Data",
+   "label": "Relationship"
+  },
+  {
+   "fieldname": "column_break_22",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "emergency_contact_address",
+   "fieldtype": "Data",
+   "label": "Emergency Contact Address"
+  },
+  {
+   "fieldname": "emergency_email",
+   "fieldtype": "Data",
+   "label": "Emergency Email"
+  },
+  {
+   "fieldname": "medical_info_section",
+   "fieldtype": "Section Break",
+   "label": "Medical Information"
+  },
+  {
+   "fieldname": "allergies",
+   "fieldtype": "Text",
+   "label": "Allergies"
+  },
+  {
+   "fieldname": "current_medications",
+   "fieldtype": "Text",
+   "label": "Current Medications"
+  },
+  {
+   "fieldname": "chronic_conditions",
+   "fieldtype": "Text",
+   "label": "Chronic Conditions"
+  },
+  {
+   "fieldname": "column_break_28",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "past_surgeries",
+   "fieldtype": "Text",
+   "label": "Past Surgeries"
+  },
+  {
+   "fieldname": "family_history",
+   "fieldtype": "Text",
+   "label": "Family Medical History"
+  },
+  {
+   "fieldname": "immunization_records",
+   "fieldtype": "Text",
+   "label": "Immunization Records"
+  },
+  {
+   "fieldname": "insurance_section",
+   "fieldtype": "Section Break",
+   "label": "Insurance Information"
+  },
+  {
+   "fieldname": "insurance_provider",
+   "fieldtype": "Data",
+   "label": "Insurance Provider"
+  },
+  {
+   "fieldname": "insurance_policy_number",
+   "fieldtype": "Data",
+   "label": "Policy Number"
+  },
+  {
+   "fieldname": "insurance_expiry",
+   "fieldtype": "Date",
+   "label": "Insurance Expiry Date"
+  },
+  {
+   "fieldname": "column_break_35",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "insurance_group_number",
+   "fieldtype": "Data",
+   "label": "Group Number"
+  },
+  {
+   "fieldname": "copay_amount",
+   "fieldtype": "Currency",
+   "label": "Co-pay Amount"
+  },
+  {
+   "fieldname": "insurance_notes",
+   "fieldtype": "Text",
+   "label": "Insurance Notes"
+  },
+  {
+   "fieldname": "primary_care_section",
+   "fieldtype": "Section Break",
+   "label": "Primary Care"
+  },
+  {
+   "fieldname": "primary_physician",
+   "fieldtype": "Link",
+   "label": "Primary Physician",
+   "options": "Healthcare Practitioner"
+  },
+  {
+   "fieldname": "preferred_hospital",
+   "fieldtype": "Data",
+   "label": "Preferred Hospital"
+  },
+  {
+   "fieldname": "column_break_41",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "preferred_pharmacy",
+   "fieldtype": "Data",
+   "label": "Preferred Pharmacy"
+  },
+  {
+   "fieldname": "referring_physician",
+   "fieldtype": "Link",
+   "label": "Referring Physician",
+   "options": "Healthcare Practitioner"
+  },
+  {
+   "fieldname": "identification_section",
+   "fieldtype": "Section Break",
+   "label": "Identification"
+  },
+  {
+   "fieldname": "id_type",
+   "fieldtype": "Select",
+   "label": "ID Type",
+   "options": "National ID\nPassport\nDrivers License\nMedical Card\nOther"
+  },
+  {
+   "fieldname": "id_number",
+   "fieldtype": "Data",
+   "label": "ID Number"
+  },
+  {
+   "fieldname": "id_expiry_date",
+   "fieldtype": "Date",
+   "label": "ID Expiry Date"
+  },
+  {
+   "fieldname": "column_break_47",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "id_document",
+   "fieldtype": "Attach",
+   "label": "ID Document"
+  },
+  {
+   "fieldname": "secondary_id",
+   "fieldtype": "Data",
+   "label": "Secondary ID Number"
+  },
+  {
+   "fieldname": "employment_section",
+   "fieldtype": "Section Break",
+   "label": "Employment"
+  },
+  {
+   "fieldname": "occupation",
+   "fieldtype": "Data",
+   "label": "Occupation"
+  },
+  {
+   "fieldname": "employer",
+   "fieldtype": "Data",
+   "label": "Employer"
+  },
+  {
+   "fieldname": "column_break_52",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "employment_status",
+   "fieldtype": "Select",
+   "label": "Employment Status",
+   "options": "Employed\nSelf-Employed\nUnemployed\nRetired\nStudent\nHomemaker"
+  },
+  {
+   "fieldname": "work_phone",
+   "fieldtype": "Data",
+   "label": "Work Phone"
+  },
+  {
+   "fieldname": "preferences_section",
+   "fieldtype": "Section Break",
+   "label": "Preferences"
+  },
+  {
+   "fieldname": "preferred_language",
+   "fieldtype": "Link",
+   "label": "Preferred Language",
+   "options": "Language"
+  },
+  {
+   "fieldname": "communication_preference",
+   "fieldtype": "Select",
+   "label": "Communication Preference",
+   "options": "Email\nSMS\nPhone\nMail"
+  },
+  {
+   "fieldname": "column_break_57",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "notification_preference",
+   "fieldtype": "Select",
+   "label": "Notification Preference",
+   "options": "All\nReminders Only\nCritical Only\nNone"
+  },
+  {
+   "fieldname": "accessibility_needs",
+   "fieldtype": "Data",
+   "label": "Accessibility Needs"
+  },
+  {
+   "fieldname": "status_section",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nInactive\nDeceased\nTransferred"
+  },
+  {
+   "fieldname": "registration_date",
+   "fieldtype": "Date",
+   "label": "Registration Date"
+  },
+  {
+   "fieldname": "column_break_62",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_visit_date",
+   "fieldtype": "Date",
+   "label": "Last Visit Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_visits",
+   "fieldtype": "Int",
+   "label": "Total Visits",
+   "read_only": 1
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "customer_group",
+   "fieldtype": "Link",
+   "label": "Customer Group",
+   "options": "Customer Group"
+  },
+  {
+   "fieldname": "column_break_68",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "territory",
+   "fieldtype": "Link",
+   "label": "Territory",
+   "options": "Territory"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  }
+ ],
+ "links": [
+  {
+   "group": "Appointments",
+   "link_doctype": "Appointment Booking",
+   "link_fieldname": "patient"
+  },
+  {
+   "group": "Medical Records",
+   "link_doctype": "Medical Record",
+   "link_fieldname": "patient"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Healthcare",
+ "name": "Patient Record",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Healthcare Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Healthcare Practitioner",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Green",
+   "title": "Active"
+  },
+  {
+   "color": "Gray",
+   "title": "Inactive"
+  }
+ ],
+ "timeline_field": "customer",
+ "track_changes": 1
+}

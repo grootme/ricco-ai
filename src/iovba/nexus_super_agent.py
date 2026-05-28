@@ -859,12 +859,24 @@ Para configurar, establece la variable de entorno `OPENROUTER_API_KEY` o pasa la
         return roles
 
 
-# Singleton instance for global access
-_nexus_instance: Optional[NEXUSSuperAgent] = None
-
+# ============================================
+# DEPENDENCY INJECTION FACTORY
+# Replaces singleton pattern for better testability and multi-tenancy
+# ============================================
 
 def get_nexus(api_key: Optional[str] = None) -> NEXUSSuperAgent:
-    """Get or create the NEXUS singleton instance"""
+    """
+    Factory function for NEXUS instances.
+    
+    DEPRECATED: This function is kept for backward compatibility.
+    For new code, use FastAPI dependency injection with get_nexus_service().
+    
+    Args:
+        api_key: Optional OpenRouter API key
+        
+    Returns:
+        A new NEXUSSuperAgent instance (or cached singleton for backward compat)
+    """
     global _nexus_instance
     
     if _nexus_instance is None:
@@ -876,7 +888,159 @@ def get_nexus(api_key: Optional[str] = None) -> NEXUSSuperAgent:
     return _nexus_instance
 
 
+def create_nexus(
+    openrouter_api_key: Optional[str] = None,
+    config: Optional[NEXUSConfig] = None,
+) -> NEXUSSuperAgent:
+    """
+    Factory function to create a new NEXUS instance.
+    
+    Use this for creating fresh instances instead of the singleton pattern.
+    Ideal for multi-tenant scenarios and testing.
+    
+    Args:
+        openrouter_api_key: Optional API key for OpenRouter
+        config: Optional NEXUSConfig instance
+        
+    Returns:
+        A new NEXUSSuperAgent instance
+        
+    Example:
+        ```python
+        nexus = create_nexus(openrouter_api_key="sk-...")
+        response = await nexus.process_query("Hello")
+        ```
+    """
+    if config is None:
+        config = NEXUSConfig()
+    
+    if openrouter_api_key:
+        config.openrouter_api_key = openrouter_api_key
+    
+    return NEXUSSuperAgent(config=config)
+
+
 def reset_nexus() -> None:
-    """Reset the NEXUS singleton"""
+    """
+    Reset the NEXUS singleton instance.
+    
+    This is primarily useful for testing to ensure clean state.
+    """
     global _nexus_instance
     _nexus_instance = None
+
+
+# FastAPI Dependency Injection Provider
+async def get_nexus_service(
+    openrouter_api_key: Optional[str] = None,
+    settings: Optional[Any] = None,
+) -> NEXUSSuperAgent:
+    """
+    FastAPI dependency injection provider for NEXUS.
+    
+    This is the recommended way to get a NEXUS instance in FastAPI routes.
+    It creates a new instance per-request, avoiding singleton issues.
+    
+    Usage in FastAPI:
+        ```python
+        from fastapi import Depends
+        
+        @app.post("/api/query")
+        async def query_endpoint(
+            query: str,
+            nexus: NEXUSSuperAgent = Depends(get_nexus_service)
+        ):
+            response = await nexus.process_query(query)
+            return response.to_dict()
+        ```
+    
+    Args:
+        openrouter_api_key: Optional API key (can be injected from settings)
+        settings: Optional settings object with openrouter_api_key attribute
+        
+    Returns:
+        A NEXUSSuperAgent instance
+    """
+    # Try to get API key from settings if not provided
+    if openrouter_api_key is None and settings is not None:
+        openrouter_api_key = getattr(settings, 'OPENROUTER_API_KEY', None)
+    
+    return create_nexus(openrouter_api_key=openrouter_api_key)
+
+
+class NEXUSProvider:
+    """
+    Provider class for managing NEXUS instances with lifecycle management.
+    
+    Useful for applications that need:
+    - Multiple NEXUS instances (multi-tenant)
+    - Lifecycle management (startup/shutdown)
+    - Configuration caching
+    
+    Example:
+        ```python
+        provider = NEXUSProvider(default_api_key="sk-...")
+        
+        # Get instance for specific tenant
+        nexus = provider.get_instance("tenant_123", api_key="tenant_specific_key")
+        
+        # Cleanup on shutdown
+        await provider.shutdown()
+        ```
+    """
+    
+    def __init__(
+        self,
+        default_api_key: Optional[str] = None,
+        default_config: Optional[NEXUSConfig] = None,
+    ):
+        self._default_api_key = default_api_key
+        self._default_config = default_config
+        self._instances: Dict[str, NEXUSSuperAgent] = {}
+    
+    def get_instance(
+        self,
+        instance_id: str = "default",
+        api_key: Optional[str] = None,
+        config: Optional[NEXUSConfig] = None,
+    ) -> NEXUSSuperAgent:
+        """
+        Get or create a NEXUS instance by ID.
+        
+        Args:
+            instance_id: Unique identifier for the instance
+            api_key: Optional API key (overrides default)
+            config: Optional config (overrides default)
+            
+        Returns:
+            NEXUSSuperAgent instance
+        """
+        if instance_id not in self._instances:
+            effective_config = config or self._default_config or NEXUSConfig()
+            effective_api_key = api_key or self._default_api_key
+            
+            if effective_api_key:
+                effective_config.openrouter_api_key = effective_api_key
+            
+            self._instances[instance_id] = NEXUSSuperAgent(config=effective_config)
+        
+        return self._instances[instance_id]
+    
+    def remove_instance(self, instance_id: str) -> bool:
+        """Remove an instance by ID"""
+        if instance_id in self._instances:
+            del self._instances[instance_id]
+            return True
+        return False
+    
+    async def shutdown(self) -> None:
+        """Cleanup all instances"""
+        self._instances.clear()
+    
+    def list_instances(self) -> List[str]:
+        """List all instance IDs"""
+        return list(self._instances.keys())
+
+
+# Singleton instance for backward compatibility
+_nexus_instance: Optional[NEXUSSuperAgent] = None

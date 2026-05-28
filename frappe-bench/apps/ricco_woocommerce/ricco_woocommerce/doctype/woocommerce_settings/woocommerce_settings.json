@@ -1,0 +1,480 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "store_configuration_section",
+  "store_name",
+  "store_url",
+  "consumer_key",
+  "consumer_secret",
+  "column_break_store",
+  "is_active",
+  "verify_ssl",
+  "timeout",
+  "api_version",
+  "sync_configuration_section",
+  "sync_products",
+  "sync_orders",
+  "sync_customers",
+  "sync_inventory",
+  "column_break_sync",
+  "auto_sync_enabled",
+  "sync_interval",
+  "sync_on_submit",
+  "sync_on_update",
+  "default_values_section",
+  "default_warehouse",
+  "default_price_list",
+  "default_customer_group",
+  "default_territory",
+  "column_break_defaults",
+  "default_cost_center",
+  "default_naming_series",
+  "order_prefix",
+  "customer_prefix",
+  "order_configuration_section",
+  "order_status_mapping",
+  "import_orders_from_status",
+  "column_break_order",
+  "create_sales_invoice",
+  "create_delivery_note",
+  "order_item_tax_template",
+  "inventory_configuration_section",
+  "inventory_sync_direction",
+  "update_erpnext_stock",
+  "update_wc_stock",
+  "column_break_inventory",
+  "stock_reservation_days",
+  "enable_stock_reservation",
+  "webhook_configuration_section",
+  "webhook_secret",
+  "enable_webhooks",
+  "webhook_delivery_url",
+  "column_break_webhook",
+  "notify_on_webhook_error",
+  "webhook_error_email",
+  "error_handling_section",
+  "max_retry_attempts",
+  "retry_interval_minutes",
+  "enable_error_logging",
+  "column_break_error",
+  "notify_on_sync_error",
+  "sync_error_email",
+  "advanced_settings_section",
+  "debug_mode",
+  "log_api_requests",
+  "batch_size",
+  "column_break_advanced",
+  "enable_multi_store",
+  "multi_store_mapping"
+ ],
+ "fields": [
+  {
+   "fieldname": "store_configuration_section",
+   "fieldtype": "Section Break",
+   "label": "Store Configuration"
+  },
+  {
+   "fieldname": "store_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Store Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "store_url",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Store URL",
+   "reqd": 1,
+   "description": "Your WooCommerce store URL (e.g., https://mystore.com)"
+  },
+  {
+   "fieldname": "consumer_key",
+   "fieldtype": "Password",
+   "in_list_view": 1,
+   "label": "Consumer Key",
+   "reqd": 1
+  },
+  {
+   "fieldname": "consumer_secret",
+   "fieldtype": "Password",
+   "label": "Consumer Secret",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_store",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "default": "1",
+   "fieldname": "verify_ssl",
+   "fieldtype": "Check",
+   "label": "Verify SSL Certificate"
+  },
+  {
+   "default": "30",
+   "fieldname": "timeout",
+   "fieldtype": "Int",
+   "label": "API Timeout (seconds)"
+  },
+  {
+   "default": "wc/v3",
+   "fieldname": "api_version",
+   "fieldtype": "Select",
+   "label": "API Version",
+   "options": "wc/v3\nwc/v2\nv3\nv2"
+  },
+  {
+   "fieldname": "sync_configuration_section",
+   "fieldtype": "Section Break",
+   "label": "Sync Configuration"
+  },
+  {
+   "default": "1",
+   "fieldname": "sync_products",
+   "fieldtype": "Check",
+   "label": "Sync Products"
+  },
+  {
+   "default": "1",
+   "fieldname": "sync_orders",
+   "fieldtype": "Check",
+   "label": "Sync Orders"
+  },
+  {
+   "default": "1",
+   "fieldname": "sync_customers",
+   "fieldtype": "Check",
+   "label": "Sync Customers"
+  },
+  {
+   "default": "1",
+   "fieldname": "sync_inventory",
+   "fieldtype": "Check",
+   "label": "Sync Inventory"
+  },
+  {
+   "fieldname": "column_break_sync",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "auto_sync_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Auto Sync"
+  },
+  {
+   "default": "30",
+   "fieldname": "sync_interval",
+   "fieldtype": "Int",
+   "label": "Sync Interval (minutes)"
+  },
+  {
+   "default": "1",
+   "fieldname": "sync_on_submit",
+   "fieldtype": "Check",
+   "label": "Sync on Submit"
+  },
+  {
+   "default": "1",
+   "fieldname": "sync_on_update",
+   "fieldtype": "Check",
+   "label": "Sync on Update"
+  },
+  {
+   "fieldname": "default_values_section",
+   "fieldtype": "Section Break",
+   "label": "Default Values"
+  },
+  {
+   "fieldname": "default_warehouse",
+   "fieldtype": "Link",
+   "label": "Default Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "default_price_list",
+   "fieldtype": "Link",
+   "label": "Default Price List",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "default_customer_group",
+   "fieldtype": "Link",
+   "label": "Default Customer Group",
+   "options": "Customer Group"
+  },
+  {
+   "fieldname": "default_territory",
+   "fieldtype": "Link",
+   "label": "Default Territory",
+   "options": "Territory"
+  },
+  {
+   "fieldname": "column_break_defaults",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_cost_center",
+   "fieldtype": "Link",
+   "label": "Default Cost Center",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "default_naming_series",
+   "fieldtype": "Data",
+   "label": "Default Naming Series"
+  },
+  {
+   "default": "WC-ORD-",
+   "fieldname": "order_prefix",
+   "fieldtype": "Data",
+   "label": "Order Prefix"
+  },
+  {
+   "default": "WC-CUST-",
+   "fieldname": "customer_prefix",
+   "fieldtype": "Data",
+   "label": "Customer Prefix"
+  },
+  {
+   "fieldname": "order_configuration_section",
+   "fieldtype": "Section Break",
+   "label": "Order Configuration"
+  },
+  {
+   "fieldname": "order_status_mapping",
+   "fieldtype": "Table",
+   "label": "Order Status Mapping",
+   "options": "WooCommerce Order Status Mapping"
+  },
+  {
+   "fieldname": "import_orders_from_status",
+   "fieldtype": "Select",
+   "label": "Import Orders From Status",
+   "options": "any\npending\nprocessing\non-hold\ncompleted\ncancelled\nrefunded\nfailed"
+  },
+  {
+   "fieldname": "column_break_order",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "create_sales_invoice",
+   "fieldtype": "Check",
+   "label": "Create Sales Invoice on Order Import"
+  },
+  {
+   "default": "0",
+   "fieldname": "create_delivery_note",
+   "fieldtype": "Check",
+   "label": "Create Delivery Note on Order Complete"
+  },
+  {
+   "fieldname": "order_item_tax_template",
+   "fieldtype": "Link",
+   "label": "Order Item Tax Template",
+   "options": "Item Tax Template"
+  },
+  {
+   "fieldname": "inventory_configuration_section",
+   "fieldtype": "Section Break",
+   "label": "Inventory Configuration"
+  },
+  {
+   "default": "both",
+   "fieldname": "inventory_sync_direction",
+   "fieldtype": "Select",
+   "label": "Inventory Sync Direction",
+   "options": "to_wc\nfrom_wc\nboth"
+  },
+  {
+   "default": "1",
+   "fieldname": "update_erpnext_stock",
+   "fieldtype": "Check",
+   "label": "Update ERPNext Stock from WooCommerce"
+  },
+  {
+   "default": "1",
+   "fieldname": "update_wc_stock",
+   "fieldtype": "Check",
+   "label": "Update WooCommerce Stock from ERPNext"
+  },
+  {
+   "fieldname": "column_break_inventory",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "7",
+   "fieldname": "stock_reservation_days",
+   "fieldtype": "Int",
+   "label": "Stock Reservation Days"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_stock_reservation",
+   "fieldtype": "Check",
+   "label": "Enable Stock Reservation"
+  },
+  {
+   "fieldname": "webhook_configuration_section",
+   "fieldtype": "Section Break",
+   "label": "Webhook Configuration"
+  },
+  {
+   "fieldname": "webhook_secret",
+   "fieldtype": "Password",
+   "label": "Webhook Secret"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_webhooks",
+   "fieldtype": "Check",
+   "label": "Enable Webhooks"
+  },
+  {
+   "fieldname": "webhook_delivery_url",
+   "fieldtype": "Data",
+   "label": "Webhook Delivery URL",
+   "description": "URL where WooCommerce will send webhook events"
+  },
+  {
+   "fieldname": "column_break_webhook",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "notify_on_webhook_error",
+   "fieldtype": "Check",
+   "label": "Notify on Webhook Error"
+  },
+  {
+   "fieldname": "webhook_error_email",
+   "fieldtype": "Data",
+   "label": "Webhook Error Email"
+  },
+  {
+   "fieldname": "error_handling_section",
+   "fieldtype": "Section Break",
+   "label": "Error Handling"
+  },
+  {
+   "default": "3",
+   "fieldname": "max_retry_attempts",
+   "fieldtype": "Int",
+   "label": "Max Retry Attempts"
+  },
+  {
+   "default": "5",
+   "fieldname": "retry_interval_minutes",
+   "fieldtype": "Int",
+   "label": "Retry Interval (minutes)"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_error_logging",
+   "fieldtype": "Check",
+   "label": "Enable Error Logging"
+  },
+  {
+   "fieldname": "column_break_error",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "notify_on_sync_error",
+   "fieldtype": "Check",
+   "label": "Notify on Sync Error"
+  },
+  {
+   "fieldname": "sync_error_email",
+   "fieldtype": "Data",
+   "label": "Sync Error Email"
+  },
+  {
+   "fieldname": "advanced_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Advanced Settings"
+  },
+  {
+   "default": "0",
+   "fieldname": "debug_mode",
+   "fieldtype": "Check",
+   "label": "Debug Mode"
+  },
+  {
+   "default": "0",
+   "fieldname": "log_api_requests",
+   "fieldtype": "Check",
+   "label": "Log API Requests"
+  },
+  {
+   "default": "100",
+   "fieldname": "batch_size",
+   "fieldtype": "Int",
+   "label": "Batch Size"
+  },
+  {
+   "fieldname": "column_break_advanced",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_multi_store",
+   "fieldtype": "Check",
+   "label": "Enable Multi-Store Support"
+  },
+  {
+   "fieldname": "multi_store_mapping",
+   "fieldtype": "Table",
+   "label": "Multi-Store Mapping",
+   "options": "WooCommerce Multi Store Mapping"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 0,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "WooCommerce Settings",
+ "name": "WooCommerce Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Sales Manager",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Item Manager",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,253 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:table_number",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "table_details_section",
+  "table_number",
+  "table_name",
+  "table_section",
+  "column_break_4",
+  "capacity",
+  "status",
+  "floor_section",
+  "floor",
+  "position_x",
+  "position_y",
+  "column_break_10",
+  "shape",
+  "size",
+  "features_section",
+  "has_view",
+  "is_private",
+  "is_accessible",
+  "column_break_16",
+  "is_smoking",
+  "has_high_chair",
+  "notes",
+  "integration_section",
+  "linked_customer",
+  "column_break_22",
+  "current_reservation"
+ ],
+ "fields": [
+  {
+   "fieldname": "table_details_section",
+   "fieldtype": "Section Break",
+   "label": "Table Details"
+  },
+  {
+   "fieldname": "table_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Table Number",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "table_name",
+   "fieldtype": "Data",
+   "label": "Table Name"
+  },
+  {
+   "fieldname": "table_section",
+   "fieldtype": "Link",
+   "label": "Section",
+   "options": "Restaurant Table Section"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "4",
+   "fieldname": "capacity",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Seating Capacity",
+   "reqd": 1
+  },
+  {
+   "default": "Available",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Available\nOccupied\nReserved\nMaintenance\nOut of Service"
+  },
+  {
+   "fieldname": "floor_section",
+   "fieldtype": "Section Break",
+   "label": "Floor Layout"
+  },
+  {
+   "fieldname": "floor",
+   "fieldtype": "Link",
+   "label": "Floor",
+   "options": "Restaurant Floor"
+  },
+  {
+   "fieldname": "position_x",
+   "fieldtype": "Int",
+   "label": "Position X"
+  },
+  {
+   "fieldname": "position_y",
+   "fieldtype": "Int",
+   "label": "Position Y"
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Round",
+   "fieldname": "shape",
+   "fieldtype": "Select",
+   "label": "Shape",
+   "options": "Round\nSquare\nRectangle\nOval"
+  },
+  {
+   "fieldname": "size",
+   "fieldtype": "Select",
+   "label": "Size",
+   "options": "Small\nMedium\nLarge\nExtra Large"
+  },
+  {
+   "fieldname": "features_section",
+   "fieldtype": "Section Break",
+   "label": "Features"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_view",
+   "fieldtype": "Check",
+   "label": "Has View"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_private",
+   "fieldtype": "Check",
+   "label": "Is Private"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_accessible",
+   "fieldtype": "Check",
+   "label": "Wheelchair Accessible"
+  },
+  {
+   "fieldname": "column_break_16",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_smoking",
+   "fieldtype": "Check",
+   "label": "Smoking Area"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_high_chair",
+   "fieldtype": "Check",
+   "label": "High Chair Available"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "linked_customer",
+   "fieldtype": "Link",
+   "label": "Linked Customer (Walk-in)",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "column_break_22",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "current_reservation",
+   "fieldtype": "Link",
+   "label": "Current Reservation",
+   "options": "Restaurant Reservation",
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Restaurant",
+ "name": "Restaurant Table",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Restaurant Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Restaurant Staff",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Green",
+   "title": "Available"
+  },
+  {
+   "color": "Red",
+   "title": "Occupied"
+  },
+  {
+   "color": "Blue",
+   "title": "Reserved"
+  },
+  {
+   "color": "Orange",
+   "title": "Maintenance"
+  }
+ ],
+ "track_changes": 1
+}

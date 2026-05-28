@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://build.nvidia.com/nvidia/biomedical-aiq-research-agent",
+    "name": "Biomedical AI-Q Research Agent Blueprint - NVIDIA Build",
+    "snippet": "Build advanced AI agents within the biomedical domain using the AI-Q Blueprint and the BioNeMo Virtual Screening Blueprint. Missing: healthcare | Show results with: healthcare",
+    "host_name": "build.nvidia.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/biomedical-aiq-research-agent",
+    "name": "NVIDIA-AI-Blueprints/biomedical-aiq-research-agent - GitHub",
+    "snippet": "The NVIDIA Biomedical AI-Q Research Agent Developer Blueprint allows you to create a deep research agent with virtual screening capabilities ... Missing: agents | Show results with: agents",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/blog/advancing-literature-review-amp-target-discovery-with-nvidia-biomedical-ai-q-research-agent-blueprint",
+    "name": "Advancing Literature Review & Target Discovery With NVIDIA",
+    "snippet": "NVIDIA has developed the Biomedical AI-Q Research Agent to assist drug development scientists to rapidly review available literature, draw complex hypotheses.",
+    "host_name": "developer.nvidia.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.nvidia.com/enterprise-reference-architectures/ai-q-research-agent-blueprint.pdf",
+    "name": "[PDF] AI-Q NVIDIA Research Agent Blueprint for Enterprise RA",
+    "snippet": "AI-Q provides the open blueprint and reference architecture for building next‑generation agents, while NeMo. Agent Toolkit is the underlying control layer ...",
+    "host_name": "docs.nvidia.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://build.nvidia.com/nvidia/biomedical-aiq-research-agent/nim",
+    "name": "Biomedical AI-Q Research Agent Blueprint - NVIDIA Build",
+    "snippet": "Build advanced AI agents within the biomedical domain using the AI-Q Blueprint and the BioNeMo Virtual Screening Blueprint. Missing: healthcare | Show results with: healthcare",
+    "host_name": "build.nvidia.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA-AI-Blueprints/biomedical-aiq-research-agent/blob/main/docs/get-started/get-started-docker-compose.md",
+    "name": "NVIDIA-AI-Blueprints/biomedical-aiq-research-agent - GitHub",
+    "snippet": "This guide describes how to deploy the Biomedical AI-Q Research Agent using Docker. Prerequisites. This blueprint, like the AI-Q NVIDIA Research Assistant ... Missing: agents | Show results with: agents",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-us/industries/healthcare-life-sciences",
+    "name": "NVIDIA AI Platforms for Healthcare and Life Sciences",
+    "snippet": "Open source AI models for biomedical research across omics, protein and molecule structures, medical imaging, 3D anatomy, surgical robotics, and digital twins ...",
+    "host_name": "www.nvidia.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://build.nvidia.com/nvidia/aiq",
+    "name": "NVIDIA AI-Q Blueprint for intelligent agents",
+    "snippet": "The NVIDIA AI-Q Blueprint (pronounced IQ) enables developers to build fully customizable AI agents that they own, inspect and control. Built on LangChain ... Missing: biomedical healthcare",
+    "host_name": "build.nvidia.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=1auHkFYrDO4",
+    "name": "Build Reasoning AI Agents with NVIDIA AI-Q Blueprint - YouTube",
+    "snippet": "Discover how to build intelligent, reasoning-capable AI agents using the AI-Q NVIDIA Blueprint. Learn how this developer framework connects ... Missing: healthcare architecture",
+    "host_name": "www.youtube.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=zTqGXZXV-7o",
+    "name": "NVIDIA's Insights on Healthcare AI Agents: A Detailed Exploration",
+    "snippet": "NVIDIA is leading the charge by delivering cutting-edge AI agent solutions that enhance patient care, optimize clinical research, ... Missing: Q | Show results with: Q",
+    "host_name": "www.youtube.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

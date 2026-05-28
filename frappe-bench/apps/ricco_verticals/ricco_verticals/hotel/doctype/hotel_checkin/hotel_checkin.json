@@ -1,0 +1,511 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "CHKIN-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "checkin_details_section",
+  "booking",
+  "customer",
+  "guest_name",
+  "column_break_4",
+  "check_in_datetime",
+  "check_in_by",
+  "status",
+  "room_section",
+  "room",
+  "room_type",
+  "floor",
+  "column_break_10",
+  "room_rate",
+  "key_card_number",
+  "wifi_password",
+  "guest_verification_section",
+  "id_type",
+  "id_number",
+  "id_expiry",
+  "column_break_16",
+  "id_document",
+  "id_verified",
+  "verified_by",
+  "guest_details_section",
+  "number_of_adults",
+  "number_of_children",
+  "column_break_22",
+  "vehicle_number",
+  "special_requests",
+  "payment_section",
+  "payment_method",
+  "deposit_collected",
+  "deposit_amount",
+  "column_break_28",
+  "credit_card_hold",
+  "card_last_four",
+  "billing_instructions",
+  "checkout_section",
+  "expected_checkout",
+  "actual_checkout",
+  "checked_out_by",
+  "column_break_35",
+  "late_checkout_approved",
+  "late_checkout_reason",
+  "checkout_notes",
+  "billing_section",
+  "room_charges",
+  "additional_charges",
+  "taxes",
+  "column_break_42",
+  "discount_applied",
+  "total_charges",
+  "amount_paid",
+  "balance_due",
+  "folio_section",
+  "folio_number",
+  "charges",
+  "column_break_49",
+  "payments",
+  "adjustments",
+  "integration_section",
+  "sales_invoice",
+  "payment_entry",
+  "column_break_55",
+  "company",
+  "branch",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "checkin_details_section",
+   "fieldtype": "Section Break",
+   "label": "Check-in Details"
+  },
+  {
+   "fieldname": "booking",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Booking",
+   "options": "Hotel Booking"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "guest_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Guest Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Now",
+   "fieldname": "check_in_datetime",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Check-in Date & Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "check_in_by",
+   "fieldtype": "Link",
+   "label": "Checked In By",
+   "options": "User"
+  },
+  {
+   "default": "Checked In",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Checked In\nChecked Out\nCancelled"
+  },
+  {
+   "fieldname": "room_section",
+   "fieldtype": "Section Break",
+   "label": "Room Information"
+  },
+  {
+   "fieldname": "room",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Room",
+   "options": "Hotel Room",
+   "reqd": 1
+  },
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Data",
+   "label": "Room Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "floor",
+   "fieldtype": "Int",
+   "label": "Floor",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "room_rate",
+   "fieldtype": "Currency",
+   "label": "Room Rate/Night"
+  },
+  {
+   "fieldname": "key_card_number",
+   "fieldtype": "Data",
+   "label": "Key Card Number"
+  },
+  {
+   "fieldname": "wifi_password",
+   "fieldtype": "Data",
+   "label": "WiFi Password"
+  },
+  {
+   "fieldname": "guest_verification_section",
+   "fieldtype": "Section Break",
+   "label": "Guest Verification"
+  },
+  {
+   "fieldname": "id_type",
+   "fieldtype": "Select",
+   "label": "ID Type",
+   "options": "Passport\nNational ID\nDrivers License\nOther"
+  },
+  {
+   "fieldname": "id_number",
+   "fieldtype": "Data",
+   "label": "ID Number"
+  },
+  {
+   "fieldname": "id_expiry",
+   "fieldtype": "Date",
+   "label": "ID Expiry Date"
+  },
+  {
+   "fieldname": "column_break_16",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "id_document",
+   "fieldtype": "Attach",
+   "label": "ID Document Scan"
+  },
+  {
+   "default": "0",
+   "fieldname": "id_verified",
+   "fieldtype": "Check",
+   "label": "ID Verified"
+  },
+  {
+   "fieldname": "verified_by",
+   "fieldtype": "Link",
+   "label": "Verified By",
+   "options": "User"
+  },
+  {
+   "fieldname": "guest_details_section",
+   "fieldtype": "Section Break",
+   "label": "Guest Details"
+  },
+  {
+   "default": "1",
+   "fieldname": "number_of_adults",
+   "fieldtype": "Int",
+   "label": "Number of Adults"
+  },
+  {
+   "fieldname": "number_of_children",
+   "fieldtype": "Int",
+   "label": "Number of Children"
+  },
+  {
+   "fieldname": "column_break_22",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "vehicle_number",
+   "fieldtype": "Data",
+   "label": "Vehicle Number"
+  },
+  {
+   "fieldname": "special_requests",
+   "fieldtype": "Text",
+   "label": "Special Requests"
+  },
+  {
+   "fieldname": "payment_section",
+   "fieldtype": "Section Break",
+   "label": "Payment at Check-in"
+  },
+  {
+   "fieldname": "payment_method",
+   "fieldtype": "Select",
+   "label": "Payment Method",
+   "options": "Cash\nCredit Card\nDebit Card\nBank Transfer\nMobile Payment"
+  },
+  {
+   "default": "0",
+   "fieldname": "deposit_collected",
+   "fieldtype": "Check",
+   "label": "Deposit Collected"
+  },
+  {
+   "fieldname": "deposit_amount",
+   "fieldtype": "Currency",
+   "label": "Deposit Amount"
+  },
+  {
+   "fieldname": "column_break_28",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "credit_card_hold",
+   "fieldtype": "Check",
+   "label": "Credit Card Hold"
+  },
+  {
+   "fieldname": "card_last_four",
+   "fieldtype": "Data",
+   "label": "Card Last 4 Digits"
+  },
+  {
+   "fieldname": "billing_instructions",
+   "fieldtype": "Text",
+   "label": "Billing Instructions"
+  },
+  {
+   "fieldname": "checkout_section",
+   "fieldtype": "Section Break",
+   "label": "Check-out"
+  },
+  {
+   "fieldname": "expected_checkout",
+   "fieldtype": "Date",
+   "label": "Expected Checkout"
+  },
+  {
+   "fieldname": "actual_checkout",
+   "fieldtype": "Datetime",
+   "label": "Actual Checkout Date & Time"
+  },
+  {
+   "fieldname": "checked_out_by",
+   "fieldtype": "Link",
+   "label": "Checked Out By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_35",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "late_checkout_approved",
+   "fieldtype": "Check",
+   "label": "Late Checkout Approved"
+  },
+  {
+   "fieldname": "late_checkout_reason",
+   "fieldtype": "Data",
+   "label": "Late Checkout Reason"
+  },
+  {
+   "fieldname": "checkout_notes",
+   "fieldtype": "Text",
+   "label": "Checkout Notes"
+  },
+  {
+   "fieldname": "billing_section",
+   "fieldtype": "Section Break",
+   "label": "Billing Summary"
+  },
+  {
+   "fieldname": "room_charges",
+   "fieldtype": "Currency",
+   "label": "Room Charges"
+  },
+  {
+   "fieldname": "additional_charges",
+   "fieldtype": "Currency",
+   "label": "Additional Charges"
+  },
+  {
+   "fieldname": "taxes",
+   "fieldtype": "Currency",
+   "label": "Taxes"
+  },
+  {
+   "fieldname": "column_break_42",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "discount_applied",
+   "fieldtype": "Currency",
+   "label": "Discount Applied"
+  },
+  {
+   "fieldname": "total_charges",
+   "fieldtype": "Currency",
+   "label": "Total Charges",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amount_paid",
+   "fieldtype": "Currency",
+   "label": "Amount Paid"
+  },
+  {
+   "fieldname": "balance_due",
+   "fieldtype": "Currency",
+   "label": "Balance Due",
+   "read_only": 1
+  },
+  {
+   "fieldname": "folio_section",
+   "fieldtype": "Section Break",
+   "label": "Folio Details"
+  },
+  {
+   "fieldname": "folio_number",
+   "fieldtype": "Data",
+   "label": "Folio Number"
+  },
+  {
+   "fieldname": "charges",
+   "fieldtype": "Table",
+   "label": "Charges",
+   "options": "Hotel Checkin Charge"
+  },
+  {
+   "fieldname": "column_break_49",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payments",
+   "fieldtype": "Table",
+   "label": "Payments",
+   "options": "Hotel Checkin Payment"
+  },
+  {
+   "fieldname": "adjustments",
+   "fieldtype": "Currency",
+   "label": "Adjustments"
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_entry",
+   "fieldtype": "Link",
+   "label": "Payment Entry",
+   "options": "Payment Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_55",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Notes"
+  }
+ ],
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Checkin",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Hotel Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Front Desk",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Green",
+   "title": "Checked In"
+  },
+  {
+   "color": "Gray",
+   "title": "Checked Out"
+  },
+  {
+   "color": "Red",
+   "title": "Cancelled"
+  }
+ ],
+ "timeline_field": "customer",
+ "track_changes": 1
+}

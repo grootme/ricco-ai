@@ -1,0 +1,192 @@
+{
+  "timestamp": "2026-05-28T20:52:15.317689",
+  "duration_seconds": 2.8499016761779785,
+  "summary": {
+    "total": 23,
+    "passed": 17,
+    "failed": 6,
+    "success_rate": 73.91304347826086
+  },
+  "by_category": {
+    "OpenRouter": {
+      "passed": 2,
+      "failed": 0
+    },
+    "AI Providers": {
+      "passed": 2,
+      "failed": 1
+    },
+    "MCP": {
+      "passed": 2,
+      "failed": 1
+    },
+    "Blueprints": {
+      "passed": 2,
+      "failed": 0
+    },
+    "Vector Stores": {
+      "passed": 2,
+      "failed": 0
+    },
+    "Config": {
+      "passed": 2,
+      "failed": 0
+    },
+    "Services": {
+      "passed": 2,
+      "failed": 0
+    },
+    "Queue": {
+      "passed": 2,
+      "failed": 0
+    },
+    "Schemas": {
+      "passed": 1,
+      "failed": 1
+    },
+    "Integration": {
+      "passed": 0,
+      "failed": 3
+    }
+  },
+  "results": {
+    "OpenRouter/Models Endpoint": {
+      "success": true,
+      "message": "Found 357 models",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:12.681034"
+    },
+    "OpenRouter/Chat Completion": {
+      "success": true,
+      "message": "Response: OK",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:13.362267"
+    },
+    "AI Providers/OpenAI": {
+      "success": false,
+      "message": "attempted relative import beyond top-level package",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:13.556181"
+    },
+    "AI Providers/Anthropic": {
+      "success": true,
+      "message": "AnthropicProvider available",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:13.556230"
+    },
+    "AI Providers/Local": {
+      "success": true,
+      "message": "LocalProvider available",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:13.556237"
+    },
+    "MCP/Base Server": {
+      "success": true,
+      "message": "BaseMCPServer imported",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:13.592448"
+    },
+    "MCP/Multi-Agent Server": {
+      "success": true,
+      "message": "MultiAgentMCPServer imported",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:13.592480"
+    },
+    "MCP/Tool Definitions": {
+      "success": false,
+      "message": "cannot import name 'TOOL_DEFINITIONS' from 'mcp.tools.tool_definitions' (/home/z/my-project/src/mcp/tools/tool_definitions.py)",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:13.605397"
+    },
+    "Blueprints/Registry": {
+      "success": true,
+      "message": "0 blueprints registered",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:13.614072"
+    },
+    "Blueprints/RAG Blueprint": {
+      "success": true,
+      "message": "Available",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:13.614128"
+    },
+    "Vector Stores/Qdrant Import": {
+      "success": true,
+      "message": "QdrantVectorStore imported",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:14.358588"
+    },
+    "Vector Stores/Milvus Import": {
+      "success": true,
+      "message": "MilvusVectorStore imported",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:14.722754"
+    },
+    "Config/Settings": {
+      "success": true,
+      "message": "API: RICCO AI",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:14.757091"
+    },
+    "Config/OpenRouter Config": {
+      "success": true,
+      "message": "7 free models configured",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:14.760802"
+    },
+    "Services/A2UI Service": {
+      "success": true,
+      "message": "A2UIService imported",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:14.819227"
+    },
+    "Services/Context Engine": {
+      "success": true,
+      "message": "ContextEngine imported",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:14.821086"
+    },
+    "Queue/Event Dispatcher": {
+      "success": true,
+      "message": "EventDispatcher imported",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:15.141606"
+    },
+    "Queue/Queue Worker": {
+      "success": true,
+      "message": "QueueWorker imported",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:15.141651"
+    },
+    "Schemas/A2A Types": {
+      "success": true,
+      "message": "AgentCard imported",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:15.164064"
+    },
+    "Schemas/Chat Schemas": {
+      "success": false,
+      "message": "cannot import name 'ChatMessage' from 'schemas.chat' (/home/z/my-project/src/schemas/chat.py)",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:15.167221"
+    },
+    "Integration/Integration Service": {
+      "success": false,
+      "message": "cannot import name 'IntegrationService' from 'integration.integration_service' (/home/z/my-project/src/integration/integration_service.py)",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:15.173551"
+    },
+    "Integration/Service Container": {
+      "success": false,
+      "message": "cannot import name 'ServiceContainer' from 'core.container' (/home/z/my-project/src/core/container.py)",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:15.317535"
+    },
+    "Integration/Protocols": {
+      "success": false,
+      "message": "cannot import name 'ServiceProtocol' from 'core.protocols' (/home/z/my-project/src/core/protocols.py)",
+      "details": null,
+      "timestamp": "2026-05-28T20:52:15.317577"
+    }
+  }
+}

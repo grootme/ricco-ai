@@ -1,0 +1,394 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:wc_product_id",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "product_information_section",
+  "wc_product_id",
+  "item_code",
+  "woocommerce_settings",
+  "column_break_product",
+  "sku",
+  "product_name",
+  "product_type",
+  "sync_status",
+  "stock_sync_section",
+  "stock_sync",
+  "stock_quantity",
+  "wc_stock_quantity",
+  "last_stock_sync",
+  "column_break_stock",
+  "manage_stock",
+  "stock_status",
+  "backorders",
+  "sync_stock_on_update",
+  "price_sync_section",
+  "regular_price",
+  "sale_price",
+  "wc_regular_price",
+  "wc_sale_price",
+  "column_break_price",
+  "price_sync",
+  "last_price_sync",
+  "currency",
+  "product_details_section",
+  "product_description",
+  "short_description",
+  "categories",
+  "column_break_details",
+  "weight",
+  "length",
+  "width",
+  "height",
+  "image_url",
+  "sync_history_section",
+  "sync_attempts",
+  "last_sync_at",
+  "last_sync_error",
+  "column_break_history",
+  "created_at",
+  "modified_at",
+  "wc_data"
+ ],
+ "fields": [
+  {
+   "fieldname": "product_information_section",
+   "fieldtype": "Section Break",
+   "label": "Product Information"
+  },
+  {
+   "fieldname": "wc_product_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "WooCommerce Product ID",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "ERPNext Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "woocommerce_settings",
+   "fieldtype": "Link",
+   "label": "WooCommerce Settings",
+   "options": "WooCommerce Settings"
+  },
+  {
+   "fieldname": "column_break_product",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sku",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "SKU"
+  },
+  {
+   "fieldname": "product_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Product Name"
+  },
+  {
+   "fieldname": "product_type",
+   "fieldtype": "Select",
+   "label": "Product Type",
+   "options": "simple\ngrouped\nexternal\nvariable\nvariation"
+  },
+  {
+   "fieldname": "sync_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Sync Status",
+   "options": "Pending\nSynced\nFailed\nProcessing",
+   "default": "Pending"
+  },
+  {
+   "fieldname": "stock_sync_section",
+   "fieldtype": "Section Break",
+   "label": "Stock Sync"
+  },
+  {
+   "default": "1",
+   "fieldname": "stock_sync",
+   "fieldtype": "Check",
+   "label": "Enable Stock Sync"
+  },
+  {
+   "fieldname": "stock_quantity",
+   "fieldtype": "Float",
+   "label": "ERPNext Stock Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "wc_stock_quantity",
+   "fieldtype": "Float",
+   "label": "WooCommerce Stock Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_stock_sync",
+   "fieldtype": "Datetime",
+   "label": "Last Stock Sync",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_stock",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "manage_stock",
+   "fieldtype": "Check",
+   "label": "Manage Stock"
+  },
+  {
+   "fieldname": "stock_status",
+   "fieldtype": "Select",
+   "label": "Stock Status",
+   "options": "instock\noutofstock\nonbackorder"
+  },
+  {
+   "fieldname": "backorders",
+   "fieldtype": "Select",
+   "label": "Backorders",
+   "options": "no\nnotify\nyes"
+  },
+  {
+   "default": "1",
+   "fieldname": "sync_stock_on_update",
+   "fieldtype": "Check",
+   "label": "Sync Stock on Update"
+  },
+  {
+   "fieldname": "price_sync_section",
+   "fieldtype": "Section Break",
+   "label": "Price Sync"
+  },
+  {
+   "fieldname": "regular_price",
+   "fieldtype": "Currency",
+   "label": "ERPNext Regular Price"
+  },
+  {
+   "fieldname": "sale_price",
+   "fieldtype": "Currency",
+   "label": "ERPNext Sale Price"
+  },
+  {
+   "fieldname": "wc_regular_price",
+   "fieldtype": "Currency",
+   "label": "WC Regular Price",
+   "read_only": 1
+  },
+  {
+   "fieldname": "wc_sale_price",
+   "fieldtype": "Currency",
+   "label": "WC Sale Price",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_price",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "price_sync",
+   "fieldtype": "Check",
+   "label": "Enable Price Sync"
+  },
+  {
+   "fieldname": "last_price_sync",
+   "fieldtype": "Datetime",
+   "label": "Last Price Sync",
+   "read_only": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "product_details_section",
+   "fieldtype": "Section Break",
+   "label": "Product Details"
+  },
+  {
+   "fieldname": "product_description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "short_description",
+   "fieldtype": "Text",
+   "label": "Short Description"
+  },
+  {
+   "fieldname": "categories",
+   "fieldtype": "Small Text",
+   "label": "Categories (JSON)"
+  },
+  {
+   "fieldname": "column_break_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "weight",
+   "fieldtype": "Float",
+   "label": "Weight"
+  },
+  {
+   "fieldname": "length",
+   "fieldtype": "Float",
+   "label": "Length"
+  },
+  {
+   "fieldname": "width",
+   "fieldtype": "Float",
+   "label": "Width"
+  },
+  {
+   "fieldname": "height",
+   "fieldtype": "Float",
+   "label": "Height"
+  },
+  {
+   "fieldname": "image_url",
+   "fieldtype": "Data",
+   "label": "Image URL"
+  },
+  {
+   "fieldname": "sync_history_section",
+   "fieldtype": "Section Break",
+   "label": "Sync History"
+  },
+  {
+   "fieldname": "sync_attempts",
+   "fieldtype": "Int",
+   "label": "Sync Attempts",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_sync_at",
+   "fieldtype": "Datetime",
+   "label": "Last Sync At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_sync_error",
+   "fieldtype": "Text",
+   "label": "Last Sync Error",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_history",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "created_at",
+   "fieldtype": "Datetime",
+   "label": "Created At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "modified_at",
+   "fieldtype": "Datetime",
+   "label": "Modified At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "wc_data",
+   "fieldtype": "Code",
+   "label": "WooCommerce Data (JSON)",
+   "options": "JSON",
+   "read_only": 1,
+   "hidden": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "group": "Related Documents",
+   "link_doctype": "Item",
+   "link_fieldname": "item_code"
+  },
+  {
+   "group": "Related Documents",
+   "link_doctype": "WooCommerce Settings",
+   "link_fieldname": "woocommerce_settings"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "WooCommerce Product",
+ "name": "WooCommerce Product",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Item Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Stock User",
+   "share": 1,
+   "write": 0
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Red",
+   "title": "Failed"
+  },
+  {
+   "color": "Orange",
+   "title": "Pending"
+  },
+  {
+   "color": "Blue",
+   "title": "Processing"
+  },
+  {
+   "color": "Green",
+   "title": "Synced"
+  }
+ ],
+ "track_changes": 1
+}

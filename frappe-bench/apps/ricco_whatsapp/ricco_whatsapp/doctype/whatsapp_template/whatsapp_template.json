@@ -1,0 +1,232 @@
+{
+ "actions": [
+  {
+   "action": "Sync Templates",
+   "action_type": "Server Action",
+   "group": "Actions",
+   "label": "Sync from WhatsApp",
+   "server_action": "ricco_whatsapp.api.whatsapp_api.sync_templates"
+  }
+ ],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:template_id",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "template_details_section",
+  "template_id",
+  "name_column",
+  "language",
+  "category",
+  "column_break_details",
+  "status",
+  "approval_status",
+  "quality_score",
+  "content_section",
+  "components",
+  "preview_section",
+  "preview_text",
+  "usage_section",
+  "total_sent",
+  "last_used",
+  "column_break_usage",
+  "is_active",
+  "auto_sync"
+ ],
+ "fields": [
+  {
+   "fieldname": "template_details_section",
+   "fieldtype": "Section Break",
+   "label": "Template Details"
+  },
+  {
+   "fieldname": "template_id",
+   "fieldtype": "Data",
+   "label": "Template ID",
+   "reqd": 1,
+   "unique": 1,
+   "description": "Unique template identifier from WhatsApp"
+  },
+  {
+   "fieldname": "name_column",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Template Name",
+   "reqd": 1,
+   "unique": 1,
+   "description": "Name used in API calls"
+  },
+  {
+   "default": "en",
+   "fieldname": "language",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Language",
+   "options": "en\nen_US\nen_GB\nes\nes_ES\nes_MX\npt_BR\nfr\nfr_FR\nde\nit\nar\nid\nhi\nja\nko\nzh_CN\nzh_TW",
+   "reqd": 1
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Category",
+   "options": "AUTHENTICATION\nMARKETING\nUTILITY",
+   "reqd": 1,
+   "description": "Template category determines pricing"
+  },
+  {
+   "fieldname": "column_break_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Pending",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Pending\nApproved\nRejected\nDisabled",
+   "read_only": 1
+  },
+  {
+   "default": "Pending",
+   "fieldname": "approval_status",
+   "fieldtype": "Select",
+   "label": "Approval Status",
+   "options": "Pending\nApproved\nRejected\nPending Deletion\nDeleted",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quality_score",
+   "fieldtype": "Select",
+   "label": "Quality Score",
+   "options": "Unknown\nGreen\nYellow\nRed",
+   "read_only": 1,
+   "description": "Template quality score from WhatsApp"
+  },
+  {
+   "fieldname": "content_section",
+   "fieldtype": "Section Break",
+   "label": "Template Components"
+  },
+  {
+   "description": "JSON structure of template components (header, body, footer, buttons)",
+   "fieldname": "components",
+   "fieldtype": "Code",
+   "label": "Components",
+   "options": "JSON",
+   "reqd": 1
+  },
+  {
+   "fieldname": "preview_section",
+   "fieldtype": "Section Break",
+   "label": "Preview"
+  },
+  {
+   "fieldname": "preview_text",
+   "fieldtype": "Text",
+   "label": "Preview Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "usage_section",
+   "fieldtype": "Section Break",
+   "label": "Usage Statistics"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_sent",
+   "fieldtype": "Int",
+   "label": "Total Messages Sent",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_used",
+   "fieldtype": "Datetime",
+   "label": "Last Used",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_usage",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "default": "1",
+   "fieldname": "auto_sync",
+   "fieldtype": "Check",
+   "label": "Auto Sync with WhatsApp",
+   "description": "Automatically sync status with WhatsApp API"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "group": "Messages",
+   "link_doctype": "WhatsApp Message",
+   "link_fieldname": "template_name"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Ricco WhatsApp",
+ "name": "WhatsApp Template",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Sales Manager",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "WhatsApp Manager",
+   "write": 1
+  }
+ ],
+ "sort_field": "name_column",
+ "sort_order": "ASC",
+ "states": [
+  {
+   "color": "Gray",
+   "state": "Pending"
+  },
+  {
+   "color": "Green",
+   "state": "Approved"
+  },
+  {
+   "color": "Red",
+   "state": "Rejected"
+  },
+  {
+   "color": "Orange",
+   "state": "Disabled"
+  }
+ ],
+ "track_changes": 1
+}

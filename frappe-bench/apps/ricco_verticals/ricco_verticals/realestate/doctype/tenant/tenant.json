@@ -1,0 +1,503 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:tenant_id",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tenant_details_section",
+  "tenant_id",
+  "first_name",
+  "last_name",
+  "photo",
+  "column_break_5",
+  "tenant_type",
+  "status",
+  "preferred_language",
+  "contact_details_section",
+  "email",
+  "phone",
+  "mobile",
+  "column_break_12",
+  "emergency_contact_name",
+  "emergency_contact_phone",
+  "address_section",
+  "current_address_line1",
+  "current_address_line2",
+  "current_city",
+  "column_break_19",
+  "current_state",
+  "current_country",
+  "current_pincode",
+  "employment_section",
+  "employment_type",
+  "employer_name",
+  "employer_address",
+  "column_break_26",
+  "job_title",
+  "monthly_income",
+  "employment_start_date",
+  "identification_section",
+  "id_type",
+  "id_number",
+  "id_expiry_date",
+  "column_break_33",
+  "id_document",
+  "secondary_id_type",
+  "secondary_id_number",
+  "references_section",
+  "reference_name",
+  "reference_contact",
+  "reference_relationship",
+  "column_break_40",
+  "reference_name_2",
+  "reference_contact_2",
+  "reference_relationship_2",
+  "preferences_section",
+  "preferred_property_type",
+  "preferred_location",
+  "column_break_46",
+  "budget_range",
+  "move_in_date",
+  "background_section",
+  "background_check_status",
+  "background_check_date",
+  "column_break_51",
+  "credit_score",
+  "credit_report",
+  "notes",
+  "integration_section",
+  "customer",
+  "customer_group",
+  "column_break_57",
+  "territory",
+  "company"
+ ],
+ "fields": [
+  {
+   "fieldname": "tenant_details_section",
+   "fieldtype": "Section Break",
+   "label": "Tenant Details"
+  },
+  {
+   "fieldname": "tenant_id",
+   "fieldtype": "Data",
+   "label": "Tenant ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "First Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Last Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "photo",
+   "fieldtype": "Attach Image",
+   "label": "Photo"
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tenant_type",
+   "fieldtype": "Select",
+   "label": "Tenant Type",
+   "options": "Individual\nFamily\nCompany\nStudent\nSenior Citizen"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Active\nInactive\nBlacklisted\nPending Verification"
+  },
+  {
+   "fieldname": "preferred_language",
+   "fieldtype": "Link",
+   "label": "Preferred Language",
+   "options": "Language"
+  },
+  {
+   "fieldname": "contact_details_section",
+   "fieldtype": "Section Break",
+   "label": "Contact Details"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "mobile",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Mobile",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_12",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "emergency_contact_name",
+   "fieldtype": "Data",
+   "label": "Emergency Contact Name"
+  },
+  {
+   "fieldname": "emergency_contact_phone",
+   "fieldtype": "Data",
+   "label": "Emergency Contact Phone"
+  },
+  {
+   "fieldname": "address_section",
+   "fieldtype": "Section Break",
+   "label": "Current Address"
+  },
+  {
+   "fieldname": "current_address_line1",
+   "fieldtype": "Data",
+   "label": "Address Line 1"
+  },
+  {
+   "fieldname": "current_address_line2",
+   "fieldtype": "Data",
+   "label": "Address Line 2"
+  },
+  {
+   "fieldname": "current_city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "column_break_19",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "current_state",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "current_country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "current_pincode",
+   "fieldtype": "Data",
+   "label": "Pincode"
+  },
+  {
+   "fieldname": "employment_section",
+   "fieldtype": "Section Break",
+   "label": "Employment Details"
+  },
+  {
+   "fieldname": "employment_type",
+   "fieldtype": "Select",
+   "label": "Employment Type",
+   "options": "Employed\nSelf-Employed\nRetired\nStudent\nUnemployed\nBusiness Owner"
+  },
+  {
+   "fieldname": "employer_name",
+   "fieldtype": "Data",
+   "label": "Employer Name"
+  },
+  {
+   "fieldname": "employer_address",
+   "fieldtype": "Data",
+   "label": "Employer Address"
+  },
+  {
+   "fieldname": "column_break_26",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "job_title",
+   "fieldtype": "Data",
+   "label": "Job Title"
+  },
+  {
+   "fieldname": "monthly_income",
+   "fieldtype": "Currency",
+   "label": "Monthly Income"
+  },
+  {
+   "fieldname": "employment_start_date",
+   "fieldtype": "Date",
+   "label": "Employment Start Date"
+  },
+  {
+   "fieldname": "identification_section",
+   "fieldtype": "Section Break",
+   "label": "Identification"
+  },
+  {
+   "fieldname": "id_type",
+   "fieldtype": "Select",
+   "label": "Primary ID Type",
+   "options": "National ID\nPassport\nDrivers License\nTax ID\nOther"
+  },
+  {
+   "fieldname": "id_number",
+   "fieldtype": "Data",
+   "label": "ID Number"
+  },
+  {
+   "fieldname": "id_expiry_date",
+   "fieldtype": "Date",
+   "label": "ID Expiry Date"
+  },
+  {
+   "fieldname": "column_break_33",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "id_document",
+   "fieldtype": "Attach",
+   "label": "ID Document"
+  },
+  {
+   "fieldname": "secondary_id_type",
+   "fieldtype": "Select",
+   "label": "Secondary ID Type",
+   "options": "National ID\nPassport\nDrivers License\nTax ID\nOther"
+  },
+  {
+   "fieldname": "secondary_id_number",
+   "fieldtype": "Data",
+   "label": "Secondary ID Number"
+  },
+  {
+   "fieldname": "references_section",
+   "fieldtype": "Section Break",
+   "label": "References"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Data",
+   "label": "Reference Name 1"
+  },
+  {
+   "fieldname": "reference_contact",
+   "fieldtype": "Data",
+   "label": "Reference Contact 1"
+  },
+  {
+   "fieldname": "reference_relationship",
+   "fieldtype": "Data",
+   "label": "Relationship"
+  },
+  {
+   "fieldname": "column_break_40",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "reference_name_2",
+   "fieldtype": "Data",
+   "label": "Reference Name 2"
+  },
+  {
+   "fieldname": "reference_contact_2",
+   "fieldtype": "Data",
+   "label": "Reference Contact 2"
+  },
+  {
+   "fieldname": "reference_relationship_2",
+   "fieldtype": "Data",
+   "label": "Relationship"
+  },
+  {
+   "fieldname": "preferences_section",
+   "fieldtype": "Section Break",
+   "label": "Rental Preferences"
+  },
+  {
+   "fieldname": "preferred_property_type",
+   "fieldtype": "Select",
+   "label": "Preferred Property Type",
+   "options": "Apartment\nHouse\nVilla\nCondo\nTownhouse\nStudio"
+  },
+  {
+   "fieldname": "preferred_location",
+   "fieldtype": "Data",
+   "label": "Preferred Location"
+  },
+  {
+   "fieldname": "column_break_46",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "budget_range",
+   "fieldtype": "Data",
+   "label": "Budget Range"
+  },
+  {
+   "fieldname": "move_in_date",
+   "fieldtype": "Date",
+   "label": "Preferred Move-in Date"
+  },
+  {
+   "fieldname": "background_section",
+   "fieldtype": "Section Break",
+   "label": "Background Check"
+  },
+  {
+   "fieldname": "background_check_status",
+   "fieldtype": "Select",
+   "label": "Background Check Status",
+   "options": "Pending\nIn Progress\nCompleted\nFailed"
+  },
+  {
+   "fieldname": "background_check_date",
+   "fieldtype": "Date",
+   "label": "Background Check Date"
+  },
+  {
+   "fieldname": "column_break_51",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "credit_score",
+   "fieldtype": "Int",
+   "label": "Credit Score"
+  },
+  {
+   "fieldname": "credit_report",
+   "fieldtype": "Attach",
+   "label": "Credit Report"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Integration"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "customer_group",
+   "fieldtype": "Link",
+   "label": "Customer Group",
+   "options": "Customer Group"
+  },
+  {
+   "fieldname": "column_break_57",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "territory",
+   "fieldtype": "Link",
+   "label": "Territory",
+   "options": "Territory"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  }
+ ],
+ "links": [
+  {
+   "group": "Rentals",
+   "link_doctype": "Property Rental",
+   "link_fieldname": "tenant"
+  },
+  {
+   "group": "Maintenance",
+   "link_doctype": "Property Maintenance",
+   "link_fieldname": "tenant"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Real Estate",
+ "name": "Tenant",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Agent",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Green",
+   "title": "Active"
+  },
+  {
+   "color": "Gray",
+   "title": "Inactive"
+  },
+  {
+   "color": "Red",
+   "title": "Blacklisted"
+  }
+ ],
+ "timeline_field": "customer",
+ "track_changes": 1
+}

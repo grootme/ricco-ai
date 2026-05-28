@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.nvidia.com/ja-jp/on-demand/session/aidaytokyo25-ad111026",
+    "name": "NVIDIA Isaac GR00TとCosmosの紹介 | AI Day Tokyo 2025",
+    "snippet": "Sep 24, 2025 — ヒューマノイドロボットは、知覚・認知・制御を高度に統合する必要がある、ロボティクスの最前線の分野です。本セミナーでは、 NVIDIA が推進する ...",
+    "host_name": "www.nvidia.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.nvidia.com/isaac/gr00t",
+    "name": "Isaac GR00T - Generalist Robot 00 Technology",
+    "snippet": "NVIDIA Isaac GR00T is a research initiative and development platform for robot foundation models and data pipelines to accelerate humanoid robotics.",
+    "host_name": "developer.nvidia.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.therobotreport.com/nvidia-releases-new-physical-ai-models-plus-autonomous-vehicle-tools",
+    "name": "NVIDIA releases new physical AI models, plus autonomous",
+    "snippet": "Jan 6, 2026 — NVIDIA released Cosmos, GR00T, and Alpamayo open models to help developers build reasoning machines including robots and vehicles.",
+    "host_name": "www.therobotreport.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-us/on-demand/session/aidaytokyo25-ad111026",
+    "name": "フィジカルAIで加速するヒューマノイドロボティクス",
+    "snippet": "Sep 24, 2025 — 本セミナーを通じて、 Physical AI を活用したヒューマノイドロボティクスの最新動向と、 Isaac GR00T および Cosmos による開発アプローチをご理解いただけます ...",
+    "host_name": "www.nvidia.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-us/ai/cosmos",
+    "name": "Physical AI with World Foundation Models | NVIDIA Cosmos",
+    "snippet": "NVIDIA RTX PRO 6000 Blackwell Series Servers accelerate physical AI development for robots, autonomous vehicles, and AI agents across training, synthetic data ...\nA comprehensive guide for working with the NVIDIA Cosmos ecosystem for real-world, domain-specific applications across robotics , simulation, autonomous systems, ...",
+    "host_name": "www.nvidia.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/huggingface/blog/blob/main/nvidia-physical-ai.md",
+    "name": "blog/nvidia-physical-ai.md at main · huggingface/blog",
+    "snippet": "NVIDIA Isaac GR00T N1 used in object manipulation . ... driving controllable synthetic data generation for robotics and autonomous vehicle development at scale.",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://aibusiness.com/robotics/nvidia-launches-physical-ai-models",
+    "name": "Nvidia Launches Physical AI Models for Robots",
+    "snippet": "Jan 6, 2026 — For humanoid robotics specifically, Nvidia released Isaac GR00T N1.6 , an open vision-language-action model built on Cosmos Reason that enables ...",
+    "host_name": "aibusiness.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.edge-ai-vision.com/2025/03/nvidia-unveils-open-physical-ai-dataset-to-advance-robotics-and-autonomous-vehicle-development",
+    "name": "NVIDIA Unveils Open Physical AI Dataset to Advance",
+    "snippet": "Mar 19, 2025 — NVIDIA Isaac GR00T robotics models take thousands of hours of video clips for post-training — the GR00T N1 model, for example, was trained on an ...",
+    "host_name": "www.edge-ai-vision.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://resources.nvidia.com/en-us-playlist-for-robotics/introduction-to-autonomous-vehicles",
+    "name": "Introduction to Autonomous Vehicles",
+    "snippet": "Welcome to Physical AI Learning#. Start building autonomous robots, digital twins, and AI-powered systems with free, self-paced courses from NVIDIA.",
+    "host_name": "resources.nvidia.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "http://nvidianews.nvidia.com/news/nvidia-and-global-robotics-leaders-take-physical-ai-to-the-real-world",
+    "name": "NVIDIA and Global Robotics Leaders Take Physical AI to",
+    "snippet": "Mar 16, 2026 — NVIDIA unveils new NVIDIA Cosmos world models , NVIDIA Isaac simulation frameworks and NVIDIA Isaac GR00T N models to accelerate the transition ...",
+    "host_name": "nvidianews.nvidia.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

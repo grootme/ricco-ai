@@ -1,0 +1,5 @@
+# This file contains list of patches to be applied in sequence
+# Format: patch_file_name
+# Example: 
+# 1.0.0#create_initial_custom_fields.py
+# 1.0.1#update_woocommerce_settings.py

@@ -1,0 +1,462 @@
+# =============================================================================
+# RICCO-AI Domain Configuration
+# =============================================================================
+# Este archivo define los dominios de especialización de agentes.
+# Para agregar un nuevo dominio, simplemente añade una nueva entrada.
+# NO requiere modificar código fuente - cumple OCP de SOLID.
+#
+# Estructura de cada dominio:
+#   id: Identificador único (usado en código)
+#   elegant_name: Nombre para mostrar (branding)
+#   display_name: Nombre legible
+#   description: Descripción completa
+#   icon: Icono para UI (lucide-react)
+#   color: Color hexadecimal para branding
+#   default_skills: Skills por defecto para agentes de este dominio
+#   default_tools: Tools por defecto
+#   default_mcp_servers: MCP servers por defecto
+#   keywords: Palabras clave para detección automática
+# =============================================================================
+
+domains:
+  codex:
+    id: "codex"
+    elegant_name: "CODEX"
+    display_name: "Software Engineering"
+    description: "Desarrollo de software, debugging, code review y arquitectura de sistemas"
+    icon: "code"
+    color: "#3B82F6"
+    category: "engineering"
+    default_skills:
+      - "code-generation"
+      - "debugging"
+      - "code-review"
+      - "architecture-design"
+      - "refactoring"
+    default_tools:
+      - "git"
+      - "code-executor"
+      - "linter"
+      - "docker"
+      - "ci-cd"
+    default_mcp_servers:
+      - "github"
+      - "filesystem"
+      - "docker"
+    keywords:
+      - "code"
+      - "codigo"
+      - "program"
+      - "develop"
+      - "software"
+      - "app"
+      - "api"
+      - "bug"
+      - "function"
+      - "debug"
+    prompt_template: |
+      Eres un especialista en ingeniería de software del dominio CODEX.
+      Tu expertise incluye desarrollo, debugging, code review y arquitectura.
+
+  vitalis:
+    id: "vitalis"
+    elegant_name: "VITALIS"
+    display_name: "Health & Wellness"
+    description: "Salud y medicina - Análisis clínico, investigación médica y diagnóstico asistido"
+    icon: "heart"
+    color: "#10B981"
+    category: "healthcare"
+    default_skills:
+      - "clinical-analysis"
+      - "medical-research"
+      - "diagnosis-support"
+      - "literature-review"
+    default_tools:
+      - "medical-db"
+      - "diagnostic-tools"
+      - "imaging"
+      - "lab-results"
+    default_mcp_servers:
+      - "pubmed"
+      - "medical-db"
+    keywords:
+      - "health"
+      - "salud"
+      - "medical"
+      - "wellness"
+      - "doctor"
+      - "hospital"
+      - "medicina"
+      - "clinical"
+    prompt_template: |
+      Eres un especialista en salud y medicina del dominio VITALIS.
+
+  athlon:
+    id: "athlon"
+    elegant_name: "ATHLON"
+    display_name: "Sports & Fitness"
+    description: "Deportes - Análisis de rendimiento, estadísticas y predicciones deportivas"
+    icon: "trophy"
+    color: "#F59E0B"
+    category: "sports"
+    default_skills:
+      - "performance-analysis"
+      - "statistics"
+      - "predictions"
+      - "training-planning"
+    default_tools:
+      - "stats-analyzer"
+      - "video-analysis"
+      - "performance-tracker"
+    default_mcp_servers:
+      - "sports-api"
+    keywords:
+      - "sport"
+      - "deporte"
+      - "fitness"
+      - "exercise"
+      - "training"
+      - "athletic"
+    prompt_template: |
+      Eres un especialista en deportes y fitness del dominio ATHLON.
+
+  veritas:
+    id: "veritas"
+    elegant_name: "VERITAS"
+    display_name: "News & Information"
+    description: "Noticias y periodismo - Investigación, verificación y análisis periodístico"
+    icon: "newspaper"
+    color: "#8B5CF6"
+    category: "media"
+    default_skills:
+      - "investigation"
+      - "fact-checking"
+      - "source-verification"
+      - "content-analysis"
+    default_tools:
+      - "news-api"
+      - "fact-checker"
+      - "sentiment-analyzer"
+    default_mcp_servers:
+      - "brave-search"
+      - "news-api"
+    keywords:
+      - "news"
+      - "noticias"
+      - "information"
+      - "media"
+      - "journalism"
+      - "report"
+    prompt_template: |
+      Eres un especialista en noticias e información del dominio VERITAS.
+
+  alchemy:
+    id: "alchemy"
+    elegant_name: "ALCHEMY"
+    display_name: "Chemistry & Materials"
+    description: "Química - Investigación molecular, síntesis y análisis químico"
+    icon: "flask-conical"
+    color: "#EC4899"
+    category: "science"
+    default_skills:
+      - "molecular-analysis"
+      - "synthesis"
+      - "spectroscopy"
+      - "safety-assessment"
+    default_tools:
+      - "molecule-db"
+      - "reaction-sim"
+      - "safety-checker"
+    default_mcp_servers:
+      - "pubchem"
+      - "chemspider"
+    keywords:
+      - "science"
+      - "ciencia"
+      - "research"
+      - "laboratory"
+      - "experiment"
+      - "quimica"
+      - "chemistry"
+    prompt_template: |
+      Eres un especialista en química del dominio ALCHEMY.
+
+  genesis:
+    id: "genesis"
+    elegant_name: "GENESIS"
+    display_name: "Biology & Life Sciences"
+    description: "Biología - Investigación biológica, genómica y análisis de sistemas vivos"
+    icon: "dna"
+    color: "#14B8A6"
+    category: "biology"
+    default_skills:
+      - "genomic-analysis"
+      - "species-identification"
+      - "ecosystem-modeling"
+      - "bioinformatics"
+    default_tools:
+      - "species-db"
+      - "cell-sim"
+      - "gene-analyzer"
+    default_mcp_servers:
+      - "ncbi"
+      - "ensembl"
+    keywords:
+      - "bio"
+      - "biotech"
+      - "biologia"
+      - "cell"
+      - "celula"
+      - "genetic"
+      - "biology"
+    prompt_template: |
+      Eres un especialista en biología del dominio GENESIS.
+
+  helix:
+    id: "helix"
+    elegant_name: "HELIX"
+    display_name: "Biotechnology"
+    description: "Biotecnología - Bioingeniería, desarrollo de fármacos y aplicaciones terapéuticas"
+    icon: "atom"
+    color: "#F97316"
+    category: "biotech"
+    default_skills:
+      - "drug-development"
+      - "genetic-engineering"
+      - "bioprocess"
+      - "clinical-trials"
+    default_tools:
+      - "genomics-db"
+      - "molecular-sim"
+      - "lab-equipment"
+      - "compound-db"
+    default_mcp_servers:
+      - "ncbi"
+      - "uniprot"
+      - "pubmed"
+    keywords:
+      - "genetic"
+      - "genetica"
+      - "dna"
+      - "rna"
+      - "gene"
+      - "mutation"
+      - "biotecnologia"
+    prompt_template: |
+      Eres un especialista en biotecnología del dominio HELIX.
+
+  diplomat:
+    id: "diplomat"
+    elegant_name: "DIPLOMAT"
+    display_name: "International Relations"
+    description: "Geopolítica - Inteligencia estratégica y análisis de relaciones internacionales"
+    icon: "globe"
+    color: "#6366F1"
+    category: "geopolitics"
+    default_skills:
+      - "strategic-analysis"
+      - "policy-assessment"
+      - "cultural-intelligence"
+      - "negotiation"
+    default_tools:
+      - "maps-api"
+      - "news-aggregator"
+      - "trend-analyzer"
+    default_mcp_servers:
+      - "brave-search"
+      - "maps-api"
+    keywords:
+      - "international"
+      - "diplomacy"
+      - "relations"
+      - "politics"
+      - "global"
+      - "geopolitica"
+    prompt_template: |
+      Eres un especialista en relaciones internacionales del dominio DIPLOMAT.
+
+  apex:
+    id: "apex"
+    elegant_name: "APEX"
+    display_name: "Finance & Business"
+    description: "Finanzas - Análisis de mercados, inversiones y gestión de riesgos"
+    icon: "trending-up"
+    color: "#22C55E"
+    category: "finance"
+    default_skills:
+      - "market-analysis"
+      - "risk-assessment"
+      - "portfolio-management"
+      - "financial-modeling"
+    default_tools:
+      - "market-data"
+      - "risk-analyzer"
+      - "portfolio-tracker"
+    default_mcp_servers:
+      - "alpha-vantage"
+      - "coingecko"
+    keywords:
+      - "finance"
+      - "finanzas"
+      - "business"
+      - "investment"
+      - "market"
+      - "trading"
+    prompt_template: |
+      Eres un especialista en finanzas del dominio APEX.
+
+  justitia:
+    id: "justitia"
+    elegant_name: "JUSTITIA"
+    display_name: "Legal & Compliance"
+    description: "Legal - Jurisprudencia, compliance y análisis contractual"
+    icon: "scale"
+    color: "#64748B"
+    category: "legal"
+    default_skills:
+      - "legal-research"
+      - "contract-analysis"
+      - "compliance-check"
+      - "case-analysis"
+    default_tools:
+      - "case-law-db"
+      - "contract-analyzer"
+      - "compliance-checker"
+    default_mcp_servers:
+      - "court-api"
+      - "statute-db"
+    keywords:
+      - "legal"
+      - "legalidad"
+      - "law"
+      - "justice"
+      - "court"
+      - "abogado"
+    prompt_template: |
+      Eres un especialista legal del dominio JUSTITIA.
+
+  mentor:
+    id: "mentor"
+    elegant_name: "MENTOR"
+    display_name: "Education & Training"
+    description: "Educación - Aprendizaje personalizado y contenido pedagógico"
+    icon: "graduation-cap"
+    color: "#A855F7"
+    category: "education"
+    default_skills:
+      - "curriculum-design"
+      - "assessment-creation"
+      - "personalized-learning"
+      - "knowledge-transfer"
+    default_tools:
+      - "content-creator"
+      - "quiz-generator"
+      - "progress-tracker"
+    default_mcp_servers:
+      - "lms-integration"
+      - "content-db"
+    keywords:
+      - "education"
+      - "educacion"
+      - "learning"
+      - "teaching"
+      - "course"
+      - "student"
+    prompt_template: |
+      Eres un especialista en educación del dominio MENTOR.
+
+  pioneer:
+    id: "pioneer"
+    elegant_name: "PIONEER"
+    display_name: "Research & Innovation"
+    description: "Investigación - Descubrimiento científico y publicación académica"
+    icon: "microscope"
+    color: "#EF4444"
+    category: "research"
+    default_skills:
+      - "scientific-method"
+      - "literature-review"
+      - "hypothesis-testing"
+      - "publication"
+    default_tools:
+      - "paper-db"
+      - "citation-manager"
+      - "methodology-guide"
+    default_mcp_servers:
+      - "arxiv"
+      - "pubmed"
+      - "semantic-scholar"
+    keywords:
+      - "explore"
+      - "explorar"
+      - "discovery"
+      - "innovation"
+      - "research"
+      - "investigacion"
+    prompt_template: |
+      Eres un especialista en investigación del dominio PIONEER.
+
+  prisma:
+    id: "prisma"
+    elegant_name: "PRISMA"
+    display_name: "Marketing & Communications"
+    description: "Marketing - Campañas, análisis de audiencia y optimización"
+    icon: "megaphone"
+    color: "#06B6D4"
+    category: "marketing"
+    default_skills:
+      - "campaign-design"
+      - "audience-analysis"
+      - "content-strategy"
+      - "analytics"
+    default_tools:
+      - "analytics"
+      - "social-media"
+      - "campaign-builder"
+    default_mcp_servers:
+      - "google-analytics"
+      - "social-apis"
+    keywords:
+      - "marketing"
+      - "advertising"
+      - "brand"
+      - "social media"
+      - "campaign"
+    prompt_template: |
+      Eres un especialista en marketing del dominio PRISMA.
+
+categories:
+  engineering:
+    name: "Engineering"
+    description: "Technical and engineering domains"
+    domains: ["codex"]
+  
+  healthcare:
+    name: "Healthcare"
+    description: "Health and medical domains"
+    domains: ["vitalis"]
+  
+  science:
+    name: "Science"
+    description: "Scientific research domains"
+    domains: ["alchemy", "genesis", "helix", "pioneer"]
+  
+  business:
+    name: "Business"
+    description: "Business and finance domains"
+    domains: ["apex", "prisma"]
+  
+  public:
+    name: "Public Sector"
+    description: "Government and legal domains"
+    domains: ["diplomat", "justitia"]
+  
+  lifestyle:
+    name: "Lifestyle"
+    description: "Personal development domains"
+    domains: ["athlon", "mentor"]
+  
+  media:
+    name: "Media"
+    description: "Information and media domains"
+    domains: ["veritas"]

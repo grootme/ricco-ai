@@ -1,0 +1,29 @@
+name: Devcontainer
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - .devcontainer/**
+  pull_request:
+    paths:
+      - .devcontainer/**
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and test devcontainer
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          env: |
+            CI=true

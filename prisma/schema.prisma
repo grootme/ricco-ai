@@ -1,0 +1,284 @@
+// RICCO AI Prisma Schema
+// Database: PostgreSQL (production) / SQLite (development)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// Core Models
+// ============================================================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String?
+  role          String    @default("user")
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  sessions      Session[]
+  subscriptions Subscription[]
+  agents       Agent[]
+  apiKeys      ApiKey[]
+  
+  @@index([email])
+  @@index([role])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  token        String   @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  
+  // Relations
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([token])
+  @@index([userId])
+}
+
+model ApiKey {
+  id          String   @id @default(cuid())
+  userId      String
+  key         String   @unique
+  name        String
+  scopes      String[] @default([])
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([key])
+  @@index([userId])
+}
+
+// ============================================================================
+// Subscription & Billing
+// ============================================================================
+
+model Subscription {
+  id              String   @id @default(cuid())
+  userId          String
+  plan            String   @default("free")
+  status          String   @default("active")
+  stripeCustomerId   String?
+  stripeSubscriptionId String?
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+  cancelAtPeriodEnd  Boolean @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([stripeCustomerId])
+  @@index([stripeSubscriptionId])
+}
+
+// ============================================================================
+// Agents
+// ============================================================================
+
+model Agent {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  description   String?
+  domain        String?
+  role          String?
+  systemPrompt  String?
+  model         String   @default("claude-3.5-sonnet")
+  provider      String   @default("openrouter")
+  temperature   Float    @default(0.7)
+  maxTokens     Int      @default(4096)
+  isActive      Boolean  @default(true)
+  isPublic      Boolean  @default(false)
+  config        Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversations Conversation[]
+  tools        AgentTool[]
+  
+  @@index([userId])
+  @@index([domain])
+  @@index([role])
+}
+
+model AgentTool {
+  id          String   @id @default(cuid())
+  agentId     String
+  name        String
+  description String?
+  type        String   @default("mcp")  // mcp, function, skill
+  config      Json?
+  isEnabled   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  agent       Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  
+  @@index([agentId])
+}
+
+// ============================================================================
+// Conversations & Messages
+// ============================================================================
+
+model Conversation {
+  id          String   @id @default(cuid())
+  agentId     String
+  title       String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  agent       Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  messages    Message[]
+  
+  @@index([agentId])
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  role           String   // user, assistant, system
+  content        String
+  tokensUsed     Int      @default(0)
+  modelUsed      String?
+  provider       String?
+  latencyMs      Int?
+  metadata       Json?
+  createdAt      DateTime @default(now())
+  
+  // Relations
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  @@index([conversationId])
+}
+
+// ============================================================================
+// MCP Servers & Skills
+// ============================================================================
+
+model MCPServer {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  endpoint    String
+  transport   String   @default("stdio")  // stdio, http, websocket
+  config      Json?
+  isEnabled   Boolean  @default(true)
+  healthStatus String  @default("unknown")
+  lastHealthCheck DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([name])
+}
+
+model Skill {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  category    String
+  description String?
+  version     String   @default("1.0.0")
+  config      Json?
+  isEnabled   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([name])
+  @@index([category])
+}
+
+// ============================================================================
+// Documents & Embeddings
+// ============================================================================
+
+model Document {
+  id          String   @id @default(cuid())
+  title       String?
+  content     String   @db.Text
+  source      String?
+  metadata    Json?
+  embedding   Float[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([source])
+}
+
+model DocumentChunk {
+  id           String   @id @default(cuid())
+  documentId   String
+  content      String   @db.Text
+  embedding    Float[]
+  chunkIndex   Int
+  metadata     Json?
+  createdAt    DateTime @default(now())
+  
+  @@index([documentId])
+}
+
+// ============================================================================
+// Audit & Analytics
+// ============================================================================
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  action      String
+  resource    String
+  resourceId  String?
+  metadata    Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+  
+  @@index([userId])
+  @@index([action])
+  @@index([resource])
+  @@index([createdAt])
+}
+
+model UsageMetric {
+  id            String   @id @default(cuid())
+  userId        String?
+  agentId       String?
+  provider      String?
+  model         String?
+  requestType   String
+  tokensPrompt  Int      @default(0)
+  tokensCompletion Int   @default(0)
+  tokensTotal   Int      @default(0)
+  costUsd       Float    @default(0)
+  latencyMs     Int?
+  success       Boolean  @default(true)
+  errorMessage  String?
+  createdAt     DateTime @default(now())
+  
+  @@index([userId])
+  @@index([agentId])
+  @@index([provider])
+  @@index([createdAt])
+}

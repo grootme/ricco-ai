@@ -1,0 +1,47 @@
+@import 'frappe-ui/style.css';
+
+/*
+  Inter OpenType features:
+  calt  — contextual alternates: enables arrow/operator ligatures (→ ⇒ ≥ ≤ ≠)
+  cv01  — alternate '1' with serif foot: distinct from l and I
+  cv03  — alternate '6' with more open loop
+  cv04  — alternate '9' with straight tail
+  cv11  — single-story lowercase 'a': cleaner, more contemporary feel
+*/
+html {
+  font-feature-settings: 'calt' 1, 'cv01' 1, 'cv03' 1, 'cv04' 1, 'cv11' 1;
+}
+
+/* ProseMirror disables ligatures by default; restore so the font-feature-settings
+   set on html are inherited inside the editor */
+.ProseMirror {
+  font-variant-ligatures: inherit !important;
+  -webkit-font-variant-ligatures: inherit !important;
+  font-feature-settings: inherit !important;
+}
+
+@layer components {
+  .body-container {
+    @apply max-w-[940px] w-full px-3 sm:px-5 mx-auto;
+  }
+
+  .discussion-container {
+    max-width: calc(720px + var(--discussion-padding));
+    @apply w-full px-3 sm:px-5 mx-auto;
+    @apply [--discussion-padding:1.5rem] sm:[--discussion-padding:2.5rem];
+  }
+}
+
+/* disable webkit tap highlight color */
+body {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  touch-action: manipulation;
+}
+
+.debug {
+  border: 1px solid red;
+}

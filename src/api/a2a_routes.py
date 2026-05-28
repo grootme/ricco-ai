@@ -1385,7 +1385,7 @@ async def send_push_notification(
                         :200
                     ]  # Log first 200 chars of response
                     logger.warning(f"Response body: {response_text}")
-                except:
+                except Exception:
                     pass
 
             # Don't raise exception for non-200 status codes per A2A spec

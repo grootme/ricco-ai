@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/index.html",
+    "name": "NVIDIA Triton Inference Server",
+    "snippet": "Triton Inference Server enables teams to deploy any AI model from multiple deep learning and machine learning frameworks. Read more",
+    "host_name": "docs.nvidia.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-us/ai/dynamo-triton",
+    "name": "Triton Inference Server for Every AI Workload",
+    "snippet": "Triton Inference Server is open-source software that standardizes AI model deployment and execution across every workload.",
+    "host_name": "www.nvidia.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.nvidia.com/nemo-framework/user-guide/24.12/deployment/index.html",
+    "name": "Deploy NeMo Framework Models",
+    "snippet": "13 Jan 2026 — Enterprises seeking a comprehensive solution that covers both on-premises and cloud deployment can use the NVIDIA Inference Microservices ( NIM ). Read more",
+    "host_name": "docs.nvidia.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/triton-inference-server/server",
+    "name": "The Triton Inference Server provides an optimized cloud",
+    "snippet": "Triton enables teams to deploy any AI model from multiple deep learning and machine learning frameworks, including TensorRT, PyTorch, ONNX, OpenVINO, Python, ... Read more\nMake use of these tutorials to begin your Triton journey! Join the Triton and TensorRT community and stay current on the latest product updates, bug fixes, content, best practices, and more. Need enterprise support? NVIDIA global support is available for Triton Inference Server with the NVIDIA AI Enterprise software suite.",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.langchain.com/blog/nvidia-nim",
+    "name": "LangChain Integrates NVIDIA NIM for GPU-optimized LLM",
+    "snippet": "18 Mar 2024 — NVIDIA NIM is a set of easy-to-use microservices designed to accelerate the deployment of generative AI across enterprises. This versatile ... Read more",
+    "host_name": "www.langchain.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forums.developer.nvidia.com/t/nim-to-triton-server-pipeline/325446",
+    "name": "NIM to Triton Server Pipeline - Models",
+    "snippet": "27 Feb 2025 — Please provide resources, tutorials or tutors willing to help me setup an automated pipeline to download NIMs and serve them with Triton . Read more",
+    "host_name": "forums.developer.nvidia.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/@poojambaladinni/llm-deployment-a-guide-to-nvidia-triton-inference-server-and-tensorrt-llm-141da15138ca",
+    "name": "LLM Deployment: A Guide to NVIDIA Triton Inference",
+    "snippet": "TensorRT-LLM is an open-source library specifically built to optimize inference performance for large language models on NVIDIA GPUs. Here's ... Read more\nThese two tools team up to supercharge LLM deployments for inference performance on NVIDIA GPUs. Let’s see how they can help you get the most out of your hardware and streamline your...",
+    "host_name": "medium.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://novagenai.com.my/blog/nvidia-ai-stack-explained.html",
+    "name": "The NVIDIA AI Stack Explained: NeMo, NIM, CUDA, TensorRT",
+    "snippet": "28 Feb 2026 — A deep technical guide to the NVIDIA AI stack: CUDA, cuDNN, TensorRT , Triton Inference Server , NeMo, NIM , and RAPIDS.",
+    "host_name": "novagenai.com.my",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://nebius.com/third-party-solutions/nvidia-triton-inference-server",
+    "name": "NVIDIA Triton Inference Server: Versatile AI model",
+    "snippet": "Cross-platform deployment. Deploy models across cloud, data center, edge and embedded devices with compatibility for NVIDIA GPUs, x86 and ARM CPUs, providing ... Read more",
+    "host_name": "nebius.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.nvidia.com/en-us/deep-learning-ai/solutions/inference-platform.md",
+    "name": "Explore AI Inference Platform | NVIDIA",
+    "snippet": "NVIDIA AI Enterprise consists of NVIDIA NIM, NVIDIA Triton™ Inference Server, NVIDIA® TensorRT™ and other tools to simplify building, sharing, and deploying AI applications.",
+    "host_name": "www.nvidia.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

@@ -1,0 +1,3 @@
+# Patches for ricco_whatsapp
+# Format: patch_file_path,module
+# Example: v1_0.update_settings,ricco_whatsapp
