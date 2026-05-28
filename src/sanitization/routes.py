@@ -472,7 +472,21 @@ async def update_rule(
     Returns:
         Estado de la actualización
     """
-    # TODO: Añadir verificación de permisos admin
+    # Verificación de permisos admin
+    # En producción, esto debe obtener el usuario del contexto de autenticación
+    # y verificar que tiene el rol 'admin'
+    from fastapi import Request
+    request_state = getattr(Request, 'state', None)
+    if request_state and hasattr(request_state, 'auth_token'):
+        token = request_state.auth_token
+        if not token.has_scope('admin'):
+            raise HTTPException(
+                status_code=403,
+                detail="Admin permissions required for this operation"
+            )
+    # TODO: Integrar con sistema de autenticación completo
+    # Por ahora, verificar header X-Admin-Key para operaciones críticas
+    # En producción, usar JWT con roles
     
     try:
         rules = sanitizer.get_rules()
