@@ -1,0 +1,217 @@
+# RICCO AI Alerting Rules
+
+groups:
+  # ==========================================
+  # System Alerts
+  # ==========================================
+  - name: system_alerts
+    rules:
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is above 80% for more than 5 minutes. Current value: {{ $value }}%"
+
+      - alert: HighMemoryUsage
+        expr: 100 * (1 - ((node_memory_MemAvailable_bytes) / (node_memory_MemTotal_bytes))) > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is above 85% for more than 5 minutes. Current value: {{ $value }}%"
+
+      - alert: DiskSpaceLow
+        expr: 100 * (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) < 10
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Low disk space"
+          description: "Disk space is below 10%. Current value: {{ $value }}%"
+
+  # ==========================================
+  # Application Alerts
+  # ==========================================
+  - name: application_alerts
+    rules:
+      - alert: HighErrorRate
+        expr: sum(rate(ricco_http_requests_total{status_code=~"5.."}[5m])) / sum(rate(ricco_http_requests_total[5m])) * 100 > 5
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High HTTP error rate"
+          description: "HTTP error rate is above 5% for more than 2 minutes. Current value: {{ $value }}%"
+
+      - alert: HighLatency
+        expr: histogram_quantile(0.99, sum(rate(ricco_http_request_duration_seconds_bucket[5m])) by (le)) * 1000 > 2000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request latency"
+          description: "P99 latency is above 2 seconds. Current value: {{ $value }}ms"
+
+      - alert: RequestRateDrop
+        expr: sum(rate(ricco_http_requests_total[5m])) < 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Request rate dropped"
+          description: "Request rate has dropped below 1 req/s for 10 minutes"
+
+  # ==========================================
+  # Agent Alerts
+  # ==========================================
+  - name: agent_alerts
+    rules:
+      - alert: AgentHighErrorRate
+        expr: sum(rate(ricco_agent_requests_total{status="error"}[5m])) / sum(rate(ricco_agent_requests_total[5m])) * 100 > 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Agent high error rate"
+          description: "Agent error rate is above 10%. Current value: {{ $value }}%"
+
+      - alert: AgentSlowExecution
+        expr: histogram_quantile(0.95, sum(rate(ricco_agent_execution_duration_seconds_bucket[5m])) by (le)) > 60
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Agent slow execution"
+          description: "P95 agent execution time is above 60 seconds. Current value: {{ $value }}s"
+
+      - alert: NoActiveAgentSessions
+        expr: sum(ricco_agent_active_sessions) == 0
+        for: 30m
+        labels:
+          severity: info
+        annotations:
+          summary: "No active agent sessions"
+          description: "No active agent sessions for 30 minutes"
+
+  # ==========================================
+  # MCP Alerts
+  # ==========================================
+  - name: mcp_alerts
+    rules:
+      - alert: MCPServerDown
+        expr: ricco_mcp_server_health == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "MCP server is down"
+          description: "MCP server {{ $labels.server_id }} is unhealthy"
+
+      - alert: MCPToolErrors
+        expr: sum(rate(ricco_mcp_tool_invocations_total{status="error"}[5m])) / sum(rate(ricco_mcp_tool_invocations_total[5m])) * 100 > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "MCP tool errors increasing"
+          description: "MCP tool error rate is above 5%. Current value: {{ $value }}%"
+
+      - alert: MCPToolSlowResponse
+        expr: histogram_quantile(0.95, sum(rate(ricco_mcp_tool_duration_seconds_bucket[5m])) by (le)) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "MCP tool slow response"
+          description: "P95 MCP tool response time is above 5 seconds. Current value: {{ $value }}s"
+
+  # ==========================================
+  # LLM Alerts
+  # ==========================================
+  - name: llm_alerts
+    rules:
+      - alert: LLMHighLatency
+        expr: histogram_quantile(0.95, sum(rate(ricco_llm_request_duration_seconds_bucket[5m])) by (le)) > 60
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "LLM high latency"
+          description: "P95 LLM response time is above 60 seconds. Current value: {{ $value }}s"
+
+      - alert: LLMRateLimitApproaching
+        expr: increase(ricco_llm_requests_total[1h]) > 100000
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "LLM rate limit approaching"
+          description: "High number of LLM requests in the last hour. Current value: {{ $value }}"
+
+      - alert: LLMHighCost
+        expr: ricco_llm_cost_total_dollars > 100
+        for: 1m
+        labels:
+          severity: info
+        annotations:
+          summary: "LLM cost threshold reached"
+          description: "Total LLM cost has exceeded $100. Current value: ${{ $value }}"
+
+  # ==========================================
+  # Database Alerts
+  # ==========================================
+  - name: database_alerts
+    rules:
+      - alert: DatabaseConnectionsHigh
+        expr: sum(ricco_db_connections_active) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High database connections"
+          description: "Database connection count is high. Current value: {{ $value }}"
+
+      - alert: DatabaseSlowQueries
+        expr: histogram_quantile(0.95, sum(rate(ricco_db_query_duration_seconds_bucket[5m])) by (le)) * 1000 > 500
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Database slow queries"
+          description: "P95 query time is above 500ms. Current value: {{ $value }}ms"
+
+      - alert: DatabaseErrors
+        expr: sum(rate(ricco_db_errors_total[5m])) > 0.1
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Database errors detected"
+          description: "Database error rate is above 0.1/s. Current value: {{ $value }}/s"
+
+  # ==========================================
+  # Queue Alerts
+  # ==========================================
+  - name: queue_alerts
+    rules:
+      - alert: QueueBacklog
+        expr: sum(ricco_queue_size) > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Queue backlog detected"
+          description: "Queue size is above 1000. Current value: {{ $value }}"
+
+      - alert: QueueProcessingSlow
+        expr: histogram_quantile(0.95, sum(rate(ricco_queue_processing_time_seconds_bucket[5m])) by (le)) > 10
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Queue processing slow"
+          description: "P95 queue processing time is above 10 seconds. Current value: {{ $value }}s"
