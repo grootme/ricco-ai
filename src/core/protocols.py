@@ -4,25 +4,31 @@ Implements Protocol Pattern (Structural Typing) for loose coupling
 
 This module defines the contracts that services must implement,
 enabling dependency injection and easy testing/mocking.
+
+Consolidated: Enums moved to src/shared/enums.py for OCP compliance.
 """
 
 from typing import Protocol, Dict, Any, List, Optional, AsyncIterator, runtime_checkable
 from abc import abstractmethod
 from datetime import datetime
-from enum import Enum
 
-
-# =============================================================================
-# AI Provider Protocols
-# =============================================================================
-
-class AIProviderType(str, Enum):
-    """Supported AI provider types"""
-    OPENAI = "openai"
-    ANTHROPIC = "anthropic"
-    GOOGLE = "google"
-    LOCAL = "local"
-    OPENROUTER = "openrouter"
+# Import consolidated enums from single source of truth
+try:
+    from src.shared.enums import (
+        AIProviderType,
+        AgentType,
+        UIContextMode,
+    )
+except ImportError:
+    # Fallback for direct imports
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from shared.enums import (
+        AIProviderType,
+        AgentType,
+        UIContextMode,
+    )
 
 
 @runtime_checkable
@@ -91,15 +97,7 @@ class EmbeddingProviderProtocol(Protocol):
 # Agent Protocols
 # =============================================================================
 
-class AgentType(str, Enum):
-    """Types of agents in the system"""
-    LLM = "llm"
-    A2A = "a2a"
-    SEQUENTIAL = "sequential"
-    PARALLEL = "parallel"
-    LOOP = "loop"
-    WORKFLOW = "workflow"
-    TASK = "task"
+# AgentType imported from src.shared.enums
 
 
 @runtime_checkable
@@ -214,12 +212,7 @@ class SessionServiceProtocol(Protocol):
 # UI/A2UI Protocols
 # =============================================================================
 
-class UIContextMode(str, Enum):
-    """UI generation modes"""
-    MINIMAL = "minimal"
-    STANDARD = "standard"
-    DETAILED = "detailed"
-    ACCESSIBILITY = "accessibility"
+# UIContextMode imported from src.shared.enums
 
 
 @runtime_checkable

@@ -8,44 +8,50 @@ This module provides schema definitions for:
 - AgentConfig: Agent configurations
 - ContextProviderConfig: Context provider configurations
 - A2UIComponentConfig: A2UI component configurations
+
+Consolidated: Enums moved to src/shared/enums.py for OCP compliance.
 """
 
 from typing import Any, Dict, List, Optional
 from datetime import datetime
-from enum import Enum
 from pydantic import BaseModel, Field
+
+# Import consolidated enums from single source of truth
+try:
+    from src.shared.enums import (
+        MCPCategory,
+        TransportType,
+        HealthStatus,
+        AgentType,
+        AgentCapability,
+        ContextType,
+        A2UIComponentType,
+        A2UIPlatform,
+        ToolRiskLevel,
+        SubscriptionTier,
+    )
+except ImportError:
+    # Fallback for direct imports
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from shared.enums import (
+        MCPCategory,
+        TransportType,
+        HealthStatus,
+        AgentType,
+        AgentCapability,
+        ContextType,
+        A2UIComponentType,
+        A2UIPlatform,
+        ToolRiskLevel,
+        SubscriptionTier,
+    )
 
 
 # ==================== MCP Server Config ====================
 
-class MCPCategory(str, Enum):
-    """MCP server categories."""
-    FILESYSTEM = "filesystem"
-    DATABASE = "database"
-    WEB = "web"
-    AI = "ai"
-    FINANCE = "finance"
-    RICCO = "ricco"
-    DEVOPS = "devops"
-    MONITORING = "monitoring"
-    DOCUMENTS = "documents"
-    PRODUCTIVITY = "productivity"
-
-
-class TransportType(str, Enum):
-    """MCP transport types."""
-    STDIO = "stdio"
-    HTTP = "http"
-    GRPC = "grpc"
-    WEBSOCKET = "websocket"
-
-
-class HealthStatus(str, Enum):
-    """Server health status."""
-    HEALTHY = "healthy"
-    DEGRADED = "degraded"
-    UNHEALTHY = "unhealthy"
-    UNKNOWN = "unknown"
+# Enums imported from src.shared.enums
 
 
 class ServerMetadataConfig(BaseModel):
@@ -142,34 +148,7 @@ class MCPServerConfigUpdate(BaseModel):
 
 # ==================== Agent Config ====================
 
-class AgentType(str, Enum):
-    """Types of agents."""
-    ORCHESTRATOR = "orchestrator"
-    COMMERCE = "commerce"
-    HEALTH = "health"
-    LOGISTICS = "logistics"
-    FINANCE = "finance"
-    REWARDS = "rewards"
-    BOOKING = "booking"
-    TRAVEL = "travel"
-    SOCIAL = "social"
-    LEGAL = "legal"
-    GENERAL = "general"
-
-
-class AgentCapability(str, Enum):
-    """Agent capabilities."""
-    NATURAL_LANGUAGE = "natural_language"
-    ORDER_MANAGEMENT = "order_management"
-    PAYMENT_PROCESSING = "payment_processing"
-    INVENTORY_CHECK = "inventory_check"
-    APPOINTMENT_BOOKING = "appointment_booking"
-    TRAVEL_PLANNING = "travel_planning"
-    FINANCIAL_ADVICE = "financial_advice"
-    HEALTH_CONSULTATION = "health_consultation"
-    LEGAL_ASSISTANCE = "legal_assistance"
-    REWARDS_MANAGEMENT = "rewards_management"
-    CRYPTO_OPERATIONS = "crypto_operations"
+# AgentType and AgentCapability imported from src.shared.enums
 
 
 class AgentMetadataConfig(BaseModel):
@@ -265,18 +244,7 @@ class AgentConfigUpdate(BaseModel):
 
 # ==================== Context Provider Config ====================
 
-class ContextType(str, Enum):
-    """Types of context."""
-    PERSONAL = "personal"
-    SPATIAL = "spatial"
-    TEMPORAL = "temporal"
-    DEVICE = "device"
-    SOLUTION = "solution"
-    HORIZONTAL = "horizontal"
-    VERTICAL = "vertical"
-    SKILLS = "skills"
-    RAG = "rag"
-    CONVERSATION = "conversation"
+# ContextType imported from src.shared.enums
 
 
 class ContextProviderConfigModel(BaseModel):
@@ -362,30 +330,7 @@ class ContextProviderConfigUpdate(BaseModel):
 
 # ==================== A2UI Component Config ====================
 
-class A2UIComponentType(str, Enum):
-    """Types of A2UI components."""
-    BUTTON = "button"
-    CARD = "card"
-    FORM = "form"
-    LIST = "list"
-    MODAL = "modal"
-    NAVIGATION = "navigation"
-    INPUT = "input"
-    TEXT = "text"
-    IMAGE = "image"
-    CONTAINER = "container"
-    PRODUCT_CARD = "product_card"
-    USER_PROFILE = "user_profile"
-    DASHBOARD = "dashboard"
-
-
-class A2UIPlatform(str, Enum):
-    """Target platforms for A2UI components."""
-    REACT = "react"
-    FLUTTER = "flutter"
-    LIT = "lit"
-    NATIVE = "native"
-    HTML = "html"
+# A2UIComponentType and A2UIPlatform imported from src.shared.enums
 
 
 class A2UIActionConfig(BaseModel):

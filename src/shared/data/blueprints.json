@@ -1,0 +1,233 @@
+{
+  "entity_type": "blueprint",
+  "entities": [
+    {
+      "id": "aiq",
+      "name": "AI-Q Research Agent",
+      "description": "NVIDIA AI-Q Blueprint for intelligent research agents",
+      "category": "research",
+      "tags": ["nvidia", "research", "agents"],
+      "metadata": {
+        "module": "src.blueprints.aiq",
+        "class": "AIQBlueprint",
+        "skills": ["aiq-blueprint"]
+      }
+    },
+    {
+      "id": "video-search",
+      "name": "Video Search and Summarization",
+      "description": "NVIDIA Video Search Blueprint for video analysis",
+      "category": "ai",
+      "tags": ["nvidia", "video", "multimodal"],
+      "metadata": {
+        "module": "src.blueprints.video_search",
+        "class": "VideoSearchBlueprint",
+        "skills": ["video-search-blueprint"]
+      }
+    },
+    {
+      "id": "rag",
+      "name": "RAG Blueprint",
+      "description": "NVIDIA RAG Blueprint for retrieval-augmented generation",
+      "category": "blueprint",
+      "tags": ["nvidia", "rag", "search"],
+      "metadata": {
+        "module": "src.blueprints.rag",
+        "class": "RAGBlueprint",
+        "skills": ["rag-blueprint"]
+      }
+    },
+    {
+      "id": "virtual-assistant",
+      "name": "Virtual Assistant",
+      "description": "NVIDIA Virtual Assistant Blueprint for chatbots",
+      "category": "communication",
+      "tags": ["nvidia", "assistant", "chatbot"],
+      "metadata": {
+        "module": "src.blueprints.virtual_assistant",
+        "class": "VirtualAssistantBlueprint",
+        "skills": ["virtual-assistant-blueprint"]
+      }
+    },
+    {
+      "id": "data-flywheel",
+      "name": "Data Flywheel",
+      "description": "NVIDIA Data Flywheel for continuous learning",
+      "category": "ai",
+      "tags": ["nvidia", "ml-ops", "training"],
+      "metadata": {
+        "module": "src.blueprints.data_flywheel",
+        "class": "DataFlywheelBlueprint",
+        "skills": ["data-flywheel-blueprint"]
+      }
+    },
+    {
+      "id": "portfolio-optimization",
+      "name": "Portfolio Optimization",
+      "description": "NVIDIA Portfolio Optimization for finance",
+      "category": "finance",
+      "tags": ["nvidia", "finance", "trading"],
+      "metadata": {
+        "module": "src.blueprints.portfolio_optimization",
+        "class": "PortfolioOptimizationBlueprint",
+        "skills": ["portfolio-optimization-blueprint"]
+      }
+    },
+    {
+      "id": "intelligent-warehouse",
+      "name": "Intelligent Warehouse",
+      "description": "NVIDIA Warehouse automation blueprint",
+      "category": "industrial",
+      "tags": ["nvidia", "warehouse", "robotics"],
+      "metadata": {
+        "module": "src.blueprints.intelligent_warehouse",
+        "class": "IntelligentWarehouseBlueprint",
+        "skills": ["intelligent-warehouse-blueprint"]
+      }
+    },
+    {
+      "id": "multi-agent",
+      "name": "Multi-Agent Orchestration",
+      "description": "NVIDIA Multi-Agent for agent coordination",
+      "category": "blueprint",
+      "tags": ["nvidia", "multi-agent", "orchestration"],
+      "metadata": {
+        "module": "src.blueprints.multi_agent",
+        "class": "MultiAgentBlueprint",
+        "skills": ["multi-agent-blueprint"]
+      }
+    },
+    {
+      "id": "digital-human",
+      "name": "Digital Human",
+      "description": "NVIDIA Digital Human for avatars",
+      "category": "blueprint",
+      "tags": ["nvidia", "avatar", "tts"],
+      "metadata": {
+        "module": "src.blueprints.digital_human",
+        "class": "DigitalHumanBlueprint",
+        "skills": ["digital-human-blueprint"]
+      }
+    },
+    {
+      "id": "healthcare",
+      "name": "Healthcare",
+      "description": "NVIDIA Healthcare for medical AI",
+      "category": "blueprint",
+      "tags": ["nvidia", "healthcare", "medical"],
+      "metadata": {
+        "module": "src.blueprints.healthcare",
+        "class": "HealthcareBlueprint",
+        "skills": ["healthcare-blueprint"]
+      }
+    },
+    {
+      "id": "industrial",
+      "name": "Industrial",
+      "description": "NVIDIA Industrial for manufacturing",
+      "category": "industrial",
+      "tags": ["nvidia", "industrial", "manufacturing"],
+      "metadata": {
+        "module": "src.blueprints.industrial",
+        "class": "IndustrialBlueprint",
+        "skills": ["industrial-blueprint"]
+      }
+    },
+    {
+      "id": "streaming-rag",
+      "name": "Streaming RAG",
+      "description": "Real-time streaming RAG blueprint",
+      "category": "blueprint",
+      "tags": ["rag", "streaming", "realtime"],
+      "metadata": {
+        "module": "src.blueprints.streaming_rag",
+        "class": "StreamingRAGBlueprint",
+        "skills": ["rag-blueprint"]
+      }
+    },
+    {
+      "id": "genomics",
+      "name": "Genomics",
+      "description": "Genomics analysis blueprint",
+      "category": "research",
+      "tags": ["genomics", "bioinformatics", "research"],
+      "metadata": {
+        "module": "src.blueprints.genomics",
+        "class": "GenomicsBlueprint",
+        "skills": []
+      }
+    },
+    {
+      "id": "retail-commerce",
+      "name": "Retail Commerce",
+      "description": "Retail and e-commerce blueprint",
+      "category": "commerce",
+      "tags": ["retail", "ecommerce", "commerce"],
+      "metadata": {
+        "module": "src.blueprints.retail_commerce",
+        "class": "RetailCommerceBlueprint",
+        "skills": []
+      }
+    },
+    {
+      "id": "biomedical-research",
+      "name": "Biomedical Research",
+      "description": "Biomedical research blueprint",
+      "category": "research",
+      "tags": ["biomedical", "research", "science"],
+      "metadata": {
+        "module": "src.blueprints.biomedical_research",
+        "class": "BiomedicalResearchBlueprint",
+        "skills": []
+      }
+    },
+    {
+      "id": "voice-agent",
+      "name": "Voice Agent",
+      "description": "Voice-enabled agent blueprint",
+      "category": "communication",
+      "tags": ["voice", "audio", "agent"],
+      "metadata": {
+        "module": "src.blueprints.voice_agent",
+        "class": "VoiceAgentBlueprint",
+        "skills": ["ASR", "TTS"]
+      }
+    },
+    {
+      "id": "financial-distillation",
+      "name": "Financial Distillation",
+      "description": "Financial data distillation blueprint",
+      "category": "finance",
+      "tags": ["finance", "data", "analytics"],
+      "metadata": {
+        "module": "src.blueprints.financial_distillation",
+        "class": "FinancialDistillationBlueprint",
+        "skills": ["portfolio-optimization-blueprint"]
+      }
+    },
+    {
+      "id": "ambient-patient",
+      "name": "Ambient Patient",
+      "description": "Ambient patient monitoring blueprint",
+      "category": "healthcare",
+      "tags": ["healthcare", "monitoring", "ambient"],
+      "metadata": {
+        "module": "src.blueprints.ambient_patient",
+        "class": "AmbientPatientBlueprint",
+        "skills": ["healthcare-blueprint"]
+      }
+    },
+    {
+      "id": "retail-shopping",
+      "name": "Retail Shopping",
+      "description": "Retail shopping assistant blueprint",
+      "category": "commerce",
+      "tags": ["retail", "shopping", "assistant"],
+      "metadata": {
+        "module": "src.blueprints.retail_shopping",
+        "class": "RetailShoppingBlueprint",
+        "skills": []
+      }
+    }
+  ]
+}

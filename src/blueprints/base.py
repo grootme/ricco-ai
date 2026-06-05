@@ -2,47 +2,25 @@
 Blueprint Base Classes and Types
 
 Provides the foundation for all NVIDIA AI Blueprint integrations.
+
+Consolidated: Enums moved to src/shared/enums.py for OCP compliance.
 """
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
-from enum import Enum
 import time
 import uuid
 
-
-class BlueprintStatus(str, Enum):
-    """Status of a blueprint execution"""
-    PENDING = "pending"
-    RUNNING = "running"
-    COMPLETED = "completed"
-    FAILED = "failed"
-    CANCELLED = "cancelled"
-
-
-class BlueprintType(str, Enum):
-    """Types of NVIDIA AI Blueprints"""
-    AIQ_RESEARCH = "aiq_research"
-    RAG = "rag"
-    VIDEO_SEARCH = "video_search"
-    DATA_FLYWHEEL = "data_flywheel"
-    DIGITAL_HUMAN = "digital_human"
-    HEALTHCARE = "healthcare"
-    RETAIL_COMMERCE = "retail_commerce"
-    # Extended blueprints
-    AMBIENT_PATIENT = "ambient_patient"
-    BIOMEDICAL_RESEARCH = "biomedical_research"
-    FINANCIAL_DISTILLATION = "financial_distillation"
-    GENOMICS = "genomics"
-    INDUSTRIAL = "industrial"
-    INTELLIGENT_WAREHOUSE = "intelligent_warehouse"
-    MULTI_AGENT = "multi_agent"
-    PORTFOLIO_OPTIMIZATION = "portfolio_optimization"
-    RETAIL_SHOPPING = "retail_shopping"
-    STREAMING_RAG = "streaming_rag"
-    VIRTUAL_ASSISTANT = "virtual_assistant"
-    VOICE_AGENT = "voice_agent"
+# Import consolidated enums from single source of truth
+try:
+    from src.shared.enums import BlueprintStatus, BlueprintType
+except ImportError:
+    # Fallback for direct imports
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from shared.enums import BlueprintStatus, BlueprintType
 
 
 @dataclass
