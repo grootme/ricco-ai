@@ -1,0 +1,244 @@
+-- RICCO Ecosystem - NebulaGraph Schema
+-- Social Graph para identidades, relaciones y trust network
+
+-- Crear espacio de grafos
+CREATE SPACE IF NOT EXISTS ricco_ecosystem (
+    partition_num = 10,
+    replica_factor = 1,
+    vid_type = FIXED_STRING(64)
+);
+
+USE ricco_ecosystem;
+
+-- ========================================
+-- TAGS (Nodos/Entidades)
+-- ========================================
+
+-- Usuario RICCO ID
+CREATE TAG IF NOT EXISTS user (
+    ricco_id STRING,
+    email STRING,
+    phone STRING,
+    trust_score INT,
+    verification_level INT,  -- 0=none, 1=basic, 2=advanced, 3=government
+    created_at TIMESTAMP,
+    last_active TIMESTAMP,
+    energy_points INT,
+    subscription_tier STRING  -- peon, alfil, torre, reina, rey
+);
+
+-- Negocio/Empresa
+CREATE TAG IF NOT EXISTS business (
+    business_id STRING,
+    name STRING,
+    rut STRING,
+    industry STRING,
+    trust_score INT,
+    verification_status INT,
+    created_at TIMESTAMP,
+    subscription_tier STRING
+);
+
+-- Producto
+CREATE TAG IF NOT EXISTS product (
+    product_id STRING,
+    sku STRING,
+    name STRING,
+    category STRING,
+    price DOUBLE,
+    currency STRING,
+    stock INT,
+    created_at TIMESTAMP
+);
+
+-- Servicio (Booking)
+CREATE TAG IF NOT EXISTS service (
+    service_id STRING,
+    name STRING,
+    industry STRING,  -- car_wash, beauty, health, repairs, gym, parking, rentals_auto, rentals_space, lodging
+    duration_minutes INT,
+    base_price DOUBLE,
+    currency STRING
+);
+
+-- Transacción
+CREATE TAG IF NOT EXISTS transaction (
+    transaction_id STRING,
+    type STRING,  -- purchase, booking, subscription, transfer
+    amount DOUBLE,
+    currency STRING,
+    status STRING,  -- pending, completed, cancelled, refunded
+    created_at TIMESTAMP
+);
+
+-- Pedido/Orden
+CREATE TAG IF NOT EXISTS order (
+    order_id STRING,
+    status STRING,
+    total DOUBLE,
+    currency STRING,
+    items_count INT,
+    created_at TIMESTAMP,
+    completed_at TIMESTAMP
+);
+
+-- Reseña
+CREATE TAG IF NOT EXISTS review (
+    review_id STRING,
+    rating INT,
+    comment STRING,
+    verified BOOL,
+    created_at TIMESTAMP
+);
+
+-- Categoría
+CREATE TAG IF NOT EXISTS category (
+    category_id STRING,
+    name STRING,
+    parent_id STRING,
+    level INT
+);
+
+-- Ubicación
+CREATE TAG IF NOT EXISTS location (
+    location_id STRING,
+    address STRING,
+    city STRING,
+    province STRING,
+    country STRING,
+    lat DOUBLE,
+    lng DOUBLE
+);
+
+-- Agente RICCO
+CREATE TAG IF NOT EXISTS agent (
+    agent_id STRING,
+    name STRING,
+    commission_rate DOUBLE,
+    total_sales DOUBLE,
+    trust_score INT,
+    created_at TIMESTAMP
+);
+
+-- ========================================
+-- EDGES (Relificaciones)
+-- ========================================
+
+-- Usuario posee negocio
+CREATE EDGE IF NOT EXISTS owns (
+    role STRING,  -- owner, admin, staff
+    since TIMESTAMP
+);
+
+-- Usuario sigue a usuario
+CREATE EDGE IF NOT EXISTS follows (
+    since TIMESTAMP
+);
+
+-- Usuario es amigo de usuario
+CREATE EDGE IF NOT EXISTS friends_with (
+    since TIMESTAMP,
+    closeness_score INT
+);
+
+-- Usuario realizó transacción
+CREATE EDGE IF NOT EXISTS made_transaction (
+    role STRING  -- buyer, seller
+);
+
+-- Usuario escribió reseña
+CREATE EDGE IF NOT EXISTS wrote_review (
+    entity_type STRING  -- product, service, business, user
+);
+
+-- Producto pertenece a categoría
+CREATE EDGE IF NOT EXISTS belongs_to_category ();
+
+-- Producto vendido por negocio
+CREATE EDGE IF NOT EXISTS sold_by (
+    commission_rate DOUBLE
+);
+
+-- Negocio ubicado en
+CREATE EDGE IF NOT EXISTS located_at ();
+
+-- Usuario referido por
+CREATE EDGE IF NOT EXISTS referred_by (
+    reward_claimed BOOL,
+    reward_amount DOUBLE
+);
+
+-- Usuario tiene suscripción
+CREATE EDGE IF NOT EXISTS has_subscription (
+    plan STRING,
+    started_at TIMESTAMP,
+    expires_at TIMESTAMP,
+    active BOOL
+);
+
+-- Agente promociona producto/negocio
+CREATE EDGE IF NOT EXISTS promotes (
+    commission_rate DOUBLE,
+    sales_count INT,
+    total_commission DOUBLE
+);
+
+-- Usuario verificó identidad
+CREATE EDGE IF NOT EXISTS verified_by (
+    verification_type STRING,  -- phone, email, document, government
+    verified_at TIMESTAMP,
+    expires_at TIMESTAMP
+);
+
+-- Orden contiene producto
+CREATE EDGE IF NOT EXISTS contains (
+    quantity INT,
+    unit_price DOUBLE,
+    total_price DOUBLE
+);
+
+-- Servicio reservado por usuario
+CREATE EDGE IF NOT EXISTS booked_by (
+    slot_start TIMESTAMP,
+    slot_end TIMESTAMP,
+    status STRING
+);
+
+-- Trust relationship (confianza entre usuarios)
+CREATE EDGE IF NOT EXISTS trusts (
+    trust_score INT,  -- 1-100
+    reason STRING,
+    since TIMESTAMP
+);
+
+-- ========================================
+-- ÍNDICES
+-- ========================================
+
+-- Crear índices para búsquedas eficientes
+CREATE TAG INDEX IF NOT EXISTS user_ricco_id_index ON user(ricco_id);
+CREATE TAG INDEX IF NOT EXISTS user_email_index ON user(email);
+CREATE TAG INDEX IF NOT EXISTS user_trust_score_index ON user(trust_score);
+CREATE TAG INDEX IF NOT EXISTS business_id_index ON business(business_id);
+CREATE TAG INDEX IF NOT EXISTS business_industry_index ON business(industry);
+CREATE TAG INDEX IF NOT EXISTS product_id_index ON product(product_id);
+CREATE TAG INDEX IF NOT EXISTS product_category_index ON product(category);
+CREATE TAG INDEX IF NOT EXISTS service_id_index ON service(service_id);
+CREATE TAG INDEX IF NOT EXISTS service_industry_index ON service(industry);
+CREATE TAG INDEX IF NOT EXISTS transaction_id_index ON transaction(transaction_id);
+CREATE TAG INDEX IF NOT EXISTS order_id_index ON order(order_id);
+
+-- ========================================
+-- DATOS DE EJEMPLO (Opcional)
+-- ========================================
+
+-- Insertar usuario de ejemplo
+-- INSERT VERTEX user (ricco_id, email, trust_score, verification_level, created_at, energy_points, subscription_tier)
+-- VALUES "user_001": ("RICCO-001", "demo@ricco.com", 85, 2, NOW(), 1000, "torre");
+
+-- Insertar negocio de ejemplo
+-- INSERT VERTEX business (business_id, name, industry, trust_score, verification_status, created_at, subscription_tier)
+-- VALUES "biz_001": ("BIZ-001", "Restaurante Demo", "restaurant", 90, 2, NOW(), "reina");
+
+-- Insertar relación de propiedad
+-- INSERT EDGE owns (role, since) VALUES "user_001"->"biz_001": ("owner", NOW());
