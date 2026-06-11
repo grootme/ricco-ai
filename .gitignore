@@ -102,3 +102,6 @@ test_*.py
 
 # Generated scripts at root
 generate_*.py
+
+# Cloned repository analysis (too large for git)
+/repo-analysis/
