@@ -1,0 +1,1399 @@
+     1→     1→# Letta (MemGPT) Self-Directed Memory Management Research
+     2→     2→
+     3→     3→## Executive Summary
+     4→     4→
+     5→     5→Letta (formerly MemGPT) is a revolutionary platform for building stateful AI agents with self-directed memory management. It implements an OS-inspired hierarchical memory architecture that enables agents to overcome LLM context window limitations through autonomous memory decisions.
+     6→     6→
+     7→     7→**Key Innovation**: Agents can self-edit their own memory using function tools, deciding what to remember, forget, and consolidate without human intervention.
+     8→     8→
+     9→     9→---
+    10→    10→
+    11→    11→## 1. Letta Architecture: Self-Directed Memory Implementation
+    12→    12→
+    13→    13→### 1.1 Core Concept: LLM as Operating System
+    14→    14→
+    15→    15→Letta implements the "LLM as Operating System" paradigm from the MemGPT paper (arXiv:2310.08560):
+    16→    16→
+    17→    17→```
+    18→    18→┌─────────────────────────────────────────────────────────────┐
+    19→    19→│                    LETTA AGENT ARCHITECTURE                  │
+    20→    20→├─────────────────────────────────────────────────────────────┤
+    21→    21→│                                                              │
+    22→    22→│  ┌─────────────────────────────────────────────────────┐    │
+    23→    23→│  │              MAIN CONTEXT (Limited)                  │    │
+    24→    24→│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐    │    │
+    25→    25→│  │  │   SYSTEM    │ │   CORE      │ │  WORKING    │    │    │
+    26→    26→│  │  │   PROMPT    │ │   MEMORY    │ │  MEMORY     │    │    │
+    27→    27→│  │  │  (Persona)  │ │  (Blocks)   │ │ (Messages)  │    │    │
+    28→    28→│  │  └─────────────┘ └─────────────┘ └─────────────┘    │    │
+    29→    29→│  │         ↑ Always in context (like RAM)              │    │
+    30→    30→│  └─────────────────────────────────────────────────────┘    │
+    31→    31→│                         ↕                                    │
+    32→    32→│  ┌─────────────────────────────────────────────────────┐    │
+    33→    33→│  │           EXTERNAL MEMORY (Unlimited)                │    │
+    34→    34→│  │  ┌─────────────────┐ ┌─────────────────────────┐    │    │
+    35→    35→│  │  │     RECALL      │ │      ARCHIVAL           │    │    │
+    36→    36→│  │  │     MEMORY      │ │      MEMORY             │    │    │
+    37→    37→│  │  │ (Message DB)    │ │ (Vector Database)       │    │    │
+    38→    38→│  │  └─────────────────┘ └─────────────────────────┘    │    │
+    39→    39→│  │         ↑ Requires retrieval (like Disk)            │    │
+    40→    40→│  └─────────────────────────────────────────────────────┘    │
+    41→    41→│                                                              │
+    42→    42→└─────────────────────────────────────────────────────────────┘
+    43→    43→```
+    44→    44→
+    45→    45→### 1.2 Memory Hierarchy (OS-Inspired)
+    46→    46→
+    47→    47→| Memory Tier | Analogy | Characteristics | Capacity |
+    48→    48→|-------------|---------|-----------------|----------|
+    49→    49→| **Main Context** | CPU Registers | Always visible to LLM | Fixed (context window) |
+    50→    50→| **Core Memory** | RAM | In-context, self-editable | Limited (~2000-8000 tokens) |
+    51→    51→| **Recall Memory** | Page Cache | Conversation history | Semi-limited |
+    52→    52→| **Archival Memory** | Disk/SSD | Vector DB, searchable | Unlimited |
+    53→    53→
+    54→    54→### 1.3 Key Architecture Components
+    55→    55→
+    56→    56→```python
+    57→    57→# Letta Agent Structure (Conceptual)
+    58→    58→class LettaAgent:
+    59→    59→    """Simplified Letta agent structure showing memory components"""
+    60→    60→    
+    61→    61→    def __init__(self):
+    62→    62→        # System Prompt - Defines agent persona and behavior
+    63→    63→        self.system_prompt = """
+    64→    64→        You are a helpful AI assistant with memory capabilities.
+    65→    65→        You have access to memory tools to store and retrieve information.
+    66→    66→        Manage your memory wisely to provide personalized responses.
+    67→    67→        """
+    68→    68→        
+    69→    69→        # Core Memory Blocks - Always in context
+    70→    70→        self.core_memory = {
+    71→    71→            "persona": "Information about the AI's identity",
+    72→    72→            "human": "Information about the user",
+    73→    73→            "tasks": "Current tasks and goals"
+    74→    74→        }
+    75→    75→        
+    76→    76→        # Working Memory - Recent messages
+    77→    77→        self.working_memory = []  # Recent conversation
+    78→    78→        
+    79→    79→        # Recall Memory - Full message history
+    80→    80→        self.recall_memory = MessageDatabase()  # All messages
+    81→    81→        
+    82→    82→        # Archival Memory - Long-term semantic storage
+    83→    83→        self.archival_memory = VectorDatabase()  # Unlimited storage
+    84→    84→        
+    85→    85→        # Memory Tools - Self-modification capabilities
+    86→    86→        self.memory_tools = [
+    87→    87→            "core_memory_append",
+    88→    88→            "core_memory_replace", 
+    89→    89→            "archival_memory_insert",
+    90→    90→            "archival_memory_search",
+    91→    91→            "conversation_search",
+    92→    92→            # ... more tools
+    93→    93→        ]
+    94→    94→```
+    95→    95→
+    96→    96→---
+    97→    97→
+    98→    98→## 2. Memory Tiers: Detailed Breakdown
+    99→    99→
+   100→   100→### 2.1 Core Memory (Memory Blocks)
+   101→   101→
+   102→   102→**Definition**: Structured sections of the agent's context window that persist across all interactions. Always visible - no retrieval needed.
+   103→   103→
+   104→   104→```python
+   105→   105→# Core Memory Structure
+   106→   106→class CoreMemoryBlock:
+   107→   107→    """A structured memory block in core memory"""
+   108→   108→    label: str           # e.g., "persona", "human", "tasks"
+   109→   109→    content: str         # The actual content
+   110→   110→    limit: int           # Character/token limit
+   111→   111→    priority: int        # Importance for context management
+   112→   112→
+   113→   113→# Default Core Memory Blocks
+   114→   114→DEFAULT_BLOCKS = {
+   115→   115→    "persona": {
+   116→   116→        "description": "AI's identity and capabilities",
+   117→   117→        "limit": 2000,
+   118→   118→        "content": "I am a helpful AI assistant..."
+   119→   119→    },
+   120→   120→    "human": {
+   121→   121→        "description": "User information and preferences",
+   122→   122→        "limit": 2000,
+   123→   123→        "content": "User prefers Python..."
+   124→   124→    }
+   125→   125→}
+   126→   126→```
+   127→   127→
+   128→   128→**Key Characteristics**:
+   129→   129→- **Always in context**: No retrieval overhead
+   130→   130→- **Self-editable**: Agent can modify using tools
+   131→   131→- **Structured**: Organized by topic/purpose
+   132→   132→- **Limited**: Must be carefully managed
+   133→   133→
+   134→   134→### 2.2 Working Memory (Message Queue)
+   135→   135→
+   136→   136→**Definition**: Recent conversation messages in the main context. Analogous to CPU cache.
+   137→   137→
+   138→   138→```python
+   139→   139→# Working Memory Management
+   140→   140→class WorkingMemory:
+   141→   141→    """Recent messages in main context"""
+   142→   142→    
+   143→   143→    def __init__(self, max_messages: int = 10):
+   144→   144→        self.messages = []
+   145→   145→        self.max_messages = max_messages
+   146→   146→    
+   147→   147→    def add_message(self, message: Message):
+   148→   148→        """Add message, evict oldest if needed"""
+   149→   149→        self.messages.append(message)
+   150→   150→        if len(self.messages) > self.max_messages:
+   151→   151→            # Oldest messages moved to recall memory
+   152→   152→            self._evict_oldest()
+   153→   153→    
+   154→   154→    def get_context(self) -> str:
+   155→   155→        """Format for LLM context"""
+   156→   156→        return "\n".join(m.content for m in self.messages)
+   157→   157→```
+   158→   158→
+   159→   159→### 2.3 Recall Memory (Conversation History)
+   160→   160→
+   161→   161→**Definition**: Full conversation history stored in a database. Requires search/retrieval.
+   162→   162→
+   163→   163→```python
+   164→   164→# Recall Memory Operations
+   165→   165→class RecallMemory:
+   166→   166→    """Full message history with search capabilities"""
+   167→   167→    
+   168→   168→    async def search_conversations(
+   169→   169→        self,
+   170→   170→        query: str,
+   171→   171→        user_id: str,
+   172→   172→        limit: int = 10
+   173→   173→    ) -> List[Message]:
+   174→   174→        """Search through conversation history"""
+   175→   175→        # Returns relevant past conversations
+   176→   176→        pass
+   177→   177→    
+   178→   178→    async def get_recent(
+   179→   179→        self,
+   180→   180→        user_id: str,
+   181→   181→        count: int = 5
+   182→   182→    ) -> List[Message]:
+   183→   183→        """Get most recent messages"""
+   184→   184→        pass
+   185→   185→```
+   186→   186→
+   187→   187→### 2.4 Archival Memory (Vector Database)
+   188→   188→
+   189→   189→**Definition**: Semantically searchable long-term storage for facts, knowledge, and information.
+   190→   190→
+   191→   191→```python
+   192→   192→# Archival Memory Operations
+   193→   193→class ArchivalMemory:
+   194→   194→    """Vector database for long-term semantic storage"""
+   195→   195→    
+   196→   196→    async def insert(
+   197→   197→        self,
+   198→   198→        content: str,
+   199→   199→        metadata: Dict = None
+   200→   200→    ) -> str:
+   201→   201→        """Store new information with embeddings"""
+   202→   202→        # Creates embedding, stores in vector DB
+   203→   203→        pass
+   204→   204→    
+   205→   205→    async def search(
+   206→   206→        self,
+   207→   207→        query: str,
+   208→   208→        top_k: int = 10
+   209→   209→    ) -> List[ArchivalResult]:
+   210→   210→        """Semantic search across all stored content"""
+   211→   211→        # Returns most relevant stored information
+   212→   212→        pass
+   213→   213→    
+   214→   214→    async def delete(self, memory_id: str):
+   215→   215→        """Remove stored information"""
+   216→   216→        pass
+   217→   217→```
+   218→   218→
+   219→   219→---
+   220→   220→
+   221→   221→## 3. Memory Operations: Self-Directed Tools
+   222→   222→
+   223→   223→### 3.1 Core Memory Tools
+   224→   224→
+   225→   225→Letta agents use these tools to self-modify their core memory:
+   226→   226→
+   227→   227→```python
+   228→   228→# Core Memory Tools (Letta/MemGPT)
+   229→   229→
+   230→   230→def core_memory_append(
+   231→   231→    label: str,
+   232→   232→    content: str
+   233→   233→) -> str:
+   234→   234→    """
+   235→   235→    Append content to a core memory block.
+   236→   236→    
+   237→   237→    Args:
+   238→   238→        label: Name of the memory block (e.g., "persona", "human")
+   239→   239→        content: Content to append
+   240→   240→    
+   241→   241→    Returns:
+   242→   242→        Status message with updated block size
+   243→   243→    """
+   244→   244→    # Agent decides what's important to remember
+   245→   245→    pass
+   246→   246→
+   247→   247→def core_memory_replace(
+   248→   248→    label: str,
+   249→   249→    old_content: str,
+   250→   250→    new_content: str
+   251→   251→) -> str:
+   252→   252→    """
+   253→   253→    Replace specific content in a core memory block.
+   254→   254→    
+   255→   255→    Args:
+   256→   256→        label: Name of the memory block
+   257→   257→        old_content: Text to find and replace
+   258→   258→        new_content: New text to insert
+   259→   259→    
+   260→   260→    Returns:
+   261→   261→        Status message
+   262→   262→    """
+   263→   263→    # Agent can update/correct memories
+   264→   264→    pass
+   265→   265→```
+   266→   266→
+   267→   267→### 3.2 Archival Memory Tools
+   268→   268→
+   269→   269→```python
+   270→   270→# Archival Memory Tools (Letta/MemGPT)
+   271→   271→
+   272→   272→def archival_memory_insert(
+   273→   273→    content: str
+   274→   274→) -> str:
+   275→   275→    """
+   276→   276→    Store information in archival memory (long-term storage).
+   277→   277→    
+   278→   278→    Args:
+   279→   279→        content: Information to store permanently
+   280→   280→    
+   281→   281→    Returns:
+   282→   282→        Memory ID for future reference
+   283→   283→    """
+   284→   284→    # Agent decides what's worth long-term storage
+   285→   285→    pass
+   286→   286→
+   287→   287→def archival_memory_search(
+   288→   288→    query: str,
+   289→   289→    page: int = 0
+   290→   290→) -> List[ArchivalResult]:
+   291→   291→    """
+   292→   292→    Search archival memory semantically.
+   293→   293→    
+   294→   294→    Args:
+   295→   295→        query: Search query
+   296→   296→        page: Pagination (0 = first page)
+   297→   297→    
+   298→   298→    Returns:
+   299→   299→        List of matching memories with relevance scores
+   300→   300→    """
+   301→   301→    # Agent retrieves relevant past knowledge
+   302→   302→    pass
+   303→   303→
+   304→   304→def archival_memory_delete(
+   305→   305→    memory_id: str
+   306→   306→) -> str:
+   307→   307→    """
+   308→   308→    Delete a memory from archival storage.
+   309→   309→    
+   310→   310→    Args:
+   311→   311→        memory_id: ID of memory to delete
+   312→   312→    
+   313→   313→    Returns:
+   314→   314→        Status message
+   315→   315→    """
+   316→   316→    # Agent can "forget" outdated information
+   317→   317→    pass
+   318→   318→```
+   319→   319→
+   320→   320→### 3.3 Conversation Search Tools
+   321→   321→
+   322→   322→```python
+   323→   323→# Conversation/Recall Memory Tools
+   324→   324→
+   325→   325→def conversation_search(
+   326→   326→    query: str,
+   327→   327→    page: int = 0
+   328→   328→) -> List[ConversationResult]:
+   329→   329→    """
+   330→   330→    Search through past conversations.
+   331→   331→    
+   332→   332→    Args:
+   333→   333→        query: Search query
+   334→   334→        page: Pagination
+   335→   335→    
+   336→   336→    Returns:
+   337→   337→        List of matching conversations
+   338→   338→    """
+   339→   339→    pass
+   340→   340→
+   341→   341→def conversation_search_date(
+   342→   342→    start_date: str,
+   343→   343→    end_date: str
+   344→   344→) -> List[ConversationResult]:
+   345→   345→    """
+   346→   346→    Search conversations by date range.
+   347→   347→    
+   348→   348→    Args:
+   349→   349→        start_date: ISO format start date
+   350→   350→        end_date: ISO format end date
+   351→   351→    
+   352→   352→    Returns:
+   353→   353→        List of conversations in date range
+   354→   354→    """
+   355→   355→    pass
+   356→   356→```
+   357→   357→
+   358→   358→---
+   359→   359→
+   360→   360→## 4. Self-Modification: How Agents Modify Their Own Memory
+   361→   361→
+   362→   362→### 4.1 The Self-Editing Loop
+   363→   363→
+   364→   364→```
+   365→   365→┌─────────────────────────────────────────────────────────────┐
+   366→   366→│              SELF-DIRECTED MEMORY MODIFICATION               │
+   367→   367→├─────────────────────────────────────────────────────────────┤
+   368→   368→│                                                              │
+   369→   369→│  User Message                                                │
+   370→   370→│       ↓                                                      │
+   371→   371→│  ┌─────────────┐                                            │
+   372→   372→│  │  LLM sees   │  → Context = System + Core Memory +        │
+   373→   373→│  │  context    │    Working Memory + Message                │
+   374→   374→│  └─────────────┘                                            │
+   375→   375→│       ↓                                                      │
+   376→   376→│  ┌─────────────────────────────────────────────────┐        │
+   377→   377→│  │  LLM decides:                                     │        │
+   378→   378→│  │                                                   │        │
+   379→   379→│  │  1. Do I need to REMEMBER this?                  │        │
+   380→   380→│  │     → core_memory_append()                       │        │
+   381→   381→│  │                                                   │        │
+   382→   382→│  │  2. Is this important for long-term?             │        │
+   383→   383→│  │     → archival_memory_insert()                   │        │
+   384→   384→│  │                                                   │        │
+   385→   385→│  │  3. Do I need to UPDATE existing memory?         │        │
+   386→   386→│  │     → core_memory_replace()                      │        │
+   387→   387→│  │                                                   │        │
+   388→   388→│  │  4. Do I need to RECALL past info?               │        │
+   389→   389→│  │     → archival_memory_search()                   │        │
+   390→   390→│  │     → conversation_search()                      │        │
+   391→   391→│  │                                                   │        │
+   392→   392→│  │  5. Is this outdated/WRONG?                      │        │
+   393→   393→│  │     → archival_memory_delete()                   │        │
+   394→   394→│  │                                                   │        │
+   395→   395→│  └─────────────────────────────────────────────────┘        │
+   396→   396→│       ↓                                                      │
+   397→   397→│  Tool Execution → Memory State Updated                       │
+   398→   398→│       ↓                                                      │
+   399→   399→│  Response Generation                                         │
+   400→   400→│                                                              │
+   401→   401→└─────────────────────────────────────────────────────────────┘
+   402→   402→```
+   403→   403→
+   404→   404→### 4.2 Example: Agent Self-Editing Memory
+   405→   405→
+   406→   406→```python
+   407→   407→# Example of self-directed memory modification
+   408→   408→
+   409→   409→# User says: "My name is Alice and I love Python programming"
+   410→   410→
+   411→   411→# Agent's internal process:
+   412→   412→THINKING = """
+   413→   413→The user is introducing themselves. I should:
+   414→   414→1. Store their name in my 'human' core memory block
+   415→   415→2. Store their programming preference for future reference
+   416→   416→3. This seems important for long-term - add to archival
+   417→   417→"""
+   418→   418→
+   419→   419→# Agent executes these tools:
+   420→   420→TOOL_CALLS = [
+   421→   421→    {
+   422→   422→        "name": "core_memory_append",
+   423→   423→        "arguments": {
+   424→   424→            "label": "human",
+   425→   425→            "content": "\nName: Alice"
+   426→   426→        }
+   427→   427→    },
+   428→   428→    {
+   429→   429→        "name": "core_memory_append", 
+   430→   430→        "arguments": {
+   431→   431→            "label": "human",
+   432→   432→            "content": "\nPreferred language: Python"
+   433→   433→        }
+   434→   434→    },
+   435→   435→    {
+   436→   436→        "name": "archival_memory_insert",
+   437→   437→        "arguments": {
+   438→   438→            "content": "User Alice prefers Python programming. Mentioned on first meeting."
+   439→   439→        }
+   440→   440→    }
+   441→   441→]
+   442→   442→
+   443→   443→# Later, user asks: "Can you help me with a coding problem?"
+   444→   444→# Agent's context now includes: "User prefers Python"
+   445→   445→# Agent can tailor response accordingly
+   446→   446→```
+   447→   447→
+   448→   448→### 4.3 Memory Importance Decisions
+   449→   449→
+   450→   450→The agent autonomously decides importance based on:
+   451→   451→
+   452→   452→```python
+   453→   453→# Implicit decision factors for memory storage
+   454→   454→class MemoryImportance:
+   455→   455→    """Factors the LLM considers for memory importance"""
+   456→   456→    
+   457→   457→    FACTORS = {
+   458→   458→        "user_preferences": {
+   459→   459→            "weight": "high",
+   460→   460→            "examples": ["likes Python", "prefers brief responses"]
+   461→   461→        },
+   462→   462→        "personal_info": {
+   463→   463→            "weight": "high", 
+   464→   464→            "examples": ["name is Alice", "works at Google"]
+   465→   465→        },
+   466→   466→        "task_context": {
+   467→   467→            "weight": "medium",
+   468→   468→            "examples": ["working on project X", "debugging issue Y"]
+   469→   469→        },
+   470→   470→        "temporal_relevance": {
+   471→   471→            "weight": "variable",
+   472→   472→            "examples": ["meeting tomorrow" vs "met last year"]
+   473→   473→        },
+   474→   474→        "emotional_significance": {
+   475→   475→            "weight": "high",
+   476→   476→            "examples": ["frustrated with errors", "excited about progress"]
+   477→   477→        }
+   478→   478→    }
+   479→   479→```
+   480→   480→
+   481→   481→---
+   482→   482→
+   483→   483→## 5. Key Algorithms: Memory Management
+   484→   484→
+   485→   485→### 5.1 Context Window Management (Heartbeats)
+   486→   486→
+   487→   487→Letta uses a "heartbeat" mechanism for context management:
+   488→   488→
+   489→   489→```python
+   490→   490→# Heartbeat-based context management
+   491→   491→class HeartbeatManager:
+   492→   492→    """
+   493→   493→    Periodically triggers context evaluation and management.
+   494→   494→    Similar to OS memory management interrupts.
+   495→   495→    """
+   496→   496→    
+   497→   497→    def __init__(self, max_context_tokens: int = 8000):
+   498→   498→        self.max_tokens = max_context_tokens
+   499→   499→        self.heartbeat_interval = 10  # messages
+   500→   500→    
+   501→   501→    async def check_and_compact(self, state: AgentState):
+   502→   502→        """Check if context compaction is needed"""
+   503→   503→        current_tokens = self._count_tokens(state)
+   504→   504→        
+   505→   505→        if current_tokens > self.max_tokens * 0.8:
+   506→   506→            # Trigger compaction
+   507→   507→            await self._compact_context(state)
+   508→   508→    
+   509→   509→    async def _compact_context(self, state: AgentState):
+   510→   510→        """Compact context by summarizing old messages"""
+   511→   511→        # 1. Summarize old messages
+   512→   512→        summary = await self._summarize_messages(
+   513→   513→            state.messages[:-5]  # Keep recent 5
+   514→   514→        )
+   515→   515→        
+   516→   516→        # 2. Store summary in archival memory
+   517→   517→        await state.archival_memory.insert(
+   518→   518→            f"Conversation summary: {summary}"
+   519→   519→        )
+   520→   520→        
+   521→   521→        # 3. Remove compacted messages from working memory
+   522→   522→        state.messages = state.messages[-5:]
+   523→   523→        
+   524→   524→        # 4. Update core memory if needed
+   525→   525→        # Agent decides via tool calls
+   526→   526→```
+   527→   527→
+   528→   528→### 5.2 Memory Consolidation
+   529→   529→
+   530→   530→```python
+   531→   531→# Memory consolidation algorithm (conceptual)
+   532→   532→class MemoryConsolidation:
+   533→   533→    """
+   534→   534→    Consolidate information across memory tiers.
+   535→   535→    Inspired by sleep-dependent memory consolidation.
+   536→   536→    """
+   537→   537→    
+   538→   538→    async def consolidate_session(self, session_id: str):
+   539→   539→        """Consolidate session memories into long-term storage"""
+   540→   540→        
+   541→   541→        # 1. Extract key facts from session
+   542→   542→        session_memories = await self.recall_memory.get_session(session_id)
+   543→   543→        key_facts = await self._extract_facts(session_memories)
+   544→   544→        
+   545→   545→        # 2. Check for conflicts with existing memories
+   546→   546→        for fact in key_facts:
+   547→   547→            conflicts = await self._find_conflicts(fact)
+   548→   548→            
+   549→   549→            if conflicts:
+   550→   550→                # Resolve conflicts - keep most recent/relevant
+   551→   551→                await self._resolve_conflict(fact, conflicts)
+   552→   552→            else:
+   553→   553→                # Store new fact
+   554→   554→                await self.archival_memory.insert(fact)
+   555→   555→        
+   556→   556→        # 3. Update core memory if user preferences changed
+   557→   557→        await self._update_core_memory_preferences()
+   558→   558→```
+   559→   559→
+   560→   560→### 5.3 Relevance Scoring
+   561→   561→
+   562→   562→```python
+   563→   563→# Relevance scoring for memory retrieval
+   564→   564→class RelevanceScorer:
+   565→   565→    """
+   566→   566→    Score memory relevance for retrieval decisions.
+   567→   567→    """
+   568→   568→    
+   569→   569→    def compute_relevance(
+   570→   570→        self,
+   571→   571→        query: str,
+   572→   572→        memory: MemoryItem,
+   573→   573→        context: Dict
+   574→   574→    ) -> float:
+   575→   575→        """
+   576→   576→        Compute relevance score combining multiple factors.
+   577→   577→        
+   578→   578→        Returns:
+   579→   579→            Score between 0 and 1
+   580→   580→        """
+   581→   581→        scores = {}
+   582→   582→        
+   583→   583→        # 1. Semantic similarity (vector embedding)
+   584→   584→        scores['semantic'] = self._semantic_similarity(
+   585→   585→            query, memory.content
+   586→   586→        )
+   587→   587→        
+   588→   588→        # 2. Recency factor
+   589→   589→        scores['recency'] = self._recency_score(
+   590→   590→            memory.timestamp
+   591→   591→        )
+   592→   592→        
+   593→   593→        # 3. Access frequency
+   594→   594→        scores['frequency'] = self._frequency_score(
+   595→   595→            memory.access_count
+   596→   596→        )
+   597→   597→        
+   598→   598→        # 4. Importance weight (if stored)
+   599→   599→        scores['importance'] = memory.importance or 0.5
+   600→   600→        
+   601→   601→        # 5. Context relevance
+   602→   602→        scores['context'] = self._context_relevance(
+   603→   603→            memory, context
+   604→   604→        )
+   605→   605→        
+   606→   606→        # Weighted combination
+   607→   607→        weights = {
+   608→   608→            'semantic': 0.35,
+   609→   609→            'recency': 0.20,
+   610→   610→            'frequency': 0.15,
+   611→   611→            'importance': 0.15,
+   612→   612→            'context': 0.15
+   613→   613→        }
+   614→   614→        
+   615→   615→        return sum(
+   616→   616→            scores[k] * weights[k] 
+   617→   617→            for k in weights
+   618→   618→        )
+   619→   619→```
+   620→   620→
+   621→   621→### 5.4 Consolidation Triggers
+   622→   622→
+   623→   623→```python
+   624→   624→# Triggers for memory consolidation
+   625→   625→class ConsolidationTriggers:
+   626→   626→    """
+   627→   627→    Events that trigger memory consolidation operations.
+   628→   628→    """
+   629→   629→    
+   630→   630→    TRIGGERS = {
+   631→   631→        # Context-based triggers
+   632→   632→        "context_threshold": {
+   633→   633→            "condition": "context_usage > 80%",
+   634→   634→            "action": "compact_oldest_messages"
+   635→   635→        },
+   636→   636→        
+   637→   637→        # Session-based triggers
+   638→   638→        "session_end": {
+   639→   639→            "condition": "session_closed",
+   640→   640→            "action": "consolidate_session_memories"
+   641→   641→        },
+   642→   642→        
+   643→   643→        # Importance-based triggers
+   644→   644→        "high_importance": {
+   645→   645→            "condition": "user_shows_emotional_significance",
+   646→   646→            "action": "immediate_archival"
+   647→   647→        },
+   648→   648→        
+   649→   649→        # Periodic triggers
+   650→   650→        "periodic_heartbeat": {
+   651→   651→            "condition": "every_N_messages",
+   652→   652→            "action": "evaluate_memory_state"
+   653→   653→        },
+   654→   654→        
+   655→   655→        # Conflict triggers
+   656→   656→        "contradiction_detected": {
+   657→   657→            "condition": "new_info_contradicts_stored",
+   658→   658→            "action": "resolve_and_update"
+   659→   659→        }
+   660→   660→    }
+   661→   661→```
+   662→   662→
+   663→   663→---
+   664→   664→
+   665→   665→## 6. Integration with LLMs
+   666→   666→
+   667→   667→### 6.1 Model Requirements
+   668→   668→
+   669→   669→Letta works with any LLM that supports:
+   670→   670→1. **Function calling / Tool use**
+   671→   671→2. **System prompts**
+   672→   672→3. **Multi-turn conversations**
+   673→   673→
+   674→   674→```python
+   675→   675→# LLM Integration Requirements
+   676→   676→class LettaLLMRequirements:
+   677→   677→    """Requirements for LLM integration with Letta"""
+   678→   678→    
+   679→   679→    REQUIRED_CAPABILITIES = [
+   680→   680→        "function_calling",      # For memory tools
+   681→   681→        "system_prompt",         # For agent persona
+   682→   682→        "multi_turn",            # For conversation
+   683→   683→        "json_output"            # For structured tool calls
+   684→   684→    ]
+   685→   685→    
+   686→   686→    SUPPORTED_PROVIDERS = {
+   687→   687→        "openai": {
+   688→   688→            "models": ["gpt-4", "gpt-4-turbo", "gpt-3.5-turbo"],
+   689→   689→            "function_calling": "native"
+   690→   690→        },
+   691→   691→        "anthropic": {
+   692→   692→            "models": ["claude-3-opus", "claude-3-sonnet"],
+   693→   693→            "function_calling": "native",
+   694→   694→            "memory_tool": "supported"  # New Anthropic memory tool
+   695→   695→        },
+   696→   696→        "google": {
+   697→   697→            "models": ["gemini-pro", "gemini-ultra"],
+   698→   698→            "function_calling": "native"
+   699→   699→        },
+   700→   700→        "local": {
+   701→   701→            "models": ["llama-3", "mistral", "qwen"],
+   702→   702→            "function_calling": "requires_formatting"
+   703→   703→        }
+   704→   704→    }
+   705→   705→```
+   706→   706→
+   707→   707→### 6.2 Tool Calling Flow
+   708→   708→
+   709→   709→```python
+   710→   710→# Tool calling flow for memory operations
+   711→   711→async def process_message(
+   712→   712→    agent: LettaAgent,
+   713→   713→    user_message: str
+   714→   714→) -> str:
+   715→   715→    """Process user message with memory tool calls"""
+   716→   716→    
+   717→   717→    # 1. Build context
+   718→   718→    context = build_context(
+   719→   719→        system_prompt=agent.system_prompt,
+   720→   720→        core_memory=agent.core_memory,
+   721→   721→        working_memory=agent.working_memory,
+   722→   722→        message=user_message
+   723→   723→    )
+   724→   724→    
+   725→   725→    # 2. LLM generates response (possibly with tool calls)
+   726→   726→    response = await llm.generate(
+   727→   727→        messages=context,
+   728→   728→        tools=agent.memory_tools,
+   729→   729→        tool_choice="auto"  # LLM decides when to use tools
+   730→   730→    )
+   731→   731→    
+   732→   732→    # 3. Process tool calls if any
+   733→   733→    while response.tool_calls:
+   734→   734→        for tool_call in response.tool_calls:
+   735→   735→            # Execute memory tool
+   736→   736→            result = await execute_tool(
+   737→   737→                tool_call.name,
+   738→   738→                tool_call.arguments
+   739→   739→            )
+   740→   740→            
+   741→   741→            # Add result to context
+   742→   742→            context.append({
+   743→   743→                "role": "tool",
+   744→   744→                "name": tool_call.name,
+   745→   745→                "content": result
+   746→   746→            })
+   747→   747→        
+   748→   748→        # Get next response
+   749→   749→        response = await llm.generate(
+   750→   750→            messages=context,
+   751→   751→            tools=agent.memory_tools
+   752→   752→        )
+   753→   753→    
+   754→   754→    # 4. Return final response
+   755→   755→    return response.content
+   756→   756→```
+   757→   757→
+   758→   758→### 6.3 System Prompt Structure
+   759→   759→
+   760→   760→```python
+   761→   761→# Letta System Prompt Structure
+   762→   762→LETTA_SYSTEM_PROMPT = """
+   763→   763→You are {agent_name}, a helpful AI assistant with persistent memory.
+   764→   764→
+   765→   765→## Your Memory System
+   766→   766→
+   767→   767→You have access to a sophisticated memory system with multiple tiers:
+   768→   768→
+   769→   769→### Core Memory (Always Visible)
+   770→   770→Your core memory blocks are always in your context window. Use these to store:
+   771→   771→- {persona_block}: Your identity and capabilities
+   772→   772→- {human_block}: Information about the user
+   773→   773→- {tasks_block}: Current tasks and goals
+   774→   774→
+   775→   775→### Archival Memory (Long-term Storage)
+   776→   776→Store important information for long-term recall using archival_memory_insert.
+   777→   777→Search your knowledge base with archival_memory_search.
+   778→   778→
+   779→   779→### Recall Memory (Conversation History)
+   780→   780→Search past conversations with conversation_search.
+   781→   781→
+   782→   782→## Memory Management Guidelines
+   783→   783→
+   784→   784→1. **Remember Important Information**: When the user shares preferences, 
+   785→   785→   personal details, or important facts, store them in core memory.
+   786→   786→
+   787→   787→2. **Long-term Storage**: Information that may be useful in future 
+   788→   788→   conversations should go to archival memory.
+   789→   789→
+   790→   790→3. **Update When Needed**: Use core_memory_replace to update outdated 
+   791→   791→   information.
+   792→   792→
+   793→   793→4. **Search Before Assuming**: Check your memory before making assumptions 
+   794→   794→   about the user.
+   795→   795→
+   796→   796→5. **Be Selective**: Don't store everything - focus on information that 
+   797→   797→   helps provide personalized assistance.
+   798→   798→
+   799→   799→## Current Memory State
+   800→   800→
+   801→   801→{core_memory_state}
+   802→   802→
+   803→   803→Remember: You control your own memory. Use your tools wisely to provide 
+   804→   804→the best possible assistance.
+   805→   805→"""
+   806→   806→```
+   807→   807→
+   808→   808→---
+   809→   809→
+   810→   810→## 7. Implementation: Phase 3 Self-Directed Memory
+   811→   811→
+   812→   812→### 7.1 Architecture for Implementation
+   813→   813→
+   814→   814→```python
+   815→   815→# Self-Directed Memory System Implementation
+   816→   816→from typing import Dict, List, Optional, Any
+   817→   817→from dataclasses import dataclass, field
+   818→   818→from datetime import datetime
+   819→   819→from enum import Enum
+   820→   820→import json
+   821→   821→
+   822→   822→class MemoryTier(Enum):
+   823→   823→    """Memory tier classification"""
+   824→   824→    CORE = "core"           # Always in context
+   825→   825→    WORKING = "working"     # Recent messages
+   826→   826→    RECALL = "recall"       # Conversation history
+   827→   827→    ARCHIVAL = "archival"   # Long-term semantic storage
+   828→   828→
+   829→   829→
+   830→   830→@dataclass
+   831→   831→class MemoryBlock:
+   832→   832→    """A structured memory block"""
+   833→   833→    label: str
+   834→   834→    content: str
+   835→   835→    limit: int = 2000
+   836→   836→    priority: int = 1
+   837→   837→    created_at: datetime = field(default_factory=datetime.utcnow)
+   838→   838→    updated_at: datetime = field(default_factory=datetime.utcnow)
+   839→   839→    
+   840→   840→    def can_append(self, text: str) -> bool:
+   841→   841→        return len(self.content) + len(text) <= self.limit
+   842→   842→    
+   843→   843→    def append(self, text: str) -> bool:
+   844→   844→        if self.can_append(text):
+   845→   845→            self.content += text
+   846→   846→            self.updated_at = datetime.utcnow()
+   847→   847→            return True
+   848→   848→        return False
+   849→   849→    
+   850→   850→    def replace(self, old: str, new: str) -> bool:
+   851→   851→        if old in self.content:
+   852→   852→            self.content = self.content.replace(old, new)
+   853→   853→            self.updated_at = datetime.utcnow()
+   854→   854→            return True
+   855→   855→        return False
+   856→   856→
+   857→   857→
+   858→   858→@dataclass
+   859→   859→class ArchivalEntry:
+   860→   860→    """Entry in archival memory"""
+   861→   861→    id: str
+   862→   862→    content: str
+   863→   863→    embedding: Optional[List[float]] = None
+   864→   864→    metadata: Dict[str, Any] = field(default_factory=dict)
+   865→   865→    created_at: datetime = field(default_factory=datetime.utcnow)
+   866→   866→    access_count: int = 0
+   867→   867→
+   868→   868→
+   869→   869→class SelfDirectedMemory:
+   870→   870→    """
+   871→   871→    Implementation of Letta-style self-directed memory.
+   872→   872→    Agents can modify their own memory using tools.
+   873→   873→    """
+   874→   874→    
+   875→   875→    def __init__(
+   876→   876→        self,
+   877→   877→        agent_id: str,
+   878→   878→        vector_db: Optional[Any] = None
+   879→   879→    ):
+   880→   880→        self.agent_id = agent_id
+   881→   881→        
+   882→   882→        # Memory Tiers
+   883→   883→        self.core_memory: Dict[str, MemoryBlock] = {}
+   884→   884→        self.working_memory: List[Dict] = []
+   885→   885→        self.recall_memory: List[Dict] = []
+   886→   886→        self.archival_memory: List[ArchivalEntry] = []
+   887→   887→        
+   888→   888→        # Vector database for semantic search
+   889→   889→        self.vector_db = vector_db
+   890→   890→        
+   891→   891→        # Initialize default core memory blocks
+   892→   892→        self._init_core_memory()
+   893→   893→        
+   894→   894→        # Memory tools the agent can call
+   895→   895→        self.tools = self._define_tools()
+   896→   896→    
+   897→   897→    def _init_core_memory(self):
+   898→   898→        """Initialize default core memory blocks"""
+   899→   899→        self.core_memory = {
+   900→   900→            "persona": MemoryBlock(
+   901→   901→                label="persona",
+   902→   902→                content="I am a helpful AI assistant with persistent memory.",
+   903→   903→                limit=2000
+   904→   904→            ),
+   905→   905→            "human": MemoryBlock(
+   906→   906→                label="human", 
+   907→   907→                content="",
+   908→   908→                limit=2000
+   909→   909→            ),
+   910→   910→            "tasks": MemoryBlock(
+   911→   911→                label="tasks",
+   912→   912→                content="",
+   913→   913→                limit=1000
+   914→   914→            )
+   915→   915→        }
+   916→   916→    
+   917→   917→    def _define_tools(self) -> List[Dict]:
+   918→   918→        """Define memory tools the agent can use"""
+   919→   919→        return [
+   920→   920→            {
+   921→   921→                "name": "core_memory_append",
+   922→   922→                "description": "Append content to a core memory block",
+   923→   923→                "parameters": {
+   924→   924→                    "type": "object",
+   925→   925→                    "properties": {
+   926→   926→                        "label": {
+   927→   927→                            "type": "string",
+   928→   928→                            "enum": list(self.core_memory.keys())
+   929→   929→                        },
+   930→   930→                        "content": {"type": "string"}
+   931→   931→                    },
+   932→   932→                    "required": ["label", "content"]
+   933→   933→                }
+   934→   934→            },
+   935→   935→            {
+   936→   936→                "name": "core_memory_replace",
+   937→   937→                "description": "Replace content in a core memory block",
+   938→   938→                "parameters": {
+   939→   939→                    "type": "object",
+   940→   940→                    "properties": {
+   941→   941→                        "label": {"type": "string"},
+   942→   942→                        "old_content": {"type": "string"},
+   943→   943→                        "new_content": {"type": "string"}
+   944→   944→                    },
+   945→   945→                    "required": ["label", "old_content", "new_content"]
+   946→   946→                }
+   947→   947→            },
+   948→   948→            {
+   949→   949→                "name": "archival_memory_insert",
+   950→   950→                "description": "Store information in long-term memory",
+   951→   951→                "parameters": {
+   952→   952→                    "type": "object",
+   953→   953→                    "properties": {
+   954→   954→                        "content": {"type": "string"}
+   955→   955→                    },
+   956→   956→                    "required": ["content"]
+   957→   957→                }
+   958→   958→            },
+   959→   959→            {
+   960→   960→                "name": "archival_memory_search",
+   961→   961→                "description": "Search long-term memory semantically",
+   962→   962→                "parameters": {
+   963→   963→                    "type": "object",
+   964→   964→                    "properties": {
+   965→   965→                        "query": {"type": "string"},
+   966→   966→                        "limit": {"type": "integer", "default": 10}
+   967→   967→                    },
+   968→   968→                    "required": ["query"]
+   969→   969→                }
+   970→   970→            },
+   971→   971→            {
+   972→   972→                "name": "conversation_search",
+   973→   973→                "description": "Search past conversations",
+   974→   974→                "parameters": {
+   975→   975→                    "type": "object",
+   976→   976→                    "properties": {
+   977→   977→                        "query": {"type": "string"},
+   978→   978→                        "limit": {"type": "integer", "default": 10}
+   979→   979→                    },
+   980→   980→                    "required": ["query"]
+   981→   981→                }
+   982→   982→            }
+   983→   983→        ]
+   984→   984→    
+   985→   985→    # ==========================================
+   986→   986→    # Core Memory Operations
+   987→   987→    # ==========================================
+   988→   988→    
+   989→   989→    def core_memory_append(
+   990→   990→        self,
+   991→   991→        label: str,
+   992→   992→        content: str
+   993→   993→    ) -> Dict[str, Any]:
+   994→   994→        """
+   995→   995→        Append content to a core memory block.
+   996→   996→        Called by the agent through tool use.
+   997→   997→        """
+   998→   998→        if label not in self.core_memory:
+   999→   999→            return {
+  1000→  1000→                "success": False,
+  1001→  1001→                "error": f"Unknown memory block: {label}"
+  1002→  1002→            }
+  1003→  1003→        
+  1004→  1004→        block = self.core_memory[label]
+  1005→  1005→        
+  1006→  1006→        if block.append(content):
+  1007→  1007→            return {
+  1008→  1008→                "success": True,
+  1009→  1009→                "message": f"Appended to {label}. Block size: {len(block.content)}/{block.limit}",
+  1010→  1010→                "block_size": len(block.content)
+  1011→  1011→            }
+  1012→  1012→        else:
+  1013→  1013→            return {
+  1014→  1014→                "success": False,
+  1015→  1015→                "error": f"Block {label} is full. Current: {len(block.content)}/{block.limit}"
+  1016→  1016→            }
+  1017→  1017→    
+  1018→  1018→    def core_memory_replace(
+  1019→  1019→        self,
+  1020→  1020→        label: str,
+  1021→  1021→        old_content: str,
+  1022→  1022→        new_content: str
+  1023→  1023→    ) -> Dict[str, Any]:
+  1024→  1024→        """
+  1025→  1025→        Replace content in a core memory block.
+  1026→  1026→        Called by the agent through tool use.
+  1027→  1027→        """
+  1028→  1028→        if label not in self.core_memory:
+  1029→  1029→            return {
+  1030→  1030→                "success": False,
+  1031→  1031→                "error": f"Unknown memory block: {label}"
+  1032→  1032→            }
+  1033→  1033→        
+  1034→  1034→        block = self.core_memory[label]
+  1035→  1035→        
+  1036→  1036→        if block.replace(old_content, new_content):
+  1037→  1037→            return {
+  1038→  1038→                "success": True,
+  1039→  1039→                "message": f"Updated {label}"
+  1040→  1040→            }
+  1041→  1041→        else:
+  1042→  1042→            return {
+  1043→  1043→                "success": False,
+  1044→  1044→                "error": f"Content not found in {label}"
+  1045→  1045→            }
+  1046→  1046→    
+  1047→  1047→    # ==========================================
+  1048→  1048→    # Archival Memory Operations
+  1049→  1049→    # ==========================================
+  1050→  1050→    
+  1051→  1051→    async def archival_memory_insert(
+  1052→  1052→        self,
+  1053→  1053→        content: str,
+  1054→  1054→        metadata: Optional[Dict] = None
+  1055→  1055→    ) -> Dict[str, Any]:
+  1056→  1056→        """
+  1057→  1057→        Store information in archival memory.
+  1058→  1058→        Creates embedding for semantic search.
+  1059→  1059→        """
+  1060→  1060→        entry_id = f"arch_{len(self.archival_memory)}"
+  1061→  1061→        
+  1062→  1062→        entry = ArchivalEntry(
+  1063→  1063→            id=entry_id,
+  1064→  1064→            content=content,
+  1065→  1065→            metadata=metadata or {}
+  1066→  1066→        )
+  1067→  1067→        
+  1068→  1068→        # Create embedding if vector DB available
+  1069→  1069→        if self.vector_db:
+  1070→  1070→            entry.embedding = await self._create_embedding(content)
+  1071→  1071→            await self.vector_db.insert(entry)
+  1072→  1072→        
+  1073→  1073→        self.archival_memory.append(entry)
+  1074→  1074→        
+  1075→  1075→        return {
+  1076→  1076→            "success": True,
+  1077→  1077→            "memory_id": entry_id,
+  1078→  1078→            "message": f"Stored in archival memory"
+  1079→  1079→        }
+  1080→  1080→    
+  1081→  1081→    async def archival_memory_search(
+  1082→  1082→        self,
+  1083→  1083→        query: str,
+  1084→  1084→        limit: int = 10
+  1085→  1085→    ) -> Dict[str, Any]:
+  1086→  1086→        """
+  1087→  1087→        Search archival memory semantically.
+  1088→  1088→        """
+  1089→  1089→        results = []
+  1090→  1090→        
+  1091→  1091→        if self.vector_db:
+  1092→  1092→            # Use vector search
+  1093→  1093→            query_embedding = await self._create_embedding(query)
+  1094→  1094→            results = await self.vector_db.search(query_embedding, limit)
+  1095→  1095→        else:
+  1096→  1096→            # Fallback to simple text search
+  1097→  1097→            query_lower = query.lower()
+  1098→  1098→            for entry in self.archival_memory:
+  1099→  1099→                if query_lower in entry.content.lower():
+  1100→  1100→                    entry.access_count += 1
+  1101→  1101→                    results.append({
+  1102→  1102→                        "id": entry.id,
+  1103→  1103→                        "content": entry.content,
+  1104→  1104→                        "metadata": entry.metadata,
+  1105→  1105→                        "score": 1.0  # Simple match
+  1106→  1106→                    })
+  1107→  1107→        
+  1108→  1108→        return {
+  1109→  1109→            "success": True,
+  1110→  1110→            "results": results[:limit],
+  1111→  1111→            "total": len(results)
+  1112→  1112→        }
+  1113→  1113→    
+  1114→  1114→    # ==========================================
+  1115→  1115→    # Context Building
+  1116→  1116→    # ==========================================
+  1117→  1117→    
+  1118→  1118→    def build_context(
+  1119→  1119→        self,
+  1120→  1120→        include_working: bool = True,
+  1121→  1121→        include_recent_messages: int = 10
+  1122→  1122→    ) -> str:
+  1123→  1123→        """
+  1124→  1124→        Build the context string for the LLM.
+  1125→  1125→        Includes core memory and optionally working memory.
+  1126→  1126→        """
+  1127→  1127→        context_parts = []
+  1128→  1128→        
+  1129→  1129→        # Core memory (always included)
+  1130→  1130→        context_parts.append("=== CORE MEMORY ===")
+  1131→  1131→        for label, block in self.core_memory.items():
+  1132→  1132→            if block.content:
+  1133→  1133→                context_parts.append(f"\n[{label.upper()}]\n{block.content}")
+  1134→  1134→        
+  1135→  1135→        # Working memory (recent messages)
+  1136→  1136→        if include_working and self.working_memory:
+  1137→  1137→            context_parts.append("\n=== RECENT MESSAGES ===")
+  1138→  1138→            recent = self.working_memory[-include_recent_messages:]
+  1139→  1139→            for msg in recent:
+  1140→  1140→                role = msg.get("role", "unknown")
+  1141→  1141→                content = msg.get("content", "")
+  1142→  1142→                context_parts.append(f"\n{role}: {content}")
+  1143→  1143→        
+  1144→  1144→        return "\n".join(context_parts)
+  1145→  1145→    
+  1146→  1146→    # ==========================================
+  1147→  1147→    # Helper Methods
+  1148→  1148→    # ==========================================
+  1149→  1149→    
+  1150→  1150→    async def _create_embedding(self, text: str) -> List[float]:
+  1151→  1151→        """Create embedding for text (placeholder)"""
+  1152→  1152→        # In production, use actual embedding model
+  1153→  1153→        # return await embedding_model.embed(text)
+  1154→  1154→        return []
+  1155→  1155→    
+  1156→  1156→    def get_memory_state(self) -> Dict[str, Any]:
+  1157→  1157→        """Get current memory state for system prompt"""
+  1158→  1158→        return {
+  1159→  1159→            "core_memory": {
+  1160→  1160→                label: {
+  1161→  1161→                    "content": block.content,
+  1162→  1162→                    "size": len(block.content),
+  1163→  1163→                    "limit": block.limit
+  1164→  1164→                }
+  1165→  1165→                for label, block in self.core_memory.items()
+  1166→  1166→            },
+  1167→  1167→            "working_memory_count": len(self.working_memory),
+  1168→  1168→            "archival_count": len(self.archival_memory)
+  1169→  1169→        }
+  1170→  1170→```
+  1171→  1171→
+  1172→  1172→### 7.2 Integration with Agent Loop
+  1173→  1173→
+  1174→  1174→```python
+  1175→  1175→# Agent loop with self-directed memory
+  1176→  1176→class LettaStyleAgent:
+  1177→  1177→    """
+  1178→  1178→    Agent with self-directed memory management.
+  1179→  1179→    """
+  1180→  1180→    
+  1181→  1181→    def __init__(
+  1182→  1182→        self,
+  1183→  1183→        llm_client: Any,
+  1184→  1184→        memory: SelfDirectedMemory
+  1185→  1185→    ):
+  1186→  1186→        self.llm = llm_client
+  1187→  1187→        self.memory = memory
+  1188→  1188→        self.system_prompt = self._build_system_prompt()
+  1189→  1189→    
+  1190→  1190→    def _build_system_prompt(self) -> str:
+  1191→  1191→        """Build system prompt with memory instructions"""
+  1192→  1192→        return """
+  1193→  1193→You are an AI assistant with self-directed memory capabilities.
+  1194→  1194→
+  1195→  1195→## Memory Tools Available
+  1196→  1196→
+  1197→  1197→You have access to the following memory tools:
+  1198→  1198→
+  1199→  1199→1. **core_memory_append(label, content)**: Add information to core memory
+  1200→  1200→   - Use for: User preferences, important facts, ongoing context
+  1201→  1201→   - Labels: "persona", "human", "tasks"
+  1202→  1202→
+  1203→  1203→2. **core_memory_replace(label, old_content, new_content)**: Update existing memory
+  1204→  1204→   - Use for: Correcting or updating information
+  1205→  1205→
+  1206→  1206→3. **archival_memory_insert(content)**: Store for long-term
+  1207→  1207→   - Use for: Important information that may be needed later
+  1208→  1208→
+  1209→  1209→4. **archival_memory_search(query)**: Search long-term memory
+  1210→  1210→   - Use for: Recalling past information
+  1211→  1211→
+  1212→  1212→## Memory Guidelines
+  1213→  1213→
+  1214→  1214→- Be proactive about remembering important information
+  1215→  1215→- Store user preferences and personal details
+  1216→  1216→- Update memories when you learn new information
+  1217→  1217→- Search your memory before making assumptions
+  1218→  1218→- Don't over-store trivial information
+  1219→  1219→"""
+  1220→  1220→    
+  1221→  1221→    async def process_message(
+  1222→  1222→        self,
+  1223→  1223→        user_message: str
+  1224→  1224→    ) -> str:
+  1225→  1225→        """Process user message with memory operations"""
+  1226→  1226→        
+  1227→  1227→        # Add to working memory
+  1228→  1228→        self.memory.working_memory.append({
+  1229→  1229→            "role": "user",
+  1230→  1230→            "content": user_message,
+  1231→  1231→            "timestamp": datetime.utcnow().isoformat()
+  1232→  1232→        })
+  1233→  1233→        
+  1234→  1234→        # Build messages for LLM
+  1235→  1235→        messages = [
+  1236→  1236→            {"role": "system", "content": self.system_prompt},
+  1237→  1237→            {"role": "system", "content": self.memory.build_context()},
+  1238→  1238→            {"role": "user", "content": user_message}
+  1239→  1239→        ]
+  1240→  1240→        
+  1241→  1241→        # Get LLM response with tool calling
+  1242→  1242→        response = await self.llm.chat.completions.create(
+  1243→  1243→            model="gpt-4",
+  1244→  1244→            messages=messages,
+  1245→  1245→            tools=self.memory.tools,
+  1246→  1246→            tool_choice="auto"
+  1247→  1247→        )
+  1248→  1248→        
+  1249→  1249→        # Process tool calls
+  1250→  1250→        while response.choices[0].message.tool_calls:
+  1251→  1251→            tool_calls = response.choices[0].message.tool_calls
+  1252→  1252→            
+  1253→  1253→            for tool_call in tool_calls:
+  1254→  1254→                # Execute the memory tool
+  1255→  1255→                result = await self._execute_tool(
+  1256→  1256→                    tool_call.function.name,
+  1257→  1257→                    json.loads(tool_call.function.arguments)
+  1258→  1258→                )
+  1259→  1259→                
+  1260→  1260→                # Add tool result to messages
+  1261→  1261→                messages.append(response.choices[0].message)
+  1262→  1262→                messages.append({
+  1263→  1263→                    "role": "tool",
+  1264→  1264→                    "tool_call_id": tool_call.id,
+  1265→  1265→                    "content": json.dumps(result)
+  1266→  1266→                })
+  1267→  1267→            
+  1268→  1268→            # Get next response
+  1269→  1269→            response = await self.llm.chat.completions.create(
+  1270→  1270→                model="gpt-4",
+  1271→  1271→                messages=messages,
+  1272→  1272→                tools=self.memory.tools
+  1273→  1273→            )
+  1274→  1274→        
+  1275→  1275→        # Extract final response
+  1276→  1276→        final_response = response.choices[0].message.content
+  1277→  1277→        
+  1278→  1278→        # Add to working memory
+  1279→  1279→        self.memory.working_memory.append({
+  1280→  1280→            "role": "assistant",
+  1281→  1281→            "content": final_response,
+  1282→  1282→            "timestamp": datetime.utcnow().isoformat()
+  1283→  1283→        })
+  1284→  1284→        
+  1285→  1285→        return final_response
+  1286→  1286→    
+  1287→  1287→    async def _execute_tool(
+  1288→  1288→        self,
+  1289→  1289→        tool_name: str,
+  1290→  1290→        arguments: Dict
+  1291→  1291→    ) -> Dict:
+  1292→  1292→        """Execute a memory tool"""
+  1293→  1293→        
+  1294→  1294→        if tool_name == "core_memory_append":
+  1295→  1295→            return self.memory.core_memory_append(
+  1296→  1296→                arguments["label"],
+  1297→  1297→                arguments["content"]
+  1298→  1298→            )
+  1299→  1299→        
+  1300→  1300→        elif tool_name == "core_memory_replace":
+  1301→  1301→            return self.memory.core_memory_replace(
+  1302→  1302→                arguments["label"],
+  1303→  1303→                arguments["old_content"],
+  1304→  1304→                arguments["new_content"]
+  1305→  1305→            )
+  1306→  1306→        
+  1307→  1307→        elif tool_name == "archival_memory_insert":
+  1308→  1308→            return await self.memory.archival_memory_insert(
+  1309→  1309→                arguments["content"]
+  1310→  1310→            )
+  1311→  1311→        
+  1312→  1312→        elif tool_name == "archival_memory_search":
+  1313→  1313→            return await self.memory.archival_memory_search(
+  1314→  1314→                arguments["query"],
+  1315→  1315→                arguments.get("limit", 10)
+  1316→  1316→            )
+  1317→  1317→        
+  1318→  1318→        else:
+  1319→  1319→            return {"success": False, "error": f"Unknown tool: {tool_name}"}
+  1320→  1320→```
+  1321→  1321→
+  1322→  1322→---
+  1323→  1323→
+  1324→  1324→## 8. Comparison: Letta vs Other Memory Systems
+  1325→  1325→
+  1326→  1326→| Feature | Letta/MemGPT | Mem0 | Zep | Simple RAG |
+  1327→  1327→|---------|--------------|------|-----|------------|
+  1328→  1328→| **Self-Directed** | ✅ Full autonomy | ❌ Manual config | ⚠️ Partial | ❌ No |
+  1329→  1329→| **Memory Tiers** | ✅ 4 tiers | ⚠️ 2 tiers | ✅ 3 tiers | ❌ 1 tier |
+  1330→  1330→| **Tool-Based** | ✅ Native | ❌ API-based | ⚠️ Hybrid | ❌ No |
+  1331→  1331→| **OS-Inspired** | ✅ Full paradigm | ❌ No | ❌ No | ❌ No |
+  1332→  1332→| **Unlimited Context** | ✅ Virtual context | ⚠️ Limited | ⚠️ Limited | ✅ Yes |
+  1333→  1333→| **Conflict Resolution** | ⚠️ Manual | ❌ No | ✅ Auto | ❌ No |
+  1334→  1334→| **Knowledge Graph** | ❌ No | ❌ No | ✅ Yes | ❌ No |
+  1335→  1335→| **Open Source** | ✅ Yes | ✅ Yes | ⚠️ Partial | ✅ Varies |
+  1336→  1336→
+  1337→  1337→---
+  1338→  1338→
+  1339→  1339→## 9. Key Takeaways for Implementation
+  1340→  1340→
+  1341→  1341→### 9.1 Core Principles
+  1342→  1342→
+  1343→  1343→1. **Memory as Tools**: Letta treats memory operations as function tools the agent can call
+  1344→  1344→2. **Self-Editing**: Agents decide what to remember, not developers
+  1345→  1345→3. **Tiered Architecture**: Different memory tiers for different purposes
+  1346→  1346→4. **Context Management**: OS-inspired virtual memory for unlimited context
+  1347→  1347→5. **Tool-Based Autonomy**: No hard-coded memory rules
+  1348→  1348→
+  1349→  1349→### 9.2 Implementation Checklist
+  1350→  1350→
+  1351→  1351→- [ ] Implement core memory blocks with append/replace operations
+  1352→  1352→- [ ] Add archival memory with vector search
+  1353→  1353→- [ ] Create memory tools as function definitions
+  1354→  1354→- [ ] Build context from memory state
+  1355→  1355→- [ ] Add conversation search capability
+  1356→  1356→- [ ] Implement heartbeat-based context management
+  1357→  1357→- [ ] Add memory consolidation triggers
+  1358→  1358→- [ ] Test with various LLM providers
+  1359→  1359→
+  1360→  1360→### 9.3 Best Practices
+  1361→  1361→
+  1362→  1362→1. **Start with clear system prompts** explaining memory tools
+  1363→  1363→2. **Use appropriate memory tier** for different information types
+  1364→  1364→3. **Monitor memory usage** and implement compaction
+  1365→  1365→4. **Test agent memory decisions** before production
+  1366→  1366→5. **Consider embedding quality** for archival search
+  1367→  1367→
+  1368→  1368→---
+  1369→  1369→
+  1370→  1370→## 10. Resources
+  1371→  1371→
+  1372→  1372→### Official Sources
+  1373→  1373→- **GitHub**: https://github.com/letta-ai/letta
+  1374→  1374→- **Documentation**: https://docs.letta.com
+  1375→  1375→- **Website**: https://www.letta.com
+  1376→  1376→- **MemGPT Paper**: https://arxiv.org/abs/2310.08560
+  1377→  1377→
+  1378→  1378→### Learning Resources
+  1379→  1379→- **DeepLearning.AI Course**: "LLMs as Operating Systems: Agent Memory"
+  1380→  1380→- **Letta Blog**: https://www.letta.com/blog
+  1381→  1381→- **Agent Memory Techniques**: https://github.com/NirDiamant/Agent_Memory_Techniques
+  1382→  1382→
+  1383→  1383→---
+  1384→  1384→
+  1385→  1385→## 11. Conclusion
+  1386→  1386→
+  1387→  1387→Letta (MemGPT) represents a paradigm shift in AI agent memory management. By treating memory operations as tools and giving agents autonomy over their own memory, Letta enables:
+  1388→  1388→
+  1389→  1389→- **Unlimited effective context** through OS-inspired virtual memory
+  1390→  1390→- **Personalized agents** that learn and remember user preferences
+  1391→  1391→- **Self-improving systems** that update their own knowledge
+  1392→  1392→- **Stateful interactions** across sessions and conversations
+  1393→  1393→
+  1394→  1394→For Phase 3 implementation, the key is implementing the memory tools as callable functions and designing a system prompt that guides the agent to use them effectively. The agent itself becomes the memory manager, making autonomous decisions about what to store, update, and retrieve.
+  1395→  1395→
+  1396→  1396→---
+  1397→  1397→
+  1398→  1398→*Research compiled from Letta documentation, MemGPT paper (arXiv:2310.08560), and various technical sources.*
+  1399→  1399→

@@ -1,0 +1,752 @@
+     1→# Mem0 AI Memory System - Comprehensive Technical Research Report
+     2→
+     3→## Executive Summary
+     4→
+     5→Mem0 ("mem-zero") is a production-ready, scalable memory layer for AI agents and applications. It provides persistent, self-improving memory capabilities that enable personalized AI interactions. The system is designed to dynamically extract, consolidate, and retrieve salient information from conversations.
+     6→
+     7→**Key Metrics (April 2026):**
+     8→- **LoCoMo Benchmark**: 91.6 (+20 points over previous algorithm)
+     9→- **LongMemEval**: 94.8 (+27 points, +53.6 on assistant memory recall)
+    10→- **BEAM (1M tokens)**: 64.1
+    11→- **BEAM (10M tokens)**: 48.6
+    12→
+    13→---
+    14→
+    15→## 1. Core Architecture
+    16→
+    17→### 1.1 High-Level Architecture
+    18→
+    19→Mem0 follows a **two-phase pipeline** architecture:
+    20→
+    21→```
+    22→┌─────────────────────────────────────────────────────────────────────────────┐
+    23→│                           MEM0 ARCHITECTURE                                  │
+    24→├─────────────────────────────────────────────────────────────────────────────┤
+    25→│                                                                              │
+    26→│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐                   │
+    27→│  │   Messages   │───>│  Extraction  │───>│   Storage    │                   │
+    28→│  │  (Input)     │    │   Pipeline   │    │   Layer      │                   │
+    29→│  └──────────────┘    └──────────────┘    └──────────────┘                   │
+    30→│         │                   │                    │                          │
+    31→│         │                   v                    v                          │
+    32→│         │           ┌──────────────┐    ┌──────────────┐                   │
+    33→│         │           │   Entity     │    │   Vector     │                   │
+    34→│         │           │   Linking    │    │   Store      │                   │
+    35→│         │           └──────────────┘    └──────────────┘                   │
+    36→│         │                   │                    │                          │
+    37→│         │                   v                    v                          │
+    38→│         │           ┌──────────────┐    ┌──────────────┐                   │
+    39→│         │           │   Memory     │    │   Hybrid     │                   │
+    40→│         └──────────>│   Retrieval  │<───│   Search     │                   │
+    41→│                     └──────────────┘    └──────────────┘                   │
+    42→│                                                                              │
+    43→└─────────────────────────────────────────────────────────────────────────────┘
+    44→```
+    45→
+    46→### 1.2 Core Components
+    47→
+    48→1. **Extraction Pipeline**: LLM-powered fact extraction from conversations
+    49→2. **Entity Linking**: Connects related memories across sessions
+    50→3. **Vector Storage**: Pluggable vector database layer
+    51→4. **Hybrid Search**: Semantic + BM25 + Entity boosting
+    52→5. **Memory Manager**: Orchestrates add/update/delete operations
+    53→
+    54→### 1.3 V3 Architecture (Current - April 2026)
+    55→
+    56→The new "Token-Efficient Memory Algorithm" introduces:
+    57→
+    58→| Feature | Description |
+    59→|---------|-------------|
+    60→| **Single-pass ADD-only extraction** | One LLM call, no UPDATE/DELETE operations |
+    61→| **Agent-generated facts** | First-class citizens with equal weight |
+    62→| **Entity linking** | Entities extracted, embedded, and linked across memories |
+    63→| **Multi-signal retrieval** | Semantic + BM25 keyword + entity matching in parallel |
+    64→| **Temporal Reasoning** | Time-aware retrieval for dated instances |
+    65→
+    66→---
+    67→
+    68→## 2. Memory Types
+    69→
+    70→Mem0 supports multiple memory types inspired by cognitive science:
+    71→
+    72→### 2.1 Memory Type Categories
+    73→
+    74→| Type | Description | Storage | Use Case |
+    75→|------|-------------|---------|----------|
+    76→| **Episodic Memory** | Summaries of past interactions or completed tasks | Vector Store | Conversation history, task completion |
+    77→| **Semantic Memory** | Relationships between concepts for reasoning | Vector Store + Graph | Facts, preferences, entity relationships |
+    78→| **Procedural Memory** | Execution history and agent actions | SQLite | Agent workflows, step-by-step processes |
+    79→| **Working Memory** | Current session context | In-memory | Active conversation context |
+    80→
+    81→### 2.2 Memory Structure
+    82→
+    83→```python
+    84→# Core Memory Item Structure
+    85→class MemoryItem:
+    86→    id: str                    # UUID identifier
+    87→    memory: str                # The actual memory text
+    88→    hash: str                  # Content hash for deduplication
+    89→    created_at: datetime       # Creation timestamp
+    90→    updated_at: datetime       # Last update timestamp
+    91→    
+    92→    # Entity Context
+    93→    user_id: Optional[str]     # User identifier
+    94→    agent_id: Optional[str]    # Agent identifier  
+    95→    run_id: Optional[str]      # Session/run identifier
+    96→    
+    97→    # Additional Context
+    98→    metadata: Dict[str, Any]   # Custom metadata
+    99→    linked_memory_ids: List[str]  # Related memory IDs (for graph linking)
+   100→    entities: List[Tuple[str, str]]  # Extracted entities (type, text)
+   101→```
+   102→
+   103→---
+   104→
+   105→## 3. Extraction Algorithms
+   106→
+   107→### 3.1 ADD-only Extraction (V3)
+   108→
+   109→The V3 algorithm uses **single-pass, append-only extraction**:
+   110→
+   111→```
+   112→┌─────────────────────────────────────────────────────────────────────────────┐
+   113→│                     ADD-ONLY EXTRACTION FLOW                                 │
+   114→├─────────────────────────────────────────────────────────────────────────────┤
+   115→│                                                                              │
+   116→│  INPUT:                                                                      │
+   117→│  ┌─────────────────────────────────────────────────────────────────────┐    │
+   118→│  │ • New Messages (user/assistant conversation)                        │    │
+   119→│  │ • Summary (narrative of user profile from prior conversations)      │    │
+   120→│  │ • Recently Extracted Memories (up to 20, for deduplication)          │    │
+   121→│  │ • Existing Memories (relevant memories from vector store)            │    │
+   122→│  │ • Last k Messages (up to 20, for reference resolution)               │    │
+   123→│  │ • Observation Date (temporal anchor for relative references)         │    │
+   124→│  └─────────────────────────────────────────────────────────────────────┘    │
+   125→│                                                                              │
+   126→│  PROCESSING:                                                                 │
+   127→│  ┌─────────────────────────────────────────────────────────────────────┐    │
+   128→│  │ 1. Parse all messages (user AND assistant)                          │    │
+   129→│  │ 2. Extract facts, preferences, plans, relationships                  │    │
+   130→│  │ 3. Resolve temporal references (yesterday → specific date)          │    │
+   131→│  │ 4. Deduplicate against Recent/Existing Memories                      │    │
+   132→│  │ 5. Link to related existing memories                                 │    │
+   133→│  │ 6. Generate contextually rich, self-contained memories              │    │
+   134→│  └─────────────────────────────────────────────────────────────────────┘    │
+   135→│                                                                              │
+   136→│  OUTPUT:                                                                     │
+   137→│  ┌─────────────────────────────────────────────────────────────────────┐    │
+   138→│  │ {"memory": [                                                         │    │
+   139→│  │   {"id": "0", "text": "...", "attributed_to": "user",               │    │
+   140→│  │    "linked_memory_ids": ["uuid-of-related-memory"]},                │    │
+   141→│  │   {"id": "1", "text": "...", "attributed_to": "assistant"}          │    │
+   142→│  │ ]}                                                                   │    │
+   143→│  └─────────────────────────────────────────────────────────────────────┘    │
+   144→│                                                                              │
+   145→└─────────────────────────────────────────────────────────────────────────────┘
+   146→```
+   147→
+   148→### 3.2 Extraction Prompt Structure
+   149→
+   150→The `ADDITIVE_EXTRACTION_PROMPT` is the core extraction system prompt:
+   151→
+   152→**Key Extraction Guidelines:**
+   153→
+   154→1. **What to Extract from User Messages:**
+   155→   - Personal details, preferences, plans, relationships
+   156→   - Health/wellness, opinions, hobbies, emotional states
+   157→   - Entity attributes (breed, model, color, make, size)
+   158→   - Implicit preferences revealed through requests
+   159→   - Shared content and reference material
+   160→   - Firsts and milestones
+   161→   - Specific foods, meals, and who was present
+   162→
+   163→2. **What to Extract from Assistant Messages:**
+   164→   - Specific recommendations given
+   165→   - Plans or schedules created for the user
+   166→   - Information researched or provided
+   167→   - Agreements reached during conversation
+   168→
+   169→3. **Memory Quality Standards:**
+   170→   - **Contextually Rich**: "User has a dog named Poppy and their morning walks together are the highlight of their day"
+   171→   - **Self-Contained**: Replace pronouns with specific names
+   172→   - **Temporally Grounded**: Convert relative → absolute dates
+   173→   - **Numerically Precise**: Preserve exact quantities
+   174→   - **Proper Nouns Preserved**: Keep titles, names, brands exact
+   175→
+   176→### 3.3 Entity Extraction
+   177→
+   178→Mem0 extracts four types of entities using spaCy NLP:
+   179→
+   180→| Entity Type | Description | Example |
+   181→|-------------|-------------|---------|
+   182→| **PROPER** | Capitalized multi-word sequences | "John Smith", "San Francisco" |
+   183→| **QUOTED** | Text in single or double quotes | "The Last Dance", "Inception" |
+   184→| **COMPOUND** | Multi-word noun phrases | "machine learning", "senior engineer" |
+   185→| **NOUN** | Single nouns from compound patterns | Specific technical terms |
+   186→
+   187→```python
+   188→# Entity Extraction Process
+   189→def extract_entities(text: str) -> List[Tuple[str, str]]:
+   190→    """
+   191→    Extract named entities, quoted text, and noun compounds.
+   192→    Returns: List of (entity_type, entity_text) tuples
+   193→    """
+   194→    # Uses spaCy for NER
+   195→    # Filters generic heads and circumstantial modifiers
+   196→    # Strips generic endings from compounds
+   197→```
+   198→
+   199→### 3.4 Memory Linking
+   200→
+   201→When extracting new memories, the system links them to related existing memories:
+   202→
+   203→**Linking Conditions:**
+   204→- Same entity/topic
+   205→- Updated preference
+   206→- Continuation of narrative
+   207→- Contradiction
+   208→
+   209→```json
+   210→{
+   211→  "memory": [
+   212→    {
+   213→      "id": "0",
+   214→      "text": "User's dog Poppy had a vet checkup around March 14, 2025",
+   215→      "linked_memory_ids": ["a1b2c3d4-5678-9abc-def0-111111111111"]
+   216→    }
+   217→  ]
+   218→}
+   219→```
+   220→
+   221→---
+   222→
+   223→## 4. Consolidation Process
+   224→
+   225→### 4.1 V2 Consolidation (Legacy - UPDATE/DELETE)
+   226→
+   227→The older V2 system used a four-operation model:
+   228→
+   229→| Operation | Description | When Used |
+   230→|-----------|-------------|-----------|
+   231→| **ADD** | Add new memory element | New information not in memory |
+   232→| **UPDATE** | Update existing element | Information changed/evolved |
+   233→| **DELETE** | Delete existing element | Contradictory information |
+   234→| **NONE** | No change | Already present or irrelevant |
+   235→
+   236→### 4.2 V3 ADD-Only Model (Current)
+   237→
+   238→The V3 algorithm **eliminates consolidation entirely**:
+   239→
+   240→```
+   241→┌─────────────────────────────────────────────────────────────────┐
+   242→│                    V3 ADD-ONLY MODEL                            │
+   243→├─────────────────────────────────────────────────────────────────┤
+   244→│                                                                 │
+   245→│  OLD (V2):                    NEW (V3):                         │
+   246→│  ┌─────────────────┐          ┌─────────────────┐               │
+   247→│  │ Extract Facts   │          │ Extract Facts   │               │
+   248→│  │       ↓         │          │       ↓         │               │
+   249→│  │ Compare to      │          │ Add to Store    │               │
+   250→│  │ Existing        │          │       ↓         │               │
+   251→│  │       ↓         │          │ Entity Linking  │               │
+   252→│  │ ADD/UPDATE/     │          │       ↓         │               │
+   253→│  │ DELETE/NONE     │          │ Done            │               │
+   254→│  │       ↓         │          │                 │               │
+   255→│  │ Re-consolidate  │          │                 │               │
+   256→│  └─────────────────┘          └─────────────────┘               │
+   257→│                                                                 │
+   258→│  Benefits:                                                      │
+   259→│  • ~50% faster (single LLM call)                               │
+   260→│  • Full history preserved                                       │
+   261→│  • Retrieval handles relevance ranking                          │
+   262→│  • No information loss from consolidation errors               │
+   263→│                                                                 │
+   264→└─────────────────────────────────────────────────────────────────┘
+   265→```
+   266→
+   267→### 4.3 Storage Schema
+   268→
+   269→**SQLite History Table:**
+   270→```sql
+   271→CREATE TABLE history (
+   272→    id           TEXT PRIMARY KEY,
+   273→    memory_id    TEXT,
+   274→    old_memory   TEXT,
+   275→    new_memory   TEXT,
+   276→    event        TEXT,           -- ADD, UPDATE, DELETE
+   277→    created_at   DATETIME,
+   278→    updated_at   DATETIME,
+   279→    is_deleted   INTEGER,
+   280→    actor_id     TEXT,
+   281→    role         TEXT
+   282→);
+   283→```
+   284→
+   285→**SQLite Messages Table:**
+   286→```sql
+   287→CREATE TABLE messages (
+   288→    id TEXT PRIMARY KEY,
+   289→    session_scope TEXT,
+   290→    role TEXT,
+   291→    content TEXT,
+   292→    name TEXT,
+   293→    created_at DATETIME
+   294→);
+   295→```
+   296→
+   297→---
+   298→
+   299→## 5. Integration APIs
+   300→
+   301→### 5.1 Python SDK
+   302→
+   303→```python
+   304→from mem0 import Memory
+   305→
+   306→# Initialize memory
+   307→memory = Memory()
+   308→
+   309→# Add memories from conversation
+   310→messages = [
+   311→    {"role": "user", "content": "I'm John, a software engineer at Google"},
+   312→    {"role": "assistant", "content": "Nice to meet you, John!"}
+   313→]
+   314→result = memory.add(messages, user_id="john_123")
+   315→
+   316→# Search memories
+   317→results = memory.search(
+   318→    query="What does John do?",
+   319→    filters={"user_id": "john_123"},
+   320→    top_k=3
+   321→)
+   322→
+   323→# Get all memories
+   324→all_memories = memory.get_all(filters={"user_id": "john_123"})
+   325→
+   326→# Update memory
+   327→memory.update(memory_id="abc123", data="Updated content")
+   328→
+   329→# Delete memory
+   330→memory.delete(memory_id="abc123")
+   331→```
+   332→
+   333→### 5.2 Node.js SDK
+   334→
+   335→```javascript
+   336→import { Memory } from 'mem0ai';
+   337→
+   338→const memory = new Memory();
+   339→
+   340→// Add memories
+   341→const result = await memory.add(
+   342→    [{ role: 'user', content: 'I love hiking on weekends' }],
+   343→    { userId: 'user_123' }
+   344→);
+   345→
+   346→// Search memories
+   347→const results = await memory.search(
+   348→    'What does user like to do?',
+   349→    { filters: { user_id: 'user_123' }, top_k: 5 }
+   350→);
+   351→```
+   352→
+   353→### 5.3 REST API Endpoints
+   354→
+   355→| Method | Endpoint | Description |
+   356→|--------|----------|-------------|
+   357→| `POST` | `/memories` | Create new memories |
+   358→| `GET` | `/memories` | Get all memories (with optional filters) |
+   359→| `GET` | `/memories/{id}` | Get specific memory |
+   360→| `PUT` | `/memories/{id}` | Update memory |
+   361→| `DELETE` | `/memories/{id}` | Delete memory |
+   362→| `DELETE` | `/memories` | Delete all memories (admin) |
+   363→| `POST` | `/search` | Search memories |
+   364→| `GET` | `/memories/{id}/history` | Get memory history |
+   365→
+   366→### 5.4 REST API Examples
+   367→
+   368→**Create Memory:**
+   369→```bash
+   370→curl -X POST http://localhost:3000/memories \
+   371→  -H "Authorization: Bearer <token>" \
+   372→  -H "Content-Type: application/json" \
+   373→  -d '{
+   374→    "messages": [
+   375→      {"role": "user", "content": "I prefer dark mode in all my apps"}
+   376→    ],
+   377→    "user_id": "user_123"
+   378→  }'
+   379→```
+   380→
+   381→**Search Memories:**
+   382→```bash
+   383→curl -X POST http://localhost:3000/search \
+   384→  -H "Authorization: Bearer <token>" \
+   385→  -H "Content-Type: application/json" \
+   386→  -d '{
+   387→    "query": "What are user preferences?",
+   388→    "filters": {"user_id": "user_123"},
+   389→    "top_k": 5
+   390→  }'
+   391→```
+   392→
+   393→### 5.5 CLI
+   394→
+   395→```bash
+   396→# Install CLI
+   397→npm install -g @mem0/cli
+   398→
+   399→# Initialize
+   400→mem0 init
+   401→
+   402→# Add memory
+   403→mem0 add "Prefers dark mode and vim keybindings" --user-id alice
+   404→
+   405→# Search
+   406→mem0 search "What does Alice prefer?" --user-id alice
+   407→```
+   408→
+   409→---
+   410→
+   411→## 6. Vector Database Support
+   412→
+   413→### 6.1 Supported Vector Stores
+   414→
+   415→| Provider | Class | Best For |
+   416→|----------|-------|----------|
+   417→| **Qdrant** | `mem0.vector_stores.qdrant.Qdrant` | Open-source, high-performance |
+   418→| **Pinecone** | `mem0.vector_stores.pinecone.PineconeDB` | Managed, enterprise |
+   419→| **Chroma** | `mem0.vector_stores.chroma.ChromaDB` | Local development |
+   420→| **PGVector** | `mem0.vector_stores.pgvector.PGVector` | PostgreSQL integration |
+   421→| **Milvus** | `mem0.vector_stores.milvus.MilvusDB` | Large-scale production |
+   422→| **Weaviate** | `mem0.vector_stores.weaviate.Weaviate` | GraphQL-based |
+   423→| **Redis** | `mem0.vector_stores.redis.RedisDB` | Caching + vector search |
+   424→| **MongoDB** | `mem0.vector_stores.mongodb.MongoDB` | Document store integration |
+   425→| **Azure AI Search** | `mem0.vector_stores.azure_ai_search.AzureAISearch` | Azure ecosystem |
+   426→| **OpenSearch** | `mem0.vector_stores.opensearch.OpenSearchDB` | AWS ecosystem |
+   427→| **FAISS** | `mem0.vector_stores.faiss.FAISS` | Local, no external dependencies |
+   428→| **Supabase** | `mem0.vector_stores.supabase.Supabase` | BaaS platform |
+   429→| **Upstash Vector** | `mem0.vector_stores.upstash_vector.UpstashVector` | Serverless |
+   430→| **Elasticsearch** | `mem0.vector_stores.elasticsearch.ElasticsearchDB` | Search platform |
+   431→| **Vertex AI** | `mem0.vector_stores.vertex_ai_vector_search.GoogleMatchingEngine` | GCP ecosystem |
+   432→
+   433→### 6.2 Qdrant Configuration Example
+   434→
+   435→```python
+   436→from mem0 import Memory
+   437→
+   438→config = {
+   439→    "vector_store": {
+   440→        "provider": "qdrant",
+   441→        "config": {
+   442→            "host": "localhost",
+   443→            "port": 6333,
+   444→            "collection_name": "memories"
+   445→        }
+   446→    },
+   447→    "embedder": {
+   448→        "provider": "openai",
+   449→        "config": {"model": "text-embedding-3-small"}
+   450→    },
+   451→    "llm": {
+   452→        "provider": "openai",
+   453→        "config": {"model": "gpt-4o-mini"}
+   454→    }
+   455→}
+   456→
+   457→memory = Memory.from_config(config)
+   458→```
+   459→
+   460→### 6.3 Supported Embedders
+   461→
+   462→| Provider | Best For |
+   463→|----------|----------|
+   464→| **OpenAI** | Default, text-embedding-3-small |
+   465→| **HuggingFace** | Open-source models |
+   466→| **Ollama** | Local inference |
+   467→| **Azure OpenAI** | Enterprise Azure |
+   468→| **Gemini** | Google Cloud |
+   469→| **VertexAI** | GCP ecosystem |
+   470→| **AWS Bedrock** | AWS ecosystem |
+   471→| **FastEmbed** | Lightweight, fast |
+   472→
+   473→**Recommended for Hybrid Search:**
+   474→- Qwen 600M or comparable embedding model
+   475→- Minimum: text-embedding-3-small
+   476→
+   477→### 6.4 Supported LLMs
+   478→
+   479→| Provider | Models |
+   480→|----------|--------|
+   481→| **OpenAI** | GPT-4o, GPT-4o-mini (default), GPT-5-mini |
+   482→| **Anthropic** | Claude models |
+   483→| **Azure OpenAI** | Azure-hosted OpenAI models |
+   484→| **Gemini** | Google Gemini models |
+   485→| **Groq** | Fast inference |
+   486→| **Ollama** | Local models |
+   487→| **DeepSeek** | Cost-effective |
+   488→| **Together** | Open-source models |
+   489→| **AWS Bedrock** | AWS-hosted models |
+   490→| **LiteLLM** | Universal LLM proxy |
+   491→
+   492→---
+   493→
+   494→## 7. Key Features
+   495→
+   496→### 7.1 Hybrid Search
+   497→
+   498→Mem0 combines multiple search signals:
+   499→
+   500→```
+   501→Combined Score = (Semantic + BM25 + Entity_Boost) / Max_Possible
+   502→
+   503→Where:
+   504→- Semantic: Vector similarity score
+   505→- BM25: Keyword matching score (normalized to [0,1])
+   506→- Entity_Boost: Entity linking boost (weight: 0.5)
+   507→- Max_Possible: 1.0 (semantic) + 1.0 (BM25) + 0.5 (entity)
+   508→```
+   509→
+   510→**BM25 Normalization:**
+   511→```python
+   512→def normalize_bm25(raw_score: float, midpoint: float, steepness: float) -> float:
+   513→    """Normalize BM25 score to [0, 1] using logistic sigmoid."""
+   514→    return 1.0 / (1.0 + math.exp(-steepness * (raw_score - midpoint)))
+   515→
+   516→# Query-length-adaptive parameters
+   517→if num_terms <= 3:
+   518→    midpoint, steepness = 5.0, 0.7
+   519→elif num_terms <= 6:
+   520→    midpoint, steepness = 7.0, 0.6
+   521→elif num_terms <= 9:
+   522→    midpoint, steepness = 9.0, 0.5
+   523→```
+   524→
+   525→### 7.2 Temporal Reasoning
+   526→
+   527→**Time Reference Resolution:**
+   528→- "yesterday" → day before Observation Date
+   529→- "last week" → week preceding Observation Date
+   530→- "next month" → month following Observation Date
+   531→- "recently" → shortly before Observation Date
+   532→
+   533→**Key Principle:** Always ground relative references to specific dates for meaningful long-term retrieval.
+   534→
+   535→### 7.3 Entity Resolution
+   536→
+   537→```python
+   538→# Entity linking workflow
+   539→def link_entities(new_memory, existing_memories):
+   540→    """
+   541→    1. Extract entities from new memory using spaCy
+   542→    2. Embed entities using same embedder
+   543→    3. Search for matching entities in existing memories
+   544→    4. Add matched memory IDs to linked_memory_ids
+   545→    """
+   546→    entities = extract_entities(new_memory.text)
+   547→    entity_embeddings = embed_entities(entities)
+   548→    matches = search_entities(entity_embeddings, existing_memories)
+   549→    new_memory.linked_memory_ids = [m.id for m in matches]
+   550→```
+   551→
+   552→### 7.4 Memory Importance & Deduplication
+   553→
+   554→**Deduplication Process:**
+   555→1. **Recent Memory Check**: Compare against last 20 extracted memories
+   556→2. **Existing Memory Check**: Vector search for semantically similar memories
+   557→3. **Skip if Equivalent**: If new fact matches existing (semantic equivalence), skip extraction
+   558→4. **Link if Related**: If same entity/topic but different event, extract and link
+   559→
+   560→### 7.5 Memory Expiration
+   561→
+   562→Mem0 does not implement automatic memory expiration. Instead:
+   563→- All memories are preserved (ADD-only model)
+   564→- Relevance is determined at retrieval time
+   565→- Temporal reasoning helps surface current/relevant memories
+   566→
+   567→---
+   568→
+   569→## 8. Self-Hosted Deployment
+   570→
+   571→### 8.1 Docker Compose
+   572→
+   573→```bash
+   574→# Quick start with bootstrap
+   575→cd server && make bootstrap
+   576→
+   577→# Manual setup
+   578→cd server && docker compose up -d
+   579→# Access at http://localhost:3000
+   580→```
+   581→
+   582→### 8.2 Configuration
+   583→
+   584→```python
+   585→DEFAULT_CONFIG = {
+   586→    "version": "v1.1",
+   587→    "vector_store": {
+   588→        "provider": "pgvector",
+   589→        "config": {
+   590→            "host": "localhost",
+   591→            "port": 5432,
+   592→            "dbname": "memories",
+   593→            "user": "postgres",
+   594→            "password": "password",
+   595→            "collection_name": "memories"
+   596→        }
+   597→    },
+   598→    "llm": {
+   599→        "provider": "openai",
+   600→        "config": {
+   601→            "api_key": "sk-...",
+   602→            "temperature": 0.2,
+   603→            "model": "gpt-4o-mini"
+   604→        }
+   605→    },
+   606→    "embedder": {
+   607→        "provider": "openai",
+   608→        "config": {
+   609→            "api_key": "sk-...",
+   610→            "model": "text-embedding-3-small"
+   611→        }
+   612→    },
+   613→    "history_db_path": "/app/history/history.db"
+   614→}
+   615→```
+   616→
+   617→### 8.3 Authentication
+   618→
+   619→```bash
+   620→# Environment variables
+   621→ADMIN_API_KEY=<long-random-value>  # Admin key
+   622→JWT_SECRET=$(openssl rand -base64 48)  # JWT secret
+   623→AUTH_DISABLED=true  # For local development only
+   624→```
+   625→
+   626→---
+   627→
+   628→## 9. Code Examples
+   629→
+   630→### 9.1 Full Integration Example
+   631→
+   632→```python
+   633→from openai import OpenAI
+   634→from mem0 import Memory
+   635→
+   636→openai_client = OpenAI()
+   637→memory = Memory()
+   638→
+   639→def chat_with_memories(message: str, user_id: str = "default_user") -> str:
+   640→    # 1. Retrieve relevant memories
+   641→    relevant_memories = memory.search(
+   642→        query=message,
+   643→        filters={"user_id": user_id},
+   644→        top_k=3
+   645→    )
+   646→    memories_str = "\n".join(
+   647→        f"- {entry['memory']}" 
+   648→        for entry in relevant_memories["results"]
+   649→    )
+   650→
+   651→    # 2. Generate response with memory context
+   652→    system_prompt = f"""You are a helpful AI. Answer based on query and memories.
+   653→    
+   654→User Memories:
+   655→{memories_str}"""
+   656→    
+   657→    messages = [
+   658→        {"role": "system", "content": system_prompt},
+   659→        {"role": "user", "content": message}
+   660→    ]
+   661→    
+   662→    response = openai_client.chat.completions.create(
+   663→        model="gpt-4o-mini",
+   664→        messages=messages
+   665→    )
+   666→    assistant_response = response.choices[0].message.content
+   667→
+   668→    # 3. Create new memories from conversation
+   669→    messages.append({"role": "assistant", "content": assistant_response})
+   670→    memory.add(messages, user_id=user_id)
+   671→
+   672→    return assistant_response
+   673→```
+   674→
+   675→### 9.2 Hybrid Search with Explain
+   676→
+   677→```python
+   678→results = memory.search(
+   679→    query="What restaurants does user like?",
+   680→    filters={"user_id": "user_123"},
+   681→    top_k=5,
+   682→    threshold=0.7,
+   683→    explain=True  # Returns score breakdown
+   684→)
+   685→
+   686→# Result with explain:
+   687→# {
+   688→#   "results": [{
+   689→#     "id": "abc123",
+   690→#     "memory": "User enjoys Italian cuisine at Osteria Francescana",
+   691→#     "score": 0.85,
+   692→#     "score_details": {
+   693→#       "semantic_score": 0.78,
+   694→#       "bm25_score": 0.65,
+   695→#       "entity_boost": 0.42,
+   696→#       "raw_score": 1.85,
+   697→#       "max_possible_score": 2.5,
+   698→#       "final_score": 0.85
+   699→#     }
+   700→#   }]
+   701→# }
+   702→```
+   703→
+   704→### 9.3 Custom Instructions for Extraction
+   705→
+   706→```python
+   707→memory.add(
+   708→    messages=[{"role": "user", "content": "..."}],
+   709→    user_id="user_123",
+   710→    custom_instructions="""Focus on extracting:
+   711→1. Dietary restrictions and food allergies
+   712→2. Restaurant preferences
+   713→3. Cooking habits and kitchen equipment"""
+   714→)
+   715→```
+   716→
+   717→---
+   718→
+   719→## 10. Key Takeaways for Implementation
+   720→
+   721→### Phase 1: Extraction & Consolidation
+   722→
+   723→1. **Use ADD-only extraction** - Single LLM call, no UPDATE/DELETE
+   724→2. **Extract from both user and assistant messages**
+   725→3. **Implement contextually rich extraction** - Not atomic facts
+   726→4. **Ground temporal references** - Convert relative to absolute dates
+   727→5. **Preserve proper nouns exactly** - Critical for recall
+   728→
+   729→### Phase 2: Storage & Retrieval
+   730→
+   731→1. **Use hybrid search** - Semantic + BM25 + Entity boosting
+   732→2. **Implement entity extraction** - spaCy for NER
+   733→3. **Store entity embeddings separately** - For linking
+   734→4. **Track memory history** - SQLite for audit trail
+   735→
+   736→### Phase 3: Production Considerations
+   737→
+   738→1. **Choose vector DB based on scale** - Qdrant for open-source, Pinecone for managed
+   739→2. **Configure appropriate embedder** - text-embedding-3-small minimum
+   740→3. **Set up authentication** - JWT + API keys
+   741→4. **Implement rate limiting** - Protect extraction endpoints
+   742→
+   743→---
+   744→
+   745→## References
+   746→
+   747→- **Official Documentation**: https://docs.mem0.ai
+   748→- **GitHub Repository**: https://github.com/mem0ai/mem0
+   749→- **Research Paper**: arXiv:2504.19413 - "Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory"
+   750→- **Benchmark Results**: https://mem0.ai/research
+   751→- **Migration Guide**: https://docs.mem0.ai/migration/oss-v2-to-v3
+   752→

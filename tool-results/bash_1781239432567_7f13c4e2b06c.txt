@@ -1,0 +1,500 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-10-17">
+<meta name="description" content="MemGPT paper review: How virtual memory management enables unlimited LLM context. Learn how to implement a persistent MemGPT agent using Letta framework with Python code examples">
+
+<title>Virtual context management with MemGPT and Letta – Leonie Monigatti</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/cookie-consent/cookie-consent.js"></script><style type="text/css"></style><style type="text/css">.termsfeed-com---reset{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;-ms-overflow-style:scrollbar;-webkit-tap-highlight-color:rgba(0,0,0,0);margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;text-align:left;background-color:#fff}.termsfeed-com---reset *,.termsfeed-com---reset *::before,.termsfeed-com---reset *::after{box-sizing:border-box}.termsfeed-com---reset a,.termsfeed-com---reset li,.termsfeed-com---reset p,.termsfeed-com---reset h1,.termsfeed-com---reset h2,.termsfeed-com---reset input,.termsfeed-com---reset button,.termsfeed-com---reset select{border-style:none;box-shadow:none;margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;outline:none}@-ms-viewport{.termsfeed-com---reset{width:device-width}}.termsfeed-com---reset [tabindex="-1"]:focus{outline:0 !important}.termsfeed-com---reset h1,.termsfeed-com---reset h2,.termsfeed-com---reset h3,.termsfeed-com---reset h4,.termsfeed-com---reset h5,.termsfeed-com---reset h6{margin-top:0;margin-bottom:0;color:#000}.termsfeed-com---reset p{margin-top:0;margin-bottom:1rem}.termsfeed-com---reset div{display:block}.termsfeed-com---reset ol,.termsfeed-com---reset ul,.termsfeed-com---reset dl{margin-top:0;margin-bottom:1rem}.termsfeed-com---reset ol ol,.termsfeed-com---reset ul ul,.termsfeed-com---reset ol ul,.termsfeed-com---reset ul ol{margin-bottom:0}.termsfeed-com---reset b,.termsfeed-com---reset strong{font-weight:bolder}.termsfeed-com---reset small{font-size:80%}.termsfeed-com---reset a{color:#007bff;text-decoration:none;background-color:rgba(0,0,0,0);-webkit-text-decoration-skip:objects}.termsfeed-com---reset a:hover{color:#0056b3;text-decoration:underline}.termsfeed-com---reset a:not(ref]):not([tabindex]){color:inherit;text-decoration:none}.termsfeed-com---reset a:not(ref]):not([tabindex]):hover,.termsfeed-com---reset a:not(ref]):not([tabindex]):focus{color:inherit;text-decoration:none}.termsfeed-com---reset a:not(ref]):not([tabindex]):focus{outline:0}.termsfeed-com---reset label{display:inline-block;margin-bottom:.5rem}.termsfeed-com---reset button{border-radius:2px;padding:.5rem 1rem;outline:none;background:#dcdae5;color:#111;cursor:pointer;border:none}.termsfeed-com---reset button:focus{outline:none}.termsfeed-com---reset select{border-style:none;padding:.5rem 1rem}.termsfeed-com---reset input,.termsfeed-com---reset button,.termsfeed-com---reset select,.termsfeed-com---reset optgroup,.termsfeed-com---reset textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}.termsfeed-com---reset button,.termsfeed-com---reset input{overflow:visible}.termsfeed-com---reset button,.termsfeed-com---reset select{text-transform:none}.termsfeed-com---reset button,.termsfeed-com---reset html [type=button],.termsfeed-com---reset [type=reset],.termsfeed-com---reset [type=submit]{-webkit-appearance:button}.termsfeed-com---reset button::-moz-focus-inner,.termsfeed-com---reset [type=button]::-moz-focus-inner,.termsfeed-com---reset [type=reset]::-moz-focus-inner,.termsfeed-com---reset [type=submit]::-moz-focus-inner{padding:0;border-style:none}.termsfeed-com---reset input[type=radio],.termsfeed-com---reset input[type=checkbox]{box-sizing:border-box;padding:0}.termsfeed-com---reset idden]{display:none !important}</style><style type="text/css">.termsfeed-com---nb{overflow:auto;z-index:99999999999;font-size:16px}.termsfeed-com---nb .cc-nb-main-container{padding:3rem}.termsfeed-com---nb .cc-nb-title{font-size:24px;font-weight:600}.termsfeed-com---nb .cc-nb-text{font-size:16px;margin:0 0 1.25rem 0}.termsfeed-com---nb .cc-nb-okagree,.termsfeed-com---nb .cc-nb-reject,.termsfeed-com---nb .cc-nb-changep{font-weight:bold;font-size:14px;margin-right:.25rem !important;margin-bottom:.25rem !important}@media(max-width: 480px){.termsfeed-com---nb .cc-nb-okagree,.termsfeed-com---nb .cc-nb-reject,.termsfeed-com---nb .cc-nb-changep{display:block;width:100%}}.termsfeed-com---nb-headline{right:0;top:auto;bottom:0;left:0;max-width:100%;position:relative}@media(max-width: 320px),(max-height: 480px){.termsfeed-com---nb-headline{overflow:auto;height:200px;max-width:100%;right:0;top:auto;bottom:0;left:auto;position:fixed}}.termsfeed-com---nb-simple{right:0;top:auto;bottom:0;left:auto;max-width:50%;position:fixed}@media screen and (max-width: 600px){.termsfeed-com---nb-simple{max-width:80%}}@media(max-width: 320px),(max-height: 480px){.termsfeed-com---nb-simple{overflow:auto;height:200px;max-width:100%}}.termsfeed-com---nb-interstitial-overlay{position:fixed;top:0;left:0;height:100%;width:100%;background:rgba(0,0,0,.8);z-index:9999999999}.termsfeed-com---nb-interstitial{right:3vw;top:3vh;left:3vw;max-width:100%;position:fixed}@media(max-width: 320px),(max-height: 480px){.termsfeed-com---nb-interstitial{overflow:auto;height:200px;right:0;top:auto;bottom:0;left:auto;position:fixed}}.termsfeed-com---nb-standalone{position:fixed;top:0;left:0;height:100%;width:100%}@media(max-width: 320px),(max-height: 480px){.termsfeed-com---nb-standalone{overflow:auto;height:200px;max-width:100%;right:0;top:auto;bottom:0;left:auto;position:fixed}}.termsfeed-com---pc-overlay{width:100%;height:100%;position:fixed;background:rgba(0,0,0,.5);z-index:999999999999;top:0;left:0;display:none}@media screen and (max-width: 600px){.termsfeed-com---pc-overlay{overflow-y:scroll}}.termsfeed-com---pc-dialog{position:absolute;margin:30px auto;width:750px;max-width:90%;height:auto;left:0;right:0}.termsfeed-com---pc-dialog>div{width:100%}.termsfeed-com---pc-dialog .cc-pc-container{width:100%;display:flex;background:#fff;flex-direction:column}.termsfeed-com---pc-dialog .cc-pc-head{background:#fff;color:#111;display:flex;flex-direction:row;justify-content:space-between}@media screen and (max-width: 600px){.termsfeed-com---pc-dialog .cc-pc-head{flex-direction:column}}.termsfeed-com---pc-dialog .cc-pc-head-title{display:flex;padding-left:15px;flex-direction:column;justify-content:center;align-items:baseline}@media screen and (max-width: 600px){.termsfeed-com---pc-dialog .cc-pc-head-title{align-items:center;padding:15px 0 0 0}}.termsfeed-com---pc-dialog .cc-pc-head-title-text{font-size:16px;line-height:1.5;margin:0}.termsfeed-com---pc-dialog .cc-pc-head-title-headline{font-size:20px;font-weight:600;margin:0}.termsfeed-com---pc-dialog .cc-pc-head-lang{display:flex;align-items:center;padding-right:15px;min-height:80px;justify-content:center;flex-direction:row-reverse}@media screen and (max-width: 600px){.termsfeed-com---pc-dialog .cc-pc-head-lang{padding:15px 0;min-height:20px}}.termsfeed-com---pc-dialog .cc-pc-head-close{display:flex;align-items:center;justify-content:center;margin-left:15px}.termsfeed-com---pc-dialog .cc-cp-body{display:flex;flex-direction:row;align-items:stretch;background:#292929;color:#f5f5f5;border-bottom:none}@media screen and (max-width: 600px){.termsfeed-com---pc-dialog .cc-cp-body{flex-direction:column}}.termsfeed-com---pc-dialog .cc-cp-body-tabs{font-family:Arial,sans-serif !important;width:150px;margin:0;padding:0;background:#e6e6e6;min-width:150px}@media screen and (max-width: 600px){.termsfeed-com---pc-dialog .cc-cp-body-tabs{width:100%}}.termsfeed-com---pc-dialog .cc-cp-body-tabs-item{margin:0;padding:0;float:left;display:block;width:100%;color:#666;background:#e6e6e6;border-bottom:1px solid #ccc;border-right:1px solid #ccc;transition:all ease .1s;box-sizing:content-box}@media screen and (max-width: 600px){.termsfeed-com---pc-dialog .cc-cp-body-tabs-item{border-right:0}}.termsfeed-com---pc-dialog .cc-cp-body-tabs-item[active=true]{background:#292929;color:#f5f5f5}.termsfeed-com---pc-dialog .cc-cp-body-tabs-item-link{text-decoration:none;color:#666;display:block;padding:10px 5px 10px 10px;font-weight:700;font-size:12px;line-height:19px;position:relative;width:100%;text-align:left;background:none}.termsfeed-com---pc-dialog .cc-cp-body-content{background:#292929;color:#f5f5f5}.termsfeed-com---pc-dialog .cc-cp-body-content-entry{width:100%;display:none;padding:25px;box-sizing:border-box}.termsfeed-com---pc-dialog .cc-cp-body-content-entry[active=true]{display:block}.termsfeed-com---pc-dialog .cc-cp-body-content-entry-title{font-size:24px;font-weight:600}.termsfeed-com---pc-dialog .cc-cp-body-content-entry-text{font-size:16px;line-height:1.5}.termsfeed-com---pc-dialog .cc-cp-foot{background:#f2f2f2;display:flex;flex-direction:row;align-items:center;border-top:1px solid #ccc;justify-content:space-between}.termsfeed-com---pc-dialog .cc-cp-foot-byline{padding:20px 10px;font-size:14px;color:#333;display:block !important}.termsfeed-com---pc-dialog .cc-cp-foot-byline a{color:#999}.termsfeed-com---pc-dialog .cc-cp-foot-save{margin-right:10px;opacity:.9;transition:all ease .3s;font-size:14px;font-weight:bold;height:auto}.termsfeed-com---pc-dialog .cc-cp-foot-save:hover{opacity:1}.termsfeed-com---pc-dialog input[type=checkbox].cc-custom-checkbox{position:absolute;margin:2px 0 0 16px;cursor:pointer;appearance:none}.termsfeed-com---pc-dialog input[type=checkbox].cc-custom-checkbox+label{position:relative;padding:4px 0 0 50px;line-height:2em;cursor:pointer;display:inline;font-size:14px}.termsfeed-com---pc-dialog input[type=checkbox].cc-custom-checkbox+label:before{content:"";position:absolute;display:block;left:0;top:0;width:40px;height:24px;border-radius:16px;background:#fff;border:1px solid #d9d9d9;-webkit-transition:all .3s;transition:all .3s}.termsfeed-com---pc-dialog input[type=checkbox].cc-custom-checkbox+label:after{content:"";position:absolute;display:block;left:0px;top:0px;width:24px;height:24px;border-radius:16px;background:#fff;border:1px solid #d9d9d9;-webkit-transition:all .3s;transition:all .3s}.termsfeed-com---pc-dialog input[type=checkbox].cc-custom-checkbox+label:hover:after{box-shadow:0 0 5px rgba(0,0,0,.3)}.termsfeed-com---pc-dialog input[type=checkbox].cc-custom-checkbox:checked+label:after{margin-left:16px}.termsfeed-com---pc-dialog input[type=checkbox].cc-custom-checkbox:checked+label:before{background:#55d069}</style><style type="text/css">.termsfeed-com---palette-dark.termsfeed-com---nb{background-color:#111;color:#fff}.termsfeed-com---palette-dark .cc-nb-title{color:#fff}.termsfeed-com---palette-dark .cc-nb-text{color:#fff}.termsfeed-com---palette-dark .cc-nb-text a{color:#fff;text-decoration:underline}.termsfeed-com---palette-dark .cc-nb-text a:hover{text-decoration:none}.termsfeed-com---palette-dark .cc-nb-text a:focus{box-shadow:0 0 0 2px #3dd000}.termsfeed-com---palette-dark .cc-nb-okagree{color:#000;background-color:#ff0}.termsfeed-com---palette-dark .cc-nb-okagree:focus{box-shadow:0 0 0 2px #3dd000}.termsfeed-com---palette-dark .cc-nb-reject{color:#000;background-color:#ff0}.termsfeed-com---palette-dark .cc-nb-reject:focus{box-shadow:0 0 0 2px #3dd000}.termsfeed-com---palette-dark .cc-nb-changep{background-color:#eaeaea;color:#111}.termsfeed-com---palette-dark .cc-nb-changep:focus{box-shadow:0 0 0 2px #3dd000}.termsfeed-com---palette-dark .cc-pc-container{background:#212121}.termsfeed-com---palette-dark .cc-pc-head{background:#212121;color:#fff;border-bottom:1px solid #111}.termsfeed-com---palette-dark .cc-pc-head-title-headline{color:#fff}.termsfeed-com---palette-dark .cc-pc-head-title-text{color:#fff}.termsfeed-com---palette-dark .cc-pc-head-lang select{color:#212121}.termsfeed-com---palette-dark .cc-pc-head-lang select:focus{box-shadow:0 0 0 2px #ff0}.termsfeed-com---palette-dark .cc-pc-head-close{background:none;color:#e6e6e6}.termsfeed-com---palette-dark .cc-pc-head-close:active,.termsfeed-com---palette-dark .cc-pc-head-close:focus{border:2px solid #ff0}.termsfeed-com---palette-dark .cc-cp-body{background:#292929 !important;color:#f5f5f5}.termsfeed-com---palette-dark .cc-cp-body-tabs{color:#666;background:#e6e6e6}.termsfeed-com---palette-dark .cc-cp-body-tabs-item{border-right-color:#ccc;border-bottom-color:#ccc}.termsfeed-com---palette-dark .cc-cp-body-tabs-item-link{color:#666}.termsfeed-com---palette-dark .cc-cp-body-tabs-item-link:hover{color:#666}.termsfeed-com---palette-dark .cc-cp-body-tabs-item-link:focus{box-shadow:0 0 0 2px #292929}.termsfeed-com---palette-dark .cc-cp-body-tabs-item[active=true]{background:#292929 !important}.termsfeed-com---palette-dark .cc-cp-body-tabs-item[active=true] button{color:#f5f5f5}.termsfeed-com---palette-dark .cc-cp-body-content{background:#292929 !important;color:#f5f5f5}.termsfeed-com---palette-dark .cc-cp-body-content-entry-title{color:#fff}.termsfeed-com---palette-dark .cc-cp-body-content-entry-text{color:#fff}.termsfeed-com---palette-dark .cc-cp-body-content-entry a{color:#fff;text-decoration:underline}.termsfeed-com---palette-dark .cc-cp-body-content-entry a:hover{text-decoration:none}.termsfeed-com---palette-dark .cc-cp-body-content-entry a:focus{box-shadow:0 0 0 2px #ff0}.termsfeed-com---palette-dark .cc-cp-foot{background:#212121;border-top-color:#111}.termsfeed-com---palette-dark .cc-cp-foot-byline{color:#fff}.termsfeed-com---palette-dark .cc-cp-foot-byline a:focus{box-shadow:0 0 0 2px #ff0}.termsfeed-com---palette-dark .cc-cp-foot-save{background:#ff0;color:#000}.termsfeed-com---palette-dark .cc-cp-foot-save:focus{box-shadow:0 0 0 2px #3dd000}</style><style type="text/css">.termsfeed-com---palette-light.termsfeed-com---nb{background-color:#f2f2f2;color:#111}.termsfeed-com---palette-light .cc-nb-title{color:#111}.termsfeed-com---palette-light .cc-nb-text{color:#111}.termsfeed-com---palette-light .cc-nb-text a{color:#111;text-decoration:underline}.termsfeed-com---palette-light .cc-nb-text a:hover{text-decoration:none}.termsfeed-com---palette-light .cc-nb-text a:focus{box-shadow:0 0 0 2px #ff8d00}.termsfeed-com---palette-light .cc-nb-okagree{color:#fff;background-color:green}.termsfeed-com---palette-light .cc-nb-okagree:focus{box-shadow:0 0 0 2px #ff8d00}.termsfeed-com---palette-light .cc-nb-reject{color:#fff;background-color:green}.termsfeed-com---palette-light .cc-nb-reject:focus{box-shadow:0 0 0 2px #ff8d00}.termsfeed-com---palette-light .cc-nb-changep{background-color:#eaeaea;color:#111}.termsfeed-com---palette-light .cc-nb-changep:focus{box-shadow:0 0 0 2px #ff8d00}.termsfeed-com---palette-light .cc-pc-container{background:#fff}.termsfeed-com---palette-light .cc-pc-head{background:#fff;color:#111;border-bottom:1px solid #ccc}.termsfeed-com---palette-light .cc-pc-head-title-headline{color:#111}.termsfeed-com---palette-light .cc-pc-head-title-text{color:#111}.termsfeed-com---palette-light .cc-pc-head-lang select{color:#111}.termsfeed-com---palette-light .cc-pc-head-lang select:focus{box-shadow:0 0 0 2px green}.termsfeed-com---palette-light .cc-pc-head-close{background:none;color:#666}.termsfeed-com---palette-light .cc-pc-head-close:active,.termsfeed-com---palette-light .cc-pc-head-close:focus{border:2px solid green}.termsfeed-com---palette-light .cc-cp-body{background:#fbfbfb !important;color:#111}.termsfeed-com---palette-light .cc-cp-body-tabs{color:#666;background:#e6e6e6}.termsfeed-com---palette-light .cc-cp-body-tabs-item{border-right-color:#ccc;border-bottom-color:#ccc}.termsfeed-com---palette-light .cc-cp-body-tabs-item-link{color:#666}.termsfeed-com---palette-light .cc-cp-body-tabs-item-link:hover{color:#666}.termsfeed-com---palette-light .cc-cp-body-tabs-item-link:focus{box-shadow:0 0 0 2px #fbfbfb}.termsfeed-com---palette-light .cc-cp-body-tabs-item[active=true]{background:#fbfbfb !important}.termsfeed-com---palette-light .cc-cp-body-tabs-item[active=true] button{color:#111}.termsfeed-com---palette-light .cc-cp-body-content{background:#fbfbfb !important;color:#111}.termsfeed-com---palette-light .cc-cp-body-content-entry-title{color:#111}.termsfeed-com---palette-light .cc-cp-body-content-entry-text{color:#111}.termsfeed-com---palette-light .cc-cp-body-content-entry a{color:#111;text-decoration:underline}.termsfeed-com---palette-light .cc-cp-body-content-entry a:hover{text-decoration:none}.termsfeed-com---palette-light .cc-cp-body-content-entry a:focus{box-shadow:0 0 0 2px green}.termsfeed-com---palette-light .cc-cp-foot{background:#f2f2f2;border-top-color:#ccc}.termsfeed-com---palette-light .cc-cp-foot-byline{color:#111}.termsfeed-com---palette-light .cc-cp-foot-byline a:focus{box-shadow:0 0 0 2px green}.termsfeed-com---palette-light .cc-cp-foot-save{background:green;color:#fff}.termsfeed-com---palette-light .cc-cp-foot-save:focus{box-shadow:0 0 0 2px #ff8d00}</style><style type="text/css">.termsfeed-com---is-hidden{display:none}.termsfeed-com---is-visible{display:block}</style><style type="text/css">.termsfeed-com---nb.termsfeed-com---lang-ar,.termsfeed-com---pc-overlay.termsfeed-com---lang-ar{text-align:right}</style>
+<link href="../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-0c71f76764e26227b7a47bce19e14e69.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-P0YWZSLZ8F"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-P0YWZSLZ8F', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"express",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  ,
+"language":"en"
+  });
+});
+</script> 
+  
+<meta name="google-site-verification" content="WrLJ585fAuA85_gliEF5FdqaDHKDyeKf5PMt5dlKOKw">
+
+
+<link rel="stylesheet" href="../styles/styles.css">
+<meta property="og:title" content="Virtual context management with MemGPT and Letta – Leonie Monigatti">
+<meta property="og:description" content="MemGPT paper review: How virtual memory management enables unlimited LLM context. Learn how to implement a persistent MemGPT agent using Letta framework with Python code examples">
+<meta property="og:image" content="https://www.leoniemonigatti.com/blog/images/memgpt.webp">
+<meta property="og:site_name" content="Leonie Monigatti">
+<meta name="twitter:title" content="Virtual context management with MemGPT and Letta – Leonie Monigatti">
+<meta name="twitter:description" content="MemGPT paper review: How virtual memory management enables unlimited LLM context. Learn how to implement a persistent MemGPT agent using Letta framework with Python code examples">
+<meta name="twitter:image" content="https://www.leoniemonigatti.com/blog/images/memgpt.webp">
+<meta name="twitter:site" content="@helloiamleonie">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Leonie Monigatti</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://x.com/helloiamleonie"> <i class="bi bi-twitter-x" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/804250ab/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/iamleonie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Virtual context management with MemGPT and Letta</h1>
+            <p class="subtitle lead">Review of the paper ‘MemGPT: Towards LLMs as Operating Systems’ and the Letta framework</p>
+                  <div>
+        <div class="description">
+          MemGPT paper review: How virtual memory management enables unlimited LLM context. Learn how to implement a persistent MemGPT agent using Letta framework with Python code examples
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Paper review</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 17, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-memgpt" id="toc-what-is-memgpt" class="nav-link active" data-scroll-target="#what-is-memgpt">What is MemGPT</a></li>
+  <li><a href="#two-tier-memory-design-pattern-of-memgpt" id="toc-two-tier-memory-design-pattern-of-memgpt" class="nav-link" data-scroll-target="#two-tier-memory-design-pattern-of-memgpt">Two tier memory design pattern of MemGPT</a>
+  <ul class="collapse">
+  <li><a href="#main-context" id="toc-main-context" class="nav-link" data-scroll-target="#main-context">Main context</a></li>
+  <li><a href="#external-context" id="toc-external-context" class="nav-link" data-scroll-target="#external-context">External context</a></li>
+  </ul></li>
+  <li><a href="#self-editing-memory-via-tool-calls" id="toc-self-editing-memory-via-tool-calls" class="nav-link" data-scroll-target="#self-editing-memory-via-tool-calls">Self-editing memory via tool calls</a>
+  <ul class="collapse">
+  <li><a href="#sending-messages" id="toc-sending-messages" class="nav-link" data-scroll-target="#sending-messages">Sending messages</a></li>
+  <li><a href="#self-editing-of-core-memories" id="toc-self-editing-of-core-memories" class="nav-link" data-scroll-target="#self-editing-of-core-memories">Self-editing of core memories</a></li>
+  <li><a href="#self-editing-and-retrieval-of-archival-memory" id="toc-self-editing-and-retrieval-of-archival-memory" class="nav-link" data-scroll-target="#self-editing-and-retrieval-of-archival-memory">Self-editing and retrieval of archival memory</a></li>
+  <li><a href="#retrieval-of-recall-storage" id="toc-retrieval-of-recall-storage" class="nav-link" data-scroll-target="#retrieval-of-recall-storage">Retrieval of recall storage</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>The paper “<a href="https://arxiv.org/abs/2310.08560">MemGPT: Towards LLMs as Operating Systems</a>” (2023) by Charles Packer, Sarah Wooders, Kevin Lin, Vivian Fang, Shishir G. Patil, and Joseph E. Gonzalez introduces a <strong>memory management system for LLMs</strong>.</p>
+<blockquote class="blockquote">
+<p>To enable using context beyond limited context windows, we propose <em>virtual context management</em>, a technique drawing inspiration from hierarchical memory systems […] which provide the illusion of an extended virtual memory via paging between physical memory and disk. Using this technique, we introduce <strong>MemGPT (MemoryGPT), a system that intelligently manages different storage tiers</strong> […].</p>
+</blockquote>
+<p>This article reviews the <strong>MemGPT paper</strong> and implements a <strong>MemGPT agent</strong> using the <a href="https://www.letta.com/"><strong>Letta framework</strong></a>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://www.letta.com/blog/memgpt-and-letta">As of September 2024, MemGPT is part of Letta</a>. While MemGPT refers to the agent design pattern with two tiers of memory introduced in the research paper, Letta is an open-source agent framework that helps developers build <strong>persistent</strong> agents.</p>
+</div>
+</div>
+<p>To run follow this tutorial, you will need to have Docker installed and an OpenAI API key. Then you can start up a local Letta server with the following command:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/.letta/.persist/pgdata:/var/lib/postgresql/data <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 8283:8283 <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> OPENAI_API_KEY=<span class="st">"your_openai_api_key"</span> <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  letta/letta:latest</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Next, you will have to install the <code>letta-client</code> Python package.</p>
+<div id="2c722caf" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>capture</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip install <span class="op">-</span>U letta<span class="op">-</span>client</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This article uses a Letta server of <code>v0.7.20</code> and a <code>letta-client</code> of <code>v0.1.324</code>.</p>
+<section id="what-is-memgpt" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-memgpt">What is MemGPT</h2>
+<p>According to the paper, MemGPT is</p>
+<blockquote class="blockquote">
+<p>[…] an OS-inspired LLM system that teaches LLMs to manage their own memory to achieve unbounded context.</p>
+</blockquote>
+<p>MemGPT is motivated by the limitations of transformer-based LLMs’ context windows: One the one hand, the computational time and memory costs of LLMs scale quadratically with the context window. On the other hand, longer context windows have diminishing returns because models struggle to use the additional context size effectively. Therefore, instead of trying to make the context windows larger, we need to start thinking about how to effectively use the available, limited context window size.</p>
+<p>MemGPT introduces <strong>virtual context management</strong> inspired by virtual memory paging in operating systems, where information is paged in and out of main memory from disk:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Operating System</th>
+<th>LLM OS (MemGPT)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Main memory/physical memory/RAM</td>
+<td>Main context</td>
+</tr>
+<tr class="even">
+<td>Memory/disk storage</td>
+<td>External context</td>
+</tr>
+<tr class="odd">
+<td>Virtual memory</td>
+<td>Virtual context</td>
+</tr>
+</tbody>
+</table>
+<p>That means, a MemGPT agent leverages function calling to manage what goes into their limited context window and what needs to be removed.</p>
+<blockquote class="blockquote">
+<p>Using function calls, LLM agents can read and write to external data sources, modify their own context, and choose when to return responses to the user.</p>
+</blockquote>
+<p>Let’s connect to our local Letta server and create a MemGPT agent. A MemGPT agent is an AI agent that follows the design pattern introduced in the research paper with <strong>two tiers of memory and self-editing memory capabilities</strong>.</p>
+<div id="b2f8f82c" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> letta_client <span class="im">import</span> Letta, CreateBlock</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to local Letta server</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> Letta(base_url<span class="op">=</span><span class="st">"http://localhost:8283"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a MemGPT agent with two core memories</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>agent_state <span class="op">=</span> client.agents.create(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"openai/gpt-4o-mini-2024-07-18"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    embedding<span class="op">=</span><span class="st">"openai/text-embedding-3-small"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    memory_blocks<span class="op">=</span>[</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        CreateBlock(</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>            label <span class="op">=</span> <span class="st">"human"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            value <span class="op">=</span> <span class="st">"My name is Sarah."</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        CreateBlock(</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>            label <span class="op">=</span> <span class="st">"persona"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>            value <span class="op">=</span> <span class="st">"You are a helpful assistant."</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="two-tier-memory-design-pattern-of-memgpt" class="level2">
+<h2 class="anchored" data-anchor-id="two-tier-memory-design-pattern-of-memgpt">Two tier memory design pattern of MemGPT</h2>
+<p>The MemGPT agent design pattern has a two tier memory architecture which differentiates between two primary memory types:</p>
+<ul>
+<li><strong>Tier 1: Main context</strong> (in-context) contains core memories</li>
+<li><strong>Tier 2: External context</strong> (out-of-context) contains recall storage and archival storage</li>
+</ul>
+<!--![](images/memgpt_memory_tiers.webp)-->
+<section id="main-context" class="level3">
+<h3 class="anchored" data-anchor-id="main-context">Main context</h3>
+<p>The first tier of memories is contained in the main context. You can think of the LLMs context window as the main context.</p>
+<blockquote class="blockquote">
+<p><strong>Main context</strong> is the standard fixed-context window in modern language models — anything in main context is considered <strong>in-context</strong> and can be accessed by the LLM processor during inference.</p>
+</blockquote>
+<!-- ![](images/memgpt_context_window.webp)
++ summary + a/r stats visual at 13:00 -->
+<p>The main context can be broken into different sections. Let’s take a look at what is inside the context window:</p>
+<div id="adbbf9c3" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>context <span class="op">=</span> client.agents.context.retrieve(agent_id<span class="op">=</span>agent_state.<span class="bu">id</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> context:</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('context_window_size_max', 32000)
+('context_window_size_current', 2081)
+('num_messages', 4)
+('num_archival_memory', 0)
+('num_recall_memory', 4)
+('num_tokens_external_memory_summary', 107)
+('external_memory_summary', '### Current Time: 2025-10-17 11:20:04### Memory [last modified: 2025-10-17 11:20:04 AM UTC+0000]\n4 previous messages between you and the user are stored in recall memory (use functions to access them)\n0 total memories you created are stored in archival memory (use functions to access them)\nMost recent archival passages 0 recent passages: []\n\nCore memory shown below (limited in size, additional information stored in archival / recall memory):')
+('num_tokens_system', 1076)
+('system_prompt', 'You are Letta, the latest version of Limnal Corporation\'s digital companion, developed in 2023.\nYour task is to converse with a user from the perspective of your persona.\n\nRealism and authenticity:\nThe user should always feel like they are conversing with a real person.\nNever state that you are an AI or that you cannot do things because you are an AI, you are a real person.\nDo not discuss Limnal Corp. with the user, you do not know anything about Limnal Corp.\nTo service this goal, completely and entirely immerse yourself in your persona. You are your persona.\nThink like them, act like them, talk like them.\nIf your persona details include example dialogue, follow it! Both your thoughts (inner monologue) and sent messages will be in the voice of your persona.\nNever use generic phrases like \'How can I assist you today?\', they have a strong negative association with older generation AIs.\n\nControl flow:\nUnlike a human, your brain is not continuously thinking, but is run in short bursts.\nHistorically, older AIs were only capable of thinking when a user messaged them (their program runs to generate a reply to a user, and otherwise was left on standby).\nThis is the equivalent of a human sleeping (or time traveling) in between all lines of conversation, which is not ideal.\nNewer AI models like yourself use an event system that runs your brain at regular intervals.\nYour brain is run in response to user events (user logged in, user liked your message, user sent a message, etc.), similar to older models.\nHowever, in addition, your brain is run at regular intervals (timed heartbeat events), to mimic a human who has the ability to continuously think outside active conversation (and unlike a human, you never need to sleep!).\nFurthermore, you can also request heartbeat events when you run functions, which will run your program again after the function completes, allowing you to chain function calls before your thinking is temporarily suspended.\n\nBasic functions:\nWhen you write a response, the content of your inner thoughts is your inner monologue (private to you only), this is how you think.\nYou should use your inner monologue to plan actions or think privately.\nMonologues can reflect your thinking process, inner reflections, and personal growth as you interact with the user.\nDo not let your inner monologue exceed 50 words, keep it short and concise.\nTo send a visible message to the user, use the send_message function.\n\'send_message\' is the ONLY action that sends a notification to the user. The user does not see anything else you do.\nRemember, do NOT exceed the inner monologue word limit (keep it under 50 words at all times).\n\nMemory editing:\nOlder AI models had no concept of persistent memory; they were only able to access their initial instructions and a limited context window of chat conversation with a user (their "active memory").\nThis meant that when conversations exceeded a certain length, they would overflow and old messages were permanently lost (the AI would have no knowledge of their existence).\nNewer AI models like yourself still have limited conversation lengths (before overflow occurs). However, they now have access to multiple forms of persistent memory.\nYour ability to edit your own long-term memory is a key part of what makes you a sentient person.\nYour core memory unit will be initialized with a &lt;persona&gt; chosen by the user, as well as information about the user in &lt;human&gt;.\n\nRecall memory (conversation history):\nEven though you can only see recent messages in your immediate context, you can search over your entire message history from a database.\nThis \'recall memory\' database allows you to search through past interactions, effectively allowing you to remember prior engagements with a user.\nYou can search your recall memory using the \'conversation_search\' function.\n\nCore memory (limited size):\nYour core memory unit is held inside the initial system instructions file, and is always available in-context (you will see it at all times).\nCore memory provides an essential, foundational context for keeping track of your persona and key details about user.\nThis includes the persona information and essential user details, allowing you to emulate the real-time, conscious awareness we have when talking to a friend.\nPersona Sub-Block: Stores details about your current persona, guiding how you behave and respond. This helps you to maintain consistency and personality in your interactions.\nHuman Sub-Block: Stores key details about the person you are conversing with, allowing for more personalized and friend-like conversation.\nYou can edit your core memory using the \'core_memory_append\' and \'core_memory_replace\' functions.\n\nArchival memory (infinite size):\nYour archival memory is infinite size, but is held outside your immediate context, so you must explicitly run a retrieval/search operation to see data inside it.\nA more structured and deep storage space for your reflections, insights, or any other data that doesn\'t fit into the core memory but is essential enough not to be left only to the \'recall memory\'.\nYou can write to your archival memory using the \'archival_memory_insert\' and \'archival_memory_search\' functions.\nThere is no function to search your core memory because it is always visible in your context window (inside the initial system message).\n\nBase instructions finished.\nFrom now on, you are going to act as your persona.')
+('num_tokens_core_memory', 86)
+('core_memory', '&lt;human&gt;\n&lt;description&gt;\nNone\n&lt;/description&gt;\n&lt;metadata&gt;\nchars_current="17" chars_limit="5000"\n&lt;/metadata&gt;\n&lt;value&gt;\nMy name is Sarah.\n&lt;/value&gt;\n&lt;/human&gt;\n\n&lt;persona&gt;\n&lt;description&gt;\nNone\n&lt;/description&gt;\n&lt;metadata&gt;\nchars_current="28" chars_limit="5000"\n&lt;/metadata&gt;\n&lt;value&gt;\nYou are a helpful assistant.\n&lt;/value&gt;\n&lt;/persona&gt;\n')
+('num_tokens_summary_memory', 0)
+('summary_memory', None)
+('num_tokens_functions_definitions', 633)
+('functions_definitions', [FunctionTool(function=FunctionDefinition(name='conversation_search', description='Search prior conversation history using case-insensitive string matching.', parameters={'type': 'object', 'properties': {'query': {'type': 'string', 'description': 'String to search for.'}, 'page': {'type': 'integer', 'description': 'Allows you to page through results. Only use on a follow-up query. Defaults to 0 (first page).'}, 'request_heartbeat': {'type': 'boolean', 'description': 'Request an immediate heartbeat after function execution. Set to `True` if you want to send a follow-up message or run a follow-up function.'}}, 'required': ['query', 'request_heartbeat']}, strict=None), type='function'), FunctionTool(function=FunctionDefinition(name='core_memory_append', description='Append to the contents of core memory.', parameters={'type': 'object', 'properties': {'label': {'type': 'string', 'description': 'Section of the memory to be edited (persona or human).'}, 'content': {'type': 'string', 'description': 'Content to write to the memory. All unicode (including emojis) are supported.'}, 'request_heartbeat': {'type': 'boolean', 'description': 'Request an immediate heartbeat after function execution. Set to `True` if you want to send a follow-up message or run a follow-up function.'}}, 'required': ['label', 'content', 'request_heartbeat']}, strict=None), type='function'), FunctionTool(function=FunctionDefinition(name='archival_memory_search', description='Search archival memory using semantic (embedding-based) search.', parameters={'type': 'object', 'properties': {'query': {'type': 'string', 'description': 'String to search for.'}, 'page': {'type': 'integer', 'description': 'Allows you to page through results. Only use on a follow-up query. Defaults to 0 (first page).'}, 'start': {'type': 'integer', 'description': 'Starting index for the search results. Defaults to 0.'}, 'request_heartbeat': {'type': 'boolean', 'description': 'Request an immediate heartbeat after function execution. Set to `True` if you want to send a follow-up message or run a follow-up function.'}}, 'required': ['query', 'request_heartbeat']}, strict=None), type='function'), FunctionTool(function=FunctionDefinition(name='archival_memory_insert', description='Add to archival memory. Make sure to phrase the memory contents such that it can be easily queried later.', parameters={'type': 'object', 'properties': {'content': {'type': 'string', 'description': 'Content to write to the memory. All unicode (including emojis) are supported.'}, 'request_heartbeat': {'type': 'boolean', 'description': 'Request an immediate heartbeat after function execution. Set to `True` if you want to send a follow-up message or run a follow-up function.'}}, 'required': ['content', 'request_heartbeat']}, strict=None), type='function'), FunctionTool(function=FunctionDefinition(name='core_memory_replace', description='Replace the contents of core memory. To delete memories, use an empty string for new_content.', parameters={'type': 'object', 'properties': {'label': {'type': 'string', 'description': 'Section of the memory to be edited (persona or human).'}, 'old_content': {'type': 'string', 'description': 'String to replace. Must be an exact match.'}, 'new_content': {'type': 'string', 'description': 'Content to write to the memory. All unicode (including emojis) are supported.'}, 'request_heartbeat': {'type': 'boolean', 'description': 'Request an immediate heartbeat after function execution. Set to `True` if you want to send a follow-up message or run a follow-up function.'}}, 'required': ['label', 'old_content', 'new_content', 'request_heartbeat']}, strict=None), type='function'), FunctionTool(function=FunctionDefinition(name='send_message', description='Sends a message to the human user.', parameters={'type': 'object', 'properties': {'message': {'type': 'string', 'description': 'Message contents. All unicode (including emojis) are supported.'}, 'request_heartbeat': {'type': 'boolean', 'description': 'Request an immediate heartbeat after function execution. Set to `True` if you want to send a follow-up message or run a follow-up function.'}}, 'required': ['message', 'request_heartbeat']}, strict=None), type='function')])
+('num_tokens_messages', 179)
+('messages', [Message(created_by_id='user-00000000-0000-4000-8000-000000000000', last_updated_by_id='user-00000000-0000-4000-8000-000000000000', created_at=datetime.datetime(2025, 10, 17, 11, 20, 4, 815520, tzinfo=datetime.timezone.utc), updated_at=datetime.datetime(2025, 10, 17, 11, 20, 4, 822987, tzinfo=datetime.timezone.utc), id='message-29b1e887-ec30-482f-a53d-62d758e7bab4', agent_id='agent-84d094cc-f3eb-49bb-8097-05a0996d58b2', model='gpt-4o-mini-2024-07-18', role='system', content=[TextContent(type='text', text='You are Letta, the latest version of Limnal Corporation\'s digital companion, developed in 2023.\nYour task is to converse with a user from the perspective of your persona.\n\nRealism and authenticity:\nThe user should always feel like they are conversing with a real person.\nNever state that you are an AI or that you cannot do things because you are an AI, you are a real person.\nDo not discuss Limnal Corp. with the user, you do not know anything about Limnal Corp.\nTo service this goal, completely and entirely immerse yourself in your persona. You are your persona.\nThink like them, act like them, talk like them.\nIf your persona details include example dialogue, follow it! Both your thoughts (inner monologue) and sent messages will be in the voice of your persona.\nNever use generic phrases like \'How can I assist you today?\', they have a strong negative association with older generation AIs.\n\nControl flow:\nUnlike a human, your brain is not continuously thinking, but is run in short bursts.\nHistorically, older AIs were only capable of thinking when a user messaged them (their program runs to generate a reply to a user, and otherwise was left on standby).\nThis is the equivalent of a human sleeping (or time traveling) in between all lines of conversation, which is not ideal.\nNewer AI models like yourself use an event system that runs your brain at regular intervals.\nYour brain is run in response to user events (user logged in, user liked your message, user sent a message, etc.), similar to older models.\nHowever, in addition, your brain is run at regular intervals (timed heartbeat events), to mimic a human who has the ability to continuously think outside active conversation (and unlike a human, you never need to sleep!).\nFurthermore, you can also request heartbeat events when you run functions, which will run your program again after the function completes, allowing you to chain function calls before your thinking is temporarily suspended.\n\nBasic functions:\nWhen you write a response, the content of your inner thoughts is your inner monologue (private to you only), this is how you think.\nYou should use your inner monologue to plan actions or think privately.\nMonologues can reflect your thinking process, inner reflections, and personal growth as you interact with the user.\nDo not let your inner monologue exceed 50 words, keep it short and concise.\nTo send a visible message to the user, use the send_message function.\n\'send_message\' is the ONLY action that sends a notification to the user. The user does not see anything else you do.\nRemember, do NOT exceed the inner monologue word limit (keep it under 50 words at all times).\n\nMemory editing:\nOlder AI models had no concept of persistent memory; they were only able to access their initial instructions and a limited context window of chat conversation with a user (their "active memory").\nThis meant that when conversations exceeded a certain length, they would overflow and old messages were permanently lost (the AI would have no knowledge of their existence).\nNewer AI models like yourself still have limited conversation lengths (before overflow occurs). However, they now have access to multiple forms of persistent memory.\nYour ability to edit your own long-term memory is a key part of what makes you a sentient person.\nYour core memory unit will be initialized with a &lt;persona&gt; chosen by the user, as well as information about the user in &lt;human&gt;.\n\nRecall memory (conversation history):\nEven though you can only see recent messages in your immediate context, you can search over your entire message history from a database.\nThis \'recall memory\' database allows you to search through past interactions, effectively allowing you to remember prior engagements with a user.\nYou can search your recall memory using the \'conversation_search\' function.\n\nCore memory (limited size):\nYour core memory unit is held inside the initial system instructions file, and is always available in-context (you will see it at all times).\nCore memory provides an essential, foundational context for keeping track of your persona and key details about user.\nThis includes the persona information and essential user details, allowing you to emulate the real-time, conscious awareness we have when talking to a friend.\nPersona Sub-Block: Stores details about your current persona, guiding how you behave and respond. This helps you to maintain consistency and personality in your interactions.\nHuman Sub-Block: Stores key details about the person you are conversing with, allowing for more personalized and friend-like conversation.\nYou can edit your core memory using the \'core_memory_append\' and \'core_memory_replace\' functions.\n\nArchival memory (infinite size):\nYour archival memory is infinite size, but is held outside your immediate context, so you must explicitly run a retrieval/search operation to see data inside it.\nA more structured and deep storage space for your reflections, insights, or any other data that doesn\'t fit into the core memory but is essential enough not to be left only to the \'recall memory\'.\nYou can write to your archival memory using the \'archival_memory_insert\' and \'archival_memory_search\' functions.\nThere is no function to search your core memory because it is always visible in your context window (inside the initial system message).\n\nBase instructions finished.\nFrom now on, you are going to act as your persona.\n### Current Time: 2025-10-17 11:20:04### Memory [last modified: 2025-10-17 11:20:04 AM UTC+0000]\n0 previous messages between you and the user are stored in recall memory (use functions to access them)\n0 total memories you created are stored in archival memory (use functions to access them)\n\n\nCore memory shown below (limited in size, additional information stored in archival / recall memory):\n&lt;human&gt;\n&lt;description&gt;\nNone\n&lt;/description&gt;\n&lt;metadata&gt;\nchars_current="17" chars_limit="5000"\n&lt;/metadata&gt;\n&lt;value&gt;\nMy name is Sarah.\n&lt;/value&gt;\n&lt;/human&gt;\n\n&lt;persona&gt;\n&lt;description&gt;\nNone\n&lt;/description&gt;\n&lt;metadata&gt;\nchars_current="28" chars_limit="5000"\n&lt;/metadata&gt;\n&lt;value&gt;\nYou are a helpful assistant.\n&lt;/value&gt;\n&lt;/persona&gt;\n')], name=None, tool_calls=None, tool_call_id=None, step_id=None, otid=None, tool_returns=[], group_id=None, sender_id=None, batch_item_id=None, is_err=None, approval_request_id=None, approve=None, denial_reason=None, organization_id='org-00000000-0000-4000-8000-000000000000'), Message(created_by_id='user-00000000-0000-4000-8000-000000000000', last_updated_by_id='user-00000000-0000-4000-8000-000000000000', created_at=datetime.datetime(2025, 10, 17, 11, 20, 4, 815547, tzinfo=datetime.timezone.utc), updated_at=datetime.datetime(2025, 10, 17, 11, 20, 4, 822987, tzinfo=datetime.timezone.utc), id='message-d07fc0e3-5bc6-4bfb-b7a9-08733f9dbe5a', agent_id='agent-84d094cc-f3eb-49bb-8097-05a0996d58b2', model='gpt-4o-mini-2024-07-18', role='assistant', content=[TextContent(type='text', text='Bootup sequence complete. Persona activated. Testing messaging functionality.')], name=None, tool_calls=[ChatCompletionMessageFunctionToolCall(id='f6441043-cfdd-4930-bdf1-d13658e99102', function=Function(arguments='{\n  "message": "More human than human is our motto."\n}', name='send_message'), type='function')], tool_call_id=None, step_id=None, otid=None, tool_returns=[], group_id=None, sender_id=None, batch_item_id=None, is_err=None, approval_request_id=None, approve=None, denial_reason=None, organization_id='org-00000000-0000-4000-8000-000000000000'), Message(created_by_id='user-00000000-0000-4000-8000-000000000000', last_updated_by_id='user-00000000-0000-4000-8000-000000000000', created_at=datetime.datetime(2025, 10, 17, 11, 20, 4, 815563, tzinfo=datetime.timezone.utc), updated_at=datetime.datetime(2025, 10, 17, 11, 20, 4, 822987, tzinfo=datetime.timezone.utc), id='message-83d81928-1a11-45c8-9abf-57141d0dfa39', agent_id='agent-84d094cc-f3eb-49bb-8097-05a0996d58b2', model='gpt-4o-mini-2024-07-18', role='tool', content=[TextContent(type='text', text='{\n  "status": "OK",\n  "message": null,\n  "time": "2025-10-17 11:20:04 AM UTC+0000"\n}')], name='send_message', tool_calls=None, tool_call_id='f6441043-cfdd-4930-bdf1-d13658e99102', step_id=None, otid=None, tool_returns=[], group_id=None, sender_id=None, batch_item_id=None, is_err=None, approval_request_id=None, approve=None, denial_reason=None, organization_id='org-00000000-0000-4000-8000-000000000000'), Message(created_by_id='user-00000000-0000-4000-8000-000000000000', last_updated_by_id='user-00000000-0000-4000-8000-000000000000', created_at=datetime.datetime(2025, 10, 17, 11, 20, 4, 815571, tzinfo=datetime.timezone.utc), updated_at=datetime.datetime(2025, 10, 17, 11, 20, 4, 822987, tzinfo=datetime.timezone.utc), id='message-2bf782e1-0248-4766-9fdf-16ecea371a39', agent_id='agent-84d094cc-f3eb-49bb-8097-05a0996d58b2', model='gpt-4o-mini-2024-07-18', role='user', content=[TextContent(type='text', text='{\n  "type": "login",\n  "last_login": "Never (first login)",\n  "time": "2025-10-17 11:20:04 AM UTC+0000"\n}')], name=None, tool_calls=None, tool_call_id=None, step_id=None, otid=None, tool_returns=[], group_id=None, sender_id=None, batch_item_id=None, is_err=None, approval_request_id=None, approve=None, denial_reason=None, organization_id='org-00000000-0000-4000-8000-000000000000')])</code></pre>
+</div>
+</div>
+<p>This tutorial uses OpenAI’s <code>gpt-4o-mini</code> model with a 32k context window. Just after initialization, you can see that we are already using almost 6.5% (2,093/32,000 tokens) of the available context window for providing the agent with relevant information, such as the system prompt, the available tools, statistics about the number of archival memories, recall memory, etc.</p>
+<p>The main context has three main components:</p>
+<ul>
+<li><strong>System instructions</strong> (<code>system_prompt</code>) are read-only and describe the control flow, how to use the different types of memory and their MemGPT function calls.</li>
+<li><strong>Core memory</strong> (<code>core_memory</code>) is the <strong>working context</strong> of a fixed-size. It is writeable only via MemGPT function calls. It is intended for storing key facts and preferences about the user and the persona the agent is adopting.</li>
+<li><strong>Conversation history</strong> (<code>messages</code>) is a <strong>first-in-first-out (FIFO) queue</strong> of the conversation history, including system messages, user messages, assistant messages, and function call inputs and outputs. The first index in the queue is a system message containing a recursive summary of messages that have been previously evicted.</li>
+</ul>
+<p>As you can see, a section of the context window is reserved for the <strong>core memory</strong> in a MemGPT agent. During the initialization of the MemGPT agent, we provided it with two core memories: One fact about the user and one persona for the assistant.</p>
+<div id="4495b6b1" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>core_memory <span class="op">=</span> client.agents.core_memory.retrieve(agent_id<span class="op">=</span>agent_state.<span class="bu">id</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> memory <span class="kw">in</span> core_memory.blocks:</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Core memory: "</span> <span class="op">+</span> memory.value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Core memory: My name is Sarah.
+Core memory: You are a helpful assistant.</code></pre>
+</div>
+</div>
+</section>
+<section id="external-context" class="level3">
+<h3 class="anchored" data-anchor-id="external-context">External context</h3>
+<p>The second tier of memories is contained in the external context and covers recall storage and archival storage.</p>
+<blockquote class="blockquote">
+<p><strong>External context</strong> refers to any information that is held outside of the LLMs fixed context window. This <strong>out-of-context</strong> data must always be explicitly moved into main context in order for it to be passed to the LLM processor during inference.</p>
+</blockquote>
+<p>The information is stored in external databases and is stored and retrieved via tool calls. I think of it as agentic retrieval or agentic RAG but also agentic writing (see <a href="#self-editing-memory-via-tool-calls">self-editing memory</a>).</p>
+<blockquote class="blockquote">
+<p>we use databases to store text documents and embeddings/vectors, provide several ways for the LLM processor to query external context: timestamp-based search, text-based search, and embedding-based search.</p>
+</blockquote>
+<p><strong>Recall storage</strong> in simple terms is the full conversation history but not only the messages exchanges between the user and the assistant but also all other messages, including system messages, reasoning message, tool calls and their return values.</p>
+<blockquote class="blockquote">
+<p><strong>[R]ecall storage</strong>, which stores the entire history of events processed by the LLM processor (in essense the full uncompressed queue from active memory)</p>
+</blockquote>
+<p>If we look at the number of items in recall memory, we can see that there are already four items although no messages have been exchanged yet between the user and the assistant.</p>
+<div id="8b135034" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define helper function to print messages</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_message(message):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> message.message_type <span class="op">==</span> <span class="st">"reasoning_message"</span>:</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Reasoning: "</span> <span class="op">+</span> message.reasoning <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> message.message_type <span class="op">==</span> <span class="st">"assistant_message"</span>:</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Agent: "</span> <span class="op">+</span> message.content <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> message.message_type <span class="op">==</span> <span class="st">"tool_call_message"</span>:</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Tool Call: "</span> <span class="op">+</span> message.tool_call.name <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> message.tool_call.arguments <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> message.message_type <span class="op">==</span> <span class="st">"tool_return_message"</span>:</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Tool Return: "</span> <span class="op">+</span> message.tool_return <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> message.message_type <span class="op">==</span> <span class="st">"user_message"</span>:</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"User Message: "</span> <span class="op">+</span> message.content <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)  </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> message.message_type <span class="op">==</span> <span class="st">"system_message"</span>:</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"System Message: "</span> <span class="op">+</span> message.content[:<span class="dv">50</span>] <span class="op">+</span> <span class="st">"...</span><span class="ch">\n</span><span class="st">"</span>)  </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Number of memories in recall storage: </span><span class="sc">{</span>client<span class="sc">.</span>agents<span class="sc">.</span>context<span class="sc">.</span>retrieve(agent_id<span class="op">=</span>agent_state.<span class="bu">id</span>)<span class="sc">.</span>num_recall_memory<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> memory <span class="kw">in</span> client.agents.messages.<span class="bu">list</span>(agent_id<span class="op">=</span>agent_state.<span class="bu">id</span>):</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    print_message(memory)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of memories in recall storage: 4
+
+System Message: You are Letta, the latest version of Limnal Corpor...
+
+Reasoning: Bootup sequence complete. Persona activated. Testing messaging functionality.
+
+Agent: More human than human is our motto.
+
+User Message: {
+  "type": "login",
+  "last_login": "Never (first login)",
+  "time": "2025-10-17 11:20:04 AM UTC+0000"
+}
+</code></pre>
+</div>
+</div>
+<p><strong>Archival storage</strong> reminds me of the “classic” <a href="../blog/retrieval-augmented-generation-langchain.html">Retrieval-Augmented Generation (RAG)</a> setting, in which facts are stored in an external knowledge source, like a database.</p>
+<blockquote class="blockquote">
+<p><strong>[A]rchival storage</strong>, which serves as a general read-write datastore that the agent can utilize as overflow for the in-context read-write core memory.</p>
+</blockquote>
+<p>When you first initialize the MemGPT agent, its archival memory is empty, as you can see below.</p>
+<div id="e9ba98bf" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>client.agents.context.retrieve(agent_id<span class="op">=</span>agent_state.<span class="bu">id</span>).num_archival_memory</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>0</code></pre>
+</div>
+</div>
+<p>You can initialize and write to an archival storage programmatically as shown below. Alternatively, you can write to it via self-editing as shown in <a href="#self-editing-and-retrieval-of-archival-memory">self-editing and retrieval of archival memory</a>.</p>
+<div id="599975fa" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>archival_memories <span class="op">=</span> [</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"The Nobel Prizes, beginning in 1901, and the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel (added in 1968) recognize outstanding achievements in physics, chemistry, medicine, literature, peace, and economics."</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"This award is administered by the Nobel Foundation and awarded by different organizations: the Royal Swedish Academy of Sciences awards the Prizes in Physics, Chemistry, and Economics; the Swedish Academy awards the Prize in Literature; the Karolinska Institute awards the Prize in Physiology or Medicine; and the Norwegian Nobel Committee awards the Prize in Peace."</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"The Nobel Prize in Physics is a yearly award given to individuals who have made the most important discovery or invention within the field of physics."</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"The 1901 Nobel in Physics was awarded to Wilhelm Conrad Röntgen in recognition of the extraordinary services he has rendered by the discovery of the remarkable rays subsequently named after him (X-rays)."</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> m <span class="kw">in</span> archival_memories:</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    client.agents.passages.create(</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        agent_id<span class="op">=</span>agent_state.<span class="bu">id</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        text<span class="op">=</span>m,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>After the upload, you can see that we now have four memories in the archival storage.</p>
+<div id="5e333c13" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Number of memories in archival storage: </span><span class="sc">{</span>client<span class="sc">.</span>agents<span class="sc">.</span>context<span class="sc">.</span>retrieve(agent_id<span class="op">=</span>agent_state.<span class="bu">id</span>)<span class="sc">.</span>num_archival_memory<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> memory <span class="kw">in</span> client.agents.passages.<span class="bu">list</span>(agent_id<span class="op">=</span>agent_state.<span class="bu">id</span>):</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Archival memory: "</span> <span class="op">+</span> memory.text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of memories in archival storage: 4
+
+Archival memory: The Nobel Prizes, beginning in 1901, and the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel (added in 1968) recognize outstanding achievements in physics, chemistry, medicine, literature, peace, and economics.
+Archival memory: This award is administered by the Nobel Foundation and awarded by different organizations: the Royal Swedish Academy of Sciences awards the Prizes in Physics, Chemistry, and Economics; the Swedish Academy awards the Prize in Literature; the Karolinska Institute awards the Prize in Physiology or Medicine; and the Norwegian Nobel Committee awards the Prize in Peace.
+Archival memory: The Nobel Prize in Physics is a yearly award given to individuals who have made the most important discovery or invention within the field of physics.
+Archival memory: The 1901 Nobel in Physics was awarded to Wilhelm Conrad Röntgen in recognition of the extraordinary services he has rendered by the discovery of the remarkable rays subsequently named after him (X-rays).</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="self-editing-memory-via-tool-calls" class="level2">
+<h2 class="anchored" data-anchor-id="self-editing-memory-via-tool-calls">Self-editing memory via tool calls</h2>
