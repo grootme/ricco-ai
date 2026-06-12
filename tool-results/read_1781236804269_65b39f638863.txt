@@ -1,0 +1,791 @@
+     1→"""
+     2→Super Asistente Cognitivo - Sistema de Memoria
+     3→==============================================
+     4→
+     5→Sistema de memoria persistente multi-capa:
+     6→- Memoria de Sesión (corto plazo): SQLite
+     7→- Memoria Episódica (mediano plazo): Cache/Redis
+     8→- Memoria Semántica (largo plazo): Milvus (vectores)
+     9→- Memoria Procedural/Declarativa: Neo4j (grafos)
+    10→"""
+    11→
+    12→import asyncio
+    13→import json
+    14→import sqlite3
+    15→from abc import ABC, abstractmethod
+    16→from datetime import datetime, timedelta
+    17→from typing import Any, Dict, List, Optional, Tuple
+    18→from uuid import UUID, uuid4
+    19→
+    20→import numpy as np
+    21→from pydantic import BaseModel
+    22→
+    23→from ..core.models import Memory, MemoryType
+    24→from ..core.config import settings
+    25→
+    26→
+    27→# ============================================
+    28→# EMBEDDING PROVIDER
+    29→# ============================================
+    30→
+    31→class EmbeddingProvider(ABC):
+    32→    """Proveedor de embeddings abstracto"""
+    33→    
+    34→    @abstractmethod
+    35→    async def embed(self, text: str) -> List[float]:
+    36→        """Generar embedding para un texto"""
+    37→        pass
+    38→    
+    39→    @abstractmethod
+    40→    async def embed_batch(self, texts: List[str]) -> List[List[float]]:
+    41→        """Generar embeddings para múltiples textos"""
+    42→        pass
+    43→
+    44→
+    45→class OpenAIEmbeddingProvider(EmbeddingProvider):
+    46→    """Proveedor de embeddings usando OpenAI"""
+    47→    
+    48→    def __init__(self, api_key: str, model: str = "text-embedding-3-small"):
+    49→        self.api_key = api_key
+    50→        self.model = model
+    51→        self._client = None
+    52→    
+    53→    async def _get_client(self):
+    54→        if self._client is None:
+    55→            import openai
+    56→            self._client = openai.AsyncOpenAI(api_key=self.api_key)
+    57→        return self._client
+    58→    
+    59→    async def embed(self, text: str) -> List[float]:
+    60→        client = await self._get_client()
+    61→        response = await client.embeddings.create(
+    62→            input=text,
+    63→            model=self.model
+    64→        )
+    65→        return response.data[0].embedding
+    66→    
+    67→    async def embed_batch(self, texts: List[str]) -> List[List[float]]:
+    68→        client = await self._get_client()
+    69→        response = await client.embeddings.create(
+    70→            input=texts,
+    71→            model=self.model
+    72→        )
+    73→        return [d.embedding for d in response.data]
+    74→
+    75→
+    76→class LocalEmbeddingProvider(EmbeddingProvider):
+    77→    """Proveedor de embeddings local usando sentence-transformers"""
+    78→    
+    79→    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
+    80→        self.model_name = model_name
+    81→        self._model = None
+    82→    
+    83→    def _get_model(self):
+    84→        if self._model is None:
+    85→            from sentence_transformers import SentenceTransformer
+    86→            self._model = SentenceTransformer(self.model_name)
+    87→        return self._model
+    88→    
+    89→    async def embed(self, text: str) -> List[float]:
+    90→        model = self._get_model()
+    91→        embedding = model.encode(text)
+    92→        return embedding.tolist()
+    93→    
+    94→    async def embed_batch(self, texts: List[str]) -> List[List[float]]:
+    95→        model = self._get_model()
+    96→        embeddings = model.encode(texts)
+    97→        return embeddings.tolist()
+    98→
+    99→
+   100→# ============================================
+   101→# MEMORY STORE BASE
+   102→# ============================================
+   103→
+   104→class MemoryStore(ABC):
+   105→    """Almacén de memoria abstracto"""
+   106→    
+   107→    @abstractmethod
+   108→    async def store(self, memory: Memory) -> UUID:
+   109→        """Almacenar una memoria"""
+   110→        pass
+   111→    
+   112→    @abstractmethod
+   113→    async def retrieve(self, memory_id: UUID) -> Optional[Memory]:
+   114→        """Recuperar una memoria por ID"""
+   115→        pass
+   116→    
+   117→    @abstractmethod
+   118→    async def search(
+   119→        self, 
+   120→        query: str, 
+   121→        limit: int = 10,
+   122→        filters: Optional[Dict[str, Any]] = None
+   123→    ) -> List[Memory]:
+   124→        """Buscar memorias"""
+   125→        pass
+   126→    
+   127→    @abstractmethod
+   128→    async def delete(self, memory_id: UUID) -> bool:
+   129→        """Eliminar una memoria"""
+   130→        pass
+   131→    
+   132→    @abstractmethod
+   133→    async def update(self, memory_id: UUID, data: Dict[str, Any]) -> bool:
+   134→        """Actualizar una memoria"""
+   135→        pass
+   136→
+   137→
+   138→# ============================================
+   139→# SQLITE MEMORY STORE (Session/Short-term)
+   140→# ============================================
+   141→
+   142→class SQLiteMemoryStore(MemoryStore):
+   143→    """
+   144→    Almacén de memoria en SQLite para memorias de sesión y episódicas.
+   145→    
+   146→    Rápido acceso local, ideal para contexto activo.
+   147→    """
+   148→    
+   149→    def __init__(self, db_path: str = "data/memory.db"):
+   150→        self.db_path = db_path
+   151→        self._initialized = False
+   152→    
+   153→    async def _init_db(self):
+   154→        """Inicializar la base de datos"""
+   155→        if self._initialized:
+   156→            return
+   157→            
+   158→        conn = sqlite3.connect(self.db_path)
+   159→        cursor = conn.cursor()
+   160→        
+   161→        cursor.execute("""
+   162→            CREATE TABLE IF NOT EXISTS memories (
+   163→                id TEXT PRIMARY KEY,
+   164→                agent_id TEXT NOT NULL,
+   165→                type TEXT NOT NULL,
+   166→                category TEXT,
+   167→                key TEXT,
+   168→                content TEXT NOT NULL,
+   169→                embedding BLOB,
+   170→                importance REAL DEFAULT 0.5,
+   171→                access_count INTEGER DEFAULT 0,
+   172→                last_accessed_at TEXT,
+   173→                expires_at TEXT,
+   174→                session_id TEXT,
+   175→                source_type TEXT,
+   176→                source_id TEXT,
+   177→                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+   178→                updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+   179→            )
+   180→        """)
+   181→        
+   182→        cursor.execute("""
+   183→            CREATE INDEX IF NOT EXISTS idx_agent_id ON memories(agent_id)
+   184→        """)
+   185→        cursor.execute("""
+   186→            CREATE INDEX IF NOT EXISTS idx_type ON memories(type)
+   187→        """)
+   188→        cursor.execute("""
+   189→            CREATE INDEX IF NOT EXISTS idx_session_id ON memories(session_id)
+   190→        """)
+   191→        cursor.execute("""
+   192→            CREATE INDEX IF NOT EXISTS idx_key ON memories(key)
+   193→        """)
+   194→        
+   195→        conn.commit()
+   196→        conn.close()
+   197→        
+   198→        self._initialized = True
+   199→    
+   200→    async def store(self, memory: Memory) -> UUID:
+   201→        """Almacenar una memoria"""
+   202→        await self._init_db()
+   203→        
+   204→        conn = sqlite3.connect(self.db_path)
+   205→        cursor = conn.cursor()
+   206→        
+   207→        embedding_blob = None
+   208→        if memory.embedding:
+   209→            embedding_blob = np.array(memory.embedding, dtype=np.float32).tobytes()
+   210→        
+   211→        cursor.execute("""
+   212→            INSERT OR REPLACE INTO memories 
+   213→            (id, agent_id, type, category, key, content, embedding, 
+   214→             importance, access_count, last_accessed_at, expires_at,
+   215→             session_id, source_type, source_id, created_at, updated_at)
+   216→            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+   217→        """, (
+   218→            str(memory.id),
+   219→            str(memory.agent_id),
+   220→            memory.type.value,
+   221→            memory.category,
+   222→            memory.key,
+   223→            memory.content,
+   224→            embedding_blob,
+   225→            memory.importance,
+   226→            memory.access_count,
+   227→            memory.last_accessed_at.isoformat() if memory.last_accessed_at else None,
+   228→            memory.expires_at.isoformat() if memory.expires_at else None,
+   229→            str(memory.session_id) if memory.session_id else None,
+   230→            memory.source_type,
+   231→            memory.source_id,
+   232→            memory.created_at.isoformat(),
+   233→            memory.updated_at.isoformat()
+   234→        ))
+   235→        
+   236→        conn.commit()
+   237→        conn.close()
+   238→        
+   239→        return memory.id
+   240→    
+   241→    async def retrieve(self, memory_id: UUID) -> Optional[Memory]:
+   242→        """Recuperar una memoria por ID"""
+   243→        await self._init_db()
+   244→        
+   245→        conn = sqlite3.connect(self.db_path)
+   246→        cursor = conn.cursor()
+   247→        
+   248→        cursor.execute("""
+   249→            SELECT id, agent_id, type, category, key, content, embedding,
+   250→                   importance, access_count, last_accessed_at, expires_at,
+   251→                   session_id, source_type, source_id, created_at, updated_at
+   252→            FROM memories WHERE id = ?
+   253→        """, (str(memory_id),))
+   254→        
+   255→        row = cursor.fetchone()
+   256→        conn.close()
+   257→        
+   258→        if not row:
+   259→            return None
+   260→        
+   261→        return self._row_to_memory(row)
+   262→    
+   263→    async def search(
+   264→        self, 
+   265→        query: str, 
+   266→        limit: int = 10,
+   267→        filters: Optional[Dict[str, Any]] = None
+   268→    ) -> List[Memory]:
+   269→        """Buscar memorias por contenido (búsqueda text simple)"""
+   270→        await self._init_db()
+   271→        
+   272→        conn = sqlite3.connect(self.db_path)
+   273→        cursor = conn.cursor()
+   274→        
+   275→        sql = """
+   276→            SELECT id, agent_id, type, category, key, content, embedding,
+   277→                   importance, access_count, last_accessed_at, expires_at,
+   278→                   session_id, source_type, source_id, created_at, updated_at
+   279→            FROM memories WHERE content LIKE ?
+   280→        """
+   281→        params = [f"%{query}%"]
+   282→        
+   283→        if filters:
+   284→            if "agent_id" in filters:
+   285→                sql += " AND agent_id = ?"
+   286→                params.append(str(filters["agent_id"]))
+   287→            if "type" in filters:
+   288→                sql += " AND type = ?"
+   289→                params.append(filters["type"].value if hasattr(filters["type"], "value") else filters["type"])
+   290→            if "session_id" in filters:
+   291→                sql += " AND session_id = ?"
+   292→                params.append(str(filters["session_id"]))
+   293→        
+   294→        sql += f" ORDER BY importance DESC, created_at DESC LIMIT {limit}"
+   295→        
+   296→        cursor.execute(sql, params)
+   297→        rows = cursor.fetchall()
+   298→        conn.close()
+   299→        
+   300→        return [self._row_to_memory(row) for row in rows]
+   301→    
+   302→    async def delete(self, memory_id: UUID) -> bool:
+   303→        """Eliminar una memoria"""
+   304→        await self._init_db()
+   305→        
+   306→        conn = sqlite3.connect(self.db_path)
+   307→        cursor = conn.cursor()
+   308→        
+   309→        cursor.execute("DELETE FROM memories WHERE id = ?", (str(memory_id),))
+   310→        deleted = cursor.rowcount > 0
+   311→        
+   312→        conn.commit()
+   313→        conn.close()
+   314→        
+   315→        return deleted
+   316→    
+   317→    async def update(self, memory_id: UUID, data: Dict[str, Any]) -> bool:
+   318→        """Actualizar una memoria"""
+   319→        await self._init_db()
+   320→        
+   321→        if not data:
+   322→            return False
+   323→        
+   324→        set_clauses = []
+   325→        params = []
+   326→        
+   327→        for key, value in data.items():
+   328→            if key in ["content", "importance", "access_count", "last_accessed_at", "expires_at"]:
+   329→                set_clauses.append(f"{key} = ?")
+   330→                if isinstance(value, datetime):
+   331→                    params.append(value.isoformat())
+   332→                else:
+   333→                    params.append(value)
+   334→        
+   335→        if not set_clauses:
+   336→            return False
+   337→        
+   338→        set_clauses.append("updated_at = ?")
+   339→        params.append(datetime.utcnow().isoformat())
+   340→        
+   341→        params.append(str(memory_id))
+   342→        
+   343→        conn = sqlite3.connect(self.db_path)
+   344→        cursor = conn.cursor()
+   345→        
+   346→        sql = f"UPDATE memories SET {', '.join(set_clauses)} WHERE id = ?"
+   347→        cursor.execute(sql, params)
+   348→        updated = cursor.rowcount > 0
+   349→        
+   350→        conn.commit()
+   351→        conn.close()
+   352→        
+   353→        return updated
+   354→    
+   355→    async def get_session_memories(
+   356→        self, 
+   357→        session_id: UUID,
+   358→        limit: int = 50
+   359→    ) -> List[Memory]:
+   360→        """Obtener todas las memorias de una sesión"""
+   361→        await self._init_db()
+   362→        
+   363→        conn = sqlite3.connect(self.db_path)
+   364→        cursor = conn.cursor()
+   365→        
+   366→        cursor.execute("""
+   367→            SELECT id, agent_id, type, category, key, content, embedding,
+   368→                   importance, access_count, last_accessed_at, expires_at,
+   369→                   session_id, source_type, source_id, created_at, updated_at
+   370→            FROM memories 
+   371→            WHERE session_id = ? AND type = ?
+   372→            ORDER BY created_at DESC
+   373→            LIMIT ?
+   374→        """, (str(session_id), MemoryType.SESSION.value, limit))
+   375→        
+   376→        rows = cursor.fetchall()
+   377→        conn.close()
+   378→        
+   379→        return [self._row_to_memory(row) for row in rows]
+   380→    
+   381→    async def cleanup_expired(self) -> int:
+   382→        """Limpiar memorias expiradas"""
+   383→        await self._init_db()
+   384→        
+   385→        conn = sqlite3.connect(self.db_path)
+   386→        cursor = conn.cursor()
+   387→        
+   388→        now = datetime.utcnow().isoformat()
+   389→        
+   390→        cursor.execute("""
+   391→            DELETE FROM memories 
+   392→            WHERE expires_at IS NOT NULL AND expires_at < ?
+   393→        """, (now,))
+   394→        
+   395→        deleted = cursor.rowcount
+   396→        conn.commit()
+   397→        conn.close()
+   398→        
+   399→        return deleted
+   400→    
+   401→    def _row_to_memory(self, row: tuple) -> Memory:
+   402→        """Convertir fila de BD a modelo Memory"""
+   403→        embedding = None
+   404→        if row[6]:
+   405→            embedding = np.frombuffer(row[6], dtype=np.float32).tolist()
+   406→        
+   407→        return Memory(
+   408→            id=UUID(row[0]),
+   409→            agent_id=UUID(row[1]),
+   410→            type=MemoryType(row[2]),
+   411→            category=row[3],
+   412→            key=row[4],
+   413→            content=row[5],
+   414→            embedding=embedding,
+   415→            importance=row[7],
+   416→            access_count=row[8],
+   417→            last_accessed_at=datetime.fromisoformat(row[9]) if row[9] else None,
+   418→            expires_at=datetime.fromisoformat(row[10]) if row[10] else None,
+   419→            session_id=UUID(row[11]) if row[11] else None,
+   420→            source_type=row[12],
+   421→            source_id=row[13],
+   422→            created_at=datetime.fromisoformat(row[14]),
+   423→            updated_at=datetime.fromisoformat(row[15]),
+   424→        )
+   425→
+   426→
+   427→# ============================================
+   428→# VECTOR MEMORY STORE (Semantic/Long-term)
+   429→# ============================================
+   430→
+   431→class VectorMemoryStore(MemoryStore):
+   432→    """
+   433→    Almacén de memoria vectorial para búsqueda semántica.
+   434→    
+   435→    Usa Milvus para almacenamiento de embeddings y búsqueda vectorial.
+   436→    """
+   437→    
+   438→    def __init__(
+   439→        self,
+   440→        host: str = "localhost",
+   441→        port: int = 19530,
+   442→        collection_name: str = "cognitive_memory",
+   443→        embedding_provider: Optional[EmbeddingProvider] = None
+   444→    ):
+   445→        self.host = host
+   446→        self.port = port
+   447→        self.collection_name = collection_name
+   448→        self.embedding_provider = embedding_provider
+   449→        self._collection = None
+   450→    
+   451→    async def _get_collection(self):
+   452→        """Obtener o crear colección en Milvus"""
+   453→        if self._collection is not None:
+   454→            return self._collection
+   455→        
+   456→        try:
+   457→            from pymilvus import Collection, connections, FieldSchema, CollectionSchema, DataType
+   458→            
+   459→            connections.connect("default", host=self.host, port=self.port)
+   460→            
+   461→            fields = [
+   462→                FieldSchema(name="id", dtype=DataType.VARCHAR, max_length=36, is_primary=True),
+   463→                FieldSchema(name="agent_id", dtype=DataType.VARCHAR, max_length=36),
+   464→                FieldSchema(name="type", dtype=DataType.VARCHAR, max_length=20),
+   465→                FieldSchema(name="content", dtype=DataType.VARCHAR, max_length=65535),
+   466→                FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=1536),
+   467→                FieldSchema(name="importance", dtype=DataType.FLOAT),
+   468→                FieldSchema(name="created_at", dtype=DataType.INT64),
+   469→            ]
+   470→            
+   471→            schema = CollectionSchema(fields=fields, description="Cognitive Memory")
+   472→            
+   473→            self._collection = Collection(self.collection_name, schema)
+   474→            
+   475→            # Crear índice para búsqueda vectorial
+   476→            index_params = {
+   477→                "metric_type": "COSINE",
+   478→                "index_type": "IVF_FLAT",
+   479→                "params": {"nlist": 1024}
+   480→            }
+   481→            self._collection.create_index("embedding", index_params)
+   482→            
+   483→            return self._collection
+   484→            
+   485→        except ImportError:
+   486→            raise RuntimeError("pymilvus is required for VectorMemoryStore")
+   487→        except Exception as e:
+   488→            raise RuntimeError(f"Failed to connect to Milvus: {e}")
+   489→    
+   490→    async def store(self, memory: Memory) -> UUID:
+   491→        """Almacenar una memoria con embedding"""
+   492→        collection = await self._get_collection()
+   493→        
+   494→        # Generar embedding si no existe
+   495→        if not memory.embedding and self.embedding_provider:
+   496→            memory.embedding = await self.embedding_provider.embed(memory.content)
+   497→        
+   498→        if not memory.embedding:
+   499→            raise ValueError("Memory must have embedding for vector store")
+   500→        
+   501→        data = [
+   502→            [str(memory.id)],
+   503→            [str(memory.agent_id)],
+   504→            [memory.type.value],
+   505→            [memory.content],
+   506→            [memory.embedding],
+   507→            [memory.importance],
+   508→            [int(memory.created_at.timestamp())]
+   509→        ]
+   510→        
+   511→        collection.insert(data)
+   512→        collection.flush()
+   513→        
+   514→        return memory.id
+   515→    
+   516→    async def retrieve(self, memory_id: UUID) -> Optional[Memory]:
+   517→        """Recuperar una memoria por ID"""
+   518→        collection = await self._get_collection()
+   519→        
+   520→        collection.load()
+   521→        results = collection.query(
+   522→            expr=f'id == "{str(memory_id)}"',
+   523→            output_fields=["id", "agent_id", "type", "content", "embedding", "importance", "created_at"]
+   524→        )
+   525→        
+   526→        if not results:
+   527→            return None
+   528→        
+   529→        return self._result_to_memory(results[0])
+   530→    
+   531→    async def search(
+   532→        self, 
+   533→        query: str, 
+   534→        limit: int = 10,
+   535→        filters: Optional[Dict[str, Any]] = None
+   536→    ) -> List[Memory]:
+   537→        """Búsqueda semántica por similitud vectorial"""
+   538→        collection = await self._get_collection()
+   539→        
+   540→        if not self.embedding_provider:
+   541→            raise ValueError("Embedding provider required for semantic search")
+   542→        
+   543→        # Generar embedding de la query
+   544→        query_embedding = await self.embedding_provider.embed(query)
+   545→        
+   546→        # Construir filtro
+   547→        filter_expr = None
+   548→        if filters:
+   549→            conditions = []
+   550→            if "agent_id" in filters:
+   551→                conditions.append(f'agent_id == "{str(filters["agent_id"])}"')
+   552→            if "type" in filters:
+   553→                type_val = filters["type"].value if hasattr(filters["type"], "value") else filters["type"]
+   554→                conditions.append(f'type == "{type_val}"')
+   555→            if conditions:
+   556→                filter_expr = " and ".join(conditions)
+   557→        
+   558→        collection.load()
+   559→        
+   560→        search_params = {"metric_type": "COSINE", "params": {"nprobe": 10}}
+   561→        
+   562→        results = collection.search(
+   563→            data=[query_embedding],
+   564→            anns_field="embedding",
+   565→            param=search_params,
+   566→            limit=limit,
+   567→            expr=filter_expr,
+   568→            output_fields=["id", "agent_id", "type", "content", "importance", "created_at"]
+   569→        )
+   570→        
+   571→        memories = []
+   572→        for hits in results:
+   573→            for hit in hits:
+   574→                memories.append(self._result_to_memory(hit.entity))
+   575→        
+   576→        return memories
+   577→    
+   578→    async def delete(self, memory_id: UUID) -> bool:
+   579→        """Eliminar una memoria"""
+   580→        collection = await self._get_collection()
+   581→        
+   582→        collection.delete(f'id == "{str(memory_id)}"')
+   583→        collection.flush()
+   584→        
+   585→        return True
+   586→    
+   587→    async def update(self, memory_id: UUID, data: Dict[str, Any]) -> bool:
+   588→        """Actualizar una memoria (delete + insert)"""
+   589→        # Milvus no soporta update directo
+   590→        # Obtenemos, modificamos y reinsertamos
+   591→        memory = await self.retrieve(memory_id)
+   592→        if not memory:
+   593→            return False
+   594→        
+   595→        # Actualizar campos
+   596→        for key, value in data.items():
+   597→            if hasattr(memory, key):
+   598→                setattr(memory, key, value)
+   599→        
+   600→        memory.updated_at = datetime.utcnow()
+   601→        
+   602→        # Regenerar embedding si cambió el contenido
+   603→        if "content" in data and self.embedding_provider:
+   604→            memory.embedding = await self.embedding_provider.embed(memory.content)
+   605→        
+   606→        # Eliminar y reinsertar
+   607→        await self.delete(memory_id)
+   608→        await self.store(memory)
+   609→        
+   610→        return True
+   611→    
+   612→    def _result_to_memory(self, result: dict) -> Memory:
+   613→        """Convertir resultado de Milvus a modelo Memory"""
+   614→        return Memory(
+   615→            id=UUID(result.get("id")),
+   616→            agent_id=UUID(result.get("agent_id")),
+   617→            type=MemoryType(result.get("type")),
+   618→            content=result.get("content"),
+   619→            embedding=result.get("embedding"),
+   620→            importance=result.get("importance", 0.5),
+   621→            created_at=datetime.fromtimestamp(result.get("created_at", 0)),
+   622→            updated_at=datetime.utcnow(),
+   623→        )
+   624→
+   625→
+   626→# ============================================
+   627→# UNIFIED MEMORY SYSTEM
+   628→# ============================================
+   629→
+   630→class CognitiveMemorySystem:
+   631→    """
+   632→    Sistema de memoria cognitivo unificado.
+   633→    
+   634→    Coordina múltiples capas de memoria:
+   635→    - SQLite: Memoria de sesión y episódica
+   636→    - Milvus: Memoria semántica (vectorial)
+   637→    - Neo4j: Memoria procedural y declarativa (grafo)
+   638→    """
+   639→    
+   640→    def __init__(
+   641→        self,
+   642→        sqlite_store: Optional[SQLiteMemoryStore] = None,
+   643→        vector_store: Optional[VectorMemoryStore] = None,
+   644→        embedding_provider: Optional[EmbeddingProvider] = None
+   645→    ):
+   646→        self.session_store = sqlite_store or SQLiteMemoryStore()
+   647→        self.vector_store = vector_store
+   648→        self.embedding_provider = embedding_provider
+   649→    
+   650→    async def remember(
+   651→        self,
+   652→        agent_id: UUID,
+   653→        content: str,
+   654→        memory_type: MemoryType = MemoryType.SEMANTIC,
+   655→        session_id: Optional[UUID] = None,
+   656→        importance: float = 0.5,
+   657→        expires_in: Optional[int] = None
+   658→    ) -> Memory:
+   659→        """
+   660→        Almacenar un nuevo recuerdo.
+   661→        
+   662→        Args:
+   663→            agent_id: ID del agente que recuerda
+   664→            content: Contenido del recuerdo
+   665→            memory_type: Tipo de memoria
+   666→            session_id: ID de sesión (para memoria de sesión)
+   667→            importance: Importancia del recuerdo (0-1)
+   668→            expires_in: Tiempo de expiración en segundos
+   669→            
+   670→        Returns:
+   671→            La memoria creada
+   672→        """
+   673→        now = datetime.utcnow()
+   674→        expires_at = None
+   675→        if expires_in:
+   676→            expires_at = now + timedelta(seconds=expires_in)
+   677→        
+   678→        memory = Memory(
+   679→            id=uuid4(),
+   680→            agent_id=agent_id,
+   681→            type=memory_type,
+   682→            content=content,
+   683→            importance=importance,
+   684→            session_id=session_id,
+   685→            expires_at=expires_at,
+   686→            created_at=now,
+   687→            updated_at=now
+   688→        )
+   689→        
+   690→        # Almacenar según tipo
+   691→        if memory_type in [MemoryType.SESSION, MemoryType.EPISODIC]:
+   692→            await self.session_store.store(memory)
+   693→        elif memory_type == MemoryType.SEMANTIC:
+   694→            if self.vector_store:
+   695→                await self.vector_store.store(memory)
+   696→            else:
+   697→                # Fallback a SQLite si no hay vector store
+   698→                await self.session_store.store(memory)
+   699→        
+   700→        return memory
+   701→    
+   702→    async def recall(
+   703→        self,
+   704→        query: str,
+   705→        agent_id: Optional[UUID] = None,
+   706→        session_id: Optional[UUID] = None,
+   707→        limit: int = 10
+   708→    ) -> List[Memory]:
+   709→        """
+   710→        Recuperar recuerdos relevantes.
+   711→        
+   712→        Busca en todas las capas de memoria y combina resultados.
+   713→        """
+   714→        filters = {}
+   715→        if agent_id:
+   716→            filters["agent_id"] = agent_id
+   717→        if session_id:
+   718→            filters["session_id"] = session_id
+   719→        
+   720→        results = []
+   721→        
+   722→        # Buscar en memoria de sesión
+   723→        session_results = await self.session_store.search(query, limit, filters)
+   724→        results.extend(session_results)
+   725→        
+   726→        # Buscar en memoria semántica (vectorial)
+   727→        if self.vector_store:
+   728→            semantic_results = await self.vector_store.search(query, limit, filters)
+   729→            results.extend(semantic_results)
+   730→        
+   731→        # Deduplicar y ordenar por importancia
+   732→        seen_ids = set()
+   733→        unique_results = []
+   734→        for memory in results:
+   735→            if memory.id not in seen_ids:
+   736→                seen_ids.add(memory.id)
+   737→                unique_results.append(memory)
+   738→        
+   739→        unique_results.sort(key=lambda m: m.importance, reverse=True)
+   740→        
+   741→        return unique_results[:limit]
+   742→    
+   743→    async def forget(self, memory_id: UUID, memory_type: MemoryType) -> bool:
+   744→        """Olvidar (eliminar) un recuerdo"""
+   745→        if memory_type in [MemoryType.SESSION, MemoryType.EPISODIC]:
+   746→            return await self.session_store.delete(memory_id)
+   747→        elif memory_type == MemoryType.SEMANTIC and self.vector_store:
+   748→            return await self.vector_store.delete(memory_id)
+   749→        return False
+   750→    
+   751→    async def consolidate(
+   752→        self,
+   753→        session_id: UUID,
+   754→        agent_id: UUID
+   755→    ) -> List[Memory]:
+   756→        """
+   757→        Consolidar memorias de sesión en memoria semántica.
+   758→        
+   759→        Transfiere recuerdos importantes de la sesión actual
+   760→        a la memoria de largo plazo.
+   761→        """
+   762→        # Obtener memorias de sesión
+   763→        session_memories = await self.session_store.get_session_memories(session_id)
+   764→        
+   765→        consolidated = []
+   766→        
+   767→        for memory in session_memories:
+   768→            # Solo consolidar memorias importantes
+   769→            if memory.importance >= 0.7:
+   770→                # Crear memoria semántica
+   771→                semantic_memory = Memory(
+   772→                    id=uuid4(),
+   773→                    agent_id=agent_id,
+   774→                    type=MemoryType.SEMANTIC,
+   775→                    content=memory.content,
+   776→                    importance=memory.importance,
+   777→                    created_at=datetime.utcnow(),
+   778→                    updated_at=datetime.utcnow()
+   779→                )
+   780→                
+   781→                if self.vector_store:
+   782→                    await self.vector_store.store(semantic_memory)
+   783→                    consolidated.append(semantic_memory)
+   784→        
+   785→        return consolidated
+   786→    
+   787→    async def cleanup(self) -> Dict[str, int]:
+   788→        """Limpiar memorias expiradas"""
+   789→        deleted = await self.session_store.cleanup_expired()
+   790→        return {"deleted_count": deleted}
+   791→

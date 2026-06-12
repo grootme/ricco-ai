@@ -1,0 +1,1122 @@
+     1→"""
+     2→Vector Store Synchronization System - Sincronización Milvus/Qdrant
+     3→
+     4→Implementa sincronización bidireccional entre Milvus y Qdrant para:
+     5→- Alta disponibilidad del almacenamiento vectorial
+     6→- Migración transparente de datos
+     7→- Replicación en tiempo real
+     8→- Backup y recovery
+     9→
+    10→Patrones GOF utilizados:
+    11→- Strategy: Diferentes estrategias de sincronización
+    12→- Observer: Notificación de cambios
+    13→- Command: Operaciones encapsuladas
+    14→- Factory: Creación de sincronizadores
+    15→
+    16→@author: NEXUS - Neural Execution Unified System
+    17→"""
+    18→
+    19→from typing import Dict, List, Optional, Any, Callable, Set
+    20→from dataclasses import dataclass, field
+    21→from datetime import datetime, timedelta
+    22→from enum import Enum, auto
+    23→from uuid import UUID, uuid4
+    24→from abc import ABC, abstractmethod
+    25→import asyncio
+    26→import json
+    27→import hashlib
+    28→import logging
+    29→from collections import defaultdict
+    30→
+    31→logger = logging.getLogger(__name__)
+    32→
+    33→
+    34→# ============================================================================
+    35→# SYNC CONFIGURATION
+    36→# ============================================================================
+    37→
+    38→class SyncDirection(str, Enum):
+    39→    """Dirección de sincronización"""
+    40→    MILVUS_TO_QDRANT = "milvus_to_qdrant"
+    41→    QDRANT_TO_MILVUS = "qdrant_to_milvus"
+    42→    BIDIRECTIONAL = "bidirectional"
+    43→
+    44→
+    45→class SyncMode(str, Enum):
+    46→    """Modo de sincronización"""
+    47→    REAL_TIME = "real_time"           # Sincronización inmediata
+    48→    BATCH = "batch"                   # Sincronización por lotes
+    49→    SCHEDULED = "scheduled"           # Sincronización programada
+    50→    ON_DEMAND = "on_demand"           # Bajo demanda
+    51→
+    52→
+    53→class ConflictResolution(str, Enum):
+    54→    """Estrategia de resolución de conflictos"""
+    55→    SOURCE_WINS = "source_wins"       # El origen tiene prioridad
+    56→    TARGET_WINS = "target_wins"       # El destino tiene prioridad
+    57→    NEWEST_WINS = "newest_wins"       # El más reciente gana
+    58→    MERGE = "merge"                   # Fusionar datos
+    59→    MANUAL = "manual"                 # Requiere intervención manual
+    60→
+    61→
+    62→@dataclass
+    63→class SyncConfig:
+    64→    """Configuración de sincronización"""
+    65→    direction: SyncDirection = SyncDirection.BIDIRECTIONAL
+    66→    mode: SyncMode = SyncMode.BATCH
+    67→    conflict_resolution: ConflictResolution = ConflictResolution.NEWEST_WINS
+    68→    batch_size: int = 100
+    69→    sync_interval_seconds: int = 60
+    70→    retry_attempts: int = 3
+    71→    retry_delay_seconds: float = 1.0
+    72→    enable_versioning: bool = True
+    73→    enable_change_tracking: bool = True
+    74→    collections_to_sync: List[str] = field(default_factory=lambda: [
+    75→        "agent_profiles",
+    76→        "skills",
+    77→        "documents",
+    78→        "memory_entries",
+    79→        "cognitive_capital",
+    80→    ])
+    81→
+    82→
+    83→# ============================================================================
+    84→# SYNC EVENTS & STATE
+    85→# ============================================================================
+    86→
+    87→@dataclass
+    88→class SyncEvent:
+    89→    """Evento de sincronización"""
+    90→    id: UUID = field(default_factory=uuid4)
+    91→    event_type: str = ""  # "upsert", "delete", "update"
+    92→    collection: str = ""
+    93→    point_id: str = ""
+    94→    source: str = ""  # "milvus" o "qdrant"
+    95→    timestamp: datetime = field(default_factory=datetime.utcnow)
+    96→    data: Dict[str, Any] = field(default_factory=dict)
+    97→    vector: List[float] = field(default_factory=list)
+    98→    processed: bool = False
+    99→    attempts: int = 0
+   100→    error: Optional[str] = None
+   101→
+   102→
+   103→@dataclass
+   104→class SyncState:
+   105→    """Estado de sincronización"""
+   106→    last_sync_time: datetime = field(default_factory=datetime.utcnow)
+   107→    last_sync_count: int = 0
+   108→    pending_events: int = 0
+   109→    failed_events: int = 0
+   110→    total_synced: int = 0
+   111→    collections_synced: Set[str] = field(default_factory=set)
+   112→    version: int = 0
+   113→
+   114→
+   115→# ============================================================================
+   116→# OBSERVER PATTERN - Sync Event Listeners
+   117→# ============================================================================
+   118→
+   119→class SyncObserver(ABC):
+   120→    """Observer para eventos de sincronización"""
+   121→    
+   122→    @abstractmethod
+   123→    async def on_sync_event(self, event: SyncEvent) -> None:
+   124→        """Notifica un evento de sincronización"""
+   125→        pass
+   126→    
+   127→    @abstractmethod
+   128→    async def on_sync_complete(self, state: SyncState) -> None:
+   129→        """Notifica completación de sincronización"""
+   130→        pass
+   131→    
+   132→    @abstractmethod
+   133→    async def on_sync_error(self, error: Exception, event: SyncEvent) -> None:
+   134→        """Notifica error en sincronización"""
+   135→        pass
+   136→
+   137→
+   138→class LoggingSyncObserver(SyncObserver):
+   139→    """Observer que registra eventos en logs"""
+   140→    
+   141→    async def on_sync_event(self, event: SyncEvent) -> None:
+   142→        logger.info(f"Sync event: {event.event_type} on {event.collection}.{event.point_id}")
+   143→    
+   144→    async def on_sync_complete(self, state: SyncState) -> None:
+   145→        logger.info(f"Sync complete: {state.total_synced} total synced, version {state.version}")
+   146→    
+   147→    async def on_sync_error(self, error: Exception, event: SyncEvent) -> None:
+   148→        logger.error(f"Sync error on {event.point_id}: {error}")
+   149→
+   150→
+   151→class MetricsSyncObserver(SyncObserver):
+   152→    """Observer que recopila métricas de sincronización"""
+   153→    
+   154→    def __init__(self):
+   155→        self.metrics: Dict[str, Any] = defaultdict(int)
+   156→        self.errors: List[Dict[str, Any]] = []
+   157→        self.latencies: List[float] = []
+   158→    
+   159→    async def on_sync_event(self, event: SyncEvent) -> None:
+   160→        self.metrics[f"{event.event_type}_count"] += 1
+   161→        self.metrics[f"{event.source}_events"] += 1
+   162→    
+   163→    async def on_sync_complete(self, state: SyncState) -> None:
+   164→        self.metrics["total_syncs"] += 1
+   165→        self.metrics["last_sync_count"] = state.last_sync_count
+   166→    
+   167→    async def on_sync_error(self, error: Exception, event: SyncEvent) -> None:
+   168→        self.errors.append({
+   169→            "timestamp": datetime.utcnow().isoformat(),
+   170→            "event_id": str(event.id),
+   171→            "error": str(error),
+   172→        })
+   173→        self.metrics["error_count"] += 1
+   174→    
+   175→    def get_metrics(self) -> Dict[str, Any]:
+   176→        return {
+   177→            **self.metrics,
+   178→            "error_rate": self.metrics.get("error_count", 0) / max(1, self.metrics.get("total_syncs", 1)),
+   179→        }
+   180→
+   181→
+   182→# ============================================================================
+   183→# COMMAND PATTERN - Sync Operations
+   184→# ============================================================================
+   185→
+   186→class SyncCommand(ABC):
+   187→    """Comando de sincronización encapsulado"""
+   188→    
+   189→    @abstractmethod
+   190→    async def execute(self) -> bool:
+   191→        """Ejecuta el comando de sincronización"""
+   192→        pass
+   193→    
+   194→    @abstractmethod
+   195→    async def undo(self) -> bool:
+   196→        """Deshace el comando (si es posible)"""
+   197→        pass
+   198→    
+   199→    @abstractmethod
+   200→    def get_event(self) -> SyncEvent:
+   201→        """Obtiene el evento asociado"""
+   202→        pass
+   203→
+   204→
+   205→class UpsertSyncCommand(SyncCommand):
+   206→    """Comando para sincronizar un upsert"""
+   207→    
+   208→    def __init__(
+   209→        self,
+   210→        target_store,
+   211→        collection: str,
+   212→        point_id: str,
+   213→        vector: List[float],
+   214→        payload: Dict[str, Any],
+   215→        tenant_id: str = "default"
+   216→    ):
+   217→        self.target_store = target_store
+   218→        self.collection = collection
+   219→        self.point_id = point_id
+   220→        self.vector = vector
+   221→        self.payload = payload
+   222→        self.tenant_id = tenant_id
+   223→        self._event = SyncEvent(
+   224→            event_type="upsert",
+   225→            collection=collection,
+   226→            point_id=point_id,
+   227→            data=payload,
+   228→            vector=vector,
+   229→        )
+   230→        self._success = False
+   231→    
+   232→    async def execute(self) -> bool:
+   233→        try:
+   234→            if hasattr(self.target_store, 'upsert'):
+   235→                import asyncio
+   236→                if asyncio.iscoroutinefunction(self.target_store.upsert):
+   237→                    self._success = await self.target_store.upsert(
+   238→                        collection_name=self.collection,
+   239→                        point_id=self.point_id,
+   240→                        vector=self.vector,
+   241→                        payload=self.payload,
+   242→                        tenant_id=self.tenant_id,
+   243→                    )
+   244→                else:
+   245→                    self._success = self.target_store.upsert(
+   246→                        collection_name=self.collection,
+   247→                        point_id=self.point_id,
+   248→                        vector=self.vector,
+   249→                        payload=self.payload,
+   250→                        tenant_id=self.tenant_id,
+   251→                    )
+   252→            return self._success
+   253→        except Exception as e:
+   254→            logger.error(f"UpsertSyncCommand failed: {e}")
+   255→            return False
+   256→    
+   257→    async def undo(self) -> bool:
+   258→        # No implementado - el undo de upsert es complejo
+   259→        return False
+   260→    
+   261→    def get_event(self) -> SyncEvent:
+   262→        return self._event
+   263→
+   264→
+   265→class DeleteSyncCommand(SyncCommand):
+   266→    """Comando para sincronizar un delete"""
+   267→    
+   268→    def __init__(
+   269→        self,
+   270→        target_store,
+   271→        collection: str,
+   272→        point_id: str,
+   273→        tenant_id: str = "default"
+   274→    ):
+   275→        self.target_store = target_store
+   276→        self.collection = collection
+   277→        self.point_id = point_id
+   278→        self.tenant_id = tenant_id
+   279→        self._event = SyncEvent(
+   280→            event_type="delete",
+   281→            collection=collection,
+   282→            point_id=point_id,
+   283→        )
+   284→        self._previous_data: Optional[Dict[str, Any]] = None
+   285→    
+   286→    async def execute(self) -> bool:
+   287→        try:
+   288→            if hasattr(self.target_store, 'delete'):
+   289→                self._success = self.target_store.delete(
+   290→                    collection_name=self.collection,
+   291→                    point_id=self.point_id,
+   292→                    tenant_id=self.tenant_id,
+   293→                )
+   294→            return True
+   295→        except Exception as e:
+   296→            logger.error(f"DeleteSyncCommand failed: {e}")
+   297→            return False
+   298→    
+   299→    async def undo(self) -> bool:
+   300→        # No implementado sin datos previos
+   301→        return False
+   302→    
+   303→    def get_event(self) -> SyncEvent:
+   304→        return self._event
+   305→
+   306→
+   307→# ============================================================================
+   308→# STRATEGY PATTERN - Sync Strategies
+   309→# ============================================================================
+   310→
+   311→class SyncStrategy(ABC):
+   312→    """Estrategia de sincronización"""
+   313→    
+   314→    @abstractmethod
+   315→    async def sync(
+   316→        self,
+   317→        source_store,
+   318→        target_store,
+   319→        collection: str,
+   320→        config: SyncConfig
+   321→    ) -> Dict[str, Any]:
+   322→        """Ejecuta la sincronización según la estrategia"""
+   323→        pass
+   324→
+   325→
+   326→class FullSyncStrategy(SyncStrategy):
+   327→    """Sincronización completa - copia todos los datos"""
+   328→    
+   329→    async def sync(
+   330→        self,
+   331→        source_store,
+   332→        target_store,
+   333→        collection: str,
+   334→        config: SyncConfig
+   335→    ) -> Dict[str, Any]:
+   336→        result = {
+   337→            "collection": collection,
+   338→            "synced": 0,
+   339→            "failed": 0,
+   340→            "skipped": 0,
+   341→        }
+   342→        
+   343→        # Obtener todos los puntos del source
+   344→        try:
+   345→            # Iterar sobre lotes
+   346→            offset = 0
+   347→            batch_size = config.batch_size
+   348→            
+   349→            while True:
+   350→                # Usar scroll/iterate según disponibilidad
+   351→                points = await self._fetch_batch(source_store, collection, offset, batch_size)
+   352→                
+   353→                if not points:
+   354→                    break
+   355→                
+   356→                # Sincronizar cada punto
+   357→                for point in points:
+   358→                    try:
+   359→                        command = UpsertSyncCommand(
+   360→                            target_store=target_store,
+   361→                            collection=collection,
+   362→                            point_id=point["id"],
+   363→                            vector=point.get("vector", []),
+   364→                            payload=point.get("payload", {}),
+   365→                            tenant_id=point.get("tenant_id", "default"),
+   366→                        )
+   367→                        
+   368→                        success = await command.execute()
+   369→                        if success:
+   370→                            result["synced"] += 1
+   371→                        else:
+   372→                            result["failed"] += 1
+   373→                            
+   374→                    except Exception as e:
+   375→                        logger.error(f"Failed to sync point {point.get('id')}: {e}")
+   376→                        result["failed"] += 1
+   377→                
+   378→                offset += batch_size
+   379→                
+   380→                if len(points) < batch_size:
+   381→                    break
+   382→            
+   383→        except Exception as e:
+   384→            logger.error(f"Full sync failed for {collection}: {e}")
+   385→            result["error"] = str(e)
+   386→        
+   387→        return result
+   388→    
+   389→    async def _fetch_batch(
+   390→        self,
+   391→        store,
+   392→        collection: str,
+   393→        offset: int,
+   394→        limit: int
+   395→    ) -> List[Dict[str, Any]]:
+   396→        """Obtiene un lote de puntos"""
+   397→        # Implementación genérica - adaptar según el store específico
+   398→        try:
+   399→            if hasattr(store, 'scroll'):
+   400→                return await store.scroll(collection, offset=offset, limit=limit)
+   401→            elif hasattr(store, 'list_points'):
+   402→                return await store.list_points(collection, offset=offset, limit=limit)
+   403→        except Exception as e:
+   404→            logger.warning(f"Could not fetch batch: {e}")
+   405→        return []
+   406→
+   407→
+   408→class IncrementalSyncStrategy(SyncStrategy):
+   409→    """Sincronización incremental - solo cambios desde última sync"""
+   410→    
+   411→    def __init__(self):
+   412→        self._last_sync_times: Dict[str, datetime] = {}
+   413→    
+   414→    async def sync(
+   415→        self,
+   416→        source_store,
+   417→        target_store,
+   418→        collection: str,
+   419→        config: SyncConfig
+   420→    ) -> Dict[str, Any]:
+   421→        result = {
+   422→            "collection": collection,
+   423→            "synced": 0,
+   424→            "failed": 0,
+   425→            "skipped": 0,
+   426→        }
+   427→        
+   428→        last_sync = self._last_sync_times.get(collection, datetime.utcnow() - timedelta(days=1))
+   429→        
+   430→        try:
+   431→            # Obtener cambios desde última sincronización
+   432→            changes = await self._get_changes_since(source_store, collection, last_sync)
+   433→            
+   434→            for change in changes:
+   435→                try:
+   436→                    if change.get("deleted"):
+   437→                        command = DeleteSyncCommand(
+   438→                            target_store=target_store,
+   439→                            collection=collection,
+   440→                            point_id=change["id"],
+   441→                        )
+   442→                    else:
+   443→                        command = UpsertSyncCommand(
+   444→                            target_store=target_store,
+   445→                            collection=collection,
+   446→                            point_id=change["id"],
+   447→                            vector=change.get("vector", []),
+   448→                            payload=change.get("payload", {}),
+   449→                        )
+   450→                    
+   451→                    success = await command.execute()
+   452→                    if success:
+   453→                        result["synced"] += 1
+   454→                    else:
+   455→                        result["failed"] += 1
+   456→                        
+   457→                except Exception as e:
+   458→                    logger.error(f"Failed to sync change: {e}")
+   459→                    result["failed"] += 1
+   460→            
+   461→            self._last_sync_times[collection] = datetime.utcnow()
+   462→            
+   463→        except Exception as e:
+   464→            logger.error(f"Incremental sync failed for {collection}: {e}")
+   465→            result["error"] = str(e)
+   466→        
+   467→        return result
+   468→    
+   469→    async def _get_changes_since(
+   470→        self,
+   471→        store,
+   472→        collection: str,
+   473→        since: datetime
+   474→    ) -> List[Dict[str, Any]]:
+   475→        """Obtiene cambios desde una fecha"""
+   476→        # Implementación depende de capacidades del store
+   477→        try:
+   478→            if hasattr(store, 'get_changes_since'):
+   479→                return await store.get_changes_since(collection, since)
+   480→        except Exception:
+   481→            pass
+   482→        return []
+   483→
+   484→
+   485→class DeltaSyncStrategy(SyncStrategy):
+   486→    """Sincronización delta - compara y sincroniza diferencias"""
+   487→    
+   488→    async def sync(
+   489→        self,
+   490→        source_store,
+   491→        target_store,
+   492→        collection: str,
+   493→        config: SyncConfig
+   494→    ) -> Dict[str, Any]:
+   495→        result = {
+   496→            "collection": collection,
+   497→            "synced": 0,
+   498→            "failed": 0,
+   499→            "skipped": 0,
+   500→            "added": 0,
+   501→            "updated": 0,
+   502→            "deleted": 0,
+   503→        }
+   504→        
+   505→        try:
+   506→            # Obtener IDs de ambos stores
+   507→            source_ids = await self._get_all_ids(source_store, collection)
+   508→            target_ids = await self._get_all_ids(target_store, collection)
+   509→            
+   510→            source_set = set(source_ids)
+   511→            target_set = set(target_ids)
+   512→            
+   513→            # IDs a agregar
+   514→            to_add = source_set - target_set
+   515→            
+   516→            # IDs posiblemente actualizados
+   517→            to_check = source_set & target_set
+   518→            
+   519→            # IDs a eliminar (si sync bidireccional)
+   520→            to_delete = target_set - source_set
+   521→            
+   522→            # Agregar nuevos
+   523→            for point_id in to_add:
+   524→                try:
+   525→                    point_data = await self._get_point(source_store, collection, point_id)
+   526→                    if point_data:
+   527→                        command = UpsertSyncCommand(
+   528→                            target_store=target_store,
+   529→                            collection=collection,
+   530→                            point_id=point_id,
+   531→                            vector=point_data.get("vector", []),
+   532→                            payload=point_data.get("payload", {}),
+   533→                        )
+   534→                        success = await command.execute()
+   535→                        if success:
+   536→                            result["added"] += 1
+   537→                            result["synced"] += 1
+   538→                        else:
+   539→                            result["failed"] += 1
+   540→                except Exception as e:
+   541→                    logger.error(f"Failed to add {point_id}: {e}")
+   542→                    result["failed"] += 1
+   543→            
+   544→            # Verificar actualizaciones
+   545→            for point_id in to_check:
+   546→                try:
+   547→                    source_data = await self._get_point(source_store, collection, point_id)
+   548→                    target_data = await self._get_point(target_store, collection, point_id)
+   549→                    
+   550→                    if self._needs_update(source_data, target_data, config):
+   551→                        command = UpsertSyncCommand(
+   552→                            target_store=target_store,
+   553→                            collection=collection,
+   554→                            point_id=point_id,
+   555→                            vector=source_data.get("vector", []),
+   556→                            payload=source_data.get("payload", {}),
+   557→                        )
+   558→                        success = await command.execute()
+   559→                        if success:
+   560→                            result["updated"] += 1
+   561→                            result["synced"] += 1
+   562→                        else:
+   563→                            result["failed"] += 1
+   564→                    else:
+   565→                        result["skipped"] += 1
+   566→                except Exception as e:
+   567→                    logger.error(f"Failed to check/update {point_id}: {e}")
+   568→            
+   569→        except Exception as e:
+   570→            logger.error(f"Delta sync failed for {collection}: {e}")
+   571→            result["error"] = str(e)
+   572→        
+   573→        return result
+   574→    
+   575→    async def _get_all_ids(self, store, collection: str) -> List[str]:
+   576→        """Obtiene todos los IDs de una colección"""
+   577→        try:
+   578→            if hasattr(store, 'get_all_ids'):
+   579→                return await store.get_all_ids(collection)
+   580→        except Exception:
+   581→            pass
+   582→        return []
+   583→    
+   584→    async def _get_point(self, store, collection: str, point_id: str) -> Optional[Dict[str, Any]]:
+   585→        """Obtiene un punto por ID"""
+   586→        try:
+   587→            if hasattr(store, 'get_point'):
+   588→                return await store.get_point(collection, point_id)
+   589→        except Exception:
+   590→            pass
+   591→        return None
+   592→    
+   593→    def _needs_update(
+   594→        self,
+   595→        source_data: Optional[Dict[str, Any]],
+   596→        target_data: Optional[Dict[str, Any]],
+   597→        config: SyncConfig
+   598→    ) -> bool:
+   599→        """Determina si un punto necesita actualización"""
+   600→        if not source_data or not target_data:
+   601→            return True
+   602→        
+   603→        # Comparar hashes de contenido
+   604→        source_hash = self._compute_hash(source_data)
+   605→        target_hash = self._compute_hash(target_data)
+   606→        
+   607→        return source_hash != target_hash
+   608→    
+   609→    def _compute_hash(self, data: Dict[str, Any]) -> str:
+   610→        """Computa hash de datos"""
+   611→        content = json.dumps(data.get("payload", {}), sort_keys=True, default=str)
+   612→        return hashlib.md5(content.encode()).hexdigest()
+   613→
+   614→
+   615→# ============================================================================
+   616→# FACTORY PATTERN - Sync Strategy Factory
+   617→# ============================================================================
+   618→
+   619→class SyncStrategyFactory:
+   620→    """Factory para crear estrategias de sincronización"""
+   621→    
+   622→    _strategies: Dict[SyncMode, type] = {
+   623→        SyncMode.BATCH: DeltaSyncStrategy,
+   624→        SyncMode.REAL_TIME: IncrementalSyncStrategy,
+   625→        SyncMode.SCHEDULED: FullSyncStrategy,
+   626→        SyncMode.ON_DEMAND: DeltaSyncStrategy,
+   627→    }
+   628→    
+   629→    @classmethod
+   630→    def create(cls, mode: SyncMode) -> SyncStrategy:
+   631→        """Crea una estrategia según el modo"""
+   632→        strategy_class = cls._strategies.get(mode, DeltaSyncStrategy)
+   633→        return strategy_class()
+   634→    
+   635→    @classmethod
+   636→    def register(cls, mode: SyncMode, strategy_class: type) -> None:
+   637→        """Registra una nueva estrategia"""
+   638→        cls._strategies[mode] = strategy_class
+   639→
+   640→
+   641→# ============================================================================
+   642→# VECTOR STORE SYNCHRONIZER - Main Component
+   643→# ============================================================================
+   644→
+   645→class VectorStoreSynchronizer:
+   646→    """
+   647→    Sincronizador principal de Vector Stores
+   648→    
+   649→    Implementa:
+   650→    - Sincronización bidireccional Milvus ↔ Qdrant
+   651→    - Resolución de conflictos
+   652→    - Versionado de datos
+   653→    - Notificaciones a observers
+   654→    - Ralph Loop para sincronización continua
+   655→    """
+   656→    
+   657→    def __init__(
+   658→        self,
+   659→        milvus_store=None,
+   660→        qdrant_store=None,
+   661→        config: Optional[SyncConfig] = None,
+   662→        redis_client=None
+   663→    ):
+   664→        self.milvus = milvus_store
+   665→        self.qdrant = qdrant_store
+   666→        self.config = config or SyncConfig()
+   667→        self.redis = redis_client
+   668→        
+   669→        # Estado
+   670→        self.state = SyncState()
+   671→        self._observers: List[SyncObserver] = []
+   672→        self._event_queue: asyncio.Queue = asyncio.Queue()
+   673→        self._running = False
+   674→        self._version_cache: Dict[str, int] = {}
+   675→        
+   676→        # Métricas
+   677→        self._sync_count = 0
+   678→        self._error_count = 0
+   679→    
+   680→    # ========================================================================
+   681→    # OBSERVER MANAGEMENT
+   682→    # ========================================================================
+   683→    
+   684→    def add_observer(self, observer: SyncObserver) -> None:
+   685→        """Agrega un observer"""
+   686→        self._observers.append(observer)
+   687→    
+   688→    def remove_observer(self, observer: SyncObserver) -> None:
+   689→        """Remueve un observer"""
+   690→        if observer in self._observers:
+   691→            self._observers.remove(observer)
+   692→    
+   693→    async def _notify_event(self, event: SyncEvent) -> None:
+   694→        """Notifica evento a todos los observers"""
+   695→        for observer in self._observers:
+   696→            try:
+   697→                await observer.on_sync_event(event)
+   698→            except Exception as e:
+   699→                logger.error(f"Observer error: {e}")
+   700→    
+   701→    async def _notify_complete(self) -> None:
+   702→        """Notifica completación a todos los observers"""
+   703→        for observer in self._observers:
+   704→            try:
+   705→                await observer.on_sync_complete(self.state)
+   706→            except Exception as e:
+   707→                logger.error(f"Observer error: {e}")
+   708→    
+   709→    async def _notify_error(self, error: Exception, event: SyncEvent) -> None:
+   710→        """Notifica error a todos los observers"""
+   711→        self._error_count += 1
+   712→        for observer in self._observers:
+   713→            try:
+   714→                await observer.on_sync_error(error, event)
+   715→            except Exception as e:
+   716→                logger.error(f"Observer error: {e}")
+   717→    
+   718→    # ========================================================================
+   719→    # MAIN SYNC OPERATIONS
+   720→    # ========================================================================
+   721→    
+   722→    async def sync_all(self) -> Dict[str, Any]:
+   723→        """Sincroniza todas las colecciones configuradas"""
+   724→        results = {}
+   725→        
+   726→        strategy = SyncStrategyFactory.create(self.config.mode)
+   727→        
+   728→        for collection in self.config.collections_to_sync:
+   729→            try:
+   730→                # Sincronizar según dirección configurada
+   731→                if self.config.direction in [SyncDirection.MILVUS_TO_QDRANT, SyncDirection.BIDIRECTIONAL]:
+   732→                    result = await strategy.sync(
+   733→                        source_store=self.milvus,
+   734→                        target_store=self.qdrant,
+   735→                        collection=collection,
+   736→                        config=self.config,
+   737→                    )
+   738→                    results[f"milvus_to_qdrant:{collection}"] = result
+   739→                
+   740→                if self.config.direction in [SyncDirection.QDRANT_TO_MILVUS, SyncDirection.BIDIRECTIONAL]:
+   741→                    result = await strategy.sync(
+   742→                        source_store=self.qdrant,
+   743→                        target_store=self.milvus,
+   744→                        collection=collection,
+   745→                        config=self.config,
+   746→                    )
+   747→                    results[f"qdrant_to_milvus:{collection}"] = result
+   748→                
+   749→                self.state.collections_synced.add(collection)
+   750→                
+   751→            except Exception as e:
+   752→                logger.error(f"Sync failed for {collection}: {e}")
+   753→                results[f"error:{collection}"] = str(e)
+   754→        
+   755→        # Actualizar estado
+   756→        self.state.last_sync_time = datetime.utcnow()
+   757→        self.state.version += 1
+   758→        self._sync_count += 1
+   759→        
+   760→        await self._notify_complete()
+   761→        
+   762→        return results
+   763→    
+   764→    async def sync_collection(self, collection: str) -> Dict[str, Any]:
+   765→        """Sincroniza una colección específica"""
+   766→        strategy = SyncStrategyFactory.create(self.config.mode)
+   767→        
+   768→        results = {}
+   769→        
+   770→        if self.config.direction in [SyncDirection.MILVUS_TO_QDRANT, SyncDirection.BIDIRECTIONAL]:
+   771→            results["milvus_to_qdrant"] = await strategy.sync(
+   772→                source_store=self.milvus,
+   773→                target_store=self.qdrant,
+   774→                collection=collection,
+   775→                config=self.config,
+   776→            )
+   777→        
+   778→        if self.config.direction in [SyncDirection.QDRANT_TO_MILVUS, SyncDirection.BIDIRECTIONAL]:
+   779→            results["qdrant_to_milvus"] = await strategy.sync(
+   780→                source_store=self.qdrant,
+   781→                target_store=self.milvus,
+   782→                collection=collection,
+   783→                config=self.config,
+   784→            )
+   785→        
+   786→        return results
+   787→    
+   788→    async def migrate(
+   789→        self,
+   790→        source: str,
+   791→        target: str,
+   792→        collections: Optional[List[str]] = None
+   793→    ) -> Dict[str, Any]:
+   794→        """Migra datos de un store a otro"""
+   795→        source_store = self.milvus if source == "milvus" else self.qdrant
+   796→        target_store = self.qdrant if source == "milvus" else self.milvus
+   797→        
+   798→        if not source_store or not target_store:
+   799→            return {"error": "Source or target store not available"}
+   800→        
+   801→        collections = collections or self.config.collections_to_sync
+   802→        results = {}
+   803→        
+   804→        # Usar estrategia de sincronización completa para migración
+   805→        strategy = FullSyncStrategy()
+   806→        
+   807→        for collection in collections:
+   808→            results[collection] = await strategy.sync(
+   809→                source_store=source_store,
+   810→                target_store=target_store,
+   811→                collection=collection,
+   812→                config=self.config,
+   813→            )
+   814→        
+   815→        return results
+   816→    
+   817→    # ========================================================================
+   818→    # RALPH LOOP - Continuous Sync
+   819→    # ========================================================================
+   820→    
+   821→    async def start_continuous_sync(self) -> None:
+   822→        """
+   823→        Inicia sincronización continua usando Ralph Loop
+   824→        
+   825→        Ralph Loop mantiene el proceso activo con múltiples pasos:
+   826→        1. Verificar si hay cambios pendientes
+   827→        2. Procesar cola de eventos
+   828→        3. Sincronizar cambios
+   829→        4. Actualizar estado
+   830→        5. Esperar intervalo
+   831→        6. Repetir
+   832→        """
+   833→        self._running = True
+   834→        logger.info("Starting continuous sync (Ralph Loop)")
+   835→        
+   836→        while self._running:
+   837→            try:
+   838→                # PASO 1: Verificar cambios pendientes
+   839→                pending = self._event_queue.qsize()
+   840→                self.state.pending_events = pending
+   841→                
+   842→                # PASO 2: Procesar cola de eventos
+   843→                if pending > 0:
+   844→                    await self._process_event_queue()
+   845→                
+   846→                # PASO 3: Sincronización incremental si está habilitada
+   847→                if self.config.mode == SyncMode.REAL_TIME:
+   848→                    await self._sync_changes()
+   849→                
+   850→                # PASO 4: Actualizar estado en Redis
+   851→                if self.redis:
+   852→                    await self._persist_state()
+   853→                
+   854→                # PASO 5: Esperar intervalo
+   855→                await asyncio.sleep(self.config.sync_interval_seconds)
+   856→                
+   857→            except asyncio.CancelledError:
+   858→                logger.info("Continuous sync cancelled")
+   859→                break
+   860→            except Exception as e:
+   861→                logger.error(f"Error in continuous sync: {e}")
+   862→                await asyncio.sleep(self.config.retry_delay_seconds)
+   863→    
+   864→    def stop_continuous_sync(self) -> None:
+   865→        """Detiene la sincronización continua"""
+   866→        self._running = False
+   867→        logger.info("Stopping continuous sync")
+   868→    
+   869→    async def _process_event_queue(self) -> None:
+   870→        """Procesa la cola de eventos pendientes"""
+   871→        processed = 0
+   872→        
+   873→        while not self._event_queue.empty() and processed < self.config.batch_size:
+   874→            try:
+   875→                event = await asyncio.wait_for(
+   876→                    self._event_queue.get(),
+   877→                    timeout=1.0
+   878→                )
+   879→                
+   880→                await self._process_single_event(event)
+   881→                processed += 1
+   882→                
+   883→            except asyncio.TimeoutError:
+   884→                break
+   885→            except Exception as e:
+   886→                logger.error(f"Error processing event: {e}")
+   887→    
+   888→    async def _process_single_event(self, event: SyncEvent) -> bool:
+   889→        """Procesa un único evento de sincronización"""
+   890→        target_store = self.qdrant if event.source == "milvus" else self.milvus
+   891→        
+   892→        if not target_store:
+   893→            return False
+   894→        
+   895→        try:
+   896→            if event.event_type == "upsert":
+   897→                command = UpsertSyncCommand(
+   898→                    target_store=target_store,
+   899→                    collection=event.collection,
+   900→                    point_id=event.point_id,
+   901→                    vector=event.vector,
+   902→                    payload=event.data,
+   903→                )
+   904→            elif event.event_type == "delete":
+   905→                command = DeleteSyncCommand(
+   906→                    target_store=target_store,
+   907→                    collection=event.collection,
+   908→                    point_id=event.point_id,
+   909→                )
+   910→            else:
+   911→                return False
+   912→            
+   913→            success = await command.execute()
+   914→            event.processed = success
+   915→            
+   916→            if success:
+   917→                await self._notify_event(event)
+   918→            else:
+   919→                event.attempts += 1
+   920→                if event.attempts < self.config.retry_attempts:
+   921→                    await self._event_queue.put(event)
+   922→                else:
+   923→                    await self._notify_error(Exception("Max retries exceeded"), event)
+   924→            
+   925→            return success
+   926→            
+   927→        except Exception as e:
+   928→            await self._notify_error(e, event)
+   929→            return False
+   930→    
+   931→    async def _sync_changes(self) -> None:
+   932→        """Sincroniza cambios detectados"""
+   933→        strategy = IncrementalSyncStrategy()
+   934→        
+   935→        for collection in self.config.collections_to_sync:
+   936→            try:
+   937→                await strategy.sync(
+   938→                    source_store=self.milvus,
+   939→                    target_store=self.qdrant,
+   940→                    collection=collection,
+   941→                    config=self.config,
+   942→                )
+   943→            except Exception as e:
+   944→                logger.error(f"Error syncing changes for {collection}: {e}")
+   945→    
+   946→    async def _persist_state(self) -> None:
+   947→        """Persiste el estado en Redis"""
+   948→        if not self.redis:
+   949→            return
+   950→        
+   951→        try:
+   952→            state_data = {
+   953→                "last_sync_time": self.state.last_sync_time.isoformat(),
+   954→                "last_sync_count": self.state.last_sync_count,
+   955→                "total_synced": self.state.total_synced,
+   956→                "version": self.state.version,
+   957→            }
+   958→            await self.redis.set("vector_sync:state", json.dumps(state_data))
+   959→        except Exception as e:
+   960→            logger.error(f"Failed to persist state: {e}")
+   961→    
+   962→    # ========================================================================
+   963→    # PUBLIC API - Event Queue
+   964→    # ========================================================================
+   965→    
+   966→    async def queue_upsert(
+   967→        self,
+   968→        collection: str,
+   969→        point_id: str,
+   970→        vector: List[float],
+   971→        payload: Dict[str, Any],
+   972→        source: str = "external"
+   973→    ) -> None:
+   974→        """Encola un evento de upsert para sincronización"""
+   975→        event = SyncEvent(
+   976→            event_type="upsert",
+   977→            collection=collection,
+   978→            point_id=point_id,
+   979→            source=source,
+   980→            vector=vector,
+   981→            data=payload,
+   982→        )
+   983→        await self._event_queue.put(event)
+   984→    
+   985→    async def queue_delete(
+   986→        self,
+   987→        collection: str,
+   988→        point_id: str,
+   989→        source: str = "external"
+   990→    ) -> None:
+   991→        """Encola un evento de delete para sincronización"""
+   992→        event = SyncEvent(
+   993→            event_type="delete",
+   994→            collection=collection,
+   995→            point_id=point_id,
+   996→            source=source,
+   997→        )
+   998→        await self._event_queue.put(event)
+   999→    
+  1000→    # ========================================================================
+  1001→    # STATUS & METRICS
+  1002→    # ========================================================================
+  1003→    
+  1004→    def get_status(self) -> Dict[str, Any]:
+  1005→        """Obtiene el estado actual del sincronizador"""
+  1006→        return {
+  1007→            "running": self._running,
+  1008→            "state": {
+  1009→                "last_sync_time": self.state.last_sync_time.isoformat(),
+  1010→                "last_sync_count": self.state.last_sync_count,
+  1011→                "pending_events": self._event_queue.qsize(),
+  1012→                "total_synced": self.state.total_synced,
+  1013→                "version": self.state.version,
+  1014→                "collections_synced": list(self.state.collections_synced),
+  1015→            },
+  1016→            "config": {
+  1017→                "direction": self.config.direction.value,
+  1018→                "mode": self.config.mode.value,
+  1019→                "batch_size": self.config.batch_size,
+  1020→                "sync_interval": self.config.sync_interval_seconds,
+  1021→            },
+  1022→            "metrics": {
+  1023→                "sync_count": self._sync_count,
+  1024→                "error_count": self._error_count,
+  1025→            },
+  1026→            "stores": {
+  1027→                "milvus": self.milvus is not None,
+  1028→                "qdrant": self.qdrant is not None,
+  1029→            }
+  1030→        }
+  1031→    
+  1032→    async def get_sync_report(self) -> Dict[str, Any]:
+  1033→        """Genera un reporte detallado de sincronización"""
+  1034→        return {
+  1035→            "timestamp": datetime.utcnow().isoformat(),
+  1036→            "summary": {
+  1037→                "total_syncs": self._sync_count,
+  1038→                "total_errors": self._error_count,
+  1039→                "success_rate": self._sync_count / max(1, self._sync_count + self._error_count),
+  1040→            },
+  1041→            "collections": {
+  1042→                col: {
+  1043→                    "synced": col in self.state.collections_synced,
+  1044→                    "version": self._version_cache.get(col, 0),
+  1045→                }
+  1046→                for col in self.config.collections_to_sync
+  1047→            },
+  1048→            "state": self.state.__dict__,
+  1049→        }
+  1050→
+  1051→
+  1052→# ============================================================================
+  1053→# HELPER FUNCTIONS
+  1054→# ============================================================================
+  1055→
+  1056→def create_synchronizer(
+  1057→    milvus_store=None,
+  1058→    qdrant_store=None,
+  1059→    direction: str = "bidirectional",
+  1060→    mode: str = "batch",
+  1061→    **kwargs
+  1062→) -> VectorStoreSynchronizer:
+  1063→    """
+  1064→    Factory function para crear un sincronizador
+  1065→    
+  1066→    Args:
+  1067→        milvus_store: Instancia de MilvusVectorStore
+  1068→        qdrant_store: Instancia de QdrantVectorStore
+  1069→        direction: "bidirectional", "milvus_to_qdrant", "qdrant_to_milvus"
+  1070→        mode: "batch", "real_time", "scheduled", "on_demand"
+  1071→        **kwargs: Configuraciones adicionales
+  1072→    """
+  1073→    config = SyncConfig(
+  1074→        direction=SyncDirection(direction),
+  1075→        mode=SyncMode(mode),
+  1076→        **kwargs
+  1077→    )
+  1078→    
+  1079→    synchronizer = VectorStoreSynchronizer(
+  1080→        milvus_store=milvus_store,
+  1081→        qdrant_store=qdrant_store,
+  1082→        config=config,
+  1083→    )
+  1084→    
+  1085→    # Agregar observers por defecto
+  1086→    synchronizer.add_observer(LoggingSyncObserver())
+  1087→    
+  1088→    return synchronizer
+  1089→
+  1090→
+  1091→# ============================================================================
+  1092→# EXPORTS
+  1093→# ============================================================================
+  1094→
+  1095→__all__ = [
+  1096→    # Configuration
+  1097→    "SyncDirection",
+  1098→    "SyncMode",
+  1099→    "ConflictResolution",
+  1100→    "SyncConfig",
+  1101→    # Events & State
+  1102→    "SyncEvent",
+  1103→    "SyncState",
+  1104→    # Observers
+  1105→    "SyncObserver",
+  1106→    "LoggingSyncObserver",
+  1107→    "MetricsSyncObserver",
+  1108→    # Commands
+  1109→    "SyncCommand",
+  1110→    "UpsertSyncCommand",
+  1111→    "DeleteSyncCommand",
+  1112→    # Strategies
+  1113→    "SyncStrategy",
+  1114→    "FullSyncStrategy",
+  1115→    "IncrementalSyncStrategy",
+  1116→    "DeltaSyncStrategy",
+  1117→    "SyncStrategyFactory",
+  1118→    # Main
+  1119→    "VectorStoreSynchronizer",
+  1120→    "create_synchronizer",
+  1121→]
+  1122→

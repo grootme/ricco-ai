@@ -1,0 +1,879 @@
+     1→"""
+     2→RAG Ontológico con Knowledge Graph para Capital Cognitivo.
+     3→Implementa patrones de Neo4j GraphRAG y Microsoft GraphRAG.
+     4→"""
+     5→
+     6→from typing import Any, Dict, List, Optional, Set, Tuple, Union
+     7→from abc import ABC, abstractmethod
+     8→from pydantic import BaseModel, Field
+     9→from datetime import datetime
+    10→from enum import Enum
+    11→from dataclasses import dataclass, field
+    12→import asyncio
+    13→import json
+    14→
+    15→
+    16→# =============================================================================
+    17→# PATRONES GOF APLICADOS
+    18→# =============================================================================
+    19→
+    20→# Factory Pattern - Para creación de entidades y relaciones
+    21→# Strategy Pattern - Para diferentes estrategias de extracción
+    22→# Observer Pattern - Para eventos del grafo
+    23→# Command Pattern - Para operaciones del grafo
+    24→# Builder Pattern - Para construcción de consultas
+    25→# Composite Pattern - Para estructura jerárquica de comunidades
+    26→
+    27→
+    28→# =============================================================================
+    29→# MODELOS DE DATOS ONTOLÓGICOS
+    30→# =============================================================================
+    31→
+    32→class EntityType(str, Enum):
+    33→    """Tipos de entidades en el grafo ontológico."""
+    34→    CONCEPT = "concept"
+    35→    PERSON = "person"
+    36→    ORGANIZATION = "organization"
+    37→    TECHNOLOGY = "technology"
+    38→    SKILL = "skill"
+    39→    DOCUMENT = "document"
+    40→    CODE = "code"
+    41→    PROCESS = "process"
+    42→    EVENT = "event"
+    43→    PREFERENCE = "preference"
+    44→    MEMORY = "memory"
+    45→    AGENT = "agent"
+    46→    TOOL = "tool"
+    47→
+    48→
+    49→class RelationType(str, Enum):
+    50→    """Tipos de relaciones en el grafo."""
+    51→    # Jerárquicas
+    52→    IS_A = "is_a"
+    53→    HAS_A = "has_a"
+    54→    PART_OF = "part_of"
+    55→    
+    56→    # Semánticas
+    57→    RELATED_TO = "related_to"
+    58→    SIMILAR_TO = "similar_to"
+    59→    DIFFERENT_FROM = "different_from"
+    60→    
+    61→    # Causales
+    62→    CAUSES = "causes"
+    63→    ENABLES = "enables"
+    64→    PREVENTS = "prevents"
+    65→    
+    66→    # Temporales
+    67→    PRECEDES = "precedes"
+    68→    FOLLOWS = "follows"
+    69→    CONCURRENT_WITH = "concurrent_with"
+    70→    
+    71→    # Agentes
+    72→    USES = "uses"
+    73→    CREATES = "creates"
+    74→    MODIFIES = "modifies"
+    75→    DEPENDS_ON = "depends_on"
+    76→    
+    77→    # Conocimiento
+    78→    KNOWS_ABOUT = "knows_about"
+    79→    LEARNED_FROM = "learned_from"
+    80→    APPLIES_TO = "applies_to"
+    81→
+    82→
+    83→class NodeProperty(BaseModel):
+    84→    """Propiedad de un nodo."""
+    85→    name: str
+    86→    value: Any
+    87→    type: str = "string"
+    88→    confidence: float = 1.0
+    89→
+    90→
+    91→class Entity(BaseModel):
+    92→    """Entidad del Knowledge Graph."""
+    93→    id: str
+    94→    name: str
+    95→    entity_type: EntityType
+    96→    description: Optional[str] = None
+    97→    properties: List[NodeProperty] = Field(default_factory=list)
+    98→    embedding: Optional[List[float]] = None
+    99→    source_ids: List[str] = Field(default_factory=list)
+   100→    community_ids: List[str] = Field(default_factory=list)
+   101→    created_at: datetime = Field(default_factory=datetime.utcnow)
+   102→    updated_at: datetime = Field(default_factory=datetime.utcnow)
+   103→    confidence: float = 1.0
+   104→    metadata: Dict[str, Any] = Field(default_factory=dict)
+   105→    
+   106→    def add_property(self, name: str, value: Any, type: str = "string") -> None:
+   107→        """Agrega una propiedad a la entidad."""
+   108→        self.properties.append(NodeProperty(name=name, value=value, type=type))
+   109→    
+   110→    def get_property(self, name: str) -> Optional[Any]:
+   111→        """Obtiene el valor de una propiedad."""
+   112→        for prop in self.properties:
+   113→            if prop.name == name:
+   114→                return prop.value
+   115→        return None
+   116→
+   117→
+   118→class Relationship(BaseModel):
+   119→    """Relación entre entidades en el Knowledge Graph."""
+   120→    id: str
+   121→    source_id: str
+   122→    target_id: str
+   123→    relation_type: RelationType
+   124→    description: Optional[str] = None
+   125→    weight: float = 1.0
+   126→    properties: List[NodeProperty] = Field(default_factory=list)
+   127→    source_ids: List[str] = Field(default_factory=list)
+   128→    created_at: datetime = Field(default_factory=datetime.utcnow)
+   129→    confidence: float = 1.0
+   130→    metadata: Dict[str, Any] = Field(default_factory=dict)
+   131→
+   132→
+   133→class Community(BaseModel):
+   134→    """Comunidad de entidades (resultado de clustering)."""
+   135→    id: str
+   136→    level: int = 0
+   137→    title: str
+   138→    summary: Optional[str] = None
+   139→    entity_ids: List[str] = Field(default_factory=list)
+   140→    relationship_ids: List[str] = Field(default_factory=list)
+   141→    parent_id: Optional[str] = None
+   142→    children_ids: List[str] = Field(default_factory=list)
+   143→    findings: List[str] = Field(default_factory=list)
+   144→    embedding: Optional[List[float]] = None
+   145→    rank: int = 1
+   146→
+   147→
+   148→class Triple(BaseModel):
+   149→    """Triple RDF-style (sujeto, predicado, objeto)."""
+   150→    subject: str
+   151→    predicate: RelationType
+   152→    object: str
+   153→    confidence: float = 1.0
+   154→    source: Optional[str] = None
+   155→
+   156→
+   157→# =============================================================================
+   158→# FACTORY PATTERN - EntityFactory
+   159→# =============================================================================
+   160→
+   161→class EntityFactory:
+   162→    """
+   163→    Factory Pattern para creación de entidades.
+   164→    Centraliza la lógica de creación y asignación de IDs.
+   165→    """
+   166→    
+   167→    _instance = None
+   168→    _id_counter = 0
+   169→    
+   170→    def __new__(cls):
+   171→        if cls._instance is None:
+   172→            cls._instance = super().__new__(cls)
+   173→        return cls._instance
+   174→    
+   175→    def create_entity(
+   176→        self,
+   177→        name: str,
+   178→        entity_type: EntityType,
+   179→        description: Optional[str] = None,
+   180→        properties: Optional[Dict[str, Any]] = None,
+   181→        source_ids: Optional[List[str]] = None
+   182→    ) -> Entity:
+   183→        """Crea una nueva entidad con ID único."""
+   184→        self._id_counter += 1
+   185→        
+   186→        entity = Entity(
+   187→            id=f"entity_{self._id_counter}",
+   188→            name=name,
+   189→            entity_type=entity_type,
+   190→            description=description,
+   191→            source_ids=source_ids or []
+   192→        )
+   193→        
+   194→        if properties:
+   195→            for key, value in properties.items():
+   196→                entity.add_property(key, value)
+   197→        
+   198→        return entity
+   199→    
+   200→    def create_relationship(
+   201→        self,
+   202→        source_id: str,
+   203→        target_id: str,
+   204→        relation_type: RelationType,
+   205→        description: Optional[str] = None,
+   206→        weight: float = 1.0
+   207→    ) -> Relationship:
+   208→        """Crea una nueva relación."""
+   209→        self._id_counter += 1
+   210→        
+   211→        return Relationship(
+   212→            id=f"rel_{self._id_counter}",
+   213→            source_id=source_id,
+   214→            target_id=target_id,
+   215→            relation_type=relation_type,
+   216→            description=description,
+   217→            weight=weight
+   218→        )
+   219→
+   220→
+   221→# =============================================================================
+   222→# STRATEGY PATTERN - Extraction Strategies
+   223→# =============================================================================
+   224→
+   225→class ExtractionStrategy(ABC):
+   226→    """Strategy Pattern para extracción de entidades."""
+   227→    
+   228→    @abstractmethod
+   229→    async def extract(self, text: str) -> Tuple[List[Entity], List[Relationship]]:
+   230→        """Extrae entidades y relaciones del texto."""
+   231→        pass
+   232→
+   233→
+   234→class LLMExtractionStrategy(ExtractionStrategy):
+   235→    """Estrategia de extracción usando LLM (como GraphRAG)."""
+   236→    
+   237→    def __init__(self, entity_types: Optional[List[EntityType]] = None):
+   238→        self.entity_types = entity_types or list(EntityType)
+   239→        self.factory = EntityFactory()
+   240→    
+   241→    async def extract(self, text: str) -> Tuple[List[Entity], List[Relationship]]:
+   242→        """Extrae usando LLM con prompting estructurado."""
+   243→        # Placeholder - en producción usar LLM real
+   244→        entities = []
+   245→        relationships = []
+   246→        
+   247→        # Simular extracción basada en patrones simples
+   248→        words = text.split()
+   249→        for i, word in enumerate(words):
+   250→            if len(word) > 5 and word[0].isupper():
+   251→                entity = self.factory.create_entity(
+   252→                    name=word,
+   253→                    entity_type=EntityType.CONCEPT,
+   254→                    description=f"Extracted from context: {' '.join(words[max(0,i-2):i+3])}"
+   255→                )
+   256→                entities.append(entity)
+   257→        
+   258→        return entities, relationships
+   259→
+   260→
+   261→class NLPExtractionStrategy(ExtractionStrategy):
+   262→    """Estrategia de extracción usando NLP clásico (fast mode)."""
+   263→    
+   264→    def __init__(self):
+   265→        self.factory = EntityFactory()
+   266→        # Placeholder para modelos NLP
+   267→    
+   268→    async def extract(self, text: str) -> Tuple[List[Entity], List[Relationship]]:
+   269→        """Extrae usando NLP (sin LLM)."""
+   270→        entities = []
+   271→        relationships = []
+   272→        
+   273→        # Placeholder - usar spaCy o similar
+   274→        return entities, relationships
+   275→
+   276→
+   277→class HybridExtractionStrategy(ExtractionStrategy):
+   278→    """Estrategia híbrida: NLP + LLM."""
+   279→    
+   280→    def __init__(self):
+   281→        self.nlp_strategy = NLPExtractionStrategy()
+   282→        self.llm_strategy = LLMExtractionStrategy()
+   283→    
+   284→    async def extract(self, text: str) -> Tuple[List[Entity], List[Relationship]]:
+   285→        """Combina NLP y LLM para mejor extracción."""
+   286→        nlp_entities, nlp_rels = await self.nlp_strategy.extract(text)
+   287→        llm_entities, llm_rels = await self.llm_strategy.extract(text)
+   288→        
+   289→        # Merge con deduplicación
+   290→        all_entities = {e.name: e for e in nlp_entities}
+   291→        for e in llm_entities:
+   292→            if e.name not in all_entities:
+   293→                all_entities[e.name] = e
+   294→        
+   295→        return list(all_entities.values()), nlp_rels + llm_rels
+   296→
+   297→
+   298→# =============================================================================
+   299→# OBSERVER PATTERN - Graph Events
+   300→# =============================================================================
+   301→
+   302→class GraphEventType(str, Enum):
+   303→    """Tipos de eventos del grafo."""
+   304→    ENTITY_CREATED = "entity_created"
+   305→    ENTITY_UPDATED = "entity_updated"
+   306→    ENTITY_DELETED = "entity_deleted"
+   307→    RELATIONSHIP_CREATED = "relationship_created"
+   308→    RELATIONSHIP_DELETED = "relationship_deleted"
+   309→    COMMUNITY_FORMED = "community_formed"
+   310→    SCHEMA_CHANGED = "schema_changed"
+   311→
+   312→
+   313→class GraphEvent(BaseModel):
+   314→    """Evento del Knowledge Graph."""
+   315→    event_type: GraphEventType
+   316→    timestamp: datetime = Field(default_factory=datetime.utcnow)
+   317→    data: Dict[str, Any] = Field(default_factory=dict)
+   318→    source: Optional[str] = None
+   319→
+   320→
+   321→class GraphObserver(ABC):
+   322→    """Observer Pattern para observar cambios en el grafo."""
+   323→    
+   324→    @abstractmethod
+   325→    async def on_event(self, event: GraphEvent) -> None:
+   326→        """Maneja un evento del grafo."""
+   327→        pass
+   328→
+   329→
+   330→class LoggingObserver(GraphObserver):
+   331→    """Observer que registra eventos."""
+   332→    
+   333→    def __init__(self):
+   334→        self.events: List[GraphEvent] = []
+   335→    
+   336→    async def on_event(self, event: GraphEvent) -> None:
+   337→        self.events.append(event)
+   338→        print(f"[KG Event] {event.event_type}: {event.data}")
+   339→
+   340→
+   341→class MemorySyncObserver(GraphObserver):
+   342→    """Observer que sincroniza con el sistema de memoria."""
+   343→    
+   344→    def __init__(self, memory_system):
+   345→        self.memory_system = memory_system
+   346→    
+   347→    async def on_event(self, event: GraphEvent) -> None:
+   348→        if event.event_type == GraphEventType.ENTITY_CREATED:
+   349→            # Sincronizar con memoria
+   350→            pass
+   351→
+   352→
+   353→# =============================================================================
+   354→# COMMAND PATTERN - Graph Operations
+   355→# =============================================================================
+   356→
+   357→class GraphCommand(ABC):
+   358→    """Command Pattern para operaciones del grafo."""
+   359→    
+   360→    @abstractmethod
+   361→    async def execute(self, graph: 'KnowledgeGraph') -> Any:
+   362→        """Ejecuta el comando."""
+   363→        pass
+   364→    
+   365→    @abstractmethod
+   366→    async def undo(self, graph: 'KnowledgeGraph') -> None:
+   367→        """Deshace el comando."""
+   368→        pass
+   369→
+   370→
+   371→class AddEntityCommand(GraphCommand):
+   372→    """Comando para agregar entidad."""
+   373→    
+   374→    def __init__(self, entity: Entity):
+   375→        self.entity = entity
+   376→        self.executed = False
+   377→    
+   378→    async def execute(self, graph: 'KnowledgeGraph') -> Entity:
+   379→        graph._entities[self.entity.id] = self.entity
+   380→        self.executed = True
+   381→        return self.entity
+   382→    
+   383→    async def undo(self, graph: 'KnowledgeGraph') -> None:
+   384→        if self.executed:
+   385→            del graph._entities[self.entity.id]
+   386→
+   387→
+   388→class AddRelationshipCommand(GraphCommand):
+   389→    """Comando para agregar relación."""
+   390→    
+   391→    def __init__(self, relationship: Relationship):
+   392→        self.relationship = relationship
+   393→        self.executed = False
+   394→    
+   395→    async def execute(self, graph: 'KnowledgeGraph') -> Relationship:
+   396→        graph._relationships[self.relationship.id] = self.relationship
+   397→        self.executed = True
+   398→        return self.relationship
+   399→    
+   400→    async def undo(self, graph: 'KnowledgeGraph') -> None:
+   401→        if self.executed:
+   402→            del graph._relationships[self.relationship.id]
+   403→
+   404→
+   405→class BatchCommand(GraphCommand):
+   406→    """Comando compuesto para múltiples operaciones."""
+   407→    
+   408→    def __init__(self, commands: List[GraphCommand]):
+   409→        self.commands = commands
+   410→    
+   411→    async def execute(self, graph: 'KnowledgeGraph') -> List[Any]:
+   412→        results = []
+   413→        for cmd in self.commands:
+   414→            result = await cmd.execute(graph)
+   415→            results.append(result)
+   416→        return results
+   417→    
+   418→    async def undo(self, graph: 'KnowledgeGraph') -> None:
+   419→        for cmd in reversed(self.commands):
+   420→            await cmd.undo(graph)
+   421→
+   422→
+   423→# =============================================================================
+   424→# BUILDER PATTERN - Query Builder
+   425→# =============================================================================
+   426→
+   427→class GraphQueryBuilder:
+   428→    """Builder Pattern para construir consultas al grafo."""
+   429→    
+   430→    def __init__(self):
+   431→        self._entity_types: List[EntityType] = []
+   432→        self._relation_types: List[RelationType] = []
+   433→        self._conditions: List[str] = []
+   434→        self._limit: int = 100
+   435→        self._order_by: Optional[str] = None
+   436→        self._include_embeddings: bool = False
+   437→    
+   438→    def select_entities(self, types: List[EntityType]) -> 'GraphQueryBuilder':
+   439→        """Selecciona tipos de entidades."""
+   440→        self._entity_types.extend(types)
+   441→        return self
+   442→    
+   443→    def select_relations(self, types: List[RelationType]) -> 'GraphQueryBuilder':
+   444→        """Selecciona tipos de relaciones."""
+   445→        self._relation_types.extend(types)
+   446→        return self
+   447→    
+   448→    def where(self, condition: str) -> 'GraphQueryBuilder':
+   449→        """Agrega condición."""
+   450→        self._conditions.append(condition)
+   451→        return self
+   452→    
+   453→    def limit(self, n: int) -> 'GraphQueryBuilder':
+   454→        """Establece límite."""
+   455→        self._limit = n
+   456→        return self
+   457→    
+   458→    def order_by(self, field: str) -> 'GraphQueryBuilder':
+   459→        """Establece ordenamiento."""
+   460→        self._order_by = field
+   461→        return self
+   462→    
+   463→    def include_embeddings(self, include: bool = True) -> 'GraphQueryBuilder':
+   464→        """Incluye embeddings en resultado."""
+   465→        self._include_embeddings = include
+   466→        return self
+   467→    
+   468→    def build(self) -> Dict[str, Any]:
+   469→        """Construye la consulta."""
+   470→        return {
+   471→            "entity_types": self._entity_types,
+   472→            "relation_types": self._relation_types,
+   473→            "conditions": self._conditions,
+   474→            "limit": self._limit,
+   475→            "order_by": self._order_by,
+   476→            "include_embeddings": self._include_embeddings
+   477→        }
+   478→
+   479→
+   480→# =============================================================================
+   481→# KNOWLEDGE GRAPH PRINCIPAL
+   482→# =============================================================================
+   483→
+   484→class KnowledgeGraph:
+   485→    """
+   486→    Knowledge Graph Ontológico para Capital Cognitivo.
+   487→    Implementa patrones de Neo4j GraphRAG y Microsoft GraphRAG.
+   488→    """
+   489→    
+   490→    def __init__(
+   491→        self,
+   492→        extraction_strategy: Optional[ExtractionStrategy] = None
+   493→    ):
+   494→        # Almacenamiento
+   495→        self._entities: Dict[str, Entity] = {}
+   496→        self._relationships: Dict[str, Relationship] = {}
+   497→        self._communities: Dict[str, Community] = {}
+   498→        
+   499→        # Índices
+   500→        self._entity_name_index: Dict[str, str] = {}
+   501→        self._entity_type_index: Dict[EntityType, Set[str]] = {}
+   502→        self._adjacency: Dict[str, Set[str]] = {}  # entity_id -> related entity_ids
+   503→        
+   504→        # Estrategia de extracción
+   505→        self._extraction_strategy = extraction_strategy or HybridExtractionStrategy()
+   506→        
+   507→        # Observers
+   508→        self._observers: List[GraphObserver] = []
+   509→        
+   510→        # Factory
+   511→        self._factory = EntityFactory()
+   512→        
+   513→        # Historial de comandos (para undo)
+   514→        self._command_history: List[GraphCommand] = []
+   515→    
+   516→    # === Observer Management ===
+   517→    
+   518→    def add_observer(self, observer: GraphObserver) -> None:
+   519→        """Agrega un observer."""
+   520→        self._observers.append(observer)
+   521→    
+   522→    async def _notify(self, event: GraphEvent) -> None:
+   523→        """Notifica a todos los observers."""
+   524→        for observer in self._observers:
+   525→            await observer.on_event(event)
+   526→    
+   527→    # === Entity Operations ===
+   528→    
+   529→    async def add_entity(
+   530→        self,
+   531→        name: str,
+   532→        entity_type: EntityType,
+   533→        description: Optional[str] = None,
+   534→        properties: Optional[Dict[str, Any]] = None
+   535→    ) -> Entity:
+   536→        """Agrega una entidad al grafo."""
+   537→        entity = self._factory.create_entity(
+   538→            name=name,
+   539→            entity_type=entity_type,
+   540→            description=description,
+   541→            properties=properties
+   542→        )
+   543→        
+   544→        cmd = AddEntityCommand(entity)
+   545→        await cmd.execute(self)
+   546→        self._command_history.append(cmd)
+   547→        
+   548→        # Actualizar índices
+   549→        self._entity_name_index[name.lower()] = entity.id
+   550→        if entity_type not in self._entity_type_index:
+   551→            self._entity_type_index[entity_type] = set()
+   552→        self._entity_type_index[entity_type].add(entity.id)
+   553→        
+   554→        # Notificar
+   555→        await self._notify(GraphEvent(
+   556→            event_type=GraphEventType.ENTITY_CREATED,
+   557→            data={"entity_id": entity.id, "name": name, "type": entity_type}
+   558→        ))
+   559→        
+   560→        return entity
+   561→    
+   562→    def get_entity(self, entity_id: str) -> Optional[Entity]:
+   563→        """Obtiene una entidad por ID."""
+   564→        return self._entities.get(entity_id)
+   565→    
+   566→    def get_entity_by_name(self, name: str) -> Optional[Entity]:
+   567→        """Obtiene una entidad por nombre."""
+   568→        entity_id = self._entity_name_index.get(name.lower())
+   569→        if entity_id:
+   570→            return self._entities.get(entity_id)
+   571→        return None
+   572→    
+   573→    def get_entities_by_type(self, entity_type: EntityType) -> List[Entity]:
+   574→        """Obtiene entidades por tipo."""
+   575→        entity_ids = self._entity_type_index.get(entity_type, set())
+   576→        return [self._entities[eid] for eid in entity_ids if eid in self._entities]
+   577→    
+   578→    # === Relationship Operations ===
+   579→    
+   580→    async def add_relationship(
+   581→        self,
+   582→        source_id: str,
+   583→        target_id: str,
+   584→        relation_type: RelationType,
+   585→        description: Optional[str] = None,
+   586→        weight: float = 1.0
+   587→    ) -> Relationship:
+   588→        """Agrega una relación al grafo."""
+   589→        relationship = self._factory.create_relationship(
+   590→            source_id=source_id,
+   591→            target_id=target_id,
+   592→            relation_type=relation_type,
+   593→            description=description,
+   594→            weight=weight
+   595→        )
+   596→        
+   597→        cmd = AddRelationshipCommand(relationship)
+   598→        await cmd.execute(self)
+   599→        self._command_history.append(cmd)
+   600→        
+   601→        # Actualizar adjacencia
+   602→        if source_id not in self._adjacency:
+   603→            self._adjacency[source_id] = set()
+   604→        self._adjacency[source_id].add(target_id)
+   605→        
+   606→        await self._notify(GraphEvent(
+   607→            event_type=GraphEventType.RELATIONSHIP_CREATED,
+   608→            data={"relationship_id": relationship.id}
+   609→        ))
+   610→        
+   611→        return relationship
+   612→    
+   613→    def get_relationships(
+   614→        self,
+   615→        entity_id: str,
+   616→        relation_type: Optional[RelationType] = None
+   617→    ) -> List[Relationship]:
+   618→        """Obtiene relaciones de una entidad."""
+   619→        relationships = []
+   620→        for rel in self._relationships.values():
+   621→            if rel.source_id == entity_id or rel.target_id == entity_id:
+   622→                if relation_type is None or rel.relation_type == relation_type:
+   623→                    relationships.append(rel)
+   624→        return relationships
+   625→    
+   626→    def get_neighbors(self, entity_id: str) -> List[Entity]:
+   627→        """Obtiene entidades vecinas."""
+   628→        neighbor_ids = self._adjacency.get(entity_id, set())
+   629→        return [self._entities[nid] for nid in neighbor_ids if nid in self._entities]
+   630→    
+   631→    # === Extraction ===
+   632→    
+   633→    async def extract_from_text(self, text: str) -> Tuple[List[Entity], List[Relationship]]:
+   634→        """Extrae entidades y relaciones de texto."""
+   635→        return await self._extraction_strategy.extract(text)
+   636→    
+   637→    async def ingest_document(
+   638→        self,
+   639→        document: str,
+   640→        source_id: Optional[str] = None
+   641→    ) -> Tuple[List[Entity], List[Relationship]]:
+   642→        """Ingiera un documento completo al grafo."""
+   643→        entities, relationships = await self.extract_from_text(document)
+   644→        
+   645→        # Agregar al grafo
+   646→        for entity in entities:
+   647→            if source_id and source_id not in entity.source_ids:
+   648→                entity.source_ids.append(source_id)
+   649→            await self.add_entity(
+   650→                name=entity.name,
+   651→                entity_type=entity.entity_type,
+   652→                description=entity.description
+   653→            )
+   654→        
+   655→        for rel in relationships:
+   656→            await self.add_relationship(
+   657→                source_id=rel.source_id,
+   658→                target_id=rel.target_id,
+   659→                relation_type=rel.relation_type
+   660→            )
+   661→        
+   662→        return entities, relationships
+   663→    
+   664→    # === Query ===
+   665→    
+   666→    def query(self) -> GraphQueryBuilder:
+   667→        """Crea un builder de consultas."""
+   668→        return GraphQueryBuilder()
+   669→    
+   670→    def execute_query(self, query: Dict[str, Any]) -> List[Entity]:
+   671→        """Ejecuta una consulta."""
+   672→        results = []
+   673→        
+   674→        entity_types = query.get("entity_types", [])
+   675→        limit = query.get("limit", 100)
+   676→        
+   677→        if entity_types:
+   678→            for et in entity_types:
+   679→                results.extend(self.get_entities_by_type(et))
+   680→        else:
+   681→            results = list(self._entities.values())
+   682→        
+   683→        return results[:limit]
+   684→    
+   685→    # === Community Detection (Leiden-style) ===
+   686→    
+   687→    async def detect_communities(
+   688→        self,
+   689→        max_cluster_size: int = 10
+   690→    ) -> List[Community]:
+   691→        """Detecta comunidades usando algoritmo tipo Leiden."""
+   692→        # Placeholder - en producción usar graspologic o similar
+   693→        communities = []
+   694→        
+   695→        # Simular detección simple basada en conectividad
+   696→        visited = set()
+   697→        community_id = 0
+   698→        
+   699→        for entity_id in self._entities:
+   700→            if entity_id not in visited:
+   701→                # BFS para encontrar componente conectado
+   702→                component = set()
+   703→                queue = [entity_id]
+   704→                
+   705→                while queue:
+   706→                    current = queue.pop(0)
+   707→                    if current in visited:
+   708→                        continue
+   709→                    visited.add(current)
+   710→                    component.add(current)
+   711→                    
+   712→                    for neighbor_id in self._adjacency.get(current, set()):
+   713→                        if neighbor_id not in visited:
+   714→                            queue.append(neighbor_id)
+   715→                
+   716→                if component:
+   717→                    community_id += 1
+   718→                    community = Community(
+   719→                        id=f"community_{community_id}",
+   720→                        level=0,
+   721→                        title=f"Community {community_id}",
+   722→                        entity_ids=list(component)
+   723→                    )
+   724→                    communities.append(community)
+   725→                    self._communities[community.id] = community
+   726→        
+   727→        return communities
+   728→    
+   729→    # === Semantic Search ===
+   730→    
+   731→    async def semantic_search(
+   732→        self,
+   733→        query: str,
+   734→        top_k: int = 5
+   735→    ) -> List[Tuple[Entity, float]]:
+   736→        """Búsqueda semántica en el grafo."""
+   737→        # Placeholder - en producción usar embeddings
+   738→        results = []
+   739→        query_lower = query.lower()
+   740→        
+   741→        for entity in self._entities.values():
+   742→            score = 0.0
+   743→            if query_lower in entity.name.lower():
+   744→                score += 0.5
+   745→            if entity.description and query_lower in entity.description.lower():
+   746→                score += 0.3
+   747→            
+   748→            if score > 0:
+   749→                results.append((entity, score))
+   750→        
+   751→        results.sort(key=lambda x: x[1], reverse=True)
+   752→        return results[:top_k]
+   753→    
+   754→    # === Serialization ===
+   755→    
+   756→    def to_dict(self) -> Dict[str, Any]:
+   757→        """Serializa el grafo a diccionario."""
+   758→        return {
+   759→            "entities": [e.model_dump() for e in self._entities.values()],
+   760→            "relationships": [r.model_dump() for r in self._relationships.values()],
+   761→            "communities": [c.model_dump() for c in self._communities.values()]
+   762→        }
+   763→    
+   764→    @classmethod
+   765→    def from_dict(cls, data: Dict[str, Any]) -> 'KnowledgeGraph':
+   766→        """Deserializa el grafo."""
+   767→        kg = cls()
+   768→        
+   769→        for entity_data in data.get("entities", []):
+   770→            entity = Entity(**entity_data)
+   771→            kg._entities[entity.id] = entity
+   772→            kg._entity_name_index[entity.name.lower()] = entity.id
+   773→        
+   774→        for rel_data in data.get("relationships", []):
+   775→            rel = Relationship(**rel_data)
+   776→            kg._relationships[rel.id] = rel
+   777→        
+   778→        for comm_data in data.get("communities", []):
+   779→            comm = Community(**comm_data)
+   780→            kg._communities[comm.id] = comm
+   781→        
+   782→        return kg
+   783→
+   784→
+   785→# =============================================================================
+   786→# FACADE PATTERN - Simplified Interface
+   787→# =============================================================================
+   788→
+   789→class CognitiveKnowledgeBase:
+   790→    """
+   791→    Facade Pattern para acceso simplificado al Knowledge Graph.
+   792→    Combina Knowledge Graph con capacidades de RAG.
+   793→    """
+   794→    
+   795→    def __init__(self):
+   796→        self.graph = KnowledgeGraph()
+   797→        self._setup_observers()
+   798→    
+   799→    def _setup_observers(self) -> None:
+   800→        """Configura observers por defecto."""
+   801→        self.graph.add_observer(LoggingObserver())
+   802→    
+   803→    async def learn(self, text: str, source: Optional[str] = None) -> Dict[str, Any]:
+   804→        """Aprende de un texto, extrayendo conocimiento."""
+   805→        entities, relationships = await self.graph.ingest_document(text, source)
+   806→        
+   807→        return {
+   808→            "learned": True,
+   809→            "entities_created": len(entities),
+   810→            "relationships_created": len(relationships),
+   811→            "source": source
+   812→        }
+   813→    
+   814→    async def query(self, question: str) -> Dict[str, Any]:
+   815→        """Consulta el conocimiento."""
+   816→        # Búsqueda semántica
+   817→        results = await self.graph.semantic_search(question, top_k=5)
+   818→        
+   819→        # Expandir con vecinos
+   820→        expanded_entities = set()
+   821→        for entity, score in results:
+   822→            expanded_entities.add(entity)
+   823→            for neighbor in self.graph.get_neighbors(entity.id)[:3]:
+   824→                expanded_entities.add(neighbor)
+   825→        
+   826→        return {
+   827→            "question": question,
+   828→            "relevant_entities": [
+   829→                {"name": e.name, "type": e.entity_type, "description": e.description}
+   830→                for e in expanded_entities
+   831→            ],
+   832→            "confidence": results[0][1] if results else 0.0
+   833→        }
+   834→    
+   835→    async def get_context_for_agent(
+   836→        self,
+   837→        task: str,
+   838→        agent_role: str
+   839→    ) -> Dict[str, Any]:
+   840→        """Obtiene contexto relevante para un agente."""
+   841→        # Buscar entidades relevantes
+   842→        entities = await self.graph.semantic_search(task, top_k=10)
+   843→        
+   844→        # Filtrar por relevancia al rol
+   845→        relevant = [
+   846→            e for e, score in entities
+   847→            if score > 0.2
+   848→        ]
+   849→        
+   850→        return {
+   851→            "task": task,
+   852→            "agent_role": agent_role,
+   853→            "relevant_knowledge": [
+   854→                {"entity": e.name, "description": e.description}
+   855→                for e in relevant
+   856→            ],
+   857→            "context_confidence": entities[0][1] if entities else 0.0
+   858→        }
+   859→
+   860→
+   861→# =============================================================================
+   862→# SINGLETON PATTERN - Global Knowledge Base
+   863→# =============================================================================
+   864→
+   865→class GlobalKnowledgeBase:
+   866→    """Singleton para acceso global al Knowledge Graph."""
+   867→    
+   868→    _instance: Optional[CognitiveKnowledgeBase] = None
+   869→    
+   870→    @classmethod
+   871→    def get_instance(cls) -> CognitiveKnowledgeBase:
+   872→        if cls._instance is None:
+   873→            cls._instance = CognitiveKnowledgeBase()
+   874→        return cls._instance
+   875→    
+   876→    @classmethod
+   877→    def reset(cls) -> None:
+   878→        cls._instance = None
+   879→

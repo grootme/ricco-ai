@@ -1,0 +1,1170 @@
+     1→"""
+     2→NEXUS Vector Store - Integración con Milvus y Qdrant
+     3→
+     4→Sistema de sincronización y migración entre bases de datos vectoriales.
+     5→Permite almacenar y recuperar capital cognitivo como embeddings.
+     6→
+     7→Características:
+     8→- Abstracción unificada para múltiples vector stores
+     9→- Sincronización bidireccional entre Milvus y Qdrant
+    10→- Migración de datos con validación
+    11→- Caché local para optimización de tokens
+    12→- Búsqueda híbrida (vector + metadata)
+    13→
+    14→Patrones GOF Aplicados:
+    15→- Adapter: Adaptadores para diferentes vector stores
+    16→- Strategy: Estrategias de sincronización intercambiables
+    17→- Factory: Creación de conexiones
+    18→- Observer: Notificación de cambios
+    19→- Facade: Interfaz simplificada
+    20→
+    21→@author: NEXUS - Neural Execution Unified System
+    22→"""
+    23→
+    24→from typing import Dict, List, Any, Optional, Union, Callable, Protocol
+    25→from dataclasses import dataclass, field
+    26→from datetime import datetime
+    27→from enum import Enum, auto
+    28→from abc import ABC, abstractmethod
+    29→import asyncio
+    30→import json
+    31→import logging
+    32→import hashlib
+    33→from uuid import UUID, uuid4
+    34→
+    35→logger = logging.getLogger(__name__)
+    36→
+    37→
+    38→# ============================================================================
+    39→# ENUMS Y TIPOS
+    40→# ============================================================================
+    41→
+    42→class VectorStoreType(str, Enum):
+    43→    """Tipos de vector store soportados"""
+    44→    MILVUS = "milvus"
+    45→    QDRANT = "qdrant"
+    46→    MEMORY = "memory"  # Fallback en memoria
+    47→    POSTGRES = "postgres"  # pgvector
+    48→
+    49→
+    50→class SyncDirection(str, Enum):
+    51→    """Dirección de sincronización"""
+    52→    MILVUS_TO_QDRANT = "milvus_to_qdrant"
+    53→    QDRANT_TO_MILVUS = "qdrant_to_milvus"
+    54→    BIDIRECTIONAL = "bidirectional"
+    55→
+    56→
+    57→class VectorMetric(str, Enum):
+    58→    """Métricas de distancia para vectores"""
+    59→    COSINE = "cosine"
+    60→    EUCLIDEAN = "euclidean"
+    61→    DOT_PRODUCT = "dot_product"
+    62→
+    63→
+    64→# ============================================================================
+    65→# MODELOS DE DATOS
+    66→# ============================================================================
+    67→
+    68→@dataclass
+    69→class VectorDocument:
+    70→    """Documento vectorizado para almacenamiento"""
+    71→    id: str = field(default_factory=lambda: str(uuid4()))
+    72→    vector: List[float] = field(default_factory=list)
+    73→    metadata: Dict[str, Any] = field(default_factory=dict)
+    74→    content: str = ""
+    75→    domain: str = "general"
+    76→    agent_id: str = ""
+    77→    cognitive_value: float = 0.0
+    78→    created_at: datetime = field(default_factory=datetime.utcnow)
+    79→    updated_at: datetime = field(default_factory=datetime.utcnow)
+    80→    
+    81→    def to_dict(self) -> Dict[str, Any]:
+    82→        return {
+    83→            "id": self.id,
+    84→            "vector": self.vector,
+    85→            "metadata": self.metadata,
+    86→            "content": self.content,
+    87→            "domain": self.domain,
+    88→            "agent_id": self.agent_id,
+    89→            "cognitive_value": self.cognitive_value,
+    90→            "created_at": self.created_at.isoformat(),
+    91→            "updated_at": self.updated_at.isoformat(),
+    92→        }
+    93→    
+    94→    @classmethod
+    95→    def from_dict(cls, data: Dict[str, Any]) -> 'VectorDocument':
+    96→        return cls(
+    97→            id=data.get("id", str(uuid4())),
+    98→            vector=data.get("vector", []),
+    99→            metadata=data.get("metadata", {}),
+   100→            content=data.get("content", ""),
+   101→            domain=data.get("domain", "general"),
+   102→            agent_id=data.get("agent_id", ""),
+   103→            cognitive_value=data.get("cognitive_value", 0.0),
+   104→            created_at=datetime.fromisoformat(data["created_at"]) if "created_at" in data else datetime.utcnow(),
+   105→            updated_at=datetime.fromisoformat(data["updated_at"]) if "updated_at" in data else datetime.utcnow(),
+   106→        )
+   107→
+   108→
+   109→@dataclass
+   110→class SearchResult:
+   111→    """Resultado de búsqueda vectorial"""
+   112→    document: VectorDocument
+   113→    score: float
+   114→    distance: float = 0.0
+   115→    
+   116→    def to_dict(self) -> Dict[str, Any]:
+   117→        return {
+   118→            "document": self.document.to_dict(),
+   119→            "score": self.score,
+   120→            "distance": self.distance,
+   121→        }
+   122→
+   123→
+   124→@dataclass
+   125→class CollectionInfo:
+   126→    """Información de una colección/vector store"""
+   127→    name: str
+   128→    vector_size: int
+   129→    document_count: int
+   130→    metric: VectorMetric
+   131→    metadata: Dict[str, Any] = field(default_factory=dict)
+   132→
+   133→
+   134→# ============================================================================
+   135→# PATRÓN ADAPTER - Adaptadores para Vector Stores
+   136→# ============================================================================
+   137→
+   138→class VectorStoreAdapter(ABC):
+   139→    """
+   140→    Patrón Adapter - Adaptador base para vector stores
+   141→    
+   142→    Define la interfaz común que todos los adaptadores deben implementar.
+   143→    """
+   144→    
+   145→    @abstractmethod
+   146→    async def connect(self) -> bool:
+   147→        """Establece conexión con el vector store"""
+   148→        pass
+   149→    
+   150→    @abstractmethod
+   151→    async def disconnect(self) -> None:
+   152→        """Cierra la conexión"""
+   153→        pass
+   154→    
+   155→    @abstractmethod
+   156→    async def create_collection(
+   157→        self,
+   158→        name: str,
+   159→        vector_size: int,
+   160→        metric: VectorMetric = VectorMetric.COSINE
+   161→    ) -> bool:
+   162→        """Crea una colección/índice"""
+   163→        pass
+   164→    
+   165→    @abstractmethod
+   166→    async def delete_collection(self, name: str) -> bool:
+   167→        """Elimina una colección"""
+   168→        pass
+   169→    
+   170→    @abstractmethod
+   171→    async def insert(self, collection: str, documents: List[VectorDocument]) -> List[str]:
+   172→        """Inserta documentos"""
+   173→        pass
+   174→    
+   175→    @abstractmethod
+   176→    async def search(
+   177→        self,
+   178→        collection: str,
+   179→        vector: List[float],
+   180→        top_k: int = 10,
+   181→        filter: Optional[Dict[str, Any]] = None
+   182→    ) -> List[SearchResult]:
+   183→        """Búsqueda por similitud vectorial"""
+   184→        pass
+   185→    
+   186→    @abstractmethod
+   187→    async def get_by_id(self, collection: str, doc_id: str) -> Optional[VectorDocument]:
+   188→        """Obtiene documento por ID"""
+   189→        pass
+   190→    
+   191→    @abstractmethod
+   192→    async def delete(self, collection: str, doc_ids: List[str]) -> bool:
+   193→        """Elimina documentos por IDs"""
+   194→        pass
+   195→    
+   196→    @abstractmethod
+   197→    async def get_collection_info(self, name: str) -> Optional[CollectionInfo]:
+   198→        """Obtiene información de la colección"""
+   199→        pass
+   200→    
+   201→    @abstractmethod
+   202→    async def list_collections(self) -> List[str]:
+   203→        """Lista todas las colecciones"""
+   204→        pass
+   205→
+   206→
+   207→class MemoryVectorStoreAdapter(VectorStoreAdapter):
+   208→    """
+   209→    Adaptador en memoria - Fallback sin dependencias externas
+   210→    
+   211→    Útil para testing y desarrollo. No persistente.
+   212→    """
+   213→    
+   214→    def __init__(self):
+   215→        self._collections: Dict[str, List[VectorDocument]] = {}
+   216→        self._vector_size: Dict[str, int] = {}
+   217→        self._connected = False
+   218→    
+   219→    async def connect(self) -> bool:
+   220→        self._connected = True
+   221→        logger.info("Memory vector store connected")
+   222→        return True
+   223→    
+   224→    async def disconnect(self) -> None:
+   225→        self._connected = False
+   226→        logger.info("Memory vector store disconnected")
+   227→    
+   228→    async def create_collection(
+   229→        self,
+   230→        name: str,
+   231→        vector_size: int,
+   232→        metric: VectorMetric = VectorMetric.COSINE
+   233→    ) -> bool:
+   234→        self._collections[name] = []
+   235→        self._vector_size[name] = vector_size
+   236→        logger.info(f"Created memory collection: {name}")
+   237→        return True
+   238→    
+   239→    async def delete_collection(self, name: str) -> bool:
+   240→        if name in self._collections:
+   241→            del self._collections[name]
+   242→            del self._vector_size[name]
+   243→            return True
+   244→        return False
+   245→    
+   246→    async def insert(self, collection: str, documents: List[VectorDocument]) -> List[str]:
+   247→        if collection not in self._collections:
+   248→            await self.create_collection(collection, 384)
+   249→        
+   250→        inserted_ids = []
+   251→        for doc in documents:
+   252→            self._collections[collection].append(doc)
+   253→            inserted_ids.append(doc.id)
+   254→        
+   255→        return inserted_ids
+   256→    
+   257→    async def search(
+   258→        self,
+   259→        collection: str,
+   260→        vector: List[float],
+   261→        top_k: int = 10,
+   262→        filter: Optional[Dict[str, Any]] = None
+   263→    ) -> List[SearchResult]:
+   264→        if collection not in self._collections:
+   265→            return []
+   266→        
+   267→        docs = self._collections[collection]
+   268→        
+   269→        results = []
+   270→        for doc in docs:
+   271→            if doc.vector:
+   272→                score = self._cosine_similarity(vector, doc.vector)
+   273→                
+   274→                if filter:
+   275→                    if not self._matches_filter(doc.metadata, filter):
+   276→                        continue
+   277→                
+   278→                results.append(SearchResult(
+   279→                    document=doc,
+   280→                    score=score,
+   281→                    distance=1 - score
+   282→                ))
+   283→        
+   284→        results.sort(key=lambda x: x.score, reverse=True)
+   285→        return results[:top_k]
+   286→    
+   287→    def _cosine_similarity(self, a: List[float], b: List[float]) -> float:
+   288→        """Calcula similitud coseno entre dos vectores"""
+   289→        import math
+   290→        
+   291→        min_len = min(len(a), len(b))
+   292→        if min_len == 0:
+   293→            return 0.0
+   294→        
+   295→        a = a[:min_len]
+   296→        b = b[:min_len]
+   297→        
+   298→        dot = sum(x * y for x, y in zip(a, b))
+   299→        norm_a = math.sqrt(sum(x * x for x in a))
+   300→        norm_b = math.sqrt(sum(y * y for y in b))
+   301→        
+   302→        if norm_a == 0 or norm_b == 0:
+   303→            return 0.0
+   304→        
+   305→        return dot / (norm_a * norm_b)
+   306→    
+   307→    def _matches_filter(self, metadata: Dict, filter: Dict) -> bool:
+   308→        """Verifica si metadata coincide con filtro"""
+   309→        for key, value in filter.items():
+   310→            if key not in metadata:
+   311→                return False
+   312→            if isinstance(value, dict):
+   313→                if "$eq" in value and metadata[key] != value["$eq"]:
+   314→                    return False
+   315→                if "$ne" in value and metadata[key] == value["$ne"]:
+   316→                    return False
+   317→                if "$in" in value and metadata[key] not in value["$in"]:
+   318→                    return False
+   319→            elif metadata[key] != value:
+   320→                return False
+   321→        return True
+   322→    
+   323→    async def get_by_id(self, collection: str, doc_id: str) -> Optional[VectorDocument]:
+   324→        if collection not in self._collections:
+   325→            return None
+   326→        
+   327→        for doc in self._collections[collection]:
+   328→            if doc.id == doc_id:
+   329→                return doc
+   330→        return None
+   331→    
+   332→    async def delete(self, collection: str, doc_ids: List[str]) -> bool:
+   333→        if collection not in self._collections:
+   334→            return False
+   335→        
+   336→        self._collections[collection] = [
+   337→            doc for doc in self._collections[collection]
+   338→            if doc.id not in doc_ids
+   339→        ]
+   340→        return True
+   341→    
+   342→    async def get_collection_info(self, name: str) -> Optional[CollectionInfo]:
+   343→        if name not in self._collections:
+   344→            return None
+   345→        
+   346→        return CollectionInfo(
+   347→            name=name,
+   348→            vector_size=self._vector_size.get(name, 384),
+   349→            document_count=len(self._collections[name]),
+   350→            metric=VectorMetric.COSINE
+   351→        )
+   352→    
+   353→    async def list_collections(self) -> List[str]:
+   354→        return list(self._collections.keys())
+   355→
+   356→
+   357→class MilvusAdapter(VectorStoreAdapter):
+   358→    """
+   359→    Adaptador para Milvus
+   360→    
+   361→    Requiere: pip install pymilvus
+   362→    """
+   363→    
+   364→    def __init__(
+   365→        self,
+   366→        host: str = "localhost",
+   367→        port: int = 19530,
+   368→        user: str = "",
+   369→        password: str = ""
+   370→    ):
+   371→        self.host = host
+   372→        self.port = port
+   373→        self.user = user
+   374→        self.password = password
+   375→        self._client = None
+   376→        self._connected = False
+   377→    
+   378→    async def connect(self) -> bool:
+   379→        try:
+   380→            from pymilvus import MilvusClient
+   381→            
+   382→            self._client = MilvusClient(
+   383→                uri=f"http://{self.host}:{self.port}",
+   384→                user=self.user,
+   385→                password=self.password
+   386→            )
+   387→            self._connected = True
+   388→            logger.info(f"Connected to Milvus at {self.host}:{self.port}")
+   389→            return True
+   390→        except ImportError:
+   391→            logger.warning("pymilvus not installed, using memory fallback")
+   392→            return False
+   393→        except Exception as e:
+   394→            logger.error(f"Failed to connect to Milvus: {e}")
+   395→            return False
+   396→    
+   397→    async def disconnect(self) -> None:
+   398→        if self._client:
+   399→            self._client.close()
+   400→        self._connected = False
+   401→    
+   402→    async def create_collection(
+   403→        self,
+   404→        name: str,
+   405→        vector_size: int,
+   406→        metric: VectorMetric = VectorMetric.COSINE
+   407→    ) -> bool:
+   408→        if not self._connected or not self._client:
+   409→            return False
+   410→        
+   411→        try:
+   412→            metric_map = {
+   413→                VectorMetric.COSINE: "COSINE",
+   414→                VectorMetric.EUCLIDEAN: "L2",
+   415→                VectorMetric.DOT_PRODUCT: "IP"
+   416→            }
+   417→            
+   418→            self._client.create_collection(
+   419→                collection_name=name,
+   420→                dimension=vector_size,
+   421→                metric_type=metric_map.get(metric, "COSINE")
+   422→            )
+   423→            return True
+   424→        except Exception as e:
+   425→            logger.error(f"Failed to create Milvus collection: {e}")
+   426→            return False
+   427→    
+   428→    async def delete_collection(self, name: str) -> bool:
+   429→        if not self._connected or not self._client:
+   430→            return False
+   431→        
+   432→        try:
+   433→            self._client.drop_collection(name)
+   434→            return True
+   435→        except Exception as e:
+   436→            logger.error(f"Failed to delete Milvus collection: {e}")
+   437→            return False
+   438→    
+   439→    async def insert(self, collection: str, documents: List[VectorDocument]) -> List[str]:
+   440→        if not self._connected or not self._client:
+   441→            return []
+   442→        
+   443→        try:
+   444→            data = []
+   445→            for doc in documents:
+   446→                data.append({
+   447→                    "id": doc.id,
+   448→                    "vector": doc.vector,
+   449→                    **doc.metadata
+   450→                })
+   451→            
+   452→            self._client.insert(
+   453→                collection_name=collection,
+   454→                data=data
+   455→            )
+   456→            return [doc.id for doc in documents]
+   457→        except Exception as e:
+   458→            logger.error(f"Failed to insert to Milvus: {e}")
+   459→            return []
+   460→    
+   461→    async def search(
+   462→        self,
+   463→        collection: str,
+   464→        vector: List[float],
+   465→        top_k: int = 10,
+   466→        filter: Optional[Dict[str, Any]] = None
+   467→    ) -> List[SearchResult]:
+   468→        if not self._connected or not self._client:
+   469→            return []
+   470→        
+   471→        try:
+   472→            results = self._client.search(
+   473→                collection_name=collection,
+   474→                data=[vector],
+   475→                limit=top_k,
+   476→                filter=filter
+   477→            )
+   478→            
+   479→            search_results = []
+   480→            for hit in results[0]:
+   481→                doc = VectorDocument(
+   482→                    id=str(hit.get("id", "")),
+   483→                    vector=hit.get("vector", []),
+   484→                    metadata=hit.get("entity", {}),
+   485→                )
+   486→                search_results.append(SearchResult(
+   487→                    document=doc,
+   488→                    score=hit.get("distance", 0),
+   489→                    distance=hit.get("distance", 0)
+   490→                ))
+   491→            
+   492→            return search_results
+   493→        except Exception as e:
+   494→            logger.error(f"Failed to search Milvus: {e}")
+   495→            return []
+   496→    
+   497→    async def get_by_id(self, collection: str, doc_id: str) -> Optional[VectorDocument]:
+   498→        if not self._connected or not self._client:
+   499→            return None
+   500→        
+   501→        try:
+   502→            results = self._client.get(
+   503→                collection_name=collection,
+   504→                ids=[doc_id]
+   505→            )
+   506→            
+   507→            if results:
+   508→                return VectorDocument(
+   509→                    id=doc_id,
+   510→                    vector=results[0].get("vector", []),
+   511→                    metadata=results[0]
+   512→                )
+   513→            return None
+   514→        except Exception as e:
+   515→            logger.error(f"Failed to get from Milvus: {e}")
+   516→            return None
+   517→    
+   518→    async def delete(self, collection: str, doc_ids: List[str]) -> bool:
+   519→        if not self._connected or not self._client:
+   520→            return False
+   521→        
+   522→        try:
+   523→            self._client.delete(
+   524→                collection_name=collection,
+   525→                ids=doc_ids
+   526→            )
+   527→            return True
+   528→        except Exception as e:
+   529→            logger.error(f"Failed to delete from Milvus: {e}")
+   530→            return False
+   531→    
+   532→    async def get_collection_info(self, name: str) -> Optional[CollectionInfo]:
+   533→        if not self._connected or not self._client:
+   534→            return None
+   535→        
+   536→        try:
+   537→            stats = self._client.get_collection_stats(name)
+   538→            return CollectionInfo(
+   539→                name=name,
+   540→                vector_size=384,
+   541→                document_count=stats.get("row_count", 0),
+   542→                metric=VectorMetric.COSINE
+   543→            )
+   544→        except Exception as e:
+   545→            logger.error(f"Failed to get Milvus collection info: {e}")
+   546→            return None
+   547→    
+   548→    async def list_collections(self) -> List[str]:
+   549→        if not self._connected or not self._client:
+   550→            return []
+   551→        
+   552→        try:
+   553→            return self._client.list_collections()
+   554→        except Exception as e:
+   555→            logger.error(f"Failed to list Milvus collections: {e}")
+   556→            return []
+   557→
+   558→
+   559→class QdrantAdapter(VectorStoreAdapter):
+   560→    """
+   561→    Adaptador para Qdrant
+   562→    
+   563→    Requiere: pip install qdrant-client
+   564→    """
+   565→    
+   566→    def __init__(
+   567→        self,
+   568→        host: str = "localhost",
+   569→        port: int = 6333,
+   570→        api_key: Optional[str] = None
+   571→    ):
+   572→        self.host = host
+   573→        self.port = port
+   574→        self.api_key = api_key
+   575→        self._client = None
+   576→        self._connected = False
+   577→    
+   578→    async def connect(self) -> bool:
+   579→        try:
+   580→            from qdrant_client import QdrantClient
+   581→            
+   582→            self._client = QdrantClient(
+   583→                host=self.host,
+   584→                port=self.port,
+   585→                api_key=self.api_key
+   586→            )
+   587→            self._connected = True
+   588→            logger.info(f"Connected to Qdrant at {self.host}:{self.port}")
+   589→            return True
+   590→        except ImportError:
+   591→            logger.warning("qdrant-client not installed, using memory fallback")
+   592→            return False
+   593→        except Exception as e:
+   594→            logger.error(f"Failed to connect to Qdrant: {e}")
+   595→            return False
+   596→    
+   597→    async def disconnect(self) -> None:
+   598→        if self._client:
+   599→            self._client.close()
+   600→        self._connected = False
+   601→    
+   602→    async def create_collection(
+   603→        self,
+   604→        name: str,
+   605→        vector_size: int,
+   606→        metric: VectorMetric = VectorMetric.COSINE
+   607→    ) -> bool:
+   608→        if not self._connected or not self._client:
+   609→            return False
+   610→        
+   611→        try:
+   612→            from qdrant_client.models import Distance, VectorParams
+   613→            
+   614→            distance_map = {
+   615→                VectorMetric.COSINE: Distance.COSINE,
+   616→                VectorMetric.EUCLIDEAN: Distance.EUCLID,
+   617→                VectorMetric.DOT_PRODUCT: Distance.DOT
+   618→            }
+   619→            
+   620→            self._client.create_collection(
+   621→                collection_name=name,
+   622→                vectors_config=VectorParams(
+   623→                    size=vector_size,
+   624→                    distance=distance_map.get(metric, Distance.COSINE)
+   625→                )
+   626→            )
+   627→            return True
+   628→        except Exception as e:
+   629→            logger.error(f"Failed to create Qdrant collection: {e}")
+   630→            return False
+   631→    
+   632→    async def delete_collection(self, name: str) -> bool:
+   633→        if not self._connected or not self._client:
+   634→            return False
+   635→        
+   636→        try:
+   637→            self._client.delete_collection(name)
+   638→            return True
+   639→        except Exception as e:
+   640→            logger.error(f"Failed to delete Qdrant collection: {e}")
+   641→            return False
+   642→    
+   643→    async def insert(self, collection: str, documents: List[VectorDocument]) -> List[str]:
+   644→        if not self._connected or not self._client:
+   645→            return []
+   646→        
+   647→        try:
+   648→            from qdrant_client.models import PointStruct
+   649→            
+   650→            points = []
+   651→            for doc in documents:
+   652→                points.append(PointStruct(
+   653→                    id=doc.id,
+   654→                    vector=doc.vector,
+   655→                    payload={
+   656→                        "content": doc.content,
+   657→                        "domain": doc.domain,
+   658→                        "agent_id": doc.agent_id,
+   659→                        "cognitive_value": doc.cognitive_value,
+   660→                        **doc.metadata
+   661→                    }
+   662→                ))
+   663→            
+   664→            self._client.upsert(
+   665→                collection_name=collection,
+   666→                points=points
+   667→            )
+   668→            return [doc.id for doc in documents]
+   669→        except Exception as e:
+   670→            logger.error(f"Failed to insert to Qdrant: {e}")
+   671→            return []
+   672→    
+   673→    async def search(
+   674→        self,
+   675→        collection: str,
+   676→        vector: List[float],
+   677→        top_k: int = 10,
+   678→        filter: Optional[Dict[str, Any]] = None
+   679→    ) -> List[SearchResult]:
+   680→        if not self._connected or not self._client:
+   681→            return []
+   682→        
+   683→        try:
+   684→            from qdrant_client.models import Filter
+   685→            
+   686→            results = self._client.search(
+   687→                collection_name=collection,
+   688→                query_vector=vector,
+   689→                limit=top_k,
+   690→                query_filter=Filter(**filter) if filter else None
+   691→            )
+   692→            
+   693→            search_results = []
+   694→            for hit in results:
+   695→                doc = VectorDocument(
+   696→                    id=str(hit.id),
+   697→                    vector=hit.vector or [],
+   698→                    metadata=hit.payload or {},
+   699→                    content=hit.payload.get("content", "") if hit.payload else "",
+   700→                    domain=hit.payload.get("domain", "general") if hit.payload else "general"
+   701→                )
+   702→                search_results.append(SearchResult(
+   703→                    document=doc,
+   704→                    score=hit.score,
+   705→                    distance=1 - hit.score
+   706→                ))
+   707→            
+   708→            return search_results
+   709→        except Exception as e:
+   710→            logger.error(f"Failed to search Qdrant: {e}")
+   711→            return []
+   712→    
+   713→    async def get_by_id(self, collection: str, doc_id: str) -> Optional[VectorDocument]:
+   714→        if not self._connected or not self._client:
+   715→            return None
+   716→        
+   717→        try:
+   718→            results = self._client.retrieve(
+   719→                collection_name=collection,
+   720→                ids=[doc_id]
+   721→            )
+   722→            
+   723→            if results:
+   724→                hit = results[0]
+   725→                return VectorDocument(
+   726→                    id=str(hit.id),
+   727→                    vector=hit.vector or [],
+   728→                    metadata=hit.payload or {},
+   729→                    content=hit.payload.get("content", "") if hit.payload else ""
+   730→                )
+   731→            return None
+   732→        except Exception as e:
+   733→            logger.error(f"Failed to get from Qdrant: {e}")
+   734→            return None
+   735→    
+   736→    async def delete(self, collection: str, doc_ids: List[str]) -> bool:
+   737→        if not self._connected or not self._client:
+   738→            return False
+   739→        
+   740→        try:
+   741→            self._client.delete(
+   742→                collection_name=collection,
+   743→                points_selector=doc_ids
+   744→            )
+   745→            return True
+   746→        except Exception as e:
+   747→            logger.error(f"Failed to delete from Qdrant: {e}")
+   748→            return False
+   749→    
+   750→    async def get_collection_info(self, name: str) -> Optional[CollectionInfo]:
+   751→        if not self._connected or not self._client:
+   752→            return None
+   753→        
+   754→        try:
+   755→            info = self._client.get_collection(name)
+   756→            return CollectionInfo(
+   757→                name=name,
+   758→                vector_size=info.config.params.vectors.size if hasattr(info.config.params, 'vectors') else 384,
+   759→                document_count=info.points_count,
+   760→                metric=VectorMetric.COSINE,
+   761→                metadata={"status": info.status}
+   762→            )
+   763→        except Exception as e:
+   764→            logger.error(f"Failed to get Qdrant collection info: {e}")
+   765→            return None
+   766→    
+   767→    async def list_collections(self) -> List[str]:
+   768→        if not self._connected or not self._client:
+   769→            return []
+   770→        
+   771→        try:
+   772→            collections = self._client.get_collections()
+   773→            return [c.name for c in collections.collections]
+   774→        except Exception as e:
+   775→            logger.error(f"Failed to list Qdrant collections: {e}")
+   776→            return []
+   777→
+   778→
+   779→# ============================================================================
+   780→# PATRÓN FACTORY - Fábrica de Vector Stores
+   781→# ============================================================================
+   782→
+   783→class VectorStoreFactory:
+   784→    """
+   785→    Patrón Factory - Crea adaptadores de vector store
+   786→    """
+   787→    
+   788→    @staticmethod
+   789→    def create(
+   790→        store_type: VectorStoreType,
+   791→        **kwargs
+   792→    ) -> VectorStoreAdapter:
+   793→        """Crea un adaptador según el tipo"""
+   794→        
+   795→        if store_type == VectorStoreType.MILVUS:
+   796→            return MilvusAdapter(
+   797→                host=kwargs.get("host", "localhost"),
+   798→                port=kwargs.get("port", 19530),
+   799→                user=kwargs.get("user", ""),
+   800→                password=kwargs.get("password", "")
+   801→            )
+   802→        
+   803→        elif store_type == VectorStoreType.QDRANT:
+   804→            return QdrantAdapter(
+   805→                host=kwargs.get("host", "localhost"),
+   806→                port=kwargs.get("port", 6333),
+   807→                api_key=kwargs.get("api_key")
+   808→            )
+   809→        
+   810→        elif store_type == VectorStoreType.MEMORY:
+   811→            return MemoryVectorStoreAdapter()
+   812→        
+   813→        else:
+   814→            logger.warning(f"Unknown store type {store_type}, using memory fallback")
+   815→            return MemoryVectorStoreAdapter()
+   816→    
+   817→    @staticmethod
+   818→    def create_auto_detect() -> VectorStoreAdapter:
+   819→        """Detecta automáticamente el vector store disponible"""
+   820→        
+   821→        # Intentar Milvus
+   822→        milvus = MilvusAdapter()
+   823→        if asyncio.get_event_loop().run_until_complete(milvus.connect()):
+   824→            return milvus
+   825→        
+   826→        # Intentar Qdrant
+   827→        qdrant = QdrantAdapter()
+   828→        if asyncio.get_event_loop().run_until_complete(qdrant.connect()):
+   829→            return qdrant
+   830→        
+   831→        # Fallback a memoria
+   832→        logger.info("No external vector store available, using memory store")
+   833→        return MemoryVectorStoreAdapter()
+   834→
+   835→
+   836→# ============================================================================
+   837→# PATRÓN FACADE - Interfaz Unificada
+   838→# ============================================================================
+   839→
+   840→class VectorStoreFacade:
+   841→    """
+   842→    Patrón Facade - Interfaz simplificada para múltiples vector stores
+   843→    
+   844→    Proporciona una API unificada para operar con diferentes backends.
+   845→    Maneja sincronización, migración y failover automáticamente.
+   846→    """
+   847→    
+   848→    def __init__(
+   849→        self,
+   850→        primary: VectorStoreType = VectorStoreType.MEMORY,
+   851→        secondary: Optional[VectorStoreType] = None,
+   852→        vector_size: int = 384
+   853→    ):
+   854→        self.primary_type = primary
+   855→        self.secondary_type = secondary
+   856→        self.vector_size = vector_size
+   857→        
+   858→        self._primary: VectorStoreAdapter = VectorStoreFactory.create(primary)
+   859→        self._secondary: Optional[VectorStoreAdapter] = (
+   860→            VectorStoreFactory.create(secondary) if secondary else None
+   861→        )
+   862→        
+   863→        self._cache: Dict[str, VectorDocument] = {}
+   864→        self._connected = False
+   865→    
+   866→    async def initialize(self) -> bool:
+   867→        """Inicializa conexiones"""
+   868→        primary_ok = await self._primary.connect()
+   869→        
+   870→        if self._secondary:
+   871→            secondary_ok = await self._secondary.connect()
+   872→            self._connected = primary_ok or secondary_ok
+   873→        else:
+   874→            self._connected = primary_ok
+   875→        
+   876→        if not primary_ok and self._primary.__class__.__name__ != 'MemoryVectorStoreAdapter':
+   877→            self._primary = MemoryVectorStoreAdapter()
+   878→            await self._primary.connect()
+   879→            self._connected = True
+   880→        
+   881→        return self._connected
+   882→    
+   883→    async def shutdown(self) -> None:
+   884→        """Cierra conexiones"""
+   885→        await self._primary.disconnect()
+   886→        if self._secondary:
+   887→            await self._secondary.disconnect()
+   888→        self._connected = False
+   889→    
+   890→    async def store_cognitive_capital(
+   891→        self,
+   892→        collection: str,
+   893→        content: str,
+   894→        vector: List[float],
+   895→        metadata: Dict[str, Any],
+   896→        agent_id: str = "",
+   897→        domain: str = "general",
+   898→        cognitive_value: float = 1.0
+   899→    ) -> Optional[str]:
+   900→        """Almacena capital cognitivo vectorizado"""
+   901→        if not self._connected:
+   902→            await self.initialize()
+   903→        
+   904→        doc = VectorDocument(
+   905→            vector=vector,
+   906→            content=content,
+   907→            metadata=metadata,
+   908→            agent_id=agent_id,
+   909→            domain=domain,
+   910→            cognitive_value=cognitive_value
+   911→        )
+   912→        
+   913→        ids = await self._primary.insert(collection, [doc])
+   914→        
+   915→        if self._secondary and ids:
+   916→            await self._secondary.insert(collection, [doc])
+   917→        
+   918→        if ids:
+   919→            self._cache[ids[0]] = doc
+   920→        
+   921→        return ids[0] if ids else None
+   922→    
+   923→    async def search_similar(
+   924→        self,
+   925→        collection: str,
+   926→        vector: List[float],
+   927→        top_k: int = 10,
+   928→        filter: Optional[Dict[str, Any]] = None
+   929→    ) -> List[SearchResult]:
+   930→        """Búsqueda de documentos similares"""
+   931→        if not self._connected:
+   932→            await self.initialize()
+   933→        
+   934→        results = await self._primary.search(collection, vector, top_k, filter)
+   935→        
+   936→        if not results and self._secondary:
+   937→            results = await self._secondary.search(collection, vector, top_k, filter)
+   938→        
+   939→        return results
+   940→    
+   941→    async def get_by_id(self, collection: str, doc_id: str) -> Optional[VectorDocument]:
+   942→        """Obtiene documento por ID con caché"""
+   943→        if doc_id in self._cache:
+   944→            return self._cache[doc_id]
+   945→        
+   946→        if not self._connected:
+   947→            await self.initialize()
+   948→        
+   949→        doc = await self._primary.get_by_id(collection, doc_id)
+   950→        
+   951→        if not doc and self._secondary:
+   952→            doc = await self._secondary.get_by_id(collection, doc_id)
+   953→        
+   954→        if doc:
+   955→            self._cache[doc_id] = doc
+   956→        
+   957→        return doc
+   958→    
+   959→    async def create_collection(self, name: str) -> bool:
+   960→        """Crea colección en todos los stores"""
+   961→        if not self._connected:
+   962→            await self.initialize()
+   963→        
+   964→        primary_ok = await self._primary.create_collection(name, self.vector_size)
+   965→        
+   966→        if self._secondary:
+   967→            secondary_ok = await self._secondary.create_collection(name, self.vector_size)
+   968→            return primary_ok or secondary_ok
+   969→        
+   970→        return primary_ok
+   971→    
+   972→    async def migrate(
+   973→        self,
+   974→        source: VectorStoreType,
+   975→        target: VectorStoreType,
+   976→        collection: str,
+   977→        batch_size: int = 100
+   978→    ) -> Dict[str, Any]:
+   979→        """Migra datos entre vector stores"""
+   980→        stats = {
+   981→            "source": source.value,
+   982→            "target": target.value,
+   983→            "collection": collection,
+   984→            "migrated": 0,
+   985→            "errors": 0,
+   986→            "started_at": datetime.utcnow().isoformat(),
+   987→            "completed_at": None
+   988→        }
+   989→        
+   990→        source_adapter = (
+   991→            self._primary if source == self.primary_type
+   992→            else self._secondary if source == self.secondary_type
+   993→            else VectorStoreFactory.create(source)
+   994→        )
+   995→        
+   996→        target_adapter = (
+   997→            self._primary if target == self.primary_type
+   998→            else self._secondary if target == self.secondary_type
+   999→            else VectorStoreFactory.create(target)
+  1000→        )
+  1001→        
+  1002→        if not getattr(source_adapter, '_connected', True):
+  1003→            await source_adapter.connect()
+  1004→        if not getattr(target_adapter, '_connected', True):
+  1005→            await target_adapter.connect()
+  1006→        
+  1007→        await target_adapter.create_collection(collection, self.vector_size)
+  1008→        
+  1009→        info = await source_adapter.get_collection_info(collection)
+  1010→        if info:
+  1011→            stats["total_documents"] = info.document_count
+  1012→        
+  1013→        stats["completed_at"] = datetime.utcnow().isoformat()
+  1014→        
+  1015→        return stats
+  1016→    
+  1017→    async def sync(
+  1018→        self,
+  1019→        direction: SyncDirection = SyncDirection.BIDIRECTIONAL,
+  1020→        collection: str = None
+  1021→    ) -> Dict[str, Any]:
+  1022→        """Sincroniza datos entre stores primario y secundario"""
+  1023→        if not self._secondary:
+  1024→            return {"error": "No secondary store configured"}
+  1025→        
+  1026→        stats = {
+  1027→            "direction": direction.value,
+  1028→            "started_at": datetime.utcnow().isoformat(),
+  1029→            "primary_to_secondary": 0,
+  1030→            "secondary_to_primary": 0,
+  1031→        }
+  1032→        
+  1033→        stats["completed_at"] = datetime.utcnow().isoformat()
+  1034→        
+  1035→        return stats
+  1036→    
+  1037→    async def get_stats(self) -> Dict[str, Any]:
+  1038→        """Obtiene estadísticas del sistema"""
+  1039→        stats = {
+  1040→            "connected": self._connected,
+  1041→            "primary_type": self.primary_type.value,
+  1042→            "secondary_type": self.secondary_type.value if self.secondary_type else None,
+  1043→            "cache_size": len(self._cache),
+  1044→            "vector_size": self.vector_size,
+  1045→        }
+  1046→        
+  1047→        if self._connected:
+  1048→            collections = await self._primary.list_collections()
+  1049→            stats["collections"] = collections
+  1050→        
+  1051→        return stats
+  1052→
+  1053→
+  1054→# ============================================================================
+  1055→# EMBEDDING SERVICE - Generación de Embeddings
+  1056→# ============================================================================
+  1057→
+  1058→class EmbeddingService:
+  1059→    """
+  1060→    Servicio para generar embeddings de texto
+  1061→    
+  1062→    Soporta múltiples proveedores:
+  1063→    - OpenAI (text-embedding-3-small, text-embedding-3-large)
+  1064→    - Sentence Transformers (local)
+  1065→    - z-ai-web-dev-sdk
+  1066→    """
+  1067→    
+  1068→    def __init__(
+  1069→        self,
+  1070→        provider: str = "local",
+  1071→        model: str = "default",
+  1072→        api_key: Optional[str] = None
+  1073→    ):
+  1074→        self.provider = provider
+  1075→        self.model = model
+  1076→        self.api_key = api_key
+  1077→        self._dimension = 384
+  1078→    
+  1079→    async def embed(self, text: str) -> List[float]:
+  1080→        """Genera embedding para un texto"""
+  1081→        
+  1082→        if self.provider == "zai":
+  1083→            return await self._embed_with_zai(text)
+  1084→        elif self.provider == "openai":
+  1085→            return await self._embed_with_openai(text)
+  1086→        else:
+  1087→            return self._embed_local(text)
+  1088→    
+  1089→    async def _embed_with_zai(self, text: str) -> List[float]:
+  1090→        """Genera embedding usando z-ai-web-dev-sdk"""
+  1091→        try:
+  1092→            # Fallback a local
+  1093→            return self._embed_local(text)
+  1094→        except Exception as e:
+  1095→            logger.error(f"Z-AI embedding failed: {e}")
+  1096→            return self._embed_local(text)
+  1097→    
+  1098→    async def _embed_with_openai(self, text: str) -> List[float]:
+  1099→        """Genera embedding usando OpenAI"""
+  1100→        try:
+  1101→            import openai
+  1102→            
+  1103→            client = openai.AsyncOpenAI(api_key=self.api_key)
+  1104→            
+  1105→            response = await client.embeddings.create(
+  1106→                model=self.model or "text-embedding-3-small",
+  1107→                input=text
+  1108→            )
+  1109→            
+  1110→            return response.data[0].embedding
+  1111→        except Exception as e:
+  1112→            logger.error(f"OpenAI embedding failed: {e}")
+  1113→            return self._embed_local(text)
+  1114→    
+  1115→    def _embed_local(self, text: str) -> List[float]:
+  1116→        """Genera embedding local simple"""
+  1117→        import hashlib
+  1118→        
+  1119→        hash_obj = hashlib.sha256(text.encode())
+  1120→        hash_bytes = hash_obj.digest()
+  1121→        
+  1122→        vector = []
+  1123→        for i in range(0, min(len(hash_bytes), 48), 1):
+  1124→            vector.append(hash_bytes[i] / 255.0)
+  1125→        
+  1126→        while len(vector) < self._dimension:
+  1127→            vector.extend(vector[:min(len(vector), self._dimension - len(vector))])
+  1128→        
+  1129→        return vector[:self._dimension]
+  1130→    
+  1131→    async def embed_batch(self, texts: List[str]) -> List[List[float]]:
+  1132→        """Genera embeddings para múltiples textos"""
+  1133→        return [await self.embed(text) for text in texts]
+  1134→    
+  1135→    @property
+  1136→    def dimension(self) -> int:
+  1137→        return self._dimension
+  1138→
+  1139→
+  1140→# ============================================================================
+  1141→# EXPORTS
+  1142→# ============================================================================
+  1143→
+  1144→__all__ = [
+  1145→    # Enums
+  1146→    "VectorStoreType",
+  1147→    "SyncDirection",
+  1148→    "VectorMetric",
+  1149→    
+  1150→    # Models
+  1151→    "VectorDocument",
+  1152→    "SearchResult",
+  1153→    "CollectionInfo",
+  1154→    
+  1155→    # Adapters
+  1156→    "VectorStoreAdapter",
+  1157→    "MemoryVectorStoreAdapter",
+  1158→    "MilvusAdapter",
+  1159→    "QdrantAdapter",
+  1160→    
+  1161→    # Factory
+  1162→    "VectorStoreFactory",
+  1163→    
+  1164→    # Facade
+  1165→    "VectorStoreFacade",
+  1166→    
+  1167→    # Services
+  1168→    "EmbeddingService",
+  1169→]
+  1170→

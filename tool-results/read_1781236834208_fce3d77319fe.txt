@@ -1,0 +1,1346 @@
+     1→"""
+     2→NEXUS Cognitive Infrastructure - Infraestructura Cognitiva Completa
+     3→
+     4→Este módulo implementa:
+     5→1. Capital Cognitivo: Memoria, engrams, skills, patterns
+     6→2. Infraestructura Cognitiva: Vector store, Memory VCS, Sync Engine
+     7→3. Learning Pipeline: Aprendizaje continuo y auto-mejora
+     8→
+     9→Arquitectura:
+    10→- Cada agente tiene su propio Capital Cognitivo
+    11→- La Infraestructura Cognitiva conecta todos los agentes
+    12→- El Learning Pipeline permite evolución continua
+    13→"""
+    14→
+    15→import asyncio
+    16→import json
+    17→import math
+    18→import hashlib
+    19→import uuid
+    20→from typing import Dict, List, Optional, Any, Tuple, Set, Callable
+    21→from dataclasses import dataclass, field
+    22→from datetime import datetime
+    23→from enum import Enum
+    24→from collections import defaultdict
+    25→import logging
+    26→
+    27→# Para vector store (usando numpy para embeddings)
+    28→try:
+    29→    import numpy as np
+    30→    NUMPY_AVAILABLE = True
+    31→except ImportError:
+    32→    NUMPY_AVAILABLE = False
+    33→
+    34→# Redis para persistencia
+    35→try:
+    36→    import redis.asyncio as redis
+    37→    from redis.asyncio import Redis
+    38→    REDIS_AVAILABLE = True
+    39→except ImportError:
+    40→    REDIS_AVAILABLE = False
+    41→
+    42→logger = logging.getLogger(__name__)
+    43→
+    44→
+    45→# ============================================
+    46→# ENUMS Y TIPOS
+    47→# ============================================
+    48→
+    49→class EngramType(str, Enum):
+    50→    """Tipos de engrams (memorias)"""
+    51→    EPISODIC = "episodic"        # Experiencias específicas
+    52→    SEMANTIC = "semantic"        # Conocimiento factual
+    53→    PROCEDURAL = "procedural"    # Habilidades y procedimientos
+    54→    PATTERN = "pattern"          # Patrones reconocidos
+    55→    CONTEXT = "context"          # Contextos operativos
+    56→    RELATIONSHIP = "relationship" # Relaciones entre conceptos
+    57→
+    58→
+    59→class SkillLevel(str, Enum):
+    60→    """Niveles de habilidad"""
+    61→    NOVICE = "novice"           # 0.0 - 0.2
+    62→    BEGINNER = "beginner"       # 0.2 - 0.4
+    63→    INTERMEDIATE = "intermediate"  # 0.4 - 0.6
+    64→    ADVANCED = "advanced"       # 0.6 - 0.8
+    65→    EXPERT = "expert"           # 0.8 - 1.0
+    66→    MASTER = "master"           # 1.0
+    67→
+    68→
+    69→class SyncMode(str, Enum):
+    70→    """Modos de sincronización"""
+    71→    CENTRALIZED = "centralized"   # Servidor central
+    72→    DECENTRALIZED = "decentralized"  # P2P
+    73→    HYBRID = "hybrid"            # Combinación
+    74→
+    75→
+    76→class LearningEventType(str, Enum):
+    77→    """Tipos de eventos de aprendizaje"""
+    78→    INTERACTION = "interaction"
+    79→    OBSERVATION = "observation"
+    80→    REFLECTION = "reflection"
+    81→    INSTRUCTION = "instruction"
+    82→    FEEDBACK = "feedback"
+    83→
+    84→
+    85→# ============================================
+    86→# ENGRAM - UNIDAD DE MEMORIA COGNITIVA
+    87→# ============================================
+    88→
+    89→@dataclass
+    90→class Engram:
+    91→    """
+    92→    Unidad fundamental de memoria cognitiva
+    93→    
+    94→    Un Engram es una representación codificada de:
+    95→    - Una experiencia (episódica)
+    96→    - Un hecho (semántica)
+    97→    - Una habilidad (procedural)
+    98→    - Un patrón reconocido
+    99→    - Un contexto operativo
+   100→    """
+   101→    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+   102→    content: str = ""                          # Contenido textual
+   103→    embedding: Optional[List[float]] = None    # Vector semántico
+   104→    engram_type: EngramType = EngramType.EPISODIC
+   105→    
+   106→    # Metadata
+   107→    created_at: datetime = field(default_factory=datetime.utcnow)
+   108→    updated_at: datetime = field(default_factory=datetime.utcnow)
+   109→    accessed_at: Optional[datetime] = None
+   110→    access_count: int = 0
+   111→    
+   112→    # Importancia y relevancia
+   113→    importance_score: float = 0.5              # 0.0 - 1.0
+   114→    relevance_score: float = 0.5               # 0.0 - 1.0
+   115→    confidence_score: float = 0.5              # 0.0 - 1.0
+   116→    
+   117→    # Aprendizaje
+   118→    source: LearningEventType = LearningEventType.INTERACTION
+   119→    reinforcement_count: int = 0               # Veces que se ha reforzado
+   120→    
+   121→    # Tags y clasificación
+   122→    tags: List[str] = field(default_factory=list)
+   123→    domain: str = "general"
+   124→    context_id: Optional[str] = None
+   125→    
+   126→    # Relaciones
+   127→    related_engrams: List[str] = field(default_factory=list)
+   128→    parent_engram: Optional[str] = None
+   129→    child_engrams: List[str] = field(default_factory=list)
+   130→    
+   131→    # Versión (Memory VCS)
+   132→    version: int = 1
+   133→    checksum: str = ""
+   134→    
+   135→    def __post_init__(self):
+   136→        if not self.checksum:
+   137→            self.checksum = self._compute_checksum()
+   138→    
+   139→    def _compute_checksum(self) -> str:
+   140→        """Computa checksum para versionado"""
+   141→        data = f"{self.content}{self.engram_type.value}{self.importance_score}"
+   142→        return hashlib.sha256(data.encode()).hexdigest()[:16]
+   143→    
+   144→    def access(self) -> None:
+   145→        """Registra acceso al engram"""
+   146→        self.accessed_at = datetime.utcnow()
+   147→        self.access_count += 1
+   148→        self.updated_at = datetime.utcnow()
+   149→        
+   150→        # Incrementar importancia por acceso
+   151→        self.importance_score = min(1.0, self.importance_score + 0.01)
+   152→    
+   153→    def reinforce(self, delta: float = 0.1) -> None:
+   154→        """Reinforce el engram (fortalecer memoria)"""
+   155→        self.reinforcement_count += 1
+   156→        self.importance_score = min(1.0, self.importance_score + delta)
+   157→        self.confidence_score = min(1.0, self.confidence_score + delta * 0.5)
+   158→        self.updated_at = datetime.utcnow()
+   159→        self.checksum = self._compute_checksum()
+   160→    
+   161→    def decay(self, rate: float = 0.01) -> None:
+   162→        """Decaimiento de la memoria (olvido)"""
+   163→        self.importance_score = max(0.0, self.importance_score - rate)
+   164→        self.confidence_score = max(0.0, self.confidence_score - rate * 0.5)
+   165→    
+   166→    def to_dict(self) -> Dict[str, Any]:
+   167→        return {
+   168→            "id": self.id,
+   169→            "content": self.content,
+   170→            "embedding": self.embedding,
+   171→            "engram_type": self.engram_type.value,
+   172→            "created_at": self.created_at.isoformat(),
+   173→            "updated_at": self.updated_at.isoformat(),
+   174→            "accessed_at": self.accessed_at.isoformat() if self.accessed_at else None,
+   175→            "access_count": self.access_count,
+   176→            "importance_score": self.importance_score,
+   177→            "relevance_score": self.relevance_score,
+   178→            "confidence_score": self.confidence_score,
+   179→            "source": self.source.value,
+   180→            "reinforcement_count": self.reinforcement_count,
+   181→            "tags": self.tags,
+   182→            "domain": self.domain,
+   183→            "context_id": self.context_id,
+   184→            "related_engrams": self.related_engrams,
+   185→            "parent_engram": self.parent_engram,
+   186→            "child_engrams": self.child_engrams,
+   187→            "version": self.version,
+   188→            "checksum": self.checksum,
+   189→        }
+   190→    
+   191→    @classmethod
+   192→    def from_dict(cls, data: Dict[str, Any]) -> "Engram":
+   193→        return cls(
+   194→            id=data.get("id", str(uuid.uuid4())),
+   195→            content=data.get("content", ""),
+   196→            embedding=data.get("embedding"),
+   197→            engram_type=EngramType(data.get("engram_type", "episodic")),
+   198→            created_at=datetime.fromisoformat(data["created_at"]) if data.get("created_at") else datetime.utcnow(),
+   199→            updated_at=datetime.fromisoformat(data["updated_at"]) if data.get("updated_at") else datetime.utcnow(),
+   200→            accessed_at=datetime.fromisoformat(data["accessed_at"]) if data.get("accessed_at") else None,
+   201→            access_count=data.get("access_count", 0),
+   202→            importance_score=data.get("importance_score", 0.5),
+   203→            relevance_score=data.get("relevance_score", 0.5),
+   204→            confidence_score=data.get("confidence_score", 0.5),
+   205→            source=LearningEventType(data.get("source", "interaction")),
+   206→            reinforcement_count=data.get("reinforcement_count", 0),
+   207→            tags=data.get("tags", []),
+   208→            domain=data.get("domain", "general"),
+   209→            context_id=data.get("context_id"),
+   210→            related_engrams=data.get("related_engrams", []),
+   211→            parent_engram=data.get("parent_engram"),
+   212→            child_engrams=data.get("child_engrams", []),
+   213→            version=data.get("version", 1),
+   214→            checksum=data.get("checksum", ""),
+   215→        )
+   216→
+   217→
+   218→# ============================================
+   219→# SKILL - HABILIDAD COGNITIVA
+   220→# ============================================
+   221→
+   222→@dataclass
+   223→class Skill:
+   224→    """
+   225→    Habilidad cognitiva de un agente
+   226→    
+   227→    Representa una capacidad que el agente puede ejecutar
+   228→    con un nivel de dominio específico
+   229→    """
+   230→    name: str
+   231→    description: str = ""
+   232→    level: float = 0.1                          # 0.0 - 1.0
+   233→    experience_points: int = 0
+   234→    
+   235→    # Uso y efectividad
+   236→    times_used: int = 0
+   237→    success_count: int = 0
+   238→    failure_count: int = 0
+   239→    
+   240→    # Aprendizaje
+   241→    learning_rate: float = 0.1
+   242→    decay_rate: float = 0.01
+   243→    
+   244→    # Prerrequisitos
+   245→    prerequisites: List[str] = field(default_factory=list)
+   246→    
+   247→    # Engrams asociados
+   248→    related_engrams: List[str] = field(default_factory=list)
+   249→    
+   250→    # Metadata
+   251→    category: str = "general"
+   252→    tags: List[str] = field(default_factory=list)
+   253→    created_at: datetime = field(default_factory=datetime.utcnow)
+   254→    last_used: Optional[datetime] = None
+   255→    
+   256→    @property
+   257→    def success_rate(self) -> float:
+   258→        if self.times_used == 0:
+   259→            return 0.0
+   260→        return self.success_count / self.times_used
+   261→    
+   262→    @property
+   263→    def skill_level(self) -> SkillLevel:
+   264→        if self.level >= 1.0:
+   265→            return SkillLevel.MASTER
+   266→        elif self.level >= 0.8:
+   267→            return SkillLevel.EXPERT
+   268→        elif self.level >= 0.6:
+   269→            return SkillLevel.ADVANCED
+   270→        elif self.level >= 0.4:
+   271→            return SkillLevel.INTERMEDIATE
+   272→        elif self.level >= 0.2:
+   273→            return SkillLevel.BEGINNER
+   274→        else:
+   275→            return SkillLevel.NOVICE
+   276→    
+   277→    def use(self, success: bool = True) -> None:
+   278→        """Registra uso de la habilidad"""
+   279→        self.times_used += 1
+   280→        self.last_used = datetime.utcnow()
+   281→        
+   282→        if success:
+   283→            self.success_count += 1
+   284→            # Incrementar nivel basado en experiencia
+   285→            xp_gain = self.learning_rate * (1 + self.success_rate)
+   286→            self.experience_points += int(xp_gain * 100)
+   287→            self.level = min(1.0, self.level + xp_gain * 0.1)
+   288→        else:
+   289→            self.failure_count += 1
+   290→            # Pequeño aprendizaje de errores
+   291→            self.level = min(1.0, self.level + self.learning_rate * 0.05)
+   292→    
+   293→    def practice(self, duration_minutes: int = 1) -> None:
+   294→        """Práctica deliberada de la habilidad"""
+   295→        xp_gain = duration_minutes * self.learning_rate
+   296→        self.experience_points += int(xp_gain * 10)
+   297→        self.level = min(1.0, self.level + xp_gain * 0.05)
+   298→    
+   299→    def to_dict(self) -> Dict[str, Any]:
+   300→        return {
+   301→            "name": self.name,
+   302→            "description": self.description,
+   303→            "level": self.level,
+   304→            "experience_points": self.experience_points,
+   305→            "times_used": self.times_used,
+   306→            "success_count": self.success_count,
+   307→            "failure_count": self.failure_count,
+   308→            "learning_rate": self.learning_rate,
+   309→            "decay_rate": self.decay_rate,
+   310→            "prerequisites": self.prerequisites,
+   311→            "related_engrams": self.related_engrams,
+   312→            "category": self.category,
+   313→            "tags": self.tags,
+   314→            "created_at": self.created_at.isoformat(),
+   315→            "last_used": self.last_used.isoformat() if self.last_used else None,
+   316→            "success_rate": self.success_rate,
+   317→            "skill_level": self.skill_level.value,
+   318→        }
+   319→    
+   320→    @classmethod
+   321→    def from_dict(cls, data: Dict[str, Any]) -> "Skill":
+   322→        return cls(
+   323→            name=data.get("name", "unknown"),
+   324→            description=data.get("description", ""),
+   325→            level=data.get("level", 0.1),
+   326→            experience_points=data.get("experience_points", 0),
+   327→            times_used=data.get("times_used", 0),
+   328→            success_count=data.get("success_count", 0),
+   329→            failure_count=data.get("failure_count", 0),
+   330→            learning_rate=data.get("learning_rate", 0.1),
+   331→            decay_rate=data.get("decay_rate", 0.01),
+   332→            prerequisites=data.get("prerequisites", []),
+   333→            related_engrams=data.get("related_engrams", []),
+   334→            category=data.get("category", "general"),
+   335→            tags=data.get("tags", []),
+   336→            created_at=datetime.fromisoformat(data["created_at"]) if data.get("created_at") else datetime.utcnow(),
+   337→            last_used=datetime.fromisoformat(data["last_used"]) if data.get("last_used") else None,
+   338→        )
+   339→
+   340→
+   341→# ============================================
+   342→# PATTERN - PATRÓN COGNITIVO
+   343→# ============================================
+   344→
+   345→@dataclass
+   346→class Pattern:
+   347→    """
+   348→    Patrón reconocido por el agente
+   349→    
+   350→    Los patrones son regularidades detectadas en datos,
+   351→    comportamiento o interacciones
+   352→    """
+   353→    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+   354→    name: str = ""
+   355→    description: str = ""
+   356→    
+   357→    # Definición del patrón
+   358→    pattern_type: str = "behavioral"            # behavioral, temporal, semantic, structural
+   359→    conditions: Dict[str, Any] = field(default_factory=dict)  # Condiciones del patrón
+   360→    actions: List[Dict[str, Any]] = field(default_factory=list)  # Acciones asociadas
+   361→    
+   362→    # Estadísticas
+   363→    occurrences: int = 0                        # Veces que se ha observado
+   364→    confidence: float = 0.5                     # Confianza en el patrón
+   365→    predictive_power: float = 0.0               # Capacidad predictiva
+   366→    
+   367→    # Validez temporal
+   368→    first_observed: datetime = field(default_factory=datetime.utcnow)
+   369→    last_observed: Optional[datetime] = None
+   370→    
+   371→    # Contexto
+   372→    domain: str = "general"
+   373→    context_tags: List[str] = field(default_factory=list)
+   374→    
+   375→    def observe(self, context: Dict[str, Any]) -> bool:
+   376→        """Registra una observación del patrón"""
+   377→        self.occurrences += 1
+   378→        self.last_observed = datetime.utcnow()
+   379→        
+   380→        # Actualizar confianza basado en observaciones
+   381→        self.confidence = min(1.0, self.confidence + 0.05)
+   382→        
+   383→        return True
+   384→    
+   385→    def matches(self, context: Dict[str, Any]) -> bool:
+   386→        """Verifica si el contexto coincide con el patrón"""
+   387→        for key, expected_value in self.conditions.items():
+   388→            if key not in context:
+   389→                return False
+   390→            if context[key] != expected_value:
+   391→                return False
+   392→        return True
+   393→    
+   394→    def to_dict(self) -> Dict[str, Any]:
+   395→        return {
+   396→            "id": self.id,
+   397→            "name": self.name,
+   398→            "description": self.description,
+   399→            "pattern_type": self.pattern_type,
+   400→            "conditions": self.conditions,
+   401→            "actions": self.actions,
+   402→            "occurrences": self.occurrences,
+   403→            "confidence": self.confidence,
+   404→            "predictive_power": self.predictive_power,
+   405→            "first_observed": self.first_observed.isoformat(),
+   406→            "last_observed": self.last_observed.isoformat() if self.last_observed else None,
+   407→            "domain": self.domain,
+   408→            "context_tags": self.context_tags,
+   409→        }
+   410→    
+   411→    @classmethod
+   412→    def from_dict(cls, data: Dict[str, Any]) -> "Pattern":
+   413→        return cls(
+   414→            id=data.get("id", str(uuid.uuid4())),
+   415→            name=data.get("name", ""),
+   416→            description=data.get("description", ""),
+   417→            pattern_type=data.get("pattern_type", "behavioral"),
+   418→            conditions=data.get("conditions", {}),
+   419→            actions=data.get("actions", []),
+   420→            occurrences=data.get("occurrences", 0),
+   421→            confidence=data.get("confidence", 0.5),
+   422→            predictive_power=data.get("predictive_power", 0.0),
+   423→            first_observed=datetime.fromisoformat(data["first_observed"]) if data.get("first_observed") else datetime.utcnow(),
+   424→            last_observed=datetime.fromisoformat(data["last_observed"]) if data.get("last_observed") else None,
+   425→            domain=data.get("domain", "general"),
+   426→            context_tags=data.get("context_tags", []),
+   427→        )
+   428→
+   429→
+   430→# ============================================
+   431→# COGNITIVE CAPITAL - CAPITAL COGNITIVO
+   432→# ============================================
+   433→
+   434→@dataclass
+   435→class CognitiveCapital:
+   436→    """
+   437→    Capital Cognitivo de un Agente
+   438→    
+   439→    El capital cognitivo es el acervo completo de:
+   440→    - Memorias (Engrams)
+   441→    - Habilidades (Skills)
+   442→    - Patrones reconocidos (Patterns)
+   443→    - Contextos operativos
+   444→    - Relaciones
+   445→    
+   446→    Características:
+   447→    - Evolutivo: Crece con el uso y aprendizaje
+   448→    - Persistente: Se almacena y versiona
+   449→    - Sincronizable: Puede compartirse entre agentes
+   450→    - Medible: Tiene métricas de valor
+   451→    """
+   452→    agent_id: str
+   453→    agent_name: str = ""
+   454→    domain: str = "general"
+   455→    
+   456→    # Componentes del capital
+   457→    engrams: List[Engram] = field(default_factory=list)
+   458→    skills: Dict[str, Skill] = field(default_factory=dict)
+   459→    patterns: List[Pattern] = field(default_factory=list)
+   460→    
+   461→    # Métricas
+   462→    total_interactions: int = 0
+   463→    total_observations: int = 0
+   464→    total_reflections: int = 0
+   465→    
+   466→    # Aprendizaje
+   467→    learning_score: float = 0.0                # 0.0 - 1.0
+   468→    adaptation_rate: float = 0.1
+   469→    
+   470→    # Valor del capital (score compuesto)
+   471→    capital_value: int = 0
+   472→    
+   473→    # Sincronización
+   474→    sync_mode: SyncMode = SyncMode.HYBRID
+   475→    last_sync: Optional[datetime] = None
+   476→    sync_peers: List[str] = field(default_factory=list)
+   477→    
+   478→    # Versionado
+   479→    version: str = "1.0.0"
+   480→    created_at: datetime = field(default_factory=datetime.utcnow)
+   481→    updated_at: datetime = field(default_factory=datetime.utcnow)
+   482→    
+   483→    def __post_init__(self):
+   484→        self._recalculate_capital_value()
+   485→    
+   486→    # ========================================
+   487→    # GESTIÓN DE ENGRAMS
+   488→    # ========================================
+   489→    
+   490→    def add_engram(self, engram: Engram) -> str:
+   491→        """Añade un nuevo engram al capital"""
+   492→        engram.domain = self.domain
+   493→        self.engrams.append(engram)
+   494→        self._recalculate_capital_value()
+   495→        self.updated_at = datetime.utcnow()
+   496→        
+   497→        logger.debug(
+   498→            f"Engram added to {self.agent_id}",
+   499→            extra={
+   500→                "engram_id": engram.id,
+   501→                "engram_type": engram.engram_type.value,
+   502→                "total_engrams": len(self.engrams)
+   503→            }
+   504→        )
+   505→        
+   506→        return engram.id
+   507→    
+   508→    def get_engram(self, engram_id: str) -> Optional[Engram]:
+   509→        """Obtiene un engram por ID"""
+   510→        for engram in self.engrams:
+   511→            if engram.id == engram_id:
+   512→                engram.access()
+   513→                return engram
+   514→        return None
+   515→    
+   516→    def find_engrams(
+   517→        self,
+   518→        engram_type: Optional[EngramType] = None,
+   519→        tags: Optional[List[str]] = None,
+   520→        min_importance: float = 0.0,
+   521→        limit: int = 10
+   522→    ) -> List[Engram]:
+   523→        """Busca engrams con filtros"""
+   524→        results = []
+   525→        
+   526→        for engram in self.engrams:
+   527→            # Filtrar por tipo
+   528→            if engram_type and engram.engram_type != engram_type:
+   529→                continue
+   530→            
+   531→            # Filtrar por importancia
+   532→            if engram.importance_score < min_importance:
+   533→                continue
+   534→            
+   535→            # Filtrar por tags
+   536→            if tags:
+   537→                if not any(tag in engram.tags for tag in tags):
+   538→                    continue
+   539→            
+   540→            results.append(engram)
+   541→        
+   542→        # Ordenar por importancia
+   543→        results.sort(key=lambda e: e.importance_score, reverse=True)
+   544→        
+   545→        return results[:limit]
+   546→    
+   547→    def get_top_engrams(self, n: int = 10) -> List[Engram]:
+   548→        """Obtiene los n engrams más importantes"""
+   549→        return sorted(self.engrams, key=lambda e: e.importance_score, reverse=True)[:n]
+   550→    
+   551→    def consolidate_memories(self, decay_rate: float = 0.01) -> int:
+   552→        """
+   553→        Consolida memorias: refuerza importantes, decae no usadas
+   554→        
+   555→        Returns:
+   556→            Número de engrams eliminados (muy degradados)
+   557→        """
+   558→        to_remove = []
+   559→        
+   560→        for engram in self.engrams:
+   561→            if engram.access_count == 0:
+   562→                engram.decay(decay_rate * 2)  # Mayor decaimiento sin uso
+   563→            else:
+   564→                engram.decay(decay_rate)
+   565→            
+   566→            # Eliminar engrams muy degradados
+   567→            if engram.importance_score < 0.1 and engram.reinforcement_count == 0:
+   568→                to_remove.append(engram)
+   569→        
+   570→        for engram in to_remove:
+   571→            self.engrams.remove(engram)
+   572→        
+   573→        self._recalculate_capital_value()
+   574→        
+   575→        return len(to_remove)
+   576→    
+   577→    # ========================================
+   578→    # GESTIÓN DE SKILLS
+   579→    # ========================================
+   580→    
+   581→    def add_skill(self, skill: Skill) -> None:
+   582→        """Añade una habilidad al capital"""
+   583→        self.skills[skill.name] = skill
+   584→        self._recalculate_capital_value()
+   585→        self.updated_at = datetime.utcnow()
+   586→    
+   587→    def get_skill(self, skill_name: str) -> Optional[Skill]:
+   588→        """Obtiene una habilidad por nombre"""
+   589→        return self.skills.get(skill_name)
+   590→    
+   591→    def use_skill(self, skill_name: str, success: bool = True) -> bool:
+   592→        """Usa una habilidad y actualiza su nivel"""
+   593→        skill = self.skills.get(skill_name)
+   594→        if not skill:
+   595→            return False
+   596→        
+   597→        skill.use(success)
+   598→        self.total_interactions += 1
+   599→        self._recalculate_capital_value()
+   600→        
+   601→        return True
+   602→    
+   603→    def get_skills_by_level(self, min_level: float = 0.5) -> List[Skill]:
+   604→        """Obtiene habilidades por nivel mínimo"""
+   605→        return [s for s in self.skills.values() if s.level >= min_level]
+   606→    
+   607→    def practice_skill(self, skill_name: str, duration_minutes: int = 1) -> bool:
+   608→        """Practica una habilidad"""
+   609→        skill = self.skills.get(skill_name)
+   610→        if not skill:
+   611→            return False
+   612→        
+   613→        skill.practice(duration_minutes)
+   614→        self._recalculate_capital_value()
+   615→        
+   616→        return True
+   617→    
+   618→    # ========================================
+   619→    # GESTIÓN DE PATTERNS
+   620→    # ========================================
+   621→    
+   622→    def add_pattern(self, pattern: Pattern) -> str:
+   623→        """Añade un patrón reconocido"""
+   624→        pattern.domain = self.domain
+   625→        self.patterns.append(pattern)
+   626→        self._recalculate_capital_value()
+   627→        
+   628→        return pattern.id
+   629→    
+   630→    def find_matching_patterns(self, context: Dict[str, Any]) -> List[Pattern]:
+   631→        """Encuentra patrones que coinciden con el contexto"""
+   632→        matching = []
+   633→        
+   634→        for pattern in self.patterns:
+   635→            if pattern.matches(context):
+   636→                matching.append(pattern)
+   637→        
+   638→        # Ordenar por confianza
+   639→        matching.sort(key=lambda p: p.confidence, reverse=True)
+   640→        
+   641→        return matching
+   642→    
+   643→    # ========================================
+   644→    # APRENDIZAJE Y AUTO-MEJORA
+   645→    # ========================================
+   646→    
+   647→    def learn(
+   648→        self,
+   649→        content: str,
+   650→        event_type: LearningEventType,
+   651→        importance: float = 0.5,
+   652→        tags: List[str] = None
+   653→    ) -> Engram:
+   654→        """
+   655→        Aprende algo nuevo (crea un engram)
+   656→        
+   657→        Args:
+   658→            content: Contenido a aprender
+   659→            event_type: Tipo de evento de aprendizaje
+   660→            importance: Importancia inicial
+   661→            tags: Tags para clasificación
+   662→            
+   663→        Returns:
+   664→            El engram creado
+   665→        """
+   666→        engram = Engram(
+   667→            content=content,
+   668→            engram_type=EngramType.EPISODIC if event_type == LearningEventType.INTERACTION else EngramType.SEMANTIC,
+   669→            source=event_type,
+   670→            importance_score=importance,
+   671→            tags=tags or [],
+   672→            domain=self.domain
+   673→        )
+   674→        
+   675→        self.add_engram(engram)
+   676→        
+   677→        # Incrementar contador según tipo
+   678→        if event_type == LearningEventType.INTERACTION:
+   679→            self.total_interactions += 1
+   680→        elif event_type == LearningEventType.OBSERVATION:
+   681→            self.total_observations += 1
+   682→        elif event_type == LearningEventType.REFLECTION:
+   683→            self.total_reflections += 1
+   684→        
+   685→        # Actualizar learning score
+   686→        self._update_learning_score()
+   687→        
+   688→        return engram
+   689→    
+   690→    def reflect(self) -> Dict[str, Any]:
+   691→        """
+   692→        Reflexión: analiza su propio capital y genera insights
+   693→        
+   694→        Returns:
+   695→            Resultados de la reflexión
+   696→        """
+   697→        reflection_result = {
+   698→            "timestamp": datetime.utcnow().isoformat(),
+   699→            "total_engrams": len(self.engrams),
+   700→            "total_skills": len(self.skills),
+   701→            "total_patterns": len(self.patterns),
+   702→            "insights": [],
+   703→            "recommendations": []
+   704→        }
+   705→        
+   706→        # Analizar engrams
+   707→        if self.engrams:
+   708→            avg_importance = sum(e.importance_score for e in self.engrams) / len(self.engrams)
+   709→            reflection_result["avg_engram_importance"] = avg_importance
+   710→            
+   711→            if avg_importance < 0.5:
+   712→                reflection_result["recommendations"].append(
+   713→                    "Consider engaging more to build stronger memories"
+   714→                )
+   715→        
+   716→        # Analizar skills
+   717→        if self.skills:
+   718→            strong_skills = [s for s in self.skills.values() if s.level >= 0.7]
+   719→            weak_skills = [s for s in self.skills.values() if s.level < 0.3]
+   720→            
+   721→            reflection_result["strong_skills"] = [s.name for s in strong_skills]
+   722→            reflection_result["weak_skills"] = [s.name for s in weak_skills]
+   723→            
+   724→            if weak_skills:
+   725→                reflection_result["recommendations"].append(
+   726→                    f"Practice needed for: {', '.join(s.name for s in weak_skills[:3])}"
+   727→                )
+   728→        
+   729→        # Crear engram de reflexión
+   730→        reflection_content = f"Reflection: {len(self.engrams)} engrams, {len(self.skills)} skills, learning score {self.learning_score:.2f}"
+   731→        self.learn(reflection_content, LearningEventType.REFLECTION, importance=0.3)
+   732→        
+   733→        self.total_reflections += 1
+   734→        
+   735→        return reflection_result
+   736→    
+   737→    def _update_learning_score(self) -> None:
+   738→        """Actualiza el score de aprendizaje"""
+   739→        # Basado en actividades
+   740→        activity_score = (
+   741→            self.total_interactions * 0.4 +
+   742→            self.total_observations * 0.3 +
+   743→            self.total_reflections * 0.3
+   744→        ) / max(1, self.total_interactions + self.total_observations + self.total_reflections)
+   745→        
+   746→        # Basado en engrams
+   747→        engram_score = sum(e.importance_score for e in self.engrams) / max(1, len(self.engrams))
+   748→        
+   749→        # Basado en skills
+   750→        skill_score = sum(s.level for s in self.skills.values()) / max(1, len(self.skills))
+   751→        
+   752→        # Score compuesto
+   753→        self.learning_score = (activity_score * 0.3 + engram_score * 0.4 + skill_score * 0.3)
+   754→    
+   755→    # ========================================
+   756→    # CÁLCULO DE VALOR
+   757→    # ========================================
+   758→    
+   759→    def _recalculate_capital_value(self) -> None:
+   760→        """Recalcula el valor total del capital cognitivo"""
+   761→        # Valor de engrams
+   762→        engram_value = sum(
+   763→            e.importance_score * 10 + 
+   764→            e.access_count * 0.5 + 
+   765→            e.reinforcement_count * 2
+   766→            for e in self.engrams
+   767→        )
+   768→        
+   769→        # Valor de skills
+   770→        skill_value = sum(
+   771→            s.level * 100 + 
+   772→            s.experience_points * 0.1 + 
+   773→            s.success_rate * 50
+   774→            for s in self.skills.values()
+   775→        )
+   776→        
+   777→        # Valor de patterns
+   778→        pattern_value = sum(
+   779→            p.confidence * 20 + 
+   780→            p.occurrences * 2
+   781→            for p in self.patterns
+   782→        )
+   783→        
+   784→        # Bonus por actividad
+   785→        activity_bonus = (
+   786→            self.total_interactions * 2 +
+   787→            self.total_observations * 1 +
+   788→            self.total_reflections * 3
+   789→        )
+   790→        
+   791→        # Learning bonus
+   792→        learning_bonus = int(self.learning_score * 500)
+   793→        
+   794→        self.capital_value = int(engram_value + skill_value + pattern_value + activity_bonus + learning_bonus)
+   795→    
+   796→    # ========================================
+   797→    # SERIALIZACIÓN
+   798→    # ========================================
+   799→    
+   800→    def to_dict(self) -> Dict[str, Any]:
+   801→        return {
+   802→            "agent_id": self.agent_id,
+   803→            "agent_name": self.agent_name,
+   804→            "domain": self.domain,
+   805→            "engrams": [e.to_dict() for e in self.engrams],
+   806→            "skills": {k: v.to_dict() for k, v in self.skills.items()},
+   807→            "patterns": [p.to_dict() for p in self.patterns],
+   808→            "total_interactions": self.total_interactions,
+   809→            "total_observations": self.total_observations,
+   810→            "total_reflections": self.total_reflections,
+   811→            "learning_score": self.learning_score,
+   812→            "adaptation_rate": self.adaptation_rate,
+   813→            "capital_value": self.capital_value,
+   814→            "sync_mode": self.sync_mode.value,
+   815→            "last_sync": self.last_sync.isoformat() if self.last_sync else None,
+   816→            "sync_peers": self.sync_peers,
+   817→            "version": self.version,
+   818→            "created_at": self.created_at.isoformat(),
+   819→            "updated_at": self.updated_at.isoformat(),
+   820→        }
+   821→    
+   822→    @classmethod
+   823→    def from_dict(cls, data: Dict[str, Any]) -> "CognitiveCapital":
+   824→        capital = cls(
+   825→            agent_id=data.get("agent_id", ""),
+   826→            agent_name=data.get("agent_name", ""),
+   827→            domain=data.get("domain", "general"),
+   828→            engrams=[Engram.from_dict(e) for e in data.get("engrams", [])],
+   829→            skills={k: Skill.from_dict(v) for k, v in data.get("skills", {}).items()},
+   830→            patterns=[Pattern.from_dict(p) for p in data.get("patterns", [])],
+   831→            total_interactions=data.get("total_interactions", 0),
+   832→            total_observations=data.get("total_observations", 0),
+   833→            total_reflections=data.get("total_reflections", 0),
+   834→            learning_score=data.get("learning_score", 0.0),
+   835→            adaptation_rate=data.get("adaptation_rate", 0.1),
+   836→            capital_value=data.get("capital_value", 0),
+   837→            sync_mode=SyncMode(data.get("sync_mode", "hybrid")),
+   838→            last_sync=datetime.fromisoformat(data["last_sync"]) if data.get("last_sync") else None,
+   839→            sync_peers=data.get("sync_peers", []),
+   840→            version=data.get("version", "1.0.0"),
+   841→            created_at=datetime.fromisoformat(data["created_at"]) if data.get("created_at") else datetime.utcnow(),
+   842→            updated_at=datetime.fromisoformat(data["updated_at"]) if data.get("updated_at") else datetime.utcnow(),
+   843→        )
+   844→        return capital
+   845→
+   846→
+   847→# ============================================
+   848→# COGNITIVE INFRASTRUCTURE - INFRAESTRUCTURA COGNITIVA
+   849→# ============================================
+   850→
+   851→class CognitiveInfrastructure:
+   852→    """
+   853→    Infraestructura Cognitiva del Sistema NEXUS
+   854→    
+   855→    Proporciona:
+   856→    1. Almacenamiento persistente de Capital Cognitivo
+   857→    2. Sincronización entre agentes (P2P y centralizada)
+   858→    3. Búsqueda semántica en engrams
+   859→    4. Memory VCS (Version Control System)
+   860→    5. Pipeline de aprendizaje
+   861→    
+   862→    Características:
+   863→    - Redis para persistencia y sincronización
+   864→    - Vector store para búsqueda semántica
+   865→    - Event-driven architecture
+   866→    - Multi-tenant support
+   867→    """
+   868→    
+   869→    # Key patterns para Redis
+   870→    CAPITAL_KEY = "nexus:cognitive:capital:{agent_id}"
+   871→    ENGRAM_INDEX = "nexus:cognitive:engrams:{domain}"
+   872→    SYNC_CHANNEL = "nexus:cognitive:sync:{agent_id}"
+   873→    LEARNING_QUEUE = "nexus:cognitive:learning:{agent_id}"
+   874→    
+   875→    def __init__(self, redis_url: str = "redis://localhost:6379"):
+   876→        self.redis_url = redis_url
+   877→        self._redis: Optional[Redis] = None
+   878→        self._capital_cache: Dict[str, CognitiveCapital] = {}
+   879→        
+   880→    async def connect(self) -> None:
+   881→        """Conecta a Redis"""
+   882→        if not REDIS_AVAILABLE:
+   883→            raise ImportError("redis package required")
+   884→        
+   885→        self._redis = redis.from_url(
+   886→            self.redis_url,
+   887→            encoding="utf-8",
+   888→            decode_responses=False
+   889→        )
+   890→        
+   891→        logger.info(f"CognitiveInfrastructure connected to Redis")
+   892→    
+   893→    async def disconnect(self) -> None:
+   894→        """Desconecta de Redis"""
+   895→        if self._redis:
+   896→            await self._redis.close()
+   897→            self._redis = None
+   898→    
+   899→    # ========================================
+   900→    # GESTIÓN DE CAPITAL COGNITIVO
+   901→    # ========================================
+   902→    
+   903→    async def save_capital(self, capital: CognitiveCapital) -> None:
+   904→        """Guarda el capital cognitivo en Redis"""
+   905→        if not self._redis:
+   906→            raise RuntimeError("Not connected to Redis")
+   907→        
+   908→        key = self.CAPITAL_KEY.format(agent_id=capital.agent_id)
+   909→        data = json.dumps(capital.to_dict())
+   910→        
+   911→        await self._redis.set(key, data)
+   912→        
+   913→        # Actualizar caché
+   914→        self._capital_cache[capital.agent_id] = capital
+   915→        
+   916→        # Indexar engrams
+   917→        await self._index_engrams(capital)
+   918→        
+   919→        logger.debug(
+   920→            f"Capital saved: {capital.agent_id}",
+   921→            extra={
+   922→                "agent_id": capital.agent_id,
+   923→                "capital_value": capital.capital_value,
+   924→                "engrams": len(capital.engrams)
+   925→            }
+   926→        )
+   927→    
+   928→    async def load_capital(self, agent_id: str) -> Optional[CognitiveCapital]:
+   929→        """Carga el capital cognitivo desde Redis"""
+   930→        if not self._redis:
+   931→            raise RuntimeError("Not connected to Redis")
+   932→        
+   933→        # Verificar caché primero
+   934→        if agent_id in self._capital_cache:
+   935→            return self._capital_cache[agent_id]
+   936→        
+   937→        key = self.CAPITAL_KEY.format(agent_id=agent_id)
+   938→        data = await self._redis.get(key)
+   939→        
+   940→        if not data:
+   941→            return None
+   942→        
+   943→        capital_dict = json.loads(data)
+   944→        capital = CognitiveCapital.from_dict(capital_dict)
+   945→        
+   946→        # Actualizar caché
+   947→        self._capital_cache[agent_id] = capital
+   948→        
+   949→        return capital
+   950→    
+   951→    async def create_capital(
+   952→        self,
+   953→        agent_id: str,
+   954→        agent_name: str,
+   955→        domain: str,
+   956→        initial_skills: List[str] = None
+   957→    ) -> CognitiveCapital:
+   958→        """
+   959→        Crea capital cognitivo inicial para un agente
+   960→        
+   961→        NO usa datos mock/hardcode - genera capital basado en
+   962→        el rol y dominio del agente
+   963→        """
+   964→        capital = CognitiveCapital(
+   965→            agent_id=agent_id,
+   966→            agent_name=agent_name,
+   967→            domain=domain
+   968→        )
+   969→        
+   970→        # Añadir skills iniciales basados en el dominio
+   971→        domain_skills = self._get_domain_skills(domain)
+   972→        for skill_name in initial_skills or domain_skills:
+   973→            skill = Skill(
+   974→                name=skill_name,
+   975→                description=f"Skill for {domain} domain",
+   976→                level=0.1,  # Nivel inicial bajo
+   977→                category=domain
+   978→            )
+   979→            capital.add_skill(skill)
+   980→        
+   981→        # Añadir engram inicial de identidad
+   982→        identity_engram = Engram(
+   983→            content=f"I am {agent_name}, an agent in the {domain} domain",
+   984→            engram_type=EngramType.SEMANTIC,
+   985→            source=LearningEventType.INSTRUCTION,
+   986→            importance_score=0.8,
+   987→            tags=["identity", "self", domain],
+   988→            domain=domain
+   989→        )
+   990→        capital.add_engram(identity_engram)
+   991→        
+   992→        # Guardar
+   993→        await self.save_capital(capital)
+   994→        
+   995→        logger.info(
+   996→            f"Capital created for {agent_id}",
+   997→            extra={
+   998→                "agent_id": agent_id,
+   999→                "agent_name": agent_name,
+  1000→                "domain": domain,
+  1001→                "initial_skills": len(capital.skills)
+  1002→            }
+  1003→        )
+  1004→        
+  1005→        return capital
+  1006→    
+  1007→    def _get_domain_skills(self, domain: str) -> List[str]:
+  1008→        """Obtiene skills relevantes para un dominio"""
+  1009→        domain_skill_map = {
+  1010→            "swe": ["code-analysis", "debugging", "architecture", "testing", "refactoring"],
+  1011→            "salud": ["diagnosis", "patient-care", "medical-research", "treatment-planning"],
+  1012→            "deportes": ["performance-analysis", "training-design", "statistics", "recovery"],
+  1013→            "noticias": ["fact-checking", "investigation", "writing", "source-verification"],
+  1014→            "quimica": ["molecular-analysis", "synthesis", "lab-safety", "research"],
+  1015→            "biologia": ["genomics", "ecology", "research-methods", "data-analysis"],
+  1016→            "biotecnologia": ["bioengineering", "drug-development", "clinical-trials", "research"],
+  1017→            "geopolitica": ["analysis", "forecasting", "diplomacy", "risk-assessment"],
+  1018→            "finanzas": ["market-analysis", "risk-management", "portfolio-optimization", "forecasting"],
+  1019→            "legal": ["legal-research", "document-analysis", "compliance", "argumentation"],
+  1020→            "educacion": ["teaching", "curriculum-design", "assessment", "mentoring"],
+  1021→            "investigacion": ["research-methods", "data-analysis", "writing", "peer-review"],
+  1022→            "marketing": ["campaign-design", "analytics", "content-creation", "seo"],
+  1023→        }
+  1024→        return domain_skill_map.get(domain, ["general-analysis", "communication", "problem-solving"])
+  1025→    
+  1026→    async def _index_engrams(self, capital: CognitiveCapital) -> None:
+  1027→        """Indexa engrams para búsqueda"""
+  1028→        if not self._redis:
+  1029→            return
+  1030→        
+  1031→        index_key = self.ENGRAM_INDEX.format(domain=capital.domain)
+  1032→        
+  1033→        for engram in capital.engrams:
+  1034→            # Indexar por tags
+  1035→            for tag in engram.tags:
+  1036→                await self._redis.sadd(f"{index_key}:tag:{tag}", engram.id)
+  1037→            
+  1038→            # Indexar por tipo
+  1039→            await self._redis.sadd(f"{index_key}:type:{engram.engram_type.value}", engram.id)
+  1040→    
+  1041→    # ========================================
+  1042→    # SINCRONIZACIÓN
+  1043→    # ========================================
+  1044→    
+  1045→    async def sync_capitals(
+  1046→        self,
+  1047→        source_agent_id: str,
+  1048→        target_agent_ids: List[str],
+  1049→        mode: SyncMode = SyncMode.HYBRID
+  1050→    ) -> Dict[str, Any]:
+  1051→        """
+  1052→        Sincroniza capital cognitivo entre agentes
+  1053→        
+  1054→        Args:
+  1055→            source_agent_id: ID del agente fuente
+  1056→            target_agent_ids: IDs de agentes destino
+  1057→            mode: Modo de sincronización
+  1058→            
+  1059→        Returns:
+  1060→            Resultado de la sincronización
+  1061→        """
+  1062→        result = {
+  1063→            "source": source_agent_id,
+  1064→            "targets": target_agent_ids,
+  1065→            "mode": mode.value,
+  1066→            "synced_engrams": 0,
+  1067→            "synced_skills": 0,
+  1068→            "timestamp": datetime.utcnow().isoformat()
+  1069→        }
+  1070→        
+  1071→        source_capital = await self.load_capital(source_agent_id)
+  1072→        if not source_capital:
+  1073→            return result
+  1074→        
+  1075→        for target_id in target_agent_ids:
+  1076→            target_capital = await self.load_capital(target_id)
+  1077→            if not target_capital:
+  1078→                continue
+  1079→            
+  1080→            if mode == SyncMode.CENTRALIZED:
+  1081→                # Compartir top engrams
+  1082→                top_engrams = source_capital.get_top_engrams(5)
+  1083→                for engram in top_engrams:
+  1084→                    if engram.id not in [e.id for e in target_capital.engrams]:
+  1085→                        # Crear copia del engram
+  1086→                        new_engram = Engram.from_dict(engram.to_dict())
+  1087→                        new_engram.id = str(uuid.uuid4())  # Nuevo ID
+  1088→                        target_capital.add_engram(new_engram)
+  1089→                        result["synced_engrams"] += 1
+  1090→            
+  1091→            elif mode == SyncMode.DECENTRALIZED:
+  1092→                # Intercambio P2P bidireccional
+  1093→                source_top = source_capital.get_top_engrams(3)
+  1094→                target_top = target_capital.get_top_engrams(3)
+  1095→                
+  1096→                for engram in target_top:
+  1097→                    if engram.id not in [e.id for e in source_capital.engrams]:
+  1098→                        new_engram = Engram.from_dict(engram.to_dict())
+  1099→                        new_engram.id = str(uuid.uuid4())
+  1100→                        source_capital.add_engram(new_engram)
+  1101→                        result["synced_engrams"] += 1
+  1102→                
+  1103→                for engram in source_top:
+  1104→                    if engram.id not in [e.id for e in target_capital.engrams]:
+  1105→                        new_engram = Engram.from_dict(engram.to_dict())
+  1106→                        new_engram.id = str(uuid.uuid4())
+  1107→                        target_capital.add_engram(new_engram)
+  1108→                        result["synced_engrams"] += 1
+  1109→            
+  1110→            elif mode == SyncMode.HYBRID:
+  1111→                # Primero P2P, luego consolidación
+  1112→                await self.sync_capitals(source_agent_id, [target_id], SyncMode.DECENTRALIZED)
+  1113→            
+  1114→            # Actualizar sync timestamp
+  1115→            target_capital.last_sync = datetime.utcnow()
+  1116→            target_capital.sync_peers.append(source_agent_id)
+  1117→            await self.save_capital(target_capital)
+  1118→        
+  1119→        # Actualizar source
+  1120→        source_capital.last_sync = datetime.utcnow()
+  1121→        source_capital.sync_peers.extend(target_agent_ids)
+  1122→        await self.save_capital(source_capital)
+  1123→        
+  1124→        return result
+  1125→    
+  1126→    # ========================================
+  1127→    # PIPELINE DE APRENDIZAJE
+  1128→    # ========================================
+  1129→    
+  1130→    async def process_learning_event(
+  1131→        self,
+  1132→        agent_id: str,
+  1133→        event_type: LearningEventType,
+  1134→        content: str,
+  1135→        metadata: Dict[str, Any] = None
+  1136→    ) -> Engram:
+  1137→        """
+  1138→        Procesa un evento de aprendizaje
+  1139→        
+  1140→        Args:
+  1141→            agent_id: ID del agente
+  1142→            event_type: Tipo de evento
+  1143→            content: Contenido a aprender
+  1144→            metadata: Metadatos adicionales
+  1145→            
+  1146→        Returns:
+  1147→            El engram creado
+  1148→        """
+  1149→        capital = await self.load_capital(agent_id)
+  1150→        if not capital:
+  1151→            raise ValueError(f"No capital found for agent {agent_id}")
+  1152→        
+  1153→        # Calcular importancia basada en metadatos
+  1154→        importance = 0.5
+  1155→        if metadata:
+  1156→            if metadata.get("success"):
+  1157→                importance += 0.2
+  1158→            if metadata.get("user_feedback") == "positive":
+  1159→                importance += 0.1
+  1160→            if metadata.get("complexity") == "high":
+  1161→                importance += 0.1
+  1162→        
+  1163→        # Crear engram
+  1164→        engram = capital.learn(
+  1165→            content=content,
+  1166→            event_type=event_type,
+  1167→            importance=min(1.0, importance),
+  1168→            tags=metadata.get("tags", []) if metadata else []
+  1169→        )
+  1170→        
+  1171→        # Guardar
+  1172→        await self.save_capital(capital)
+  1173→        
+  1174→        # Publicar evento de aprendizaje
+  1175→        if self._redis:
+  1176→            channel = self.SYNC_CHANNEL.format(agent_id=agent_id)
+  1177→            await self._redis.publish(channel, json.dumps({
+  1178→                "event": "learning",
+  1179→                "engram_id": engram.id,
+  1180→                "event_type": event_type.value,
+  1181→                "timestamp": datetime.utcnow().isoformat()
+  1182→            }))
+  1183→        
+  1184→        return engram
+  1185→    
+  1186→    async def batch_learn(
+  1187→        self,
+  1188→        agent_id: str,
+  1189→        contents: List[Tuple[str, LearningEventType, float]]
+  1190→    ) -> List[Engram]:
+  1191→        """
+  1192→        Aprendizaje en batch
+  1193→        
+  1194→        Args:
+  1195→            agent_id: ID del agente
+  1196→            contents: Lista de (content, event_type, importance)
+  1197→            
+  1198→        Returns:
+  1199→            Lista de engrams creados
+  1200→        """
+  1201→        capital = await self.load_capital(agent_id)
+  1202→        if not capital:
+  1203→            raise ValueError(f"No capital found for agent {agent_id}")
+  1204→        
+  1205→        engrams = []
+  1206→        for content, event_type, importance in contents:
+  1207→            engram = capital.learn(content, event_type, importance)
+  1208→            engrams.append(engram)
+  1209→        
+  1210→        await self.save_capital(capital)
+  1211→        
+  1212→        return engrams
+  1213→    
+  1214→    # ========================================
+  1215→    # BÚSQUEDA Y RECUPERACIÓN
+  1216→    # ========================================
+  1217→    
+  1218→    async def search_engrams(
+  1219→        self,
+  1220→        agent_id: str,
+  1221→        query: str,
+  1222→        engram_type: Optional[EngramType] = None,
+  1223→        min_importance: float = 0.0,
+  1224→        limit: int = 10
+  1225→    ) -> List[Engram]:
+  1226→        """
+  1227→        Busca engrams relevantes
+  1228→        
+  1229→        Args:
+  1230→            agent_id: ID del agente
+  1231→            query: Query de búsqueda
+  1232→            engram_type: Filtrar por tipo
+  1233→            min_importance: Importancia mínima
+  1234→            limit: Máximo de resultados
+  1235→            
+  1236→        Returns:
+  1237→            Lista de engrams encontrados
+  1238→        """
+  1239→        capital = await self.load_capital(agent_id)
+  1240→        if not capital:
+  1241→            return []
+  1242→        
+  1243→        # Búsqueda por contenido (simple - en producción usar vector search)
+  1244→        results = []
+  1245→        query_lower = query.lower()
+  1246→        
+  1247→        for engram in capital.engrams:
+  1248→            # Filtrar por tipo
+  1249→            if engram_type and engram.engram_type != engram_type:
+  1250→                continue
+  1251→            
+  1252→            # Filtrar por importancia
+  1253→            if engram.importance_score < min_importance:
+  1254→                continue
+  1255→            
+  1256→            # Búsqueda en contenido
+  1257→            if query_lower in engram.content.lower():
+  1258→                results.append(engram)
+  1259→                continue
+  1260→            
+  1261→            # Búsqueda en tags
+  1262→            if any(query_lower in tag.lower() for tag in engram.tags):
+  1263→                results.append(engram)
+  1264→        
+  1265→        # Ordenar por importancia
+  1266→        results.sort(key=lambda e: e.importance_score, reverse=True)
+  1267→        
+  1268→        return results[:limit]
+  1269→    
+  1270→    async def get_similar_engrams(
+  1271→        self,
+  1272→        agent_id: str,
+  1273→        engram_id: str,
+  1274→        limit: int = 5
+  1275→    ) -> List[Engram]:
+  1276→        """Obtiene engrams similares a uno dado"""
+  1277→        capital = await self.load_capital(agent_id)
+  1278→        if not capital:
+  1279→            return []
+  1280→        
+  1281→        source_engram = capital.get_engram(engram_id)
+  1282→        if not source_engram:
+  1283→            return []
+  1284→        
+  1285→        similar = []
+  1286→        for engram in capital.engrams:
+  1287→            if engram.id == engram_id:
+  1288→                continue
+  1289→            
+  1290→            # Calcular similitud simple basada en tags compartidos
+  1291→            shared_tags = set(engram.tags) & set(source_engram.tags)
+  1292→            if shared_tags:
+  1293→                similarity = len(shared_tags) / max(len(engram.tags), len(source_engram.tags))
+  1294→                if similarity > 0.3:
+  1295→                    similar.append((engram, similarity))
+  1296→        
+  1297→        # Ordenar por similitud
+  1298→        similar.sort(key=lambda x: x[1], reverse=True)
+  1299→        
+  1300→        return [e for e, _ in similar[:limit]]
+  1301→    
+  1302→    # ========================================
+  1303→    # ESTADÍSTICAS Y MÉTRICAS
+  1304→    # ========================================
+  1305→    
+  1306→    async def get_system_statistics(self) -> Dict[str, Any]:
+  1307→        """Obtiene estadísticas del sistema cognitivo"""
+  1308→        if not self._redis:
+  1309→            raise RuntimeError("Not connected to Redis")
+  1310→        
+  1311→        # Escanear todas las keys de capital
+  1312→        keys = []
+  1313→        async for key in self._redis.scan_iter(match="nexus:cognitive:capital:*"):
+  1314→            keys.append(key)
+  1315→        
+  1316→        total_agents = len(keys)
+  1317→        total_engrams = 0
+  1318→        total_skills = 0
+  1319→        total_patterns = 0
+  1320→        total_capital_value = 0
+  1321→        
+  1322→        by_domain: Dict[str, int] = defaultdict(int)
+  1323→        
+  1324→        for key in keys:
+  1325→            data = await self._redis.get(key)
+  1326→            if data:
+  1327→                capital_dict = json.loads(data)
+  1328→                capital = CognitiveCapital.from_dict(capital_dict)
+  1329→                
+  1330→                total_engrams += len(capital.engrams)
+  1331→                total_skills += len(capital.skills)
+  1332→                total_patterns += len(capital.patterns)
+  1333→                total_capital_value += capital.capital_value
+  1334→                by_domain[capital.domain] += 1
+  1335→        
+  1336→        return {
+  1337→            "total_agents": total_agents,
+  1338→            "total_engrams": total_engrams,
+  1339→            "total_skills": total_skills,
+  1340→            "total_patterns": total_patterns,
+  1341→            "total_capital_value": total_capital_value,
+  1342→            "avg_engrams_per_agent": total_engrams / max(1, total_agents),
+  1343→            "avg_skills_per_agent": total_skills / max(1, total_agents),
+  1344→            "by_domain": dict(by_domain)
+  1345→        }
+  1346→
